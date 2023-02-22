@@ -15,7 +15,6 @@
  */
 package client;
 
-import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import com.google.inject.Injector;
@@ -26,8 +25,8 @@ import static com.google.inject.Guice.createInjector;
 
 public class Main extends Application {
 
-    private static final Injector INJECTOR = createInjector(new MyModule());
-    private static final MyFXML FXML = new MyFXML(INJECTOR);
+    private static final Injector INJECTOR = createInjector(new FXConfig());
+    private static final FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
 
     public static void main(String[] args) {
         launch();
@@ -37,9 +36,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add);
+        mainCtrl.initialize(primaryStage, overview);
     }
 }
