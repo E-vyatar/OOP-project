@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-	id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
     // add VM options: --module-path path/to/javafx-sdk-19.0.2.1/lib --add-modules javafx.controls,javafx.fxml
 }
 
