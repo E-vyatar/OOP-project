@@ -18,19 +18,23 @@ package server.api;
 import commons.Quote;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.QuoteRepository;
+import server.database.BoardRepository;
 
 import java.util.List;
 import java.util.Random;
 
+/**
+ * This is example code. I am leaving it here for now so you can see how controllers work.
+ * - romir
+ */
 @RestController
 @RequestMapping("/api/quotes")
 public class QuoteController {
 
     private final Random random;
-    private final QuoteRepository repo;
+    private final BoardRepository repo;
 
-    public QuoteController(Random random, QuoteRepository repo) {
+    public QuoteController(Random random, BoardRepository repo) {
         this.random = random;
         this.repo = repo;
     }
