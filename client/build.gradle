@@ -1,6 +1,7 @@
 plugins {
     id 'application'
-    id("org.openjfx.javafxplugin") version "0.0.11"
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    // add VM options: --module-path path/to/javafx-sdk-19.0.2.1/lib --add-modules javafx.controls,javafx.fxml
 }
 
 application {
@@ -8,25 +9,24 @@ application {
 }
 
 javafx {
-    version = "17.0.2"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    version = "19"
+    modules = ['javafx.controls', 'javafx.fxml']
 }
 
 
 dependencies {
-	implementation project(":commons")
-	
-	implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '3.0.3'
-	implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: '3.0.3'
-	implementation group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '3.0.3'
-	
-	implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.0.1'
-	
-	implementation 'com.google.inject:guice:5.0.1'
-	
-	
-	
-	implementation 'org.openjfx:javafx-controls:17.0.2'
-	implementation 'org.openjfx:javafx-fxml:17.0.2'
-	
+    implementation project(":commons")
+
+    implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '3.0.3'
+    implementation group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: '3.0.3'
+    implementation 'org.glassfish.jersey.media:jersey-media-json-jackson:3.1.1'
+
+    implementation group: 'jakarta.activation', name: 'jakarta.activation-api', version: '2.0.1'
+
+    implementation 'com.google.inject:guice:5.0.1'
+
+
+    implementation 'org.openjfx:javafx-controls:17.0.2'
+    implementation 'org.openjfx:javafx-fxml:17.0.2'
+
 }
