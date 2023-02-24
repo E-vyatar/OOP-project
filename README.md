@@ -9,13 +9,16 @@ Add your own name (do not add the names for others!) to the section below.
 
 ## Group members
 
+<<<<<<< README.md
+=======
 | Profile Picture                                                                                    | Name              | Email                                                                       |
 |----------------------------------------------------------------------------------------------------|-------------------|-----------------------------------------------------------------------------|
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/3514/avatar.png?width=48)           | romir kuslhrestha | [r.kulshrestha@student.tudelft.nl](mailto:r.kulshrestha@student.tudelft.nl) |
 | ![](https://secure.gravatar.com/avatar/835d209fc42d5c37089b3937d2f3ec28?s=800&d=identicon&size=48) | Eviatar Hadasi    | E.Hadasi@student.tudelft.nl                                                 |
 | ![]()                                                                                              | Rares Popa        | r.popa@student.tudelft.nl                                                   |
 |                                                                                                    | Abigail de Nooij  | j.denooij@student.tudelft.nl                                                |
-
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5986/avatar.png?width=96) | Kajetan Neumann | K.M.Neumann@student.tudelft.nl |
+>>>>>>> README.md
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
 <!-- - Mention your *student* email address -->
