@@ -8,10 +8,10 @@ Add your own name (do not add the names for others!) to the section below.
 
 ## Group members
 
-| Profile Picture | Name | Email |
-|---|---|---|
-| ![](https://secure.gravatar.com/avatar/835d209fc42d5c37089b3937d2f3ec28?s=800&d=identicon&size=50) | Eviatar Hadasi | E.Hadasi@student.tudelft.nl |
-
+| Profile Picture | Name            | Email                          |
+|---|-----------------|--------------------------------|
+| ![](https://secure.gravatar.com/avatar/835d209fc42d5c37089b3937d2f3ec28?s=800&d=identicon&size=50) | Eviatar Hadasi  | E.Hadasi@student.tudelft.nl    |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5986/avatar.png?width=96) | Kajetan Neumann | K.M.Neumann@student.tudelft.nl |
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
 <!-- - Mention your *student* email address -->
