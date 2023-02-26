@@ -1,4 +1,4 @@
-#Agenda Week 3
+# Agenda Week 3
 
 ---
 
@@ -6,8 +6,6 @@ Date:           Tuesday 28 February 2023
 Main focus:     Feedback  
 Chair:          Abigail de Nooij  
 Note taker:     Finn van Oosterhout
-
-[[_TOC_]
 
 ## [5-10 min] Start meeting
 
