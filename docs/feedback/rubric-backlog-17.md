@@ -27,6 +27,9 @@ Feedback:
 as presented in the lecture (eg: you talk about boards, and tags - maybe you can group these user stories into epics - see assignment description:
 "high-level epics that represent the features of the application (...) they form subsections").
 * Make sure you read the EPICS subsection of the assignment carefully and identify exactly what they are asking for.
+* See slides 18,24 from requirements-engineering-slides.pdf
+* You don't need to prioritize them using the MoSCoW anymore, but keep in mind that the epics need to be ordered in
+a prioritized manner (-> you can deduce this from the MoSCoW)
 
 ### User Stories
 
