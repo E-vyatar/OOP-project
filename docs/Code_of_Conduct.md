@@ -44,10 +44,12 @@ Work should meet the evaluation criteria listed in 'Norms & evaluations criteria
 
 #### How do you ensure that each team member finishes everything on time? Did you clarify who will have a final say in the final deliverable and submit it to Brightspace on behalf of the project group?
 
-We'll set clear goals during every meeting, which must be met by all members.
+When the final backlog has been published we'll create all the issues. During meetings, we'll create milestones for a week and we'll assign the relevant issues to people in a fairly distributed way. We'll also set up soft deadlines then, which everyone must meet.
+
+Abigail will be responsible for the final deliverables. This only applies to group deadlines and not for individual assignments.
+
 Decisions and conflicts will be dealt with as listed in `Decision-making' & 'Dealing with conflicts'.
-Team decisions should be final with regard to the code. This is to avoid having to change everything we worked on so
-far for a small change in earlier code. An exception can be made if the team agrees upon it.
+Team decisions should be final with regard to the code. This is to avoid having to change everything we worked on so far for a small change in earlier code. An exception can be made if the team agrees upon it.
 
 ### **Behaviour:**
 
