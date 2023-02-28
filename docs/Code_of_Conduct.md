@@ -170,3 +170,7 @@ If and only if people break agreements multiple times and don't improve their be
 4. Consider feedback - should be included in your work
 5. Ensure quality -clean, readable, and well tested and documented work (checkstyle)
 6. Flavour and quality of cookies - important for cookie rule mentioned in 'Consequences'
+
+### Gitlab Etiquette
+Any merge needs two people's approval. You are not allowed to approve your own merge request. If your code is relevant to someone else's work, you should assign them to approve the merge request, otherwise it's a matter of who sees it first. 
+We're gonna work with a main and dev branch. We'll make merge changes into dev and once a week we merge dev into main. This last merge requires everyone's approval.
