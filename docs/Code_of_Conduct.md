@@ -8,7 +8,7 @@ Teletubbies (Group 17)
 
 1. Respect - be respectful to others
 2. Patience - not all of us may have experience or need more time than others
-3. Communication - especially if you have issues with the work or meeting the deadlines
+3. Communication - especially if you have issues with the work consor meeting the deadlines
 4. Commitment - we want everyone to do their best and put effort into this project
 
 ### **Assignment description:**
@@ -143,11 +143,10 @@ We follow the agenda template for the feedback given in meetings .
 
 #### What are the consequences if a participant in the group does not keep the agreements?
 
-If an agreement is broken, that person should bring cookies or another form of food that the others will generally
-enjoy (should also include a vegan option). Other forms of punishment may include but are not limited to:
-
-- Public execution
-- Temporary Minecraft server ban
+If an agreement is broken, depending on the case (based upon whether they have a good excuse and/or how many problems it caused), consequences will be decided by the others on the team. An option can be that that person should bring cookies or another form of food that the others will generally
+enjoy (should also include a vegan option).
+In other cases, when person A's work had to be done by person B, person A has to do additional work to compensate for the fact that person B had to do their work (and person B has to done less then).
+If and only if people break agreements multiple times and don't improve their behaviour after this having been voiced in meetings, we'll address the issue with the TA.
 
 ### **Success factors:**
 
