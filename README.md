@@ -18,6 +18,7 @@ Add your own name (do not add the names for others!) to the section below.
 | ![]()                                                                                              | Rares Popa        | r.popa@student.tudelft.nl                                                   |
 |                                                                                                    | Abigail de Nooij  | j.denooij@student.tudelft.nl                                                |
 | ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/5986/avatar.png?width=96) | Kajetan Neumann | K.M.Neumann@student.tudelft.nl |
+| ![](https://gitlab.ewi.tudelft.nl/uploads/-/system/user/avatar/6080/avatar.png?width=48)           | Finn van Oosterhout | [F.A.vanOosterhout@student.tudelft.nl](mailto:F.A.vanOosterhout@student.tudelft.nl) |
 >>>>>>> README.md
 <!-- Instructions (remove once assignment has been completed -->
 <!-- - Add (only!) your own name to the table above (use Markdown formatting) -->
