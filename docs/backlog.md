@@ -33,29 +33,49 @@ As a **User** I want:
 - to see all changes in real time for every user, so you can collaborate more easily and don’t have to keep hitting a
   refresh button to see if another user has done something
 
-### Epic 2: Advanced Requirements (In order of priority)
+### Epic 2: Multi-board
 
 As a **User** I want:
 
 - to view boards using a key (and password), so I can work on multiple boards which can be for different things
-- to create new boards and get that board’s key, so I can separate tasks for different projects for better
-  organization (e.g. separate work and private chores). This way I can also make personalized boards.
-- to add a password to a board, so I can have private boards.
-- to add details to a card  (second mock)
-- adding a description, so I can elaborate on what I mean with a task
-- add a (potentially nested) task list, so I can split the tasks into sub-tasks to make cards seem more doable and
-  encourage progress.
-- to use tags
-- Create tags, so I can have more flexibility in describing and organizing cards
-- Add tag to card, so I can specify the type of task it is and be able to retrieve it more easily later
-- Filter by tags (only cards with a certain tag will be visible), so I can more quickly find a specific card I’m looking
-  for and/or to have a better overview of cards related to another card
-- to customize boards
-- add background color, to make them look nicer and/or to have a visual separation between boards
+- to create new boards and get that board’s key,
+so I can separate tasks for different projects for better organization (e.g. separate work and private chores).
+This way I can also make personalized boards.
+- to add a password to a board, so I can share what I’m doing without risking someone destroying my board
+- to remove a password, so I can allow anyone to modify my board
+
+### Epic 3: Board details
+
+As a **User** I want:
+
+- to add a description, so I can elaborate on what I mean with a task
+- add a (potentially nested) task list,
+so I can split the tasks into sub-tasks to make cards seem more doable and encourage progress.
+- (un)check an item on the tasklist, so I can (un)mark it as done
+
+
+### Epic 4: Tags
+
+As a **User** I want:
+
+- to create and delete tags, so I can have more flexibility in describing and organizing cards  
+- Add and remove tags from/to cards, so I can specify the type of task it is and be able to retrieve it more easily later 
+- Filter by tags (only cards with a certain tag will be visible), so I can more quickly find a specific card I’m looking for and/or to have a better overview of cards related to another card
+
+### Epic 5: Customization
+
+As a **User** I want:
+
+- add background color to my board, to make them look nicer and/or to have a visual separation between boards
 - Specify tag color, to be able to visually distinguish between different tags for better organization
+
+### Epic 6: Keyboard shortcuts
+
+As a **User** I want:
+
 - to use keyboard shortcuts, to have a more efficient workflow
-- to protect write access to a board with a password, so I can share what I’m doing without risking someone destroying
-  my board
+
+### Epic 7: Server management
 
 As a **host** I want:
 
