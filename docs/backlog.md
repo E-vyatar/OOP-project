@@ -1,18 +1,15 @@
 BACKLOG
 =======
-*Teletubbies | Group 17 OOPP*
+*Teletubbies & Co™ | Group 17 OOPP*
 
 ## Stakeholders
 
-- Users
-- Host
-- Teletubbies & Co™
+- **Users** - the people who use the application to manage boards.
+- **Host** - the person that hosts and/or manages the server. This stakeholder has an administrative role.
 
 ## Terminology
 
-- **Host** - the system that runs the back-end of the the application
 - **Database** - store of all persistent data
-- **User** - the person using the application
 - **Boards** - A set of lists
 - **List** - set of the cards
 - **Cards** - An item
