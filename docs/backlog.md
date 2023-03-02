@@ -141,8 +141,14 @@ As a **User** I want:
 As a **host** I want:
 
 - to stop/restart the server, so I can fix potential glitches and/or perform updates
+  * Server can be stopped while clients using the application, "kicking" all current clients out
+  * All changes to the server (new items, updates to items, etc.) since it was activated are saved to the database 
 - change/reset passwords of boards, so I can help people who are locked out of their own board
+  * Host can change password of any board without using the current password
+  * Host can set a temporary password for a board to give access to it until a new password is set by client
 - delete boards, so I can comply with local laws and/or remove offensive content
+  * Host can delete a board that doesn't have a password
+  * Host can delete a board that have a password without needing the password
 
 ## Mocks
 
