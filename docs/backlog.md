@@ -62,12 +62,23 @@ As a **User** I want:
 
 As a **User** I want:
 
-- to view boards using a key (and password), so I can work on multiple boards which can be for different things
-- to create new boards and get that board’s key,
+- to create multiple boards and get those boards keys,
 so I can separate tasks for different projects for better organization (e.g. separate work and private chores).
+  * Created boards appear in the application overview
+  * When created, a board gets its own unique key as identification
+  * The board key can be shown after the board creation
+- to view boards using a key (and password), so I can work on multiple boards which can be for different things
 This way I can also make personalized boards.
+  * A board's key can be used to find the board among the other boards
+  * A client with the password can edit a board, and without it only view
 - to add a password to a board, so I can share what I’m doing without risking someone destroying my board
+  * A password can be added to a board without one
+  * Any client can add a password to a board
+- to change the board's password, to keep the board protected
+  * With a board's password a client can edit the board content
+  * With a board's password a client can change the board's password
 - to remove a password, so I can allow anyone to modify my board
+  * With a board's password a client can remove the password
 
 ### Epic 3: Board details
 
