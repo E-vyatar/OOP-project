@@ -21,17 +21,42 @@ BACKLOG
 As a **User** I want:
 
 - to view the board (without registration), so I can see the contents of the board
+  * Opening the application automatically loads the board from database
+  * Loaded board is viewed in the UI
 - to create/remove a list within a board, so I can create various categories for my cards (first mock)
+  * Created lists appear on the board
+  * Created lists are added to the database
+  * Application asks for confirmation before deleting a list
+  * Deleted lists do not appear on the board
+  * Deleted lists removed from database
 - to add/remove cards to lists, so I can add new TO DO’s when I have a new task I need to do and remove them in case
   they turn out to not be necessary (first mock)
-- A card consists only of a title
-- to move (drag & drop)
-- cards up and down in a list, so I can prioritize my TO DO’s.
-- cards between lists, so I can change the status of cards when I start working on them or am finished with them.
-- lists on the board and in this way change their order, so I can put the lists in a logical order and have the more
+  * Created cards appear on their list
+  * Created cards are added to the database
+  * Application asks for confirmation before deleting a card
+  * Deleted cards do not appear on the board
+  * Deleted cards removed from database
+- a card to have only of a title, to keep list items simple to understand
+  * When creating a card it has one mandatory text field
+  * A card in the board overview shows its text content
+- to move cards in a visual way (drag & drop), to help organize my lists easily
+  * When card is clicked and held it can be moved around
+  * When held card is dropped (release mouse button) it is put in the nearest list
+  * Moved card is updated in the database
+- to move cards up and down in a list, so I can prioritize my TO DO’s.
+  * A list has an order
+  * A card position in the list can be changed
+  * Change in a card position is updated in the database
+- to move cards between lists, so I can change the status of cards when I start working on them or am finished with them. (not sure we need this section since it is more of an optional way to use the board)
+- lists on the board have a changeable order, so I can put the lists in a logical order and have the more
   commonly used lists more readily accessible.
+  * Board has an order for its lists
+  * Created list is added to some position in the board order
+  * A list position can be changed
+  * A change in the board order is updated in the database
 - to see all changes in real time for every user, so you can collaborate more easily and don’t have to keep hitting a
   refresh button to see if another user has done something
+  * Every change to the board automatically updates all connected clients view
 
 ### Epic 2: Multi-board
 
