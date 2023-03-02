@@ -80,12 +80,6 @@ This way I can also make personalized boards.
 - to remove a password, so I can allow anyone to modify my board
   * With a board's password a client can remove the password
 
-As a **Host** I want:
-
-- to hava access to all boards on the server and their data, so I can monitor it and help when a password is forgotten
-  * A host can remove a password from any locked board
-  * A host has full access to the database
-
 ### Epic 3: Board details
 
 As a **User** I want:
@@ -136,6 +130,11 @@ As a **User** I want:
 As a **User** I want:
 
 - to use keyboard shortcuts, to have a more efficient workflow
+  * Cards/lists can be in 'selected mode'
+  * A specific key combination for adding lists or cards to selected list exists
+  * A specific key combination for deleting lists or cards from selected list exists
+- to have a keyboard shortcuts cheat sheet, so I can know/remember what shortcuts are available
+  * The application has a page with the keys combinations and how yo use them
 
 ### Epic 7: Server management
 
