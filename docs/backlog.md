@@ -80,15 +80,27 @@ This way I can also make personalized boards.
 - to remove a password, so I can allow anyone to modify my board
   * With a board's password a client can remove the password
 
+As a **Host** I want:
+
+- to hava access to all boards on the server and their data, so I can monitor it and help when a password is forgotten
+  * A host can remove a password from any locked board
+  * A host has full access to the database
+
 ### Epic 3: Board details
 
 As a **User** I want:
 
-- to add a description, so I can elaborate on what I mean with a task
+- to add a description, so I can elaborate on what I mean with a task 
+  * In addition to its title, when creating a card it has an optional secondary text field
+  * The description can be updated
+  * The description is showed in a smaller font under the card title in the board overview
 - add a (potentially nested) task list,
 so I can split the tasks into sub-tasks to make cards seem more doable and encourage progress.
-- (un)check an item on the tasklist, so I can (un)mark it as done
-
+  * Sub-tasks with tick boxes can be added to a card
+  * Sub-tasks can be marked and unmarked as done
+  * Sub-tasks can be updated
+  * Sub-tasks can be deleted
+  * In the board overview, a card shows under its description how many sub-tasks this card have and how many of them marked as completed
 
 ### Epic 4: Tags
 
