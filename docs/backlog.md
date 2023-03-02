@@ -106,9 +106,17 @@ so I can split the tasks into sub-tasks to make cards seem more doable and encou
 
 As a **User** I want:
 
-- to create and delete tags, so I can have more flexibility in describing and organizing cards  
-- Add and remove tags from/to cards, so I can specify the type of task it is and be able to retrieve it more easily later 
+- to create, edit and delete tags, so I can have more flexibility in describing and organizing cards
+  * Tags can be created
+  * Created cards can be edited
+  * Created cards can be deleted
+- Add and remove tags from/to cards, so I can specify the type of task it is and be able to retrieve it more easily later
+  * Tags can be added to cards
+  * A card can have multiple tags
+  * In a board overview each card's tags are shown on the card
 - Filter by tags (only cards with a certain tag will be visible), so I can more quickly find a specific card I’m looking for and/or to have a better overview of cards related to another card
+  * Board has a search and filter feature
+  * filtering by tags shows all cards with those tags
 
 ### Epic 5: Customization
 
