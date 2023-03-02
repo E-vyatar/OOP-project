@@ -122,8 +122,14 @@ As a **User** I want:
 
 As a **User** I want:
 
-- add background color to my board, to make them look nicer and/or to have a visual separation between boards
+- to add background color to my board, to make them look nicer and/or to have a visual separation between boards
+  * Boards have default color when created
+  * Board's color can be changed by anyone with edit access
+  * Text color change with board color (if current color makes it hard to read the text)
 - Specify tag color, to be able to visually distinguish between different tags for better organization
+  * Tags have default color when created
+  * TAg's color can be changed by anyone with edit access
+  * Text color change with tag color (if current color makes it hard to read the text)
 
 ### Epic 6: Keyboard shortcuts
 
