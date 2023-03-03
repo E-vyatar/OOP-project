@@ -67,6 +67,8 @@ so I can separate tasks for different projects for better organization (e.g. sep
   * Created boards appear in the application overview
   * When created, a board gets its own unique key as identification
   * The board key can be shown after the board creation
+- To set & change the title of a board, so I can more easily distinguish between different boards
+  * Each board has a title
 - to view boards using a key (and password), so I can work on multiple boards which can be for different things
 This way I can also make personalized boards.
   * A board's key can be used to find the board among the other boards
