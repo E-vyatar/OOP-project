@@ -47,7 +47,6 @@ As a **User** I want:
   * A list has an order
   * A card position in the list can be changed
   * Change in a card position is updated in the database
-- to move cards between lists, so I can change the status of cards when I start working on them or am finished with them. (not sure if we need this section since it is more of an optional way to use the board)
 - lists on the board have a changeable order, so I can put the lists in a logical order and have the more
   commonly used lists more readily accessible.
   * Board has an order for its lists
