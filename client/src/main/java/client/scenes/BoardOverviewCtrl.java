@@ -20,7 +20,7 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class QuoteOverviewCtrl implements Initializable {
+public class BoardOverviewCtrl implements Initializable {
 
 
     @Override
