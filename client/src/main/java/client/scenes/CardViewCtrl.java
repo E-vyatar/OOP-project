@@ -5,23 +5,23 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
-public class EmbeddedCardViewCtrl implements EventHandler {
+public class CardViewCtrl implements EventHandler {
 
     private final MainCtrl mainCtrl;
     private final Card card;
-    private final EmbeddedCardView view;
+    private final CardView view;
 
-    public EmbeddedCardViewCtrl(MainCtrl mainCtrl, Card card) {
+    public CardViewCtrl(MainCtrl mainCtrl, Card card) {
         this.mainCtrl = mainCtrl;
         this.card = card;
-        this.view = new EmbeddedCardView(this);
+        this.view = new CardView(this);
     }
 
     public Card getCard(){
         return this.card;
     }
 
-    public EmbeddedCardView getView() {
+    public CardView getView() {
         return this.view;
     }
 

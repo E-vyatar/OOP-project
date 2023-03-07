@@ -39,8 +39,8 @@ public class BoardListView extends TitledPane {
         var children = new ArrayList();
 
         for (Card card : this.cards) {
-            EmbeddedCardViewCtrl embeddedCardViewCtrl = new EmbeddedCardViewCtrl(mainCtrl, card);
-            children.add(embeddedCardViewCtrl.getView());
+            CardViewCtrl cardViewCtrl = new CardViewCtrl(mainCtrl, card);
+            children.add(cardViewCtrl.getView());
         }
 
         vBox.getChildren().addAll(children);

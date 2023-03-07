@@ -4,11 +4,11 @@ import commons.Card;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-public class EmbeddedCardView extends Pane {
+public class CardView extends Pane {
 
-    private final EmbeddedCardViewCtrl controller;
+    private final CardViewCtrl controller;
 
-    public EmbeddedCardView(EmbeddedCardViewCtrl controller) {
+    public CardView(CardViewCtrl controller) {
         this.controller = controller;
         createView();
     }
