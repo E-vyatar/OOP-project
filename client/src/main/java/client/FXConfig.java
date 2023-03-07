@@ -17,6 +17,7 @@ package client;
 
 import client.scenes.AddQuoteCtrl;
 import client.scenes.BoardOverviewCtrl;
+import client.scenes.CardPopupCtrl;
 import client.scenes.MainCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -29,5 +30,6 @@ public class FXConfig implements Module {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CardPopupCtrl.class).in(Scopes.SINGLETON);
     }
 }

@@ -15,8 +15,10 @@
  */
 package client.scenes;
 
+import commons.Card;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -27,10 +29,20 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    public void initialize(Stage primaryStage, Pair<BoardOverviewCtrl, Parent> overview) {
+    private CardPopupCtrl cardPopupCtrlCtrl;
+    private Stage cardPopup;
+
+    public void initialize(Stage primaryStage,
+                           Pair<BoardOverviewCtrl, Parent> overview,
+                           Pair<CardPopupCtrl, Parent> cardPopup) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
+
+        this.cardPopupCtrlCtrl = cardPopup.getKey();
+        this.cardPopup = new Stage();
+        this.cardPopup.initModality(Modality.WINDOW_MODAL);
+        this.cardPopup.setScene(new Scene(cardPopup.getValue()));
 
         showOverview();
         primaryStage.show();
@@ -42,4 +54,11 @@ public class MainCtrl {
         overviewCtrl.refresh();
     }
 
+    public void showCard(Card card) {
+        cardPopupCtrlCtrl.setCard(card);
+        cardPopup.show();
+    }
+    public void hideCard() {
+        cardPopup.hide();
+    }
 }

@@ -12,11 +12,13 @@ import java.util.ArrayList;
 
 public class BoardListView extends TitledPane {
 
+    private final MainCtrl mainCtrl;
     private BoardList boardList;
     private final FilteredList<Card> cards;
 
-    public BoardListView(BoardList boardList, ObservableList<Card> cards) {
+    public BoardListView(MainCtrl mainCtrl, BoardList boardList, ObservableList<Card> cards) {
         super();
+        this.mainCtrl = mainCtrl;
         this.boardList = boardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
@@ -37,8 +39,8 @@ public class BoardListView extends TitledPane {
         var children = new ArrayList();
 
         for (Card card : this.cards) {
-            CardView cardView = new CardView(card);
-            children.add(cardView);
+            EmbeddedCardViewCtrl embeddedCardViewCtrl = new EmbeddedCardViewCtrl(mainCtrl, card);
+            children.add(embeddedCardViewCtrl.getView());
         }
 
         vBox.getChildren().addAll(children);

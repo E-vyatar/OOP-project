@@ -15,6 +15,7 @@
  */
 package client;
 
+import client.scenes.CardPopupCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.BoardOverviewCtrl;
 import com.google.inject.Injector;
@@ -36,8 +37,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         var overview = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
+        var cardPopup = FXML.load(CardPopupCtrl.class, "client", "scenes", "CardPopup.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview);
+
+        mainCtrl.initialize(primaryStage, overview, cardPopup);
     }
 }
