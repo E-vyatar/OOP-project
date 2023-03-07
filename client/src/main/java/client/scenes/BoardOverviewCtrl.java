@@ -15,13 +15,19 @@
  */
 package client.scenes;
 
+import commons.BoardList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class BoardOverviewCtrl implements Initializable {
 
+    @FXML
+    private HBox list_of_lists;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -29,5 +35,11 @@ public class BoardOverviewCtrl implements Initializable {
     }
 
     public void refresh() {
+        var lists = new ArrayList();
+        for (int i = 0; i < 4; i ++) {
+            lists.add(new BoardListView(new BoardList(i, "List " + i)));
+        }
+
+        list_of_lists.getChildren().addAll(lists);
     }
 }

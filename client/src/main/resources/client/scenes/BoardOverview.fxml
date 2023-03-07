@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardOverviewCtrl">
    <children>
@@ -14,106 +10,8 @@
         <content>
             <AnchorPane>
                <children>
-                  <HBox>
-                     <children>
-                        <TitledPane animated="false" collapsible="false" text="List 1" HBox.hgrow="NEVER">
-                          <content>
-                            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefWidth="200.0">
-                                 <children>
-                                    <ScrollPane hbarPolicy="NEVER" prefHeight="360.0" prefWidth="200.0">
-                                       <content>
-                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                                             <children>
-                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="150.0">
-                                                   <children>
-                                                      <Label text="Card title 1.1" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="150.0">
-                                                   <children>
-                                                      <Label text="Card Title 1.2" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="150.0">
-                                                   <children>
-                                                      <Label text="Card Title 1.3" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="150.0">
-                                                   <children>
-                                                      <Label text="Card title 1.4" />
-                                                   </children>
-                                                </Pane>
-                                             </children>
-                                          </VBox>
-                                       </content>
-                                    </ScrollPane>
-                                 </children>
-                              </AnchorPane>
-                          </content>
-                        </TitledPane>
-                        <TitledPane animated="false" collapsible="false" text="List 2">
-                           <content>
-                              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefWidth="200.0">
-                                 <children>
-                                    <ScrollPane hbarPolicy="NEVER" prefHeight="360.0" prefWidth="200.0">
-                                       <content>
-                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                                             <children>
-                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="150.0">
-                                                   <children>
-                                                      <Label text="Card title 2.1" />
-                                                   </children>
-                                                </Pane>
-                                             </children>
-                                          </VBox>
-                                       </content>
-                                    </ScrollPane>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </TitledPane>
-                        <TitledPane animated="false" collapsible="false" text="List 3">
-                           <content>
-                              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefWidth="200.0">
-                                 <children>
-                                    <ScrollPane hbarPolicy="NEVER" prefHeight="360.0" prefWidth="200.0" />
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </TitledPane>
-                        <TitledPane animated="false" collapsible="false" text="List 4">
-                           <content>
-                              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefWidth="200.0">
-                                 <children>
-                                    <ScrollPane hbarPolicy="NEVER" prefHeight="360.0" prefWidth="200.0">
-                                       <content>
-                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                                             <children>
-                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="150.0">
-                                                   <children>
-                                                      <Label text="Card title 4.1" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="150.0">
-                                                   <children>
-                                                      <Label text="Card Title 4.2" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane maxWidth="1.7976931348623157E308" prefHeight="150.0">
-                                                   <children>
-                                                      <Label text="Card Title 4.3" />
-                                                   </children>
-                                                </Pane>
-                                             </children>
-                                          </VBox>
-                                       </content>
-                                    </ScrollPane>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </TitledPane>
-                     </children>
+                  <HBox fx:id="list_of_lists">
+
                   </HBox>
                </children>
             </AnchorPane>
