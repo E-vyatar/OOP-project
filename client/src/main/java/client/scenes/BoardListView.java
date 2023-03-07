@@ -2,6 +2,8 @@ package client.scenes;
 
 import commons.BoardList;
 import commons.Card;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
@@ -11,10 +13,15 @@ import java.util.ArrayList;
 public class BoardListView extends TitledPane {
 
     private BoardList boardList;
+    private final FilteredList<Card> cards;
 
-    public BoardListView(BoardList boardList) {
+    public BoardListView(BoardList boardList, ObservableList<Card> cards) {
         super();
         this.boardList = boardList;
+        // Only keep the cards that have the same id as this list.
+        this.cards = cards.filtered(
+                card -> card.listID == this.boardList.id
+        );
 
         createView();
     }
@@ -29,7 +36,7 @@ public class BoardListView extends TitledPane {
 
         var children = new ArrayList();
 
-        for (Card card : boardList.getCards()) {
+        for (Card card : this.cards) {
             CardView cardView = new CardView(card);
             children.add(cardView);
         }

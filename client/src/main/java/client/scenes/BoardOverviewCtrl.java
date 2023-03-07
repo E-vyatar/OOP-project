@@ -16,12 +16,16 @@
 package client.scenes;
 
 import commons.BoardList;
+import commons.Card;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class BoardOverviewCtrl implements Initializable {
@@ -36,8 +40,18 @@ public class BoardOverviewCtrl implements Initializable {
 
     public void refresh() {
         var lists = new ArrayList();
+        List<Card> cards = new ArrayList<>();
+        for (int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                cards.add(new Card(i, "Card " + i + "." + j));
+            }
+        }
+
+        ObservableList<Card> observableList = FXCollections.observableList(cards);
+
         for (int i = 0; i < 4; i ++) {
-            lists.add(new BoardListView(new BoardList(i, "List " + i)));
+            BoardListView boardListView = new BoardListView(new BoardList(i, "List " + i), observableList);
+            lists.add(boardListView);
         }
 
         list_of_lists.getChildren().addAll(lists);
