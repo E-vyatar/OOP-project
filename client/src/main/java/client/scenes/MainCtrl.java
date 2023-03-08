@@ -42,6 +42,8 @@ public class MainCtrl {
         this.cardPopupCtrlCtrl = cardPopup.getKey();
         this.cardPopup = new Stage();
         this.cardPopup.initModality(Modality.WINDOW_MODAL);
+        this.cardPopup.setMinWidth(240.0);
+        this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(cardPopup.getValue()));
 
         showOverview();
