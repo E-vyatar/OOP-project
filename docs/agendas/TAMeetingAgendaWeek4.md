@@ -10,7 +10,7 @@ Note taker:      Rares Popa
 
 ### Check-in [1-5min]
 *How is everyone?*
-*Did everyone finish the git assignment? Did everyone install all requirements for the project?*
+*Did everyone finish (and pass) the git assignment?*
 
 ### Approval of the agenda [1-5min]
 *Does anyone have anything they would like to discuss this meeting? Is everyone happy with the current agenda?*
@@ -31,7 +31,7 @@ Does anyone have any objections to the minutes?*
 *Using the backlog, we will discuss what we will do in the following weeks. 
 Shall we create milestones in gitlab for the next couple of weeks?*\
 
-*If we have time: start creating issues to reach the milestones, and assign them.*
+*If we have time: What will be the meaningful merge requests of this week? Start creating issues to reach the milestones, and assign them.*
 
 ### Additional agenda items [5min]
 *Did we need to discuss anything else?*

@@ -28,7 +28,7 @@ public class CardView extends ListCell<Card> {
             pane.setPrefWidth(200.0);
 
             Label label = new Label();
-            label.setText(card.title);
+            label.setText(card.getCardTitle());
 
             pane.getChildren().addAll(label);
             this.setGraphic(pane);

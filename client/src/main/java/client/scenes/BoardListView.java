@@ -1,7 +1,7 @@
 package client.scenes;
 
-import commons.BoardList;
 import commons.Card;
+import commons.CardList;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.ListCell;
@@ -12,16 +12,16 @@ import javafx.util.Callback;
 public class BoardListView extends TitledPane {
 
     private final MainCtrl mainCtrl;
-    private BoardList boardList;
+    private CardList cardList;
     private final FilteredList<Card> cards;
 
-    public BoardListView(MainCtrl mainCtrl, BoardList boardList, ObservableList<Card> cards) {
+    public BoardListView(MainCtrl mainCtrl, CardList cardList, ObservableList<Card> cards) {
         super();
         this.mainCtrl = mainCtrl;
-        this.boardList = boardList;
+        this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> card.listID == this.boardList.id
+                card -> card.getCardListId() == this.cardList.getCardListId()
         );
 
         createView();
@@ -30,7 +30,7 @@ public class BoardListView extends TitledPane {
     private void createView() {
 
         this.setCollapsible(false);
-        this.setText(boardList.title);
+        this.setText(cardList.getCardListTitle());
         this.setMaxHeight(Double.MAX_VALUE);
 
         ListView<Card> listView = new ListView<>();

@@ -16,8 +16,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.BoardList;
 import commons.Card;
+import commons.CardList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -51,18 +51,24 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     }
 
     public void refresh() {
+        /*
+            Currently, this method just creates arbitrary data.
+            This data doesn't properly use the format as it's stored in the DB.
+            When linking with the server side,
+            the cards in a list should be converted into an ObservableList.
+         */
         var lists = new ArrayList();
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < 4; i++){
             for(int j = 0; j < 4; j++){
-                cards.add(new Card(i, "Card " + i + "." + j));
+                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, -1, -1));
             }
         }
 
         ObservableList<Card> observableList = FXCollections.observableList(cards);
 
         for (int i = 0; i < 4; i ++) {
-            BoardListView boardListView = new BoardListView(mainCtrl, new BoardList(i, "List " + i), observableList);
+            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "List " + i, -1), observableList);
             lists.add(boardListView);
         }
 
