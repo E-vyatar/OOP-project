@@ -2,42 +2,33 @@ package commons;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.Objects;
 
 
 @Entity
 public class Board {
-    String boardId;
+    @Id
+    long boardId;
+
+    @OneToMany
     List<CardList> cardLists;
 
     public Board() {
     }
 
-    public Board(String boardId, List<CardList> cardLists) {
+    public Board(long boardId, List<CardList> cardLists) {
         this.boardId = boardId;
         this.cardLists = cardLists;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Board board = (Board) o;
-        return Objects.equals(boardId, board.boardId) && Objects.equals(cardLists, board.cardLists);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(boardId, cardLists);
-    }
-
-    @Id
-    public String getBoardId() {
+    public long getBoardId() {
         return boardId;
     }
 
-    public void setBoardId(String boardId) {
+    public void setBoardId(long boardId) {
         this.boardId = boardId;
     }
 
@@ -49,4 +40,16 @@ public class Board {
         this.cardLists = cardLists;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return boardId == board.boardId && Objects.equals(cardLists, board.cardLists);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(boardId, cardLists);
+    }
 }

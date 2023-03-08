@@ -6,25 +6,25 @@ import java.util.Objects;
 
 @Entity
 public class CardList {
-    String cardListId;
+    long cardListId;
     String cardListTitle;
-    String firstCardId;
+    long firstCardId;
 
     public CardList() {
     }
 
-    public CardList(String cardListId, String cardListTitle, String firstCardId) {
+    public CardList(long cardListId, String cardListTitle, long firstCardId) {
         this.cardListId = cardListId;
         this.cardListTitle = cardListTitle;
         this.firstCardId = firstCardId;
     }
 
     @Id
-    public String getCardListId() {
+    public long getCardListId() {
         return cardListId;
     }
     
-    public void setCardListId(String cardListId) {
+    public void setCardListId(long cardListId) {
         this.cardListId = cardListId;
     }
 
@@ -35,11 +35,11 @@ public class CardList {
         this.cardListTitle = cardListTitle;
     }
 
-    public String getFirstCardId() {
+    public long getFirstCardId() {
         return firstCardId;
     }
 
-    public void setFirstCardId(String firstCardId) {
+    public void setFirstCardId(long firstCardId) {
         this.firstCardId = firstCardId;
     }
 
@@ -48,7 +48,7 @@ public class CardList {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CardList cardList = (CardList) o;
-        return Objects.equals(cardListId, cardList.cardListId) && Objects.equals(cardListTitle, cardList.cardListTitle) && Objects.equals(firstCardId, cardList.firstCardId);
+        return cardListId == cardList.cardListId && firstCardId == cardList.firstCardId && Objects.equals(cardListTitle, cardList.cardListTitle);
     }
 
     @Override

@@ -7,15 +7,16 @@ import java.util.Objects;
 @Entity
 public class Card {
 
-    String cardId;
-    String cardListId;
+    @Id
+    long cardId;
+    long cardListId;
     String cardTitle;
-    String nextCardId;
-    String boardId;
+    long nextCardId;
+    long boardId;
 
     public Card() {
     }
-    public Card(String cardId, String cardListId, String cardTitle, String nextCardId, String boardId) {
+    public Card(long cardId, long cardListId, String cardTitle, long nextCardId, long boardId) {
         this.cardId = cardId;
         this.cardListId = cardListId;
         this.cardTitle = cardTitle;
@@ -23,20 +24,19 @@ public class Card {
         this.boardId = boardId;
     }
 
-    @Id
-    public String getCardId() {
+    public long getCardId() {
         return cardId;
     }
 
-    public void setCardId(String cardId) {
+    public void setCardId(long cardId) {
         this.cardId = cardId;
     }
 
-    public String getCardListId() {
+    public long getCardListId() {
         return cardListId;
     }
 
-    public void setCardListId(String cardListId) {
+    public void setCardListId(long cardListId) {
         this.cardListId = cardListId;
     }
 
@@ -48,19 +48,19 @@ public class Card {
         this.cardTitle = cardTitle;
     }
 
-    public String getNextCardId() {
+    public long getNextCardId() {
         return nextCardId;
     }
 
-    public void setNextCardId(String nextCardId) {
+    public void setNextCardId(long nextCardId) {
         this.nextCardId = nextCardId;
     }
 
-    public String getBoardId() {
+    public long getBoardId() {
         return boardId;
     }
 
-    public void setBoardId(String boardId) {
+    public void setBoardId(long boardId) {
         this.boardId = boardId;
     }
 
@@ -69,13 +69,11 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return Objects.equals(cardId, card.cardId) && Objects.equals(cardListId, card.cardListId) && Objects.equals(cardTitle, card.cardTitle) && Objects.equals(nextCardId, card.nextCardId) && Objects.equals(boardId, card.boardId);
+        return cardId == card.cardId && cardListId == card.cardListId && nextCardId == card.nextCardId && boardId == card.boardId && Objects.equals(cardTitle, card.cardTitle);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(cardId, cardListId, cardTitle, nextCardId, boardId);
     }
-
-
 }
