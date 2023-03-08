@@ -4,11 +4,10 @@ import commons.BoardList;
 import commons.Card;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.VBox;
-
-import java.util.ArrayList;
+import javafx.util.Callback;
 
 public class BoardListView extends TitledPane {
 
@@ -33,27 +32,17 @@ public class BoardListView extends TitledPane {
         this.setCollapsible(false);
         this.setText(boardList.title);
 
-        ScrollPane scrollPane = new ScrollPane();
-        VBox vBox = new VBox();
+        ListView<Card> listView = new ListView<>();
 
-        var children = new ArrayList();
+        listView.setCellFactory(new Callback<ListView<Card>, ListCell<Card>>() {
+            @Override
+            public ListCell<Card> call(ListView<Card> param) {
+                CardViewCtrl cardViewCtrl = new CardViewCtrl(mainCtrl);
+                return cardViewCtrl.getView();
+            }
+        });
+        listView.setItems(this.cards);
 
-        for (Card card : this.cards) {
-            CardViewCtrl cardViewCtrl = new CardViewCtrl(mainCtrl, card);
-            children.add(cardViewCtrl.getView());
-        }
-
-        vBox.getChildren().addAll(children);
-
-        scrollPane.setContent(vBox);
-        // Setting the pref height is necessary for the scroll bar to show,
-        // I'm not sure why, but this should be fixed so it's not static.
-        scrollPane.setPrefHeight(360.0);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        this.setContent(scrollPane);
-
-        this.setMinWidth(200.0);
-
+        this.setContent(listView);
     }
 }
