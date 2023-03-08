@@ -1,23 +1,22 @@
 package commons;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.List;
 import java.util.Objects;
 
+
+@Entity
 public class Board {
     String boardId;
     List<CardList> cardLists;
 
+    public Board() {
+    }
+
     public Board(String boardId, List<CardList> cardLists) {
         this.boardId = boardId;
         this.cardLists = cardLists;
-    }
-
-    public String getBoardId() {
-        return boardId;
-    }
-
-    public List<CardList> getCardLists() {
-        return cardLists;
     }
 
     @Override
@@ -32,4 +31,22 @@ public class Board {
     public int hashCode() {
         return Objects.hash(boardId, cardLists);
     }
+
+    @Id
+    public String getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(String boardId) {
+        this.boardId = boardId;
+    }
+
+    public List<CardList> getCardLists() {
+        return cardLists;
+    }
+
+    public void setCardLists(List<CardList> cardLists) {
+        this.cardLists = cardLists;
+    }
+
 }

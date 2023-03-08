@@ -27,7 +27,7 @@ class BoardTest {
         Board board2 = new Board("1", null);
         assertTrue(board1.equals(board2));
 
-        Board board3 = new Board("1", null);
+        Board board3 = new Board("3", null);
         assertFalse(board1.equals(board3));
 
         assertFalse(board1.equals(null));
