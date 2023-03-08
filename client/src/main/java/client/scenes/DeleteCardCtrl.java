@@ -18,26 +18,20 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
-public class AddCardCtrl {
+public class DeleteCardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    @FXML
-    private TextField title;
-
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public DeleteCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
     public void cancel() {
-        clearFields();
         mainCtrl.showOverview();
     }
 
@@ -62,10 +56,6 @@ public class AddCardCtrl {
 //        return new Card(title.getText());
 //    }
 
-    private void clearFields() {
-        title.clear();
-    }
-
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
@@ -82,4 +72,5 @@ public class AddCardCtrl {
 
     public void refresh() {
     }
+
 }

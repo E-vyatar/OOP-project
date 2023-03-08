@@ -22,7 +22,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
-public class AddCardCtrl {
+public class EditCardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -31,7 +31,7 @@ public class AddCardCtrl {
     private TextField title;
 
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -81,5 +81,9 @@ public class AddCardCtrl {
     }
 
     public void refresh() {
+    }
+
+    public void setTitle(String title) {
+        this.title.setText(title);
     }
 }
