@@ -31,6 +31,7 @@ public class BoardListView extends TitledPane {
 
         this.setCollapsible(false);
         this.setText(boardList.title);
+        this.setMaxHeight(Double.MAX_VALUE);
 
         ListView<Card> listView = new ListView<>();
 
