@@ -77,14 +77,12 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
 
         list_of_lists.getChildren().addAll(lists);
 
+        // Create button and add to list_of_lists
         Button button = new Button("Add list");
         button.setOnAction(this::addList);
-
-        //set button margin
+            //set button margin
         HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
-
         list_of_lists.setAlignment(Pos.CENTER_RIGHT);
-
         list_of_lists.getChildren().add(button);
     }
 
