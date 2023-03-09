@@ -42,4 +42,20 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
+
+    public void updateCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("/cards/{id}") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    public void deleteCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("/cards/{id}") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete(Card.class);
+    }
 }

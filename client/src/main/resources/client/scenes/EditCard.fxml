@@ -14,7 +14,7 @@
             <Font size="48.0" />
          </font>
       </Label>
-    <Button layoutX="426.0" layoutY="320.0" mnemonicParsing="false" text="Confirm">
+    <Button layoutX="426.0" layoutY="320.0" mnemonicParsing="false" onAction="#ok" text="Confirm">
          <font>
             <Font size="24.0" />
          </font>

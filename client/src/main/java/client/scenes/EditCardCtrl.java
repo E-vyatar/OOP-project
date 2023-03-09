@@ -18,9 +18,13 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Card;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Modality;
 
 public class EditCardCtrl {
 
@@ -41,26 +45,25 @@ public class EditCardCtrl {
         mainCtrl.showOverview();
     }
 
-//    TODO
-//    public void ok() {
-//        try {
-//            server.addQuote(getQuote());
-//        } catch (WebApplicationException e) {
-//
-//            var alert = new Alert(Alert.AlertType.ERROR);
-//            alert.initModality(Modality.APPLICATION_MODAL);
-//            alert.setContentText(e.getMessage());
-//            alert.showAndWait();
-//            return;
-//        }
-//
-//        clearFields();
-//        mainCtrl.showOverview();
-//    }
+    public void ok() {
+        try {
+            server.updateCard(getCard());
+        } catch (WebApplicationException e) {
 
-//    private Card getCard() {
-//        return new Card(title.getText());
-//    }
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
+        clearFields();
+        mainCtrl.showOverview();
+    }
+
+    private Card getCard() {
+        return new Card();
+    }
 
     private void clearFields() {
         title.clear();
@@ -69,8 +72,7 @@ public class EditCardCtrl {
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
-                System.out.println("ENTER pressed");
-//                ok();
+                ok();
                 break;
             case ESCAPE:
                 cancel();
