@@ -19,6 +19,10 @@ public class CardList {
         this.firstCardId = firstCardId;
     }
 
+    public void renameCardList(String newName) {
+        this.cardListTitle = newName;
+    }
+
     @Id
     public long getCardListId() {
         return cardListId;
