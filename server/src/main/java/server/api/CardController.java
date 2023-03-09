@@ -1,69 +1,51 @@
-/*
- * Copyright 2021 Delft University of Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package server.api;
 
-import commons.Card;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import server.database.BoardRepository;
-
-import java.util.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
+import server.database.CardRepositroy;
+import server.models.Card;
 
 @RestController
-@RequestMapping("/api/cards") // temporary!!!!!!!
+@RequestMapping("/cards")
 public class CardController {
 
-    private final Random random;
-    private final BoardRepository repo;
+    private final CardRepositroy cardRepository;
+    Logger logger = LoggerFactory.getLogger(CardController.class);
 
-    public CardController(Random random, BoardRepository repo) {
-        this.random = random;
-        this.repo = repo;
+    public CardController(CardRepositroy cardRepositroy) {
+        this.cardRepository = cardRepositroy;
     }
 
-    private static boolean isNullOrEmpty(String s) {
-        return s == null || s.isEmpty();
+    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
+    public Card createCard(@RequestBody Card card) {
+        logger.info("createCard() called with: card = [" + card + "]");
+        return cardRepository.save(card);
     }
 
-    // wait for board\list repo
-//    @GetMapping(path = {"", "/"})
-//    public List<Card> getAll() {
-//        return repo.findAll();
-//    }
+    @GetMapping("all")
+    public Iterable<Card> getAllCards() {
+        return cardRepository.findAll();
+    }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Card> getById(@PathVariable("id") long id) {
-//        if (id < 0 || !repo.existsById(id)) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        return ResponseEntity.ok(repo.findById(id).get());
-//    }
+    @GetMapping("{id}")
+    public Card getCardById(@PathVariable("id") String id) {
+        return cardRepository.findById(id).orElse(null);
+    }
 
-    @PostMapping(path = {"", "/"})
-    public ResponseEntity<Card> add(@RequestBody Card card) {
-
-        if (isNullOrEmpty(card.getCardTitle())) {
-            return ResponseEntity.badRequest().build();
+    @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
+    public Card updateCard(@PathVariable("id") String id, @RequestBody Card card) {
+        logger.info("updateCard() called with: id = [" + id + "], card = [" + card + "]");
+        if (cardRepository.findById(id).isPresent()) {
+            card.setId(id);
+            return cardRepository.save(card);
         }
-
-//        Card saved = repo.save(card);
-//        return ResponseEntity.ok(saved);
         return null;
     }
+
+    @DeleteMapping("{id}")
+    public void deleteCard(@PathVariable("id") String id) {
+        cardRepository.deleteById(id);
+    }
+
 }
