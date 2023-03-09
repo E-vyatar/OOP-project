@@ -38,6 +38,7 @@ public class AddCardCtrl {
     public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.title = new TextField();
     }
 
     public void cancel() {
@@ -62,7 +63,7 @@ public class AddCardCtrl {
     }
 
     private Card getCard() {
-        return new Card();
+        return new Card(25, 36, title.getText(), 47, 90);
     }
 
     private void clearFields() {

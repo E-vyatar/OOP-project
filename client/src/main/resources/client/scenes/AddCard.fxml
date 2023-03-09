@@ -8,13 +8,13 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddCardCtrl">
    <children>
-      <TextField layoutX="35.0" layoutY="97.0" prefHeight="95.0" prefWidth="492.0" />
+      <TextField fx:id="title" layoutX="35.0" layoutY="97.0" prefHeight="95.0" prefWidth="492.0" />
       <Label layoutX="35.0" layoutY="27.0" text="Title:">
          <font>
             <Font size="48.0" />
          </font>
       </Label>
-    <Button layoutX="426.0" layoutY="320.0" mnemonicParsing="false" text="Create">
+    <Button layoutX="426.0" layoutY="320.0" mnemonicParsing="false" onAction="#ok" text="Create">
          <font>
             <Font size="24.0" />
          </font>

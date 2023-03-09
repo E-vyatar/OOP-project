@@ -37,9 +37,9 @@ public class ServerUtils {
 
     public void addCard(Card card) {
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards") //
+                .target(SERVER).path("/cards/new") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 }

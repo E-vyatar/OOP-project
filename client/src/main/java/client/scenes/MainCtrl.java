@@ -43,7 +43,7 @@ public class MainCtrl {
         this.editCardCtrl = editCard.getKey();
         this.editCard = new Scene(editCard.getValue());
 
-        showOverview();
+        showAddCard();
         primaryStage.show();
     }
 
