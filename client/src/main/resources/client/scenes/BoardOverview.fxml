@@ -3,17 +3,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 
-<ScrollPane prefWidth="600"
-            prefHeight="400"
-            fitToHeight="true"
-            vbarPolicy="NEVER"
-            vmax="0.0"
-            xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="client.scenes.BoardOverviewCtrl">
+<ScrollPane fitToHeight="true" prefHeight="400" prefWidth="600" vbarPolicy="NEVER" vmax="0.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardOverviewCtrl">
     <content>
-        <HBox fillHeight="true"
-              fx:id="list_of_lists">
+        <HBox fx:id="list_of_lists" fillHeight="true">
 
         </HBox>
     </content>

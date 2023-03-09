@@ -20,10 +20,13 @@ import commons.Card;
 import commons.CardList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
@@ -73,6 +76,36 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         }
 
         list_of_lists.getChildren().addAll(lists);
+
+        Button button = new Button("Add list");
+        button.setOnAction(this::addList);
+
+        //set button margin
+        HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
+
+        list_of_lists.setAlignment(Pos.CENTER_RIGHT);
+
+        list_of_lists.getChildren().add(button);
+    }
+
+    /**
+     * Adds a new list to the board
+     * @param actionEvent
+     */
+    private void addList(ActionEvent actionEvent) {
+        // Temporarily remove the button from the list of lists
+        Button button = (Button) list_of_lists.getChildren().get(list_of_lists.getChildren().size() - 1);
+        list_of_lists.getChildren().remove(list_of_lists.getChildren().size() - 1);
+
+        // Create a new list where cards can be added to
+        ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
+
+        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+        list_of_lists.getChildren().add(new BoardListView(mainCtrl, CardList.createNewCardList("New List", -1), observableList));
+
+        // Add the button back to the list of lists
+        list_of_lists.getChildren().add(button);
+
     }
 
     @Override
