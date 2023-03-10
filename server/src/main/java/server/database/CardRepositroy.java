@@ -1,8 +1,8 @@
 package server.database;
 
+import commons.Card;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import server.models.Card;
 
 import java.util.List;
 

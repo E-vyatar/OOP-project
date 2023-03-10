@@ -1,10 +1,10 @@
 package server.api;
 
+import commons.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardRepositroy;
-import server.models.Card;
 
 @RestController
 @RequestMapping("/cards")
