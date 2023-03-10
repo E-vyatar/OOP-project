@@ -33,6 +33,13 @@ public class MainCtrl {
     private CardPopupCtrl cardPopupCtrlCtrl;
     private Stage cardPopup;
 
+    private AddCardCtrl addCardCtrl;
+    private Scene addCard;
+
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
+
     //=========================================================
     // This is temporary in order to demonstrate functionality:
     //     - It will be merged into main project later.
@@ -47,8 +54,11 @@ public class MainCtrl {
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<CardPopupCtrl, Parent> cardPopup,
+                           Pair<AddCardCtrl, Parent> addCard,
+                           Pair<EditCardCtrl, Parent> editCard,
                            Pair<ListOverviewCtrl, Parent> listOverview,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -60,9 +70,6 @@ public class MainCtrl {
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(cardPopup.getValue()));
 
-        showOverview();
-        primaryStage.show();
-
         this.secondaryStage = new Stage();
         this.listOverviewCtrl = listOverview.getKey();
         this.listOverview = new Scene(listOverview.getValue(), 200, 200);
@@ -72,6 +79,9 @@ public class MainCtrl {
         this.renameListPopup.setX(this.renameListPopup.getX() + 100);
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
+
+        showOverview();
+        this.primaryStage.show();
 
         showExampleListOverview();
         secondaryStage.show();
@@ -98,6 +108,12 @@ public class MainCtrl {
         cardPopup.hide();
     }
 
+    public void showAddCard () {
+        primaryStage.setTitle("Empty Scene <addCard>");
+        primaryStage.setScene(addCard);
+        addCardCtrl.refresh();
+    }
+
     public void showRenameList(CardList cardList) {
         renameListPopupCtrl.setCardList(cardList);
         renameListPopup.show();
@@ -106,4 +122,5 @@ public class MainCtrl {
     public void hideRenameListPopup() {
         renameListPopup.hide();
     }
+
 }

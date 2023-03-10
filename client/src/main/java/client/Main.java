@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.*;
+
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -39,8 +40,12 @@ public class Main extends Application {
         var listOverview = FXML.load(ListOverviewCtrl.class, "client", "scenes", "Example-ListOverview.fxml");
         var renameListPopup = FXML.load(RenameListPopupCtrl.class, "client", "scenes", "RenameListPopup.fxml");
 
+
+        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
+        var editCard = FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
-        mainCtrl.initialize(primaryStage, overview, cardPopup, listOverview, renameListPopup);
+        mainCtrl.initialize(primaryStage, overview, cardPopup, addCard, editCard, listOverview, renameListPopup);
     }
 }

@@ -9,6 +9,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.util.Callback;
 
+import java.util.Objects;
+
 public class BoardListView extends TitledPane {
 
     private final MainCtrl mainCtrl;
@@ -21,7 +23,7 @@ public class BoardListView extends TitledPane {
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> card.getListId().equals(String.valueOf(this.cardList.getCardListId()))
+                card -> Objects.equals(card.getListId(), "" + this.cardList.getCardListId())
         );
 
         createView();
