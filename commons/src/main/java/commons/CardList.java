@@ -27,7 +27,7 @@ public class CardList {
     public long getCardListId() {
         return cardListId;
     }
-    
+
     public void setCardListId(long cardListId) {
         this.cardListId = cardListId;
     }
@@ -35,6 +35,7 @@ public class CardList {
     public String getCardListTitle() {
         return cardListTitle;
     }
+
     public void setCardListTitle(String cardListTitle) {
         this.cardListTitle = cardListTitle;
     }

@@ -28,8 +28,8 @@ public class ListOverviewCtrl implements Initializable {
     public void refresh() {
         List<CardListView> cardList_list = new ArrayList<>();
 
-        for (int i = 1; i <= 3; i ++) {
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List"+i, 0));
+        for (int i = 1; i <= 3; i++) {
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List" + i, 0));
             cardList_list.add(cardListViewCtrl.getView());
         }
 

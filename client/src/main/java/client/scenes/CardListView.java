@@ -5,7 +5,7 @@ import javafx.scene.control.TitledPane;
 
 public class CardListView extends TitledPane {
 
-    private CardListViewCtrl controller;
+    private final CardListViewCtrl controller;
 
     private CardList cardList;
 

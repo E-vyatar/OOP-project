@@ -5,8 +5,8 @@ import javafx.fxml.FXML;
 
 public class CardListViewCtrl {
     private final MainCtrl mainCtrl;
-    private CardList cardList;
-    private CardListView view;
+    private final CardList cardList;
+    private final CardListView view;
 
     @FXML
     private String text;

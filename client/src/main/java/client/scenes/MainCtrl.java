@@ -15,7 +15,8 @@
  */
 package client.scenes;
 
-import commons.*;
+import commons.Card;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -92,6 +93,7 @@ public class MainCtrl {
         cardPopupCtrlCtrl.setCard(card);
         cardPopup.show();
     }
+
     public void hideCard() {
         cardPopup.hide();
     }

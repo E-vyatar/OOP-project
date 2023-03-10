@@ -19,7 +19,7 @@ public class RenameListPopupCtrl {
     private TextField listTitle;
 
     @Inject
-    public RenameListPopupCtrl(ServerUtils utils, MainCtrl mainCtrl){
+    public RenameListPopupCtrl(ServerUtils utils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
     }
