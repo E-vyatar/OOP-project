@@ -27,12 +27,23 @@ public class MainCtrl {
     private QuoteOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview) {
+    private AddCardCtrl addCardCtrl;
+    private Scene addCard;
+
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
+    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
+                           Pair<AddCardCtrl, Parent> addCard, Pair<EditCardCtrl, Parent> editCard) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
 
-        showOverview();
+        showAddCard();
         primaryStage.show();
     }
 
@@ -40,6 +51,19 @@ public class MainCtrl {
         primaryStage.setTitle("Empty Scene <overview>");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
+    }
+
+    public void showAddCard () {
+        primaryStage.setTitle("Empty Scene <addCard>");
+        primaryStage.setScene(addCard);
+        addCardCtrl.refresh();
+    }
+
+    public void showEditCard (String title) {
+        primaryStage.setTitle("Empty Scene <editCard>");
+        primaryStage.setScene(editCard);
+        editCardCtrl.setTitle(title);
+        editCardCtrl.refresh();
     }
 
 }
