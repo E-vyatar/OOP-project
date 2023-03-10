@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.AddQuoteCtrl;
+import client.scenes.ConnectServerCtrl;
 import client.scenes.MainCtrl;
 import client.scenes.QuoteOverviewCtrl;
 import com.google.inject.Binder;
@@ -29,5 +30,6 @@ public class FXConfig implements Module {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ConnectServerCtrl.class).in(Scopes.SINGLETON);
     }
 }

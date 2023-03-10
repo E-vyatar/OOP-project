@@ -25,15 +25,22 @@ public class MainCtrl {
     private Stage primaryStage;
 
     private QuoteOverviewCtrl overviewCtrl;
+    private ConnectServerCtrl connectServerCtrl;
     private Scene overview;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview) {
+    public void initialize(Stage primaryStage, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
-        this.overview = new Scene(overview.getValue());
+        this.connectServerCtrl = connectServerCtrl.getKey();
+        this.overview = new Scene(connectServerCtrl.getValue());
 
-        showOverview();
+        showconnect();
         primaryStage.show();
+    }
+
+    public void showconnect(){
+        primaryStage.setTitle("Empty Scene <overview>");
+        primaryStage.setScene(overview);
+
     }
 
     public void showOverview() {
@@ -41,5 +48,11 @@ public class MainCtrl {
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
+//TODO solve the connection later
+//    public void checkConnection() throws UnknownHostException {
+//        if(connectServerCtrl.connect()){
+//            showOverview();
+//        }
+//    }
 
 }
