@@ -1,18 +1,18 @@
 package server.database;
 
-import commons.Board;
+import commons.Card;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
 @SuppressWarnings("SpringDataMongoDBJsonFieldInspection")
-public interface BoardRepository extends MongoRepository<Board, String> {
+public interface CardRepositroy extends MongoRepository<Card, String> {
     @Query("{_id:  '?0'}")
-    Board findBoardById(String id);
+    Card findCardById(String id);
 
     @Query("{boardId:  '?0'}")
-    List<Board> findBoardsByBoardId(String boardId);
+    List<Card> findCardsByBoardId(String boardId);
 
     long count();
 }

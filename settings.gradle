@@ -1,4 +1,4 @@
-rootProject.name = 'quizzzz' // TODO this is last year's title; we need to change this
+rootProject.name = 'talio'
 
 include 'client'
 include 'server'

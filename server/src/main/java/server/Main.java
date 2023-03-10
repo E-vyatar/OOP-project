@@ -19,11 +19,23 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @SpringBootApplication
 @EntityScan(basePackages = {"commons", "server"})
 public class Main {
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
+        InetAddress myIp;
+        String addressIP;
+        try {
+            myIp = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        addressIP = myIp.getHostAddress();
+        System.out.println(addressIP);
     }
 }
