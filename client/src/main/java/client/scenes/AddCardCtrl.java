@@ -63,7 +63,7 @@ public class AddCardCtrl {
     }
 
     private Card getCard() {
-        return new Card(25, 36, title.getText(), 47, 90);
+        return new Card("25", "36", title.getText(), "47", "90");
     }
 
     private void clearFields() {
