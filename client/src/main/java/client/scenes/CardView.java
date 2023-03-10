@@ -17,7 +17,7 @@ public class CardView extends ListCell<Card> {
     protected void updateItem(Card card, boolean empty) {
         super.updateItem(card, empty);
 
-        if (empty || card == null){
+        if (empty || card == null) {
             this.controller.setCard(null);
             this.setGraphic(null);
         } else {

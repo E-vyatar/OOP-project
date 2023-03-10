@@ -14,8 +14,8 @@ import java.util.Objects;
 public class BoardListView extends TitledPane {
 
     private final MainCtrl mainCtrl;
-    private CardList cardList;
     private final FilteredList<Card> cards;
+    private final CardList cardList;
 
     public BoardListView(MainCtrl mainCtrl, CardList cardList, ObservableList<Card> cards) {
         super();

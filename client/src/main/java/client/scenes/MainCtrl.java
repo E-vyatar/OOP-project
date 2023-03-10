@@ -16,6 +16,7 @@
 package client.scenes;
 
 import commons.Card;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -31,6 +32,7 @@ public class MainCtrl {
 
     private CardPopupCtrl cardPopupCtrlCtrl;
     private Stage cardPopup;
+
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
 
@@ -38,19 +40,28 @@ public class MainCtrl {
     private Scene editCard;
 
 
+    //=========================================================
+    // This is temporary in order to demonstrate functionality:
+    //     - It will be merged into main project later.
+    private Stage secondaryStage;
+    private ListOverviewCtrl listOverviewCtrl;
+    private Scene listOverview;
+
+    private RenameListPopupCtrl renameListPopupCtrl;
+    private Stage renameListPopup;
+    //=========================================================
+
     public void initialize(Stage primaryStage,
-            Pair<BoardOverviewCtrl, Parent> overview,
-            Pair<CardPopupCtrl, Parent> cardPopup,
-            Pair<AddCardCtrl, Parent> addCard,
-            Pair<EditCardCtrl, Parent> editCard
-        ) {
+                           Pair<BoardOverviewCtrl, Parent> overview,
+                           Pair<CardPopupCtrl, Parent> cardPopup,
+                           Pair<AddCardCtrl, Parent> addCard,
+                           Pair<EditCardCtrl, Parent> editCard,
+                           Pair<ListOverviewCtrl, Parent> listOverview,
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
-        this.addCardCtrl = addCard.getKey();
-        this.addCard = new Scene(addCard.getValue());
-        this.editCardCtrl = editCard.getKey();
-        this.editCard = new Scene(editCard.getValue());
 
         this.cardPopupCtrlCtrl = cardPopup.getKey();
         this.cardPopup = new Stage();
@@ -59,9 +70,27 @@ public class MainCtrl {
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(cardPopup.getValue()));
 
-        showOverview();
+        this.secondaryStage = new Stage();
+        this.listOverviewCtrl = listOverview.getKey();
+        this.listOverview = new Scene(listOverview.getValue(), 200, 200);
 
-        primaryStage.show();
+        this.renameListPopupCtrl = renameListPopup.getKey();
+        this.renameListPopup = new Stage();
+        this.renameListPopup.setX(this.renameListPopup.getX() + 100);
+        this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
+        this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
+
+        showOverview();
+        this.primaryStage.show();
+
+        showExampleListOverview();
+        secondaryStage.show();
+    }
+
+    private void showExampleListOverview() {
+        secondaryStage.setTitle("Example: rename list");
+        secondaryStage.setScene(listOverview);
+        listOverviewCtrl.refresh();
     }
 
     public void showOverview() {
@@ -74,20 +103,24 @@ public class MainCtrl {
         cardPopupCtrlCtrl.setCard(card);
         cardPopup.show();
     }
+
     public void hideCard() {
         cardPopup.hide();
     }
+
     public void showAddCard () {
         primaryStage.setTitle("Empty Scene <addCard>");
         primaryStage.setScene(addCard);
         addCardCtrl.refresh();
     }
 
-    public void showEditCard (String title) {
-        primaryStage.setTitle("Empty Scene <editCard>");
-        primaryStage.setScene(editCard);
-        editCardCtrl.setTitle(title);
-        editCardCtrl.refresh();
+    public void showRenameList(CardList cardList) {
+        renameListPopupCtrl.setCardList(cardList);
+        renameListPopup.show();
+    }
+
+    public void hideRenameListPopup() {
+        renameListPopup.hide();
     }
 
 }

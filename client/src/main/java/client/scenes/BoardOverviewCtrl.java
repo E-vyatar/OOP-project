@@ -40,7 +40,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     private HBox list_of_lists;
 
     @Inject
-    public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl){
+    public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
     }
@@ -59,16 +59,16 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
          */
         var lists = new ArrayList();
         List<Card> cards = new ArrayList<>();
-        for (int i = 0; i < 4; i++){
-            for(int j = 0; j < 4; j++){
-                cards.add(new Card("" + (i * 4 + j), "" + i, "Card " + i + "." + j, null, null));
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                cards.add(new Card(String.valueOf(i * 4 + j), String.valueOf(i), "Card " + i + "." + j, null, null));
             }
         }
 
         ObservableList<Card> observableList = FXCollections.observableList(cards);
 
-        for (int i = 0; i < 4; i ++) {
-            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "list " + i, -1), observableList);
+        for (int i = 0; i < 4; i++) {
+            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "List " + i, -1), observableList);
             lists.add(boardListView);
         }
 
