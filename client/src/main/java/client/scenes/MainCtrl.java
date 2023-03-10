@@ -49,6 +49,9 @@ public class MainCtrl {
 
     private RenameListPopupCtrl renameListPopupCtrl;
     private Stage renameListPopup;
+    private ConnectServerCtrl connectServerCtrl;
+
+    private Scene connectServer;
     //=========================================================
 
     public void initialize(Stage primaryStage,
@@ -57,11 +60,15 @@ public class MainCtrl {
                            Pair<AddCardCtrl, Parent> addCard,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ListOverviewCtrl, Parent> listOverview,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
 
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
+
+        this.connectServerCtrl = connectServerCtrl.getKey();
+        this.connectServer = new Scene(connectServerCtrl.getValue());
+
         this.overview = new Scene(overview.getValue());
+        this.overviewCtrl = overview.getKey();
 
         this.cardPopupCtrlCtrl = cardPopup.getKey();
         this.cardPopup = new Stage();
@@ -80,7 +87,7 @@ public class MainCtrl {
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
 
-        showOverview();
+        showconnect();
         this.primaryStage.show();
 
         showExampleListOverview();
@@ -93,11 +100,23 @@ public class MainCtrl {
         listOverviewCtrl.refresh();
     }
 
+    public void showconnect() {
+        primaryStage.setTitle("Connect");
+        primaryStage.setScene(connectServer);
+
+    }
+
     public void showOverview() {
         primaryStage.setTitle("Empty Scene <overview>");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
+//TODO solve the connection later
+//    public void checkConnection() throws UnknownHostException {
+//        if(connectServerCtrl.connect()){
+//            showOverview();
+//        }
+//    }
 
     public void showCard(Card card) {
         cardPopupCtrlCtrl.setCard(card);
@@ -108,7 +127,7 @@ public class MainCtrl {
         cardPopup.hide();
     }
 
-    public void showAddCard () {
+    public void showAddCard() {
         primaryStage.setTitle("Empty Scene <addCard>");
         primaryStage.setScene(addCard);
         addCardCtrl.refresh();
