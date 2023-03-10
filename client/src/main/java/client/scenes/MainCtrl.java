@@ -31,13 +31,26 @@ public class MainCtrl {
 
     private CardPopupCtrl cardPopupCtrlCtrl;
     private Stage cardPopup;
+    private AddCardCtrl addCardCtrl;
+    private Scene addCard;
+
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
 
     public void initialize(Stage primaryStage,
-                           Pair<BoardOverviewCtrl, Parent> overview,
-                           Pair<CardPopupCtrl, Parent> cardPopup) {
+            Pair<BoardOverviewCtrl, Parent> overview,
+            Pair<CardPopupCtrl, Parent> cardPopup,
+            Pair<AddCardCtrl, Parent> addCard,
+            Pair<EditCardCtrl, Parent> editCard
+        ) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
 
         this.cardPopupCtrlCtrl = cardPopup.getKey();
         this.cardPopup = new Stage();
@@ -47,6 +60,7 @@ public class MainCtrl {
         this.cardPopup.setScene(new Scene(cardPopup.getValue()));
 
         showOverview();
+
         primaryStage.show();
     }
 
@@ -63,4 +77,17 @@ public class MainCtrl {
     public void hideCard() {
         cardPopup.hide();
     }
+    public void showAddCard () {
+        primaryStage.setTitle("Empty Scene <addCard>");
+        primaryStage.setScene(addCard);
+        addCardCtrl.refresh();
+    }
+
+    public void showEditCard (String title) {
+        primaryStage.setTitle("Empty Scene <editCard>");
+        primaryStage.setScene(editCard);
+        editCardCtrl.setTitle(title);
+        editCardCtrl.refresh();
+    }
+
 }
