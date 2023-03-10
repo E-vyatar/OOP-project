@@ -21,7 +21,6 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.apache.commons.lang3.NotImplementedException;
 
 public class MainCtrl {
 
