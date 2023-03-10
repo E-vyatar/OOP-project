@@ -61,14 +61,14 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < 4; i++){
             for(int j = 0; j < 4; j++){
-                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, -1, -1));
+                cards.add(new Card("" + (i * 4 + j), "" + i, "Card " + i + "." + j, null, null));
             }
         }
 
         ObservableList<Card> observableList = FXCollections.observableList(cards);
 
         for (int i = 0; i < 4; i ++) {
-            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "List " + i, -1), observableList);
+            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "list " + i, -1), observableList);
             lists.add(boardListView);
         }
 

@@ -1,80 +1,75 @@
 package commons;
 
-
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Objects;
 
-@Entity
 public class Card {
 
     @Id
-    long cardId;
-    long cardListId;
-    String cardTitle;
-    long nextCardId;
-    long boardId;
+    String id;
+    String listId;
+    String title;
+    String nextCardId;
+    String boardId;
 
     public Card() {
     }
-    public Card(long cardId, long cardListId, String cardTitle, long nextCardId, long boardId) {
-        this.cardId = cardId;
-        this.cardListId = cardListId;
-        this.cardTitle = cardTitle;
+
+    public Card(String id, String listId, String title, String nextCardId, String boardId) {
+        this.id = id;
+        this.listId = listId;
+        this.title = title;
         this.nextCardId = nextCardId;
         this.boardId = boardId;
     }
 
-    public long getCardId() {
-        return cardId;
+    @Override
+    public String toString() {
+        return "Card{" +
+                "id='" + id + '\'' +
+                ", cardListId='" + listId + '\'' +
+                ", title='" + title + '\'' +
+                ", nextCardId='" + nextCardId + '\'' +
+                ", boardId='" + boardId + '\'' +
+                '}';
     }
 
-    public void setCardId(long cardId) {
-        this.cardId = cardId;
+    public String getId() {
+        return id;
     }
 
-    public long getCardListId() {
-        return cardListId;
+    public void setId(String cardId) {
+        this.id = cardId;
     }
 
-    public void setCardListId(long cardListId) {
-        this.cardListId = cardListId;
+    public String getListId() {
+        return listId;
     }
 
-    public String getCardTitle() {
-        return cardTitle;
+    public void setListId(String cardListId) {
+        this.listId = cardListId;
     }
 
-    public void setCardTitle(String cardTitle) {
-        this.cardTitle = cardTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public long getNextCardId() {
+    public void setTitle(String cardTitle) {
+        this.title = cardTitle;
+    }
+
+    public String getNextCardId() {
         return nextCardId;
     }
 
-    public void setNextCardId(long nextCardId) {
+    public void setNextCardId(String nextCardId) {
         this.nextCardId = nextCardId;
     }
 
-    public long getBoardId() {
+    public String getBoardId() {
         return boardId;
     }
 
-    public void setBoardId(long boardId) {
+    public void setBoardId(String boardId) {
         this.boardId = boardId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Card card = (Card) o;
-        return cardId == card.cardId && cardListId == card.cardListId && nextCardId == card.nextCardId && boardId == card.boardId && Objects.equals(cardTitle, card.cardTitle);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cardId, cardListId, cardTitle, nextCardId, boardId);
     }
 }
