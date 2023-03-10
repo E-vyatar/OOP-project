@@ -78,9 +78,9 @@ public class MainCtrl {
     }
 
     private void showExampleListOverview() {
-        // TODO
-        throw new NotImplementedException();
-
+        secondaryStage.setTitle("Example: rename list");
+        secondaryStage.setScene(listOverview);
+        listOverviewCtrl.refresh();
     }
 
     public void showOverview() {
