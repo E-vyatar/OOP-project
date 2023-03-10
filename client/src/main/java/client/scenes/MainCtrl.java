@@ -15,12 +15,13 @@
  */
 package client.scenes;
 
-import commons.Card;
+import commons.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class MainCtrl {
 
@@ -32,9 +33,22 @@ public class MainCtrl {
     private CardPopupCtrl cardPopupCtrlCtrl;
     private Stage cardPopup;
 
+    //=========================================================
+    // This is temporary in order to demonstrate functionality:
+    //     - It will be merged into main project later.
+    private Stage secondaryStage;
+    private ListOverviewCtrl listOverviewCtrl;
+    private Scene listOverview;
+
+    private RenameListPopupCtrl renameListPopupCtrl;
+    private Stage renameListPopup;
+    //=========================================================
+
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
-                           Pair<CardPopupCtrl, Parent> cardPopup) {
+                           Pair<CardPopupCtrl, Parent> cardPopup,
+                           Pair<ListOverviewCtrl, Parent> listOverview,
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -48,6 +62,25 @@ public class MainCtrl {
 
         showOverview();
         primaryStage.show();
+
+        this.secondaryStage = new Stage();
+        this.listOverviewCtrl = listOverview.getKey();
+        this.listOverview = new Scene(listOverview.getValue(), 200, 200);
+
+        this.renameListPopupCtrl = renameListPopup.getKey();
+        this.renameListPopup = new Stage();
+        this.renameListPopup.setX(this.renameListPopup.getX() + 100);
+        this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
+        this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
+
+        showExampleListOverview();
+        secondaryStage.show();
+    }
+
+    private void showExampleListOverview() {
+        // TODO
+        throw new NotImplementedException();
+
     }
 
     public void showOverview() {
@@ -62,5 +95,14 @@ public class MainCtrl {
     }
     public void hideCard() {
         cardPopup.hide();
+    }
+
+    public void showRenameList(CardList cardList) {
+        renameListPopupCtrl.setCardList(cardList);
+        renameListPopup.show();
+    }
+
+    public void hideRenameListPopup() {
+        renameListPopup.hide();
     }
 }
