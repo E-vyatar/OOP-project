@@ -21,7 +21,7 @@ public class BoardListView extends TitledPane {
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> card.getCardListId() == this.cardList.getCardListId()
+                card -> card.getListId().equals(String.valueOf(this.cardList.getCardListId()))
         );
 
         createView();

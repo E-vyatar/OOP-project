@@ -33,7 +33,7 @@ public class CardPopupCtrl {
     }
 
     private void createView() {
-        cardTitle.setText(card.getCardTitle());
+        cardTitle.setText(card.getTitle());
 
         cardDescription.setText("Here there will be a description.");
 
