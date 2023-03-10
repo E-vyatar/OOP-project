@@ -17,7 +17,7 @@ public class CardController {
         this.cardRepository = cardRepositroy;
     }
 
-    @PostMapping(value = "new", consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");
         return cardRepository.save(card);
@@ -28,5 +28,24 @@ public class CardController {
         return cardRepository.findAll();
     }
 
+    @GetMapping("{id}")
+    public Card getCardById(@PathVariable("id") String id) {
+        return cardRepository.findById(id).orElse(null);
+    }
+
+    @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
+    public Card updateCard(@PathVariable("id") String id, @RequestBody Card card) {
+        logger.info("updateCard() called with: id = [" + id + "], card = [" + card + "]");
+        if (cardRepository.findById(id).isPresent()) {
+            card.setId(id);
+            return cardRepository.save(card);
+        }
+        return null;
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteCard(@PathVariable("id") String id) {
+        cardRepository.deleteById(id);
+    }
 
 }
