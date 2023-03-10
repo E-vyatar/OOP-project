@@ -15,8 +15,11 @@
  */
 package client.scenes;
 
+import commons.Card;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -24,27 +27,60 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
+    private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private AddCardCtrl addCardCtrl;
-    private Scene addCard;
+    private CardPopupCtrl cardPopupCtrlCtrl;
+    private Stage cardPopup;
 
-    private EditCardCtrl editCardCtrl;
-    private Scene editCard;
+    //=========================================================
+    // This is temporary in order to demonstrate functionality:
+    //     - It will be merged into main project later.
+    private Stage secondaryStage;
+    private ListOverviewCtrl listOverviewCtrl;
+    private Scene listOverview;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-                           Pair<AddCardCtrl, Parent> addCard, Pair<EditCardCtrl, Parent> editCard) {
+    private RenameListPopupCtrl renameListPopupCtrl;
+    private Stage renameListPopup;
+    //=========================================================
+
+    public void initialize(Stage primaryStage,
+                           Pair<BoardOverviewCtrl, Parent> overview,
+                           Pair<CardPopupCtrl, Parent> cardPopup,
+                           Pair<ListOverviewCtrl, Parent> listOverview,
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
-        this.addCardCtrl = addCard.getKey();
-        this.addCard = new Scene(addCard.getValue());
-        this.editCardCtrl = editCard.getKey();
-        this.editCard = new Scene(editCard.getValue());
 
-        showAddCard();
+        this.cardPopupCtrlCtrl = cardPopup.getKey();
+        this.cardPopup = new Stage();
+        this.cardPopup.initModality(Modality.WINDOW_MODAL);
+        this.cardPopup.setMinWidth(240.0);
+        this.cardPopup.setMinHeight(200.0);
+        this.cardPopup.setScene(new Scene(cardPopup.getValue()));
+
+        showOverview();
         primaryStage.show();
+
+        this.secondaryStage = new Stage();
+        this.listOverviewCtrl = listOverview.getKey();
+        this.listOverview = new Scene(listOverview.getValue(), 200, 200);
+
+        this.renameListPopupCtrl = renameListPopup.getKey();
+        this.renameListPopup = new Stage();
+        this.renameListPopup.setX(this.renameListPopup.getX() + 100);
+        this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
+        this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
+
+        showExampleListOverview();
+        secondaryStage.show();
+    }
+
+    private void showExampleListOverview() {
+        secondaryStage.setTitle("Example: rename list");
+        secondaryStage.setScene(listOverview);
+        listOverviewCtrl.refresh();
     }
 
     public void showOverview() {
@@ -53,17 +89,21 @@ public class MainCtrl {
         overviewCtrl.refresh();
     }
 
-    public void showAddCard () {
-        primaryStage.setTitle("Empty Scene <addCard>");
-        primaryStage.setScene(addCard);
-        addCardCtrl.refresh();
+    public void showCard(Card card) {
+        cardPopupCtrlCtrl.setCard(card);
+        cardPopup.show();
     }
 
-    public void showEditCard (String title) {
-        primaryStage.setTitle("Empty Scene <editCard>");
-        primaryStage.setScene(editCard);
-        editCardCtrl.setTitle(title);
-        editCardCtrl.refresh();
+    public void hideCard() {
+        cardPopup.hide();
     }
 
+    public void showRenameList(CardList cardList) {
+        renameListPopupCtrl.setCardList(cardList);
+        renameListPopup.show();
+    }
+
+    public void hideRenameListPopup() {
+        renameListPopup.hide();
+    }
 }

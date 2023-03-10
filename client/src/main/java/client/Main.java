@@ -15,10 +15,7 @@
  */
 package client;
 
-import client.scenes.AddCardCtrl;
-import client.scenes.EditCardCtrl;
-import client.scenes.MainCtrl;
-import client.scenes.QuoteOverviewCtrl;
+import client.scenes.*;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -37,11 +34,13 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
-        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
-        var editCard = FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
+        var overview = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
+        var cardPopup = FXML.load(CardPopupCtrl.class, "client", "scenes", "CardPopup.fxml");
+        var listOverview = FXML.load(ListOverviewCtrl.class, "client", "scenes", "Example-ListOverview.fxml");
+        var renameListPopup = FXML.load(RenameListPopupCtrl.class, "client", "scenes", "RenameListPopup.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, addCard, editCard);
+
+        mainCtrl.initialize(primaryStage, overview, cardPopup, listOverview, renameListPopup);
     }
 }
