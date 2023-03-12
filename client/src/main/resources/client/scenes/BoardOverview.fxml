@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<ScrollPane prefWidth="600"
-            prefHeight="400"
-            fitToHeight="true"
-            vbarPolicy="NEVER"
-            vmax="0.0"
-            xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="client.scenes.BoardOverviewCtrl">
-    <HBox fx:id="list_of_lists">
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardOverviewCtrl">
+   <children>
+      <ScrollPane fitToHeight="true" prefHeight="400" prefWidth="600" vbarPolicy="NEVER" vmax="0.0">
+          <HBox fx:id="list_of_lists">
     </HBox>
-</ScrollPane>
+      </ScrollPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button layoutX="449.0" layoutY="100.0" mnemonicParsing="false" onAction="#openNewTaskWindow" text="Add new task" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

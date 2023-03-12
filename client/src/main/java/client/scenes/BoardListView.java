@@ -48,4 +48,8 @@ public class BoardListView extends TitledPane {
 
         this.setContent(listView);
     }
+
+    public String getListName() {
+        return this.cardList.getCardListTitle();
+    }
 }

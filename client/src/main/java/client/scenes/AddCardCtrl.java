@@ -22,33 +22,52 @@ import commons.Card;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
 
 public class AddCardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private BoardOverviewCtrl boardOverviewCtrl;
+
     @FXML
     private TextField title;
 
+    @FXML
+    private ChoiceBox list;
+
+    @FXML
+    private Button cancel;
+
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.title = new TextField();
+        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
     public void cancel() {
         clearFields();
-        mainCtrl.showOverview();
+        Stage stage = (Stage) cancel.getScene().getWindow();
+        stage.close();
     }
 
     public void ok() {
         try {
-            server.addCard(getCard());
+//            server.addCard(getCard());
+            String chosenList = (String) list.getValue();
+//            boardOverviewCtrl.addTaskToList(chosenList, getCard());
+            this.cancel();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -84,5 +103,10 @@ public class AddCardCtrl {
     }
 
     public void refresh() {
+        list.getItems().clear();
+        List<String> listsNames = boardOverviewCtrl.getListsNames();
+        for (String name : listsNames) {
+            list.getItems().add(name);
+        }
     }
 }
