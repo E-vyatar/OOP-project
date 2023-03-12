@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="client.scenes.EditCardCtrl">
-    <TextField fx:id="title" layoutX="35.0" layoutY="97.0" prefHeight="95.0" prefWidth="492.0"/>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditCardCtrl">
+    <TextField fx:id="title" layoutX="35.0" layoutY="97.0" prefHeight="95.0" prefWidth="492.0" />
     <Label layoutX="35.0" layoutY="27.0" text="Title:">
         <font>
-          <Font size="48.0"/>
+            <Font size="48.0" />
         </font>
     </Label>
-    <Button layoutX="426.0" layoutY="320.0" mnemonicParsing="false" onAction="#ok" text="Confirm">
+    <Button layoutX="426.0" layoutY="320.0" mnemonicParsing="false" onAction="#ok" text="Create">
         <font>
-            <Font size="24.0"/>
+            <Font size="24.0" />
         </font>
     </Button>
-    <Button layoutX="300.0" layoutY="320.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
+    <Button fx:id="cancel" layoutX="300.0" layoutY="320.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
         <font>
-          <Font size="24.0"/>
+            <Font size="24.0" />
         </font>
     </Button>
+    <ChoiceBox fx:id="list" layoutX="35.0" layoutY="236.0" prefWidth="150.0" />
 </AnchorPane>

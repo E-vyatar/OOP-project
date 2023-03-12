@@ -30,7 +30,7 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private CardPopupCtrl cardPopupCtrlCtrl;
+    private CardPopupCtrl cardPopupCtrl;
     private Stage cardPopup;
 
     private AddCardCtrl addCardCtrl;
@@ -70,7 +70,7 @@ public class MainCtrl {
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
 
-        this.cardPopupCtrlCtrl = cardPopup.getKey();
+        this.cardPopupCtrl = cardPopup.getKey();
         this.cardPopup = new Stage();
         this.cardPopup.initModality(Modality.WINDOW_MODAL);
         this.cardPopup.setMinWidth(240.0);
@@ -86,6 +86,9 @@ public class MainCtrl {
         this.renameListPopup.setX(this.renameListPopup.getX() + 100);
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
+
+        this.editCardCtrl = editCard.getKey();
+        this.editCard = new Scene(editCard.getValue());
 
         showconnect();
         this.primaryStage.show();
@@ -119,7 +122,7 @@ public class MainCtrl {
 //    }
 
     public void showCard(Card card) {
-        cardPopupCtrlCtrl.setCard(card);
+        cardPopupCtrl.setCard(card);
         cardPopup.show();
     }
 
@@ -131,6 +134,15 @@ public class MainCtrl {
         primaryStage.setTitle("Empty Scene <addCard>");
         primaryStage.setScene(addCard);
         addCardCtrl.refresh();
+    }
+
+    public void showEditCard() {
+        Stage cardWindow = new Stage();
+        cardWindow.setTitle("Edit task");
+        cardWindow.setScene(editCard);
+        this.editCardCtrl.refresh();
+        cardWindow.show();
+
     }
 
     public void showRenameList(CardList cardList) {

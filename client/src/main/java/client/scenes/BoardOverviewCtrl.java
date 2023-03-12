@@ -31,6 +31,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class BoardOverviewCtrl implements Initializable, EventHandler {
 
@@ -83,4 +84,14 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
             CardPopupCtrl card = (CardPopupCtrl) source;
         }
     }
+
+    public List<String> getListsNames() {
+        List<String> names = list_of_lists.getChildren()
+                .stream()
+                .map(node -> (BoardListView) node)
+                .map(BoardListView::getListName)
+                .collect(Collectors.toList());
+        return names;
+    }
+
 }
