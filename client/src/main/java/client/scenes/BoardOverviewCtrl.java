@@ -15,11 +15,11 @@
  */
 package client.scenes;
 
+import client.OrderedCardList;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,7 +29,7 @@ import javafx.scene.layout.HBox;
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class BoardOverviewCtrl implements Initializable, EventHandler {
@@ -58,17 +58,14 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
             the cards in a list should be converted into an ObservableList.
          */
         var lists = new ArrayList();
-        List<Card> cards = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                cards.add(new Card(String.valueOf(i * 4 + j), String.valueOf(i), "Card " + i + "." + j, null, null));
+        HashMap<Long, Card> cards = new HashMap<>();
+        for (long i = 0; i < 4; i++) {
+            for (long j = 0; j < 4; j++) {
+                cards.put(i * 4 + j, new Card(String.valueOf(i * 4 + j), String.valueOf(i), "Card " + i + "." + j, j < 3 ? String.valueOf(i * 4 + j + 1) : null, null));
             }
-        }
+            OrderedCardList orderedCardList = new OrderedCardList(new SimpleLongProperty(i * 4), cards);
 
-        ObservableList<Card> observableList = FXCollections.observableList(cards);
-
-        for (int i = 0; i < 4; i++) {
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List " + i, -1), observableList);
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List " + i, -1), orderedCardList);
             CardListView cardListView = cardListViewCtrl.getView();
             lists.add(cardListView);
         }
