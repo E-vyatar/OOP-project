@@ -36,9 +36,6 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
 
-    private EditCardCtrl editCardCtrl;
-    private Scene editCard;
-
 
     //=========================================================
     // This is temporary in order to demonstrate functionality:
@@ -61,7 +58,6 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<EditCardCtrl, Parent> editCard,
                            Pair<ListOverviewCtrl, Parent> listOverview,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
 
