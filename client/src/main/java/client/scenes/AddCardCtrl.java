@@ -30,8 +30,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.List;
-import java.util.Random;
-import java.util.Timer;
 
 public class AddCardCtrl {
 
