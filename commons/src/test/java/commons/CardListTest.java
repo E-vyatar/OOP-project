@@ -10,14 +10,14 @@ class CardListTest {
     void getCardListId() {
         // Test getListId
         CardList cardList = new CardList(1, "2", 3);
-        assertEquals(1, cardList.getCardListId());
+        assertEquals(1, cardList.getId());
     }
 
     @Test
     void getCardListTitle() {
         // Test getCardListTitle
         CardList cardList = new CardList(1, "2", 3);
-        assertEquals("2", cardList.getCardListTitle());
+        assertEquals("2", cardList.getTitle());
     }
 
     @Test

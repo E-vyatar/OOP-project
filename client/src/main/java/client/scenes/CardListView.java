@@ -19,7 +19,7 @@ public class CardListView extends TitledPane {
 
     public void createView() {
         this.setCollapsible(false);
-        this.setText(cardList.getCardListTitle());
+        this.setText(cardList.getTitle());
     }
 
     public CardList getCardList() {

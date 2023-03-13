@@ -23,7 +23,7 @@ public class BoardListView extends TitledPane {
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> Objects.equals(card.getListId(), "" + this.cardList.getCardListId())
+                card -> Objects.equals(card.getListId(), "" + this.cardList.getId())
         );
 
         createView();
@@ -32,7 +32,7 @@ public class BoardListView extends TitledPane {
     private void createView() {
 
         this.setCollapsible(false);
-        this.setText(cardList.getCardListTitle());
+        this.setText(cardList.getTitle());
         this.setMaxHeight(Double.MAX_VALUE);
 
         ListView<Card> listView = new ListView<>();
