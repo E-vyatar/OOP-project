@@ -15,16 +15,33 @@ public class BoardController {
         this.boardRepository = boardRepository;
     }
 
+    /**
+     * Get all boards
+     *
+     * @return all boards
+     */
     @GetMapping("all")
     public Iterable<Board> getAllBoards() {
         return boardRepository.findAll();
     }
 
+    /**
+     * Get a board by id
+     *
+     * @param id the id of the board
+     * @return the board
+     */
     @GetMapping("{id}")
     public Optional<Board> getBoardById(@PathVariable("id") long id) {
         return boardRepository.findById(id);
     }
 
+    /**
+     * Delete a board by id
+     *
+     * @param id the id of the board
+     * @return the deleted board
+     */
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public Board updateBoard(@PathVariable("id") long id, @RequestBody Board board) {
         if (boardRepository.findById(id).isPresent()) {
@@ -32,5 +49,16 @@ public class BoardController {
             return boardRepository.save(board);
         }
         return null;
+    }
+
+    /**
+     * Create a new board
+     *
+     * @param board the board to create
+     * @return the created board
+     */
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public Board createBoard(@RequestBody Board board) {
+        return boardRepository.save(board);
     }
 }
