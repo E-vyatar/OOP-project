@@ -62,6 +62,10 @@ public class CardListView extends TitledPane {
         this.setContent(listView);
     }
 
+    /**
+     * Get the name of this list
+     * @return name of the list as a string
+     */
     public String getListName() {
         return this.cardList.getCardListTitle();
     }

@@ -54,12 +54,20 @@ public class AddCardCtrl {
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
+    /**
+     * Clear title field and close the "Add new task" window
+     */
     public void cancel() {
         clearFields();
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Close the "Add new task" window
+     * TODO
+     * Add card to list
+     */
     public void ok() {
         try {
 //            server.addCard(getCard());
@@ -79,14 +87,25 @@ public class AddCardCtrl {
         mainCtrl.showOverview();
     }
 
+    /**
+     * Create new card object
+     * @return new Card, temporarily with dummy data
+     */
     private Card getCard() {
         return new Card("25", "36", title.getText(), "47", "90");
     }
 
+    /**
+     * Clear all data fields for next use
+     */
     private void clearFields() {
         title.clear();
     }
 
+    /**
+     * Keyboard shortcuts for the buttons
+     * @param e keyboard event
+     */
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
@@ -100,6 +119,9 @@ public class AddCardCtrl {
         }
     }
 
+    /**
+     * Update the lists menu
+     */
     public void refresh() {
         list.getItems().clear();
         List<String> listsNames = boardOverviewCtrl.getListsNames();

@@ -89,6 +89,10 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         mainCtrl.showAddCard();
     }
 
+    /**
+     * Get the names of current lists in the board
+     * @return a list of lists names as strings
+     */
     public List<String> getListsNames() {
         return list_of_lists.getChildren()
                 .stream()

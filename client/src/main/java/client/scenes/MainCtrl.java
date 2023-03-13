@@ -104,6 +104,9 @@ public class MainCtrl {
         cardPopup.hide();
     }
 
+    /**
+     * Open a new window with "AddCard" scene
+     */
     public void showAddCard() {
         Stage cardWindow = new Stage();
         cardWindow.setTitle("Add new Task");
