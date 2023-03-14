@@ -1,20 +1,22 @@
 package commons;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Entity
 public class Card {
 
     @Id
-    String id;
-    String listId;
+    long id;
+    long listId;
     String title;
-    String nextCardId;
-    String boardId;
+    long nextCardId;
+    long boardId;
 
     public Card() {
     }
 
-    public Card(String id, String listId, String title, String nextCardId, String boardId) {
+    public Card(long id, long listId, String title, long nextCardId, long boardId) {
         this.id = id;
         this.listId = listId;
         this.title = title;
@@ -24,28 +26,22 @@ public class Card {
 
     @Override
     public String toString() {
-        return "Card{" +
-                "id='" + id + '\'' +
-                ", cardListId='" + listId + '\'' +
-                ", title='" + title + '\'' +
-                ", nextCardId='" + nextCardId + '\'' +
-                ", boardId='" + boardId + '\'' +
-                '}';
+        return "Card{" + "id='" + id + '\'' + ", cardListId='" + listId + '\'' + ", title='" + title + '\'' + ", nextCardId='" + nextCardId + '\'' + ", boardId='" + boardId + '\'' + '}';
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String cardId) {
+    public void setId(long cardId) {
         this.id = cardId;
     }
 
-    public String getListId() {
+    public long getListId() {
         return listId;
     }
 
-    public void setListId(String cardListId) {
+    public void setListId(long cardListId) {
         this.listId = cardListId;
     }
 
@@ -57,19 +53,19 @@ public class Card {
         this.title = cardTitle;
     }
 
-    public String getNextCardId() {
+    public long getNextCardId() {
         return nextCardId;
     }
 
-    public void setNextCardId(String nextCardId) {
+    public void setNextCardId(long nextCardId) {
         this.nextCardId = nextCardId;
     }
 
-    public String getBoardId() {
+    public long getBoardId() {
         return boardId;
     }
 
-    public void setBoardId(String boardId) {
+    public void setBoardId(long boardId) {
         this.boardId = boardId;
     }
 }
