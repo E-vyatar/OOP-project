@@ -17,8 +17,10 @@ package client.scenes;
 
 import commons.Card;
 import commons.CardList;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -111,7 +113,9 @@ public class MainCtrl {
         Stage cardWindow = new Stage();
         cardWindow.setTitle("Add new Task");
         cardWindow.setScene(addCard);
-        this.addCardCtrl.refresh();
+        addCard.setOnKeyPressed(event -> {
+            addCardCtrl.keyPressed(event);
+        });
         cardWindow.show();
     }
 
