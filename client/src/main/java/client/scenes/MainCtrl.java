@@ -36,15 +36,11 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
 
-    private EditCardCtrl editCardCtrl;
-    private Scene editCard;
-
 
     //=========================================================
     // This is temporary in order to demonstrate functionality:
     //     - It will be merged into main project later.
     private Stage secondaryStage;
-    private ListOverviewCtrl listOverviewCtrl;
     private Scene listOverview;
 
     private RenameListPopupCtrl renameListPopupCtrl;
@@ -58,8 +54,6 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<EditCardCtrl, Parent> editCard,
-                           Pair<ListOverviewCtrl, Parent> listOverview,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
 
         this.primaryStage = primaryStage;
@@ -77,30 +71,14 @@ public class MainCtrl {
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(cardPopup.getValue()));
 
-        this.secondaryStage = new Stage();
-        this.listOverviewCtrl = listOverview.getKey();
-        this.listOverview = new Scene(listOverview.getValue(), 200, 200);
-
         this.renameListPopupCtrl = renameListPopup.getKey();
         this.renameListPopup = new Stage();
         this.renameListPopup.setX(this.renameListPopup.getX() + 100);
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
 
-        this.editCardCtrl = editCard.getKey();
-        this.editCard = new Scene(editCard.getValue());
-
         showconnect();
         this.primaryStage.show();
-
-        showExampleListOverview();
-        secondaryStage.show();
-    }
-
-    private void showExampleListOverview() {
-        secondaryStage.setTitle("Example: rename list");
-        secondaryStage.setScene(listOverview);
-        listOverviewCtrl.refresh();
     }
 
     public void showconnect() {
@@ -134,15 +112,6 @@ public class MainCtrl {
         primaryStage.setTitle("Empty Scene <addCard>");
         primaryStage.setScene(addCard);
         addCardCtrl.refresh();
-    }
-
-    public void showEditCard() {
-        Stage cardWindow = new Stage();
-        cardWindow.setTitle("Edit task");
-        cardWindow.setScene(editCard);
-        this.editCardCtrl.refresh();
-        cardWindow.show();
-
     }
 
     public void showRenameList(CardList cardList) {

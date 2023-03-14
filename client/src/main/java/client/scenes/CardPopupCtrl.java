@@ -9,14 +9,11 @@ import javafx.scene.control.TextField;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.inject.Inject;
-import java.util.List;
 
 public class CardPopupCtrl {
 
     private final ServerUtils utils;
     private final MainCtrl mainCtrl;
-
-    private BoardOverviewCtrl boardOverviewCtrl;
 
     public Card card;
 
@@ -29,10 +26,9 @@ public class CardPopupCtrl {
     private TextArea cardDescription;
 
     @Inject
-    public CardPopupCtrl(ServerUtils utils, MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl) {
+    public CardPopupCtrl(ServerUtils utils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
-        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
     public void setCard(Card card) {
@@ -43,8 +39,10 @@ public class CardPopupCtrl {
     private void createView() {
         cardTitle.setText(card.getTitle());
 
+        // temporary, will need to be updated when there is a connection to database
+        list.getSelectionModel().select("List " + card.getListId());
+
         cardDescription.setText("Here there will be a description.");
-        refresh();
 
     }
 
@@ -58,16 +56,4 @@ public class CardPopupCtrl {
         // TODO: allow to save data when editing card
         throw new NotImplementedException("Saving changes hasn't been implemented yet.");
     }
-
-    public void refresh() {
-        list.getItems().clear();
-        List<String> listsNames = boardOverviewCtrl.getListsNames();
-        for (String name : listsNames) {
-            list.getItems().add(name);
-        }
-        // temporary, eventually needs to find actual list name from database
-        String currentList = " list " + card.getListId();
-        list.getSelectionModel().select(currentList);
-    }
-
 }

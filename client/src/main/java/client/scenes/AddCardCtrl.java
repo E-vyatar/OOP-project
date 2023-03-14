@@ -48,7 +48,7 @@ public class AddCardCtrl {
 
     public void ok() {
         try {
-            server.addCard(getCard());
+//            server.addCard(getCard());
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);

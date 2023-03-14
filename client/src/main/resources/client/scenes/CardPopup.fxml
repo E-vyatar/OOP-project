@@ -9,9 +9,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="1.7976931348623157E308" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardPopupCtrl">
     <bottom>
@@ -27,21 +25,19 @@
     </bottom>
     <center>
         <ScrollPane fitToHeight="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
-            <VBox maxHeight="1.7976931348623157E308" prefHeight="205.0" prefWidth="228.0" spacing="15.0">
+            <VBox maxHeight="1.7976931348623157E308">
                 <padding>
                     <Insets bottom="8.0" left="8.0" right="20.0" top="8.0" />
                 </padding>
-            <HBox spacing="10.0">
-               <children>
-                  <Label text="Title">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                      <TextField fx:id="cardTitle" prefHeight="25.0" prefWidth="64.0" />
-               </children>
-            </HBox>
+            <Label text="Title" />
+                <TextField fx:id="cardTitle">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+            <Label text="List" />
             <ChoiceBox fx:id="list" prefWidth="150.0" />
+            <Label text="Description" />
                 <TextArea id="CardDescription" fx:id="cardDescription" prefHeight="100.0" prefWidth="200.0">
                     <VBox.margin>
                         <Insets top="8.0" />

@@ -48,10 +48,6 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-    public void refresh() {
         /*
             Currently, this method just creates arbitrary data.
             This data doesn't properly use the format as it's stored in the DB.
@@ -69,11 +65,16 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         ObservableList<Card> observableList = FXCollections.observableList(cards);
 
         for (int i = 0; i < 4; i++) {
-            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "List " + i, -1), observableList);
-            lists.add(boardListView);
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List " + i, -1), observableList);
+            CardListView cardListView = cardListViewCtrl.getView();
+            lists.add(cardListView);
         }
 
         list_of_lists.getChildren().addAll(lists);
+    }
+
+    public void refresh() {
+
     }
 
     @Override
@@ -88,10 +89,9 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     public List<String> getListsNames() {
         List<String> names = list_of_lists.getChildren()
                 .stream()
-                .map(node -> (BoardListView) node)
-                .map(BoardListView::getListName)
+                .map(node -> (CardListView) node)
+                .map(CardListView::getListName)
                 .collect(Collectors.toList());
         return names;
     }
-
 }
