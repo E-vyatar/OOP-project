@@ -10,8 +10,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
-import java.util.Objects;
-
 public class CardListView extends TitledPane {
 
     private final MainCtrl mainCtrl;
