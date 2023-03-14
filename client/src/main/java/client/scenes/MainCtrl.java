@@ -16,6 +16,7 @@
 package client.scenes;
 
 import commons.Card;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -32,12 +33,42 @@ public class MainCtrl {
     private CardPopupCtrl cardPopupCtrlCtrl;
     private Stage cardPopup;
 
+    private AddCardCtrl addCardCtrl;
+    private Scene addCard;
+
+    private EditCardCtrl editCardCtrl;
+    private Scene editCard;
+
+
+    //=========================================================
+    // This is temporary in order to demonstrate functionality:
+    //     - It will be merged into main project later.
+    private Stage secondaryStage;
+    private ListOverviewCtrl listOverviewCtrl;
+    private Scene listOverview;
+
+    private RenameListPopupCtrl renameListPopupCtrl;
+    private Stage renameListPopup;
+    private ConnectServerCtrl connectServerCtrl;
+
+    private Scene connectServer;
+    //=========================================================
+
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
-                           Pair<CardPopupCtrl, Parent> cardPopup) {
+                           Pair<CardPopupCtrl, Parent> cardPopup,
+                           Pair<AddCardCtrl, Parent> addCard,
+                           Pair<EditCardCtrl, Parent> editCard,
+                           Pair<ListOverviewCtrl, Parent> listOverview,
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
+
         this.primaryStage = primaryStage;
-        this.overviewCtrl = overview.getKey();
+
+        this.connectServerCtrl = connectServerCtrl.getKey();
+        this.connectServer = new Scene(connectServerCtrl.getValue());
+
         this.overview = new Scene(overview.getValue());
+        this.overviewCtrl = overview.getKey();
 
         this.cardPopupCtrlCtrl = cardPopup.getKey();
         this.cardPopup = new Stage();
@@ -46,8 +77,33 @@ public class MainCtrl {
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(cardPopup.getValue()));
 
-        showOverview();
-        primaryStage.show();
+        this.secondaryStage = new Stage();
+        this.listOverviewCtrl = listOverview.getKey();
+        this.listOverview = new Scene(listOverview.getValue(), 200, 200);
+
+        this.renameListPopupCtrl = renameListPopup.getKey();
+        this.renameListPopup = new Stage();
+        this.renameListPopup.setX(this.renameListPopup.getX() + 100);
+        this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
+        this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
+
+        showconnect();
+        this.primaryStage.show();
+
+        showExampleListOverview();
+        secondaryStage.show();
+    }
+
+    private void showExampleListOverview() {
+        secondaryStage.setTitle("Example: rename list");
+        secondaryStage.setScene(listOverview);
+        listOverviewCtrl.refresh();
+    }
+
+    public void showconnect() {
+        primaryStage.setTitle("Connect");
+        primaryStage.setScene(connectServer);
+
     }
 
     public void showOverview() {
@@ -55,12 +111,35 @@ public class MainCtrl {
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
+//TODO solve the connection later
+//    public void checkConnection() throws UnknownHostException {
+//        if(connectServerCtrl.connect()){
+//            showOverview();
+//        }
+//    }
 
     public void showCard(Card card) {
         cardPopupCtrlCtrl.setCard(card);
         cardPopup.show();
     }
+
     public void hideCard() {
         cardPopup.hide();
     }
+
+    public void showAddCard() {
+        primaryStage.setTitle("Empty Scene <addCard>");
+        primaryStage.setScene(addCard);
+        addCardCtrl.refresh();
+    }
+
+    public void showRenameList(CardList cardList) {
+        renameListPopupCtrl.setCardList(cardList);
+        renameListPopup.show();
+    }
+
+    public void hideRenameListPopup() {
+        renameListPopup.hide();
+    }
+
 }

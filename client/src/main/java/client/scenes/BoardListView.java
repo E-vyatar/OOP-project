@@ -9,11 +9,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.util.Callback;
 
+import java.util.Objects;
+
 public class BoardListView extends TitledPane {
 
     private final MainCtrl mainCtrl;
-    private CardList cardList;
     private final FilteredList<Card> cards;
+    private final CardList cardList;
 
     public BoardListView(MainCtrl mainCtrl, CardList cardList, ObservableList<Card> cards) {
         super();
@@ -21,7 +23,7 @@ public class BoardListView extends TitledPane {
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> card.getCardListId() == this.cardList.getCardListId()
+                card -> Objects.equals(card.getListId(), "" + this.cardList.getCardListId())
         );
 
         createView();

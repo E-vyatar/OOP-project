@@ -22,26 +22,28 @@ public class CardPopupCtrl {
     private TextArea cardDescription;
 
     @Inject
-    public CardPopupCtrl(ServerUtils utils, MainCtrl mainCtrl){
+    public CardPopupCtrl(ServerUtils utils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
     }
 
-    public void setCard(Card card){
+    public void setCard(Card card) {
         this.card = card;
         createView();
     }
 
     private void createView() {
-        cardTitle.setText(card.getCardTitle());
+        cardTitle.setText(card.getTitle());
 
         cardDescription.setText("Here there will be a description.");
 
     }
+
     @FXML
     private void close() {
         mainCtrl.hideCard();
     }
+
     @FXML
     private void save() {
         // TODO: allow to save data when editing card

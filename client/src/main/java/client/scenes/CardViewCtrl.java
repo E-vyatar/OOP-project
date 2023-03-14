@@ -8,15 +8,15 @@ import javafx.scene.input.MouseEvent;
 public class CardViewCtrl implements EventHandler {
 
     private final MainCtrl mainCtrl;
-    private Card card;
     private final CardView view;
+    private Card card;
 
     public CardViewCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.view = new CardView(this);
     }
 
-    public void setCard(Card card){
+    public void setCard(Card card) {
         this.card = card;
     }
 
@@ -26,7 +26,7 @@ public class CardViewCtrl implements EventHandler {
 
     @Override
     public void handle(Event event) {
-        if (event instanceof MouseEvent){
+        if (event instanceof MouseEvent) {
             MouseEvent mouseEvent = (MouseEvent) event;
             mainCtrl.showCard(card);
         }

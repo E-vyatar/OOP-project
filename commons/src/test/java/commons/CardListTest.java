@@ -8,7 +8,7 @@ class CardListTest {
 
     @Test
     void getCardListId() {
-        // Test getCardListId
+        // Test getListId
         CardList cardList = new CardList(1, "2", 3);
         assertEquals(1, cardList.getCardListId());
     }
