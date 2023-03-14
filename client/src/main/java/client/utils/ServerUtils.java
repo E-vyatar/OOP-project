@@ -51,7 +51,7 @@ public class ServerUtils {
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
-    public void deleteCard(Card card) {
+    public void deleteCard(Card ignoredCard) {
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("/cards/{id}") //
                 .request(APPLICATION_JSON) //

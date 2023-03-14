@@ -29,12 +29,12 @@ public class CardController {
     }
 
     @GetMapping("{id}")
-    public Card getCardById(@PathVariable("id") String id) {
+    public Card getCardById(@PathVariable("id") long id) {
         return cardRepository.findById(id).orElse(null);
     }
 
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
-    public Card updateCard(@PathVariable("id") String id, @RequestBody Card card) {
+    public Card updateCard(@PathVariable("id") long id, @RequestBody Card card) {
         logger.info("updateCard() called with: id = [" + id + "], card = [" + card + "]");
         if (cardRepository.findById(id).isPresent()) {
             card.setId(id);
@@ -44,7 +44,7 @@ public class CardController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteCard(@PathVariable("id") String id) {
+    public void deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);
     }
 
