@@ -28,7 +28,7 @@ public class CardListView extends TitledPane {
         this.controller = controller;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> Objects.equals(card.getListId(), "" + this.cardList.getCardListId())
+                card -> card.getListId() == cardList.getCardListId()
         );
 
         createView();
