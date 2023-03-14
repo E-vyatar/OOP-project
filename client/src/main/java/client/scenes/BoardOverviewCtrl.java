@@ -77,6 +77,13 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
 
         list_of_lists.getChildren().addAll(lists);
 
+        createButton();
+    }
+
+    /**
+     * Creates a button to add a new list to the board
+     */
+    private void createButton() {
         // Create button and add to list_of_lists
         Button button = new Button("Add list");
         button.setOnAction(this::addList);
@@ -91,19 +98,11 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
      * @param actionEvent
      */
     private void addList(ActionEvent actionEvent) {
-        // Temporarily remove the button from the list of lists
-        Button button = (Button) list_of_lists.getChildren().get(list_of_lists.getChildren().size() - 1);
-        list_of_lists.getChildren().remove(list_of_lists.getChildren().size() - 1);
-
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
 
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        list_of_lists.getChildren().add(new BoardListView(mainCtrl, CardList.createNewCardList("New List", -1), observableList));
-
-        // Add the button back to the list of lists
-        list_of_lists.getChildren().add(button);
-
+        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), new BoardListView(mainCtrl, CardList.createNewCardList("New List", -1), observableList));
     }
 
     @Override
