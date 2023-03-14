@@ -15,6 +15,7 @@
     <bottom>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <buttons>
+            <Button mnemonicParsing="false" onAction="#showDelete" text="Delete" textFill="#f60303" />
                 <Button mnemonicParsing="false" onAction="#close" text="Cancel" />
                 <Button mnemonicParsing="false" onAction="#save" text="Save" />
             </buttons>

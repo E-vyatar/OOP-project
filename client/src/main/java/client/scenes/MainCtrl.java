@@ -36,6 +36,9 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
 
+    private DeleteCardCtrl deleteCardCtrl;
+    private Scene deleteCard;
+
 
     //=========================================================
     // This is temporary in order to demonstrate functionality:
@@ -54,7 +57,9 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup,
+                           Pair<ConnectServerCtrl, Parent> connectServerCtrl,
+                           Pair<DeleteCardCtrl, Parent> deleteCard) {
 
         this.primaryStage = primaryStage;
 
@@ -76,6 +81,9 @@ public class MainCtrl {
         this.renameListPopup.setX(this.renameListPopup.getX() + 100);
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
+
+        this.deleteCardCtrl = deleteCard.getKey();
+        this.deleteCard = new Scene(deleteCard.getValue());
 
         showconnect();
         this.primaryStage.show();
@@ -112,6 +120,12 @@ public class MainCtrl {
         primaryStage.setTitle("Empty Scene <addCard>");
         primaryStage.setScene(addCard);
         addCardCtrl.refresh();
+    }
+
+    public void showDeleteCard() {
+        Stage stage = new Stage();
+        stage.setScene(deleteCard);
+        stage.show();
     }
 
     public void showRenameList(CardList cardList) {

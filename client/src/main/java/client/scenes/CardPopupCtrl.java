@@ -56,4 +56,9 @@ public class CardPopupCtrl {
         // TODO: allow to save data when editing card
         throw new NotImplementedException("Saving changes hasn't been implemented yet.");
     }
+
+    @FXML
+    private void showDelete() {
+        mainCtrl.showDeleteCard();
+    }
 }
