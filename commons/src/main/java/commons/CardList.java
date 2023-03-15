@@ -9,13 +9,15 @@ public class CardList {
     long id;
     String title;
     long idx;
+    long boardId;
 
     public CardList() {
     }
 
-    public CardList(long id, String title) {
+    public CardList(long id, String title, long boardId) {
         this.id = id;
         this.title = title;
+        this.boardId = boardId;
     }
 
     public long getIdx() {
