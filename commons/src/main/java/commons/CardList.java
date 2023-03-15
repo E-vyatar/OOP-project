@@ -2,21 +2,19 @@ package commons;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Objects;
 
 @Entity
 public class CardList {
+    @Id
     long id;
     String title;
-    long firstCardId;
 
     public CardList() {
     }
 
-    public CardList(long id, String title, long firstCardId) {
+    public CardList(long id, String title) {
         this.id = id;
         this.title = title;
-        this.firstCardId = firstCardId;
     }
 
     public void renameCardList(String newName) {
@@ -40,24 +38,4 @@ public class CardList {
         this.title = cardListTitle;
     }
 
-    public long getFirstCardId() {
-        return firstCardId;
-    }
-
-    public void setFirstCardId(long firstCardId) {
-        this.firstCardId = firstCardId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CardList cardList = (CardList) o;
-        return id == cardList.id && firstCardId == cardList.firstCardId && Objects.equals(title, cardList.title);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, firstCardId);
-    }
 }

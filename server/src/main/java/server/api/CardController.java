@@ -72,7 +72,7 @@ public class CardController {
      */
     @GetMapping("list/{id}")
     public Iterable<Card> getCardsByListId(@PathVariable("id") long id) {
-        return cardRepository.findAllByListId(id);
+        return cardRepository.findAllByListIdOrderByIdxAsc(id);
     }
 
     /**

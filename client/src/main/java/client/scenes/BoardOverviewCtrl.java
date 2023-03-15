@@ -57,7 +57,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
             When linking with the server side,
             the cards in a list should be converted into an ObservableList.
          */
-        var lists = new ArrayList();
+        ArrayList<BoardListView> lists = new ArrayList<>();
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -68,7 +68,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         ObservableList<Card> observableList = FXCollections.observableList(cards);
 
         for (int i = 0; i < 4; i++) {
-            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "List " + i, -1), observableList);
+            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "List " + i), observableList);
             lists.add(boardListView);
         }
 
