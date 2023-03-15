@@ -39,6 +39,7 @@ Base Route: `/lists`
 | POST        | /lists/{id}          | ListController | List             | updates the specified list     |
 | DELETE      | /lists/{id}          | ListController | -                | deletes a list                 |
 | POST        | /lists/move          | ListController | listId, newIndex | moves a list                   |
+| POST        | /lists/rename        | ListController | listId, newName  | renames a list                 |
 
 # BoardController
 
