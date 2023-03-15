@@ -8,6 +8,7 @@ public class CardList {
     @Id
     long id;
     String title;
+    long idx;
 
     public CardList() {
     }
@@ -15,6 +16,14 @@ public class CardList {
     public CardList(long id, String title) {
         this.id = id;
         this.title = title;
+    }
+
+    public long getIdx() {
+        return idx;
+    }
+
+    public void setIdx(long idx) {
+        this.idx = idx;
     }
 
     public void renameCardList(String newName) {
