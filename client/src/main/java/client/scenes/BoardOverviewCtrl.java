@@ -130,11 +130,12 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
      * Get the names of current lists in the board
      * @return a list of lists names as strings
      */
-    public List<String> getListsNames() {
+    public List<CardList> getLists() {
         return list_of_lists.getChildren()
                 .stream()
+                .filter(node -> node instanceof CardListView)
                 .map(node -> (CardListView) node)
-                .map(CardListView::getListName)
+                .map(CardListView::getCardList)
                 .collect(Collectors.toList());
     }
 }

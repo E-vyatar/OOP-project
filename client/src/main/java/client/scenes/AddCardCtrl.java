@@ -19,19 +19,14 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
+import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.util.List;
 
@@ -46,7 +41,7 @@ public class AddCardCtrl {
     private TextField title;
 
     @FXML
-    private ChoiceBox list;
+    private ComboBox<CardList> list;
 
     @FXML
     private Button cancel;
@@ -75,7 +70,6 @@ public class AddCardCtrl {
     public void ok() {
         try {
 //            server.addCard(getCard());
-            String chosenList = (String) list.getValue();
 //            boardOverviewCtrl.addTaskToList(chosenList, getCard());
             this.cancel();
         } catch (WebApplicationException e) {
@@ -96,7 +90,7 @@ public class AddCardCtrl {
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        return new Card("25", "36", title.getText(), "47", "90");
+        return new Card(25, list.getValue().getCardListId(), title.getText(), 47, 90);
     }
 
     /**
@@ -128,9 +122,39 @@ public class AddCardCtrl {
      */
     public void refresh() {
         list.getItems().clear();
-        List<String> listsNames = boardOverviewCtrl.getListsNames();
-        for (String name : listsNames) {
-            list.getItems().add(name);
-        }
+        List<CardList> cardsLists = boardOverviewCtrl.getLists();
+        list.setCellFactory(listView -> new ListCell<CardList>() {
+            @Override
+            protected void updateItem(CardList item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getCardListTitle());
+                }
+            }
+        });
+        list.setConverter(new StringConverter<CardList>() {
+            @Override
+            public String toString(CardList cardList) {
+                if (cardList != null) {
+                    return cardList.getCardListTitle();
+                }
+                else {
+                    return "";
+                }
+            }
+
+            @Override
+            public CardList fromString(String string) {
+                // not used, but must be implemented
+                return null;
+            }
+        });
+        list.getItems().addAll(cardsLists);
+    }
+
+    public ComboBox<CardList> getList() {
+        return list;
     }
 }
