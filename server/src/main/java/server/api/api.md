@@ -30,16 +30,16 @@ Base Route: `/cards`
 
 Base Route: `/lists`
 
-| Method Type | Route                | Controller     | Request Body     | Description                    |
-|-------------|----------------------|----------------|------------------|--------------------------------|
-| GET         | /lists/all           | ListController | -                | gets all lists from the server |
-| PUT         | /lists/new           | ListController | List             | creates a new list             |
-| GET         | /lists/{id}          | ListController | -                | gets a list from the server    |
-| GET         | /lists/board/{board} | ListController | -                | gets all lists from a board    |
-| POST        | /lists/{id}          | ListController | List             | updates the specified list     |
-| DELETE      | /lists/{id}          | ListController | -                | deletes a list                 |
-| POST        | /lists/move          | ListController | listId, newIndex | moves a list                   |
-| POST        | /lists/rename        | ListController | listId, newName  | renames a list                 |
+| Method Type | Route                  | Controller     | Request Body     | Description                    |
+|-------------|------------------------|----------------|------------------|--------------------------------|
+| GET         | /lists/all             | ListController | -                | gets all lists from the server |
+| PUT         | /lists/new             | ListController | List             | creates a new list             |
+| GET         | /lists/{id}            | ListController | -                | gets a list from the server    |
+| GET         | /lists/board/{boardId} | ListController | -                | gets all lists from a board    |
+| POST        | /lists/{id}            | ListController | List             | updates the specified list     |
+| DELETE      | /lists/{id}            | ListController | -                | deletes a list                 |
+| POST        | /lists/move            | ListController | listId, newIndex | moves a list                   |
+| POST        | /lists/rename          | ListController | listId, newName  | renames a list                 |
 
 # BoardController
 
