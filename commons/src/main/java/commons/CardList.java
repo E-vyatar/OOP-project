@@ -48,6 +48,15 @@ public class CardList {
         this.firstCardId = firstCardId;
     }
 
+    public static CardList createNewCardList(String cardListTitle, long firstCardId) {
+        // Some Server side code to create a new cardList and get the ID.
+        // TODO: Implement this.
+
+        long cardListId = -1;
+
+        return new CardList(cardListId, cardListTitle, firstCardId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
