@@ -50,6 +50,14 @@ public class CardList {
         this.title = cardListTitle;
     }
 
+    public long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
