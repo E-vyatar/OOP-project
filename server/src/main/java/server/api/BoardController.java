@@ -61,4 +61,7 @@ public class BoardController {
     public Board createBoard(@RequestBody Board board) {
         return boardRepository.save(board);
     }
+
+    // TODO: DELETE --> value = "{id}"
+    //  - deletes a board by id
 }
