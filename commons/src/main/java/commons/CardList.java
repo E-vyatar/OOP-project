@@ -2,6 +2,7 @@ package commons;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class CardList {
@@ -48,5 +49,19 @@ public class CardList {
     public void setTitle(String cardListTitle) {
         this.title = cardListTitle;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CardList)) return false;
+        CardList cardList = (CardList) o;
+        return id == cardList.id && idx == cardList.idx && boardId == cardList.boardId && Objects.equals(title, cardList.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, idx, boardId);
+    }
+
 
 }
