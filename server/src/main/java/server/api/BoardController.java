@@ -37,10 +37,10 @@ public class BoardController {
     }
 
     /**
-     * Delete a board by id
+     * Updates a board
      *
      * @param id the id of the board
-     * @return the deleted board
+     * @return the updated board
      */
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public Board updateBoard(@PathVariable("id") long id, @RequestBody Board board) {
