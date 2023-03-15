@@ -28,7 +28,6 @@ public class FXConfig implements Module {
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CardPopupCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(ListOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(RenameListPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ConnectServerCtrl.class).in(Scopes.SINGLETON);
     }

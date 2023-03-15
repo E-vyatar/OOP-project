@@ -20,10 +20,13 @@ import commons.Card;
 import commons.CardList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
@@ -47,17 +50,17 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        create_cards();
     }
 
-    public void refresh() {
+    private void create_cards() {
         /*
             Currently, this method just creates arbitrary data.
             This data doesn't properly use the format as it's stored in the DB.
             When linking with the server side,
             the cards in a list should be converted into an ObservableList.
          */
-        ArrayList<BoardListView> lists = new ArrayList<>();
+        var lists = new ArrayList();
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -68,11 +71,45 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         ObservableList<Card> observableList = FXCollections.observableList(cards);
 
         for (int i = 0; i < 4; i++) {
-            BoardListView boardListView = new BoardListView(mainCtrl, new CardList(i, "List " + i, 0), observableList);
-            lists.add(boardListView);
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List " + i, -1), observableList);
+            CardListView cardListView = cardListViewCtrl.getView();
+            lists.add(cardListView);
         }
 
         list_of_lists.getChildren().addAll(lists);
+
+        createButton();
+    }
+
+    /**
+     * Creates a button to add a new list to the board
+     */
+    private void createButton() {
+        // Create button and add to list_of_lists
+        Button button = new Button("Add list");
+        button.setOnAction(this::addList);
+            //set button margin
+        HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
+        list_of_lists.setAlignment(Pos.CENTER_RIGHT);
+        list_of_lists.getChildren().add(button);
+    }
+
+    /**
+     * Adds a new list to the board
+     * @param actionEvent
+     */
+    private void addList(ActionEvent actionEvent) {
+        // Create a new list where cards can be added to
+        ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
+        CardList cardList = CardList.createNewCardList("New List", -1);
+        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, cardList, observableList);
+
+        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), new CardListView(mainCtrl, cardList, cardListViewCtrl, observableList));
+    }
+
+    public void refresh() {
+
     }
 
     @Override
