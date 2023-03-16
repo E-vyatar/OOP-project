@@ -92,7 +92,4 @@ public class ListController {
     }
 
     // TODO: POST --> mapping = "move", reqBody = listId, newIndex
-
-    // TODO: POST --> mapping = "rename", reqBody = listId, newName
-    //  - This could be implemented using updateList (for further discussion)
 }
