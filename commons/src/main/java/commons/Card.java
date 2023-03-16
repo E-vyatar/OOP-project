@@ -10,7 +10,7 @@ public class Card {
     long id;
     long listId;
     String title;
-    long order;
+    long idx;
     long boardId;
 
     public Card() {
@@ -20,19 +20,13 @@ public class Card {
         this.id = id;
         this.listId = listId;
         this.title = title;
-        this.order = order;
+        this.idx = idx;
         this.boardId = boardId;
     }
 
     @Override
     public String toString() {
-        return "Card{" +
-                "id='" + id + '\'' +
-                ", cardListId='" + listId + '\'' +
-                ", title='" + title + '\'' +
-                ", order='" + order + '\'' +
-                ", boardId='" + boardId + '\'' +
-                '}';
+        return "Card{" + "id='" + id + '\'' + ", cardListId='" + listId + '\'' + ", title='" + title + '\'' + ", nextCardId='" + idx + '\'' + ", boardId='" + boardId + '\'' + '}';
     }
 
     public long getId() {
@@ -58,13 +52,12 @@ public class Card {
     public void setTitle(String cardTitle) {
         this.title = cardTitle;
     }
-
-    public long getOrder() {
-        return order;
+    public long getIdx() {
+        return idx;
     }
 
-    public void setOrder(long order) {
-        this.order = order;
+    public void setIdx(long nextCardId) {
+        this.idx = nextCardId;
     }
 
     public long getBoardId() {
@@ -73,5 +66,29 @@ public class Card {
 
     public void setBoardId(long boardId) {
         this.boardId = boardId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Card card = (Card) o;
+
+        if (id != card.id) return false;
+        if (listId != card.listId) return false;
+        if (idx != card.idx) return false;
+        if (boardId != card.boardId) return false;
+        return title.equals(card.title);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (int) (listId ^ (listId >>> 32));
+        result = 31 * result + title.hashCode();
+        result = 31 * result + (int) (idx ^ (idx >>> 32));
+        result = 31 * result + (int) (boardId ^ (boardId >>> 32));
+        return result;
     }
 }

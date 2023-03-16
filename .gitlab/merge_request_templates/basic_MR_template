@@ -1,0 +1,17 @@
+# Merge Request
+Closes #71
+
+# Checklist
+* [x] Do you have sufficient test coverage (if applicable)?
+* [x] Did you fix all style errors?
+* [x] Did you achieve the definition of done?
+* [x] Are you merging to the right branch?
+
+# Details
+- Adds a delete mapping to the Leaderboard Controller to delete by a given name.
+- Adds a get mapping to the Leaderboard Controller to get a given name and score. 
+- Adds a delete mapping to the Leaderboard Controller to delete by a given name and score.
+- findByName now returns a list of all matching entries
+
+# How to test
+Sending requests (through postman) to add and remove entries using the mentioned features
