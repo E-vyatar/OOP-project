@@ -62,7 +62,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         for (long i = 0; i < 4; i++) {
             List<Card> cards = new ArrayList<>();
             for (long j = 0; j < 4; j++) {
-            cards.add( new Card(String.valueOf(i * 4 + j), i + "", "Card " + i + "." + j, j, null));
+                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j , -1));
             }
             ObservableList observableList = FXCollections.observableList(cards);
 
