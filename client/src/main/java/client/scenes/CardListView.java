@@ -18,6 +18,7 @@ public class CardListView extends TitledPane {
     private final FilteredList<Card> cards;
     private CardList cardList;
 
+    private ListView<Card> listView;
 
     public CardListView(MainCtrl mainCtrl, CardList cardList, CardListViewCtrl controller, ObservableList<Card> cards) {
         super();
@@ -46,7 +47,7 @@ public class CardListView extends TitledPane {
         this.setText(cardList.getCardListTitle());
         this.setMaxHeight(Double.MAX_VALUE);
 
-        ListView<Card> listView = new ListView<>();
+        listView = new ListView<>();
 
         listView.setCellFactory(new Callback<ListView<Card>, ListCell<Card>>() {
             @Override
@@ -57,6 +58,15 @@ public class CardListView extends TitledPane {
         });
         listView.setItems(this.cards);
 
+        listView.getSelectionModel().getSelectedItems().addListener(controller);
+
         this.setContent(listView);
+    }
+
+    /**
+     * This unselects all selected cards in the list.
+     */
+    public void clearSelection() {
+        this.listView.getSelectionModel().clearSelection();
     }
 }

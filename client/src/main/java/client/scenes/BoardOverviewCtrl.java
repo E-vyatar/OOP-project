@@ -39,6 +39,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
 
     private final ServerUtils utils;
     private final MainCtrl mainCtrl;
+    private List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     @FXML
     private HBox list_of_lists;
 
@@ -71,7 +72,8 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         ObservableList<Card> observableList = FXCollections.observableList(cards);
 
         for (int i = 0; i < 4; i++) {
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List " + i, -1), observableList);
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, new CardList(i, "List " + i, -1), observableList);
+            cardListViewCtrlList.add(cardListViewCtrl);
             CardListView cardListView = cardListViewCtrl.getView();
             lists.add(cardListView);
         }
@@ -102,8 +104,8 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = CardList.createNewCardList("New List", -1);
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, cardList, observableList);
-
+        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, cardList, observableList);
+        cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
         list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), new CardListView(mainCtrl, cardList, cardListViewCtrl, observableList));
     }
@@ -120,4 +122,18 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
             CardPopupCtrl card = (CardPopupCtrl) source;
         }
     }
+
+    /**
+     * This method unselects all cards except the cards in the given list.
+     * @param exclude The CardListViewCtrl for which to not unselect cards.
+     */
+    public void unselectCards(CardListViewCtrl exclude) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            if (cardListViewCtrl == exclude) {
+                continue;
+            }
+            cardListViewCtrl.clearSelection();
+        }
+    }
+
 }
