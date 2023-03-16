@@ -65,7 +65,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                cards.add(new Card(i, "Card " + i + "." + j, -1 , 0));
+                cards.add(new Card(i, "Card " + i + "." + j, j , 0));
             }
         }
 

@@ -16,29 +16,26 @@
 
 package client.scenes;
 
+import client.utils.CardsUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import javafx.util.StringConverter;
-
-import java.util.List;
 
 public class AddCardCtrl {
 
     private final ServerUtils server;
+    private final CardsUtils cardsUtils;
     private final MainCtrl mainCtrl;
-
-    private final BoardOverviewCtrl boardOverviewCtrl;
 
     @FXML
     private TextField title;
@@ -50,10 +47,10 @@ public class AddCardCtrl {
     private Button cancel;
 
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl) {
+    public AddCardCtrl(ServerUtils server,CardsUtils cardsUtils , MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.boardOverviewCtrl = boardOverviewCtrl;
+        this.cardsUtils = cardsUtils;
     }
 
     /**
@@ -71,7 +68,7 @@ public class AddCardCtrl {
      * Add card to list
      */
     public void ok() {
-        if (!emptyFields()) {
+        if (cardsUtils.fieldsNotEmpty(title, list)) {
             try {
                 server.addCard(getCard());
                 closeWindow();
@@ -87,26 +84,8 @@ public class AddCardCtrl {
             clearFields();
             mainCtrl.showOverview();
         } else {
-            markFields();
+            cardsUtils.markFields(title, list);
         }
-    }
-
-    private boolean emptyFields() {
-        return title.getText().isBlank() || list.getSelectionModel().isEmpty();
-    }
-
-    private void markFields() {
-        if (title.getText().isBlank()) {
-            title.setStyle("-fx-border-color: red ; -fx-border-width: 2px");
-        }
-        if (list.getSelectionModel().isEmpty()) {
-            list.setStyle("-fx-border-color: red ; -fx-border-width: 2px");
-        }
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            title.setStyle("");
-            list.setStyle("");
-        }));
-        timeline.play();
     }
 
     /**
@@ -124,7 +103,7 @@ public class AddCardCtrl {
      */
     private void clearFields() {
         title.clear();
-        list.getItems().clear();
+//        list.getItems().clear();
     }
 
     /**
@@ -149,35 +128,36 @@ public class AddCardCtrl {
      */
     public void refresh() {
         clearFields();
-        List<CardList> cardsLists = boardOverviewCtrl.getAllLists();
-        list.setCellFactory(listView -> new ListCell<>() {
-            @Override
-            protected void updateItem(CardList item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getTitle());
-                }
-            }
-        });
-        list.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(CardList cardList) {
-                if (cardList != null) {
-                    return cardList.getTitle();
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public CardList fromString(String string) {
-                // not used, but must be implemented
-                return null;
-            }
-        });
-        list.getItems().addAll(cardsLists);
+        cardsUtils.initializeListsDropDown(list);
+//        List<CardList> cardsLists = boardOverviewCtrl.getAllLists();
+//        list.setCellFactory(listView -> new ListCell<>() {
+//            @Override
+//            protected void updateItem(CardList item, boolean empty) {
+//                super.updateItem(item, empty);
+//                if (empty || item == null) {
+//                    setText(null);
+//                } else {
+//                    setText(item.getTitle());
+//                }
+//            }
+//        });
+//        list.setConverter(new StringConverter<>() {
+//            @Override
+//            public String toString(CardList cardList) {
+//                if (cardList != null) {
+//                    return cardList.getTitle();
+//                } else {
+//                    return "";
+//                }
+//            }
+//
+//            @Override
+//            public CardList fromString(String string) {
+//                // not used, but must be implemented
+//                return null;
+//            }
+//        });
+//        list.getItems().addAll(cardsLists);
     }
 
     public ComboBox<CardList> getList() {
