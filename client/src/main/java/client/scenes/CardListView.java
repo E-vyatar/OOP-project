@@ -2,15 +2,12 @@ package client.scenes;
 
 import commons.Card;
 import commons.CardList;
-
-import javafx.scene.control.TitledPane;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.util.Callback;
-
-import java.util.Objects;
 
 public class CardListView extends TitledPane {
 
@@ -28,7 +25,7 @@ public class CardListView extends TitledPane {
         this.controller = controller;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> Objects.equals(card.getListId(), "" + this.cardList.getCardListId())
+                card -> card.getListId() == cardList.getId()
         );
 
         createView();
@@ -45,7 +42,7 @@ public class CardListView extends TitledPane {
     private void createView() {
 
         this.setCollapsible(false);
-        this.setText(cardList.getCardListTitle());
+        this.setText(cardList.getTitle());
         this.setMaxHeight(Double.MAX_VALUE);
 
         ListView<Card> listView = new ListView<>();
@@ -62,7 +59,11 @@ public class CardListView extends TitledPane {
         this.setContent(listView);
     }
 
+    /**
+     * Get the name of this list
+     * @return name of the list as a string
+     */
     public String getListName() {
-        return this.cardList.getCardListTitle();
+        return this.cardList.getTitle();
     }
 }

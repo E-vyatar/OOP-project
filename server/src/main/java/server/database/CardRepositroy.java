@@ -1,18 +1,14 @@
 package server.database;
 
 import commons.Card;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+import java.util.Optional;
 
-@SuppressWarnings("SpringDataMongoDBJsonFieldInspection")
-public interface CardRepositroy extends MongoRepository<Card, String> {
-    @Query("{_id:  '?0'}")
-    Card findCardById(String id);
+public interface CardRepositroy extends CrudRepository<Card, Long> {
+    Optional<Card> findById(long cardId);
 
-    @Query("{boardId:  '?0'}")
-    List<Card> findCardsByBoardId(String boardId);
+    Iterable<Card> findAllByListIdOrderByIdxAsc(long listId);
 
-    long count();
+    Iterable<Card> findAllByBoardId(long boardId);
 }

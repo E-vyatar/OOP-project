@@ -36,13 +36,6 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
 
-
-    //=========================================================
-    // This is temporary in order to demonstrate functionality:
-    //     - It will be merged into main project later.
-    private Stage secondaryStage;
-    private Scene listOverview;
-
     private RenameListPopupCtrl renameListPopupCtrl;
     private Stage renameListPopup;
     private ConnectServerCtrl connectServerCtrl;
