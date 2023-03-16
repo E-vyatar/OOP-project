@@ -59,7 +59,7 @@ public class AddCardCtrl {
     /**
      * Clear title field and close the "Add new task" window
      */
-    public void cancel() {
+    public void closeWindow() {
         clearFields();
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
@@ -74,8 +74,7 @@ public class AddCardCtrl {
         if (!emptyFields()) {
             try {
                 server.addCard(getCard());
-    //            boardOverviewCtrl.addTaskToList(chosenList, getCard());
-                this.cancel();
+                closeWindow();
             } catch (WebApplicationException e) {
 
                 var alert = new Alert(Alert.AlertType.ERROR);
@@ -115,7 +114,9 @@ public class AddCardCtrl {
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        return new Card(25, list.getValue().getCardListId(), title.getText(), 47, 90);
+        long listSize = server.getCardsByList(list.getValue().getId()).size();
+        Card card = new Card(list.getValue().getId(), title.getText(), listSize+1, list.getValue().getBoardId());
+        return card;
     }
 
     /**
@@ -136,7 +137,7 @@ public class AddCardCtrl {
                 ok();
                 break;
             case ESCAPE:
-                cancel();
+                closeWindow();
                 break;
             default:
                 break;
@@ -149,24 +150,23 @@ public class AddCardCtrl {
     public void refresh() {
         clearFields();
         List<CardList> cardsLists = boardOverviewCtrl.getAllLists();
-        list.setCellFactory(listView -> new ListCell<CardList>() {
+        list.setCellFactory(listView -> new ListCell<>() {
             @Override
             protected void updateItem(CardList item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getCardListTitle());
+                    setText(item.getTitle());
                 }
             }
         });
-        list.setConverter(new StringConverter<CardList>() {
+        list.setConverter(new StringConverter<>() {
             @Override
             public String toString(CardList cardList) {
                 if (cardList != null) {
-                    return cardList.getCardListTitle();
-                }
-                else {
+                    return cardList.getTitle();
+                } else {
                     return "";
                 }
             }
