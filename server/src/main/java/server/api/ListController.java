@@ -73,7 +73,7 @@ public class ListController {
      */
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public CardList updateList(@PathVariable("id") long id, @RequestBody CardList cardList) {
-        logger.info("updateCard() called with: id = [" + id + "], cardList = [" + cardList + "]");
+        logger.info("updateList() called with: id = [" + id + "], cardList = [" + cardList + "]");
         if (listRepository.findById(id).isPresent()) {
             cardList.setId(id);
             return listRepository.save(cardList);
