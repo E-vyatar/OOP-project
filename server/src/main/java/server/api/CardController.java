@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardRepositroy;
 
+/**
+ *
+ */
 @RestController
 @RequestMapping("/cards")
 public class CardController {
@@ -17,24 +20,70 @@ public class CardController {
         this.cardRepository = cardRepositroy;
     }
 
+    /**
+     * Create a new card
+     *
+     * @param card the card to create
+     * @return the created card
+     */
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");
         return cardRepository.save(card);
     }
 
+    /**
+     * Get all cards
+     *
+     * @return all cards
+     */
     @GetMapping("all")
     public Iterable<Card> getAllCards() {
         return cardRepository.findAll();
     }
 
+    /**
+     * Get a card by id
+     *
+     * @param id the id of the card
+     * @return the card
+     */
     @GetMapping("{id}")
-    public Card getCardById(@PathVariable("id") String id) {
+    public Card getCardById(@PathVariable("id") long id) {
         return cardRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Get all cards by board id
+     *
+     * @param id the id of the board
+     * @return all cards of the board
+     */
+    @GetMapping("board/{id}")
+    public Iterable<Card> getCardsByBoardId(@PathVariable("id") long id) {
+        return cardRepository.findAllByBoardId(id);
+    }
+
+    /**
+     * Get all cards by list id
+     *
+     * @param id the id of the list
+     * @return all cards of the list
+     */
+    @GetMapping("list/{id}")
+    public Iterable<Card> getCardsByListId(@PathVariable("id") long id) {
+        return cardRepository.findAllByListIdOrderByIdAsc(id);
+    }
+
+    /**
+     * Update a card
+     *
+     * @param id   the id of the card
+     * @param card the card to update
+     * @return the updated card
+     */
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
-    public Card updateCard(@PathVariable("id") String id, @RequestBody Card card) {
+    public Card updateCard(@PathVariable("id") long id, @RequestBody Card card) {
         logger.info("updateCard() called with: id = [" + id + "], card = [" + card + "]");
         if (cardRepository.findById(id).isPresent()) {
             card.setId(id);
@@ -43,8 +92,13 @@ public class CardController {
         return null;
     }
 
+    /**
+     * Delete a card
+     *
+     * @param id the id of the card
+     */
     @DeleteMapping("{id}")
-    public void deleteCard(@PathVariable("id") String id) {
+    public void deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);
     }
 

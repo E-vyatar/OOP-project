@@ -127,10 +127,10 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     }
 
     /**
-     * Get the names of current lists in the board
-     * @return a list of lists names as strings
+     * Get a list of current lists in the board
+     * @return a list of lists as CardList
      */
-    public List<CardList> getLists() {
+    public List<CardList> getAllLists() {
         return list_of_lists.getChildren()
                 .stream()
                 .filter(node -> node instanceof CardListView)
