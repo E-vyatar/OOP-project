@@ -8,17 +8,17 @@ public class Card {
     String id;
     String listId;
     String title;
-    String nextCardId;
+    long order;
     String boardId;
 
     public Card() {
     }
 
-    public Card(String id, String listId, String title, String nextCardId, String boardId) {
+    public Card(String id, String listId, String title, long order, String boardId) {
         this.id = id;
         this.listId = listId;
         this.title = title;
-        this.nextCardId = nextCardId;
+        this.order = order;
         this.boardId = boardId;
     }
 
@@ -28,7 +28,7 @@ public class Card {
                 "id='" + id + '\'' +
                 ", cardListId='" + listId + '\'' +
                 ", title='" + title + '\'' +
-                ", nextCardId='" + nextCardId + '\'' +
+                ", nextCardId='" + order + '\'' +
                 ", boardId='" + boardId + '\'' +
                 '}';
     }
@@ -57,12 +57,12 @@ public class Card {
         this.title = cardTitle;
     }
 
-    public String getNextCardId() {
-        return nextCardId;
+    public long getOrder() {
+        return order;
     }
 
-    public void setNextCardId(String nextCardId) {
-        this.nextCardId = nextCardId;
+    public void setOrder(long order) {
+        this.order = order;
     }
 
     public String getBoardId() {

@@ -15,11 +15,11 @@
  */
 package client.scenes;
 
-import client.OrderedCardList;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
-import javafx.beans.property.SimpleLongProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,7 +29,7 @@ import javafx.scene.layout.HBox;
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class BoardOverviewCtrl implements Initializable, EventHandler {
@@ -58,14 +58,15 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
             the cards in a list should be converted into an ObservableList.
          */
         var lists = new ArrayList();
-        HashMap<Long, Card> cards = new HashMap<>();
+        // Create four lists
         for (long i = 0; i < 4; i++) {
+            List<Card> cards = new ArrayList<>();
             for (long j = 0; j < 4; j++) {
-                cards.put(i * 4 + j, new Card(String.valueOf(i * 4 + j), String.valueOf(i), "Card " + i + "." + j, j < 3 ? String.valueOf(i * 4 + j + 1) : null, null));
+            cards.add( new Card(String.valueOf(i * 4 + j), i + "", "Card " + i + "." + j, j, null));
             }
-            OrderedCardList orderedCardList = new OrderedCardList(new SimpleLongProperty(i * 4), cards);
+            ObservableList observableList = FXCollections.observableList(cards);
 
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List " + i, -1), orderedCardList);
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, new CardList(i, "List " + i, -1), observableList);
             CardListView cardListView = cardListViewCtrl.getView();
             lists.add(cardListView);
         }
