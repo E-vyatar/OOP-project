@@ -1,9 +1,10 @@
 package client.scenes;
 
 import commons.Card;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 
 public class CardView extends ListCell<Card> {
 
@@ -22,15 +23,23 @@ public class CardView extends ListCell<Card> {
             this.setGraphic(null);
         } else {
 
-            Pane pane = new Pane();
+            AnchorPane pane = new AnchorPane();
 
             pane.setPrefHeight(150.0);
             pane.setPrefWidth(200.0);
 
+            Button button = new Button();
+            button.setId("editButton");
+            button.setText("edit");
+            button.setOnMouseClicked(this.controller);
+
             Label label = new Label();
             label.setText(card.getTitle());
 
-            pane.getChildren().addAll(label);
+            AnchorPane.setTopAnchor(button, 8.0);
+            AnchorPane.setRightAnchor(button, 8.0);
+
+            pane.getChildren().addAll(label, button);
             this.setGraphic(pane);
             this.setMinHeight(150.0);
 

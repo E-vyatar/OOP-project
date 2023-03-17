@@ -1,11 +1,12 @@
 package client.scenes;
 
 import commons.Card;
-import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
-public class CardViewCtrl implements EventHandler {
+public class CardViewCtrl implements EventHandler<MouseEvent> {
 
     private final MainCtrl mainCtrl;
     private final CardView view;
@@ -25,10 +26,15 @@ public class CardViewCtrl implements EventHandler {
     }
 
     @Override
-    public void handle(Event event) {
-        if (event instanceof MouseEvent) {
-            MouseEvent mouseEvent = (MouseEvent) event;
-            mainCtrl.showCard(card);
+    public void handle(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            Object source = event.getSource();
+            if (source instanceof Button &&
+                "editButton".equals(((Button) source).getId())) {
+                mainCtrl.showCard(card, true);
+            } else {
+                mainCtrl.showCard(card, false);
+            }
         }
     }
 }
