@@ -62,6 +62,13 @@ public class BoardController {
         return boardRepository.save(board);
     }
 
-    // TODO: DELETE --> value = "{id}"
-    //  - deletes a board by id
+    /**
+     * deletes board by id
+     *
+     * @param id the id of the board
+     */
+    @DeleteMapping("{id}")
+    public void deleteBoard(@PathVariable("id") long id) {
+        boardRepository.deleteById(id);
+    }
 }
