@@ -30,22 +30,10 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private CardPopupCtrl cardPopupCtrlCtrl;
-    private Stage cardPopup;
+    private CardPopupCtrl cardPopupCtrl;
 
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
-
-    private EditCardCtrl editCardCtrl;
-    private Scene editCard;
-
-
-    //=========================================================
-    // This is temporary in order to demonstrate functionality:
-    //     - It will be merged into main project later.
-    private Stage secondaryStage;
-    private ListOverviewCtrl listOverviewCtrl;
-    private Scene listOverview;
 
     private RenameListPopupCtrl renameListPopupCtrl;
     private Stage renameListPopup;
@@ -58,8 +46,6 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<EditCardCtrl, Parent> editCard,
-                           Pair<ListOverviewCtrl, Parent> listOverview,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
 
         this.primaryStage = primaryStage;
@@ -70,16 +56,7 @@ public class MainCtrl {
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
 
-        this.cardPopupCtrlCtrl = cardPopup.getKey();
-        this.cardPopup = new Stage();
-        this.cardPopup.initModality(Modality.WINDOW_MODAL);
-        this.cardPopup.setMinWidth(240.0);
-        this.cardPopup.setMinHeight(200.0);
-        this.cardPopup.setScene(new Scene(cardPopup.getValue()));
-
-        this.secondaryStage = new Stage();
-        this.listOverviewCtrl = listOverview.getKey();
-        this.listOverview = new Scene(listOverview.getValue(), 200, 200);
+        this.cardPopupCtrl = cardPopup.getKey();
 
         this.renameListPopupCtrl = renameListPopup.getKey();
         this.renameListPopup = new Stage();
@@ -87,17 +64,11 @@ public class MainCtrl {
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
 
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
+
         showconnect();
         this.primaryStage.show();
-
-        showExampleListOverview();
-        secondaryStage.show();
-    }
-
-    private void showExampleListOverview() {
-        secondaryStage.setTitle("Example: rename list");
-        secondaryStage.setScene(listOverview);
-        listOverviewCtrl.refresh();
     }
 
     public void showconnect() {
@@ -118,19 +89,29 @@ public class MainCtrl {
 //        }
 //    }
 
-    public void showCard(Card card) {
-        cardPopupCtrlCtrl.setCard(card);
-        cardPopup.show();
+    /**
+     * This function shows a card popup
+     * @param card the card to be shown in the popup
+     * @param editable whether it should be a popup to edit
+     */
+    public void showCard(Card card, boolean editable) {
+        cardPopupCtrl.setCard(card);
+        cardPopupCtrl.setEditable(editable);
+        cardPopupCtrl.show();
     }
 
-    public void hideCard() {
-        cardPopup.hide();
-    }
-
+    /**
+     * Open a new window with "AddCard" scene
+     */
     public void showAddCard() {
-        primaryStage.setTitle("Empty Scene <addCard>");
-        primaryStage.setScene(addCard);
+        Stage cardWindow = new Stage();
+        cardWindow.setTitle("Add new Task");
+        cardWindow.setScene(addCard);
+        addCard.setOnKeyPressed(event -> {
+            addCardCtrl.keyPressed(event);
+        });
         addCardCtrl.refresh();
+        cardWindow.show();
     }
 
     public void showRenameList(CardList cardList) {

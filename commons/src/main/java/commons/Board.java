@@ -10,7 +10,7 @@ import java.util.Objects;
 @Entity
 public class Board {
     @Id
-    long boardId;
+    long id;
 
     @OneToMany
     List<CardList> cardLists;
@@ -18,18 +18,18 @@ public class Board {
     public Board() {
     }
 
-    public Board(long boardId, List<CardList> cardLists) {
-        this.boardId = boardId;
+    public Board(long id, List<CardList> cardLists) {
+        this.id = id;
         this.cardLists = cardLists;
     }
 
 
-    public long getBoardId() {
-        return boardId;
+    public long getId() {
+        return id;
     }
 
-    public void setBoardId(long boardId) {
-        this.boardId = boardId;
+    public void setId(long boardId) {
+        this.id = boardId;
     }
 
     public List<CardList> getCardLists() {
@@ -45,11 +45,13 @@ public class Board {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Board board = (Board) o;
-        return boardId == board.boardId && Objects.equals(cardLists, board.cardLists);
+        return id == board.id && Objects.equals(cardLists, board.cardLists);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(boardId, cardLists);
+        return Objects.hash(id, cardLists);
     }
+
 }
+

@@ -1,0 +1,15 @@
+/* Make it look like normal text when it's not editable */
+#cardTitle:readonly {
+    -fx-text-box-border: transparent;
+    -fx-background-color: inherit;
+}
+/* Make it look like normal text when it's not editable */
+#cardDescription:readonly {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+    /*The next two attributes make sure it still looks normal even when it's focused */
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    /* Following attribute makes sure that the text won't be white (i.e. illegible) */
+    -fx-text-fill: inherit;
+}
