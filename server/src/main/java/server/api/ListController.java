@@ -91,5 +91,5 @@ public class ListController {
         listRepository.deleteById(id);
     }
 
-    // TODO: POST --> mapping = "move", reqBody = listId, newIndex
+    // TODO: POST --> mapping = "move", reqBody = listId, boardId, newIndex
 }

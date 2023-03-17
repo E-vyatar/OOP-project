@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ListRepository extends CrudRepository<CardList, Long> {
     Iterable<CardList> findAllByBoardId(long boardId);
     Optional<CardList> findById(long listId);
+
 }
