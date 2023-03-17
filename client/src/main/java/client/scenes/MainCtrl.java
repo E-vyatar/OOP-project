@@ -30,8 +30,7 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private CardPopupCtrl cardPopupCtrlCtrl;
-    private Stage cardPopup;
+    private CardPopupCtrl cardPopupCtrl;
 
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
@@ -61,12 +60,7 @@ public class MainCtrl {
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
 
-        this.cardPopupCtrlCtrl = cardPopup.getKey();
-        this.cardPopup = new Stage();
-        this.cardPopup.initModality(Modality.WINDOW_MODAL);
-        this.cardPopup.setMinWidth(240.0);
-        this.cardPopup.setMinHeight(200.0);
-        this.cardPopup.setScene(new Scene(cardPopup.getValue()));
+        this.cardPopupCtrl = cardPopup.getKey();
 
         this.renameListPopupCtrl = renameListPopup.getKey();
         this.renameListPopup = new Stage();
@@ -96,13 +90,15 @@ public class MainCtrl {
 //        }
 //    }
 
-    public void showCard(Card card) {
-        cardPopupCtrlCtrl.setCard(card);
-        cardPopup.show();
-    }
-
-    public void hideCard() {
-        cardPopup.hide();
+    /**
+     * This function shows a card popup
+     * @param card the card to be shown in the popup
+     * @param editable whether it should be a popup to edit
+     */
+    public void showCard(Card card, boolean editable) {
+        cardPopupCtrl.setCard(card);
+        cardPopupCtrl.setEditable(editable);
+        cardPopupCtrl.show();
     }
 
     public void showAddCard() {

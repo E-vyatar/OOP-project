@@ -11,6 +11,7 @@ public class CardView extends ListCell<Card> {
     private final CardViewCtrl controller;
     private Button buttonUp;
     private Button buttonDown;
+    private Button editButton;
 
     public CardView(CardViewCtrl controller) {
         this.controller = controller;
@@ -43,13 +44,25 @@ public class CardView extends ListCell<Card> {
             hbox.setPrefHeight(150.0);
             hbox.setPrefWidth(200.0);
 
+            this.editButton = new Button();
+            editButton.setId("editButton");
+            editButton.setText("edit");
+            editButton.setOnMouseClicked(this.controller);
+
+            AnchorPane pane = new AnchorPane();
+
             Label label = new Label();
             label.setText(card.getTitle());
 
-            getChildren().add(label);
+            AnchorPane.setTopAnchor(editButton, 8.0);
+            AnchorPane.setRightAnchor(editButton, 8.0);
 
-            hbox.getChildren().addAll(vbox, label);
+            pane.getChildren().addAll(label, editButton);
+
+            hbox.getChildren().addAll(vbox, pane);
             hbox.setSpacing(8.0); // Put 8 pixels of space between buttons and the rest
+
+            HBox.setHgrow(pane, Priority.ALWAYS);
 
             this.setGraphic(hbox);
             this.setMinHeight(150.0);
@@ -66,5 +79,8 @@ public class CardView extends ListCell<Card> {
 
     public Button getButtonDown() {
         return buttonDown;
+    }
+    public Button getEditButton() {
+        return editButton;
     }
 }

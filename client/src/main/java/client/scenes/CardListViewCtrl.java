@@ -2,17 +2,20 @@ package client.scenes;
 
 import commons.Card;
 import commons.CardList;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
-public class CardListViewCtrl {
+public class CardListViewCtrl implements ListChangeListener<Card> {
     private final MainCtrl mainCtrl;
-    private CardList cardList;
+    private final BoardOverviewCtrl boardOverviewCtrl;
+    private final CardList cardList;
     private final CardListView view;
     private ObservableList<Card> cards;
 
-    public CardListViewCtrl(MainCtrl mainCtrl, CardList cardList, ObservableList<Card> cards) {
+    public CardListViewCtrl(MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
         this.mainCtrl = mainCtrl;
+        this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards;
@@ -25,11 +28,6 @@ public class CardListViewCtrl {
         return cardList;
     }
 
-    public void setCardList(CardList cardList) {
-        this.cardList = cardList;
-        createView();
-    }
-
     private void createView() {
         this.view.createView();
 
@@ -39,7 +37,6 @@ public class CardListViewCtrl {
             }
         });
     }
-
 
     public CardListView getView() {
         return this.view;
@@ -68,5 +65,24 @@ public class CardListViewCtrl {
             cards.remove(indexOf);
             cards.add(indexOf + 1, card);
         }
+    }
+    /**
+     * This listens for changes in which card is selected.
+     * In here we check if the change was that a card got selected,
+     * and if so we make sure that it will be the only card that is selected.
+     * @param c an object representing the change that was done
+     */
+    @Override
+    public void onChanged(Change<? extends Card> c) {
+        if (c.next() && c.wasAdded()) {
+            boardOverviewCtrl.unselectCards(this);
+        }
+    }
+
+    /**
+     * This unselects all selected cards in the list.
+     */
+    public void clearSelection() {
+        this.getView().clearSelection();
     }
 }

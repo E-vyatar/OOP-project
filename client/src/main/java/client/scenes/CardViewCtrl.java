@@ -2,6 +2,8 @@ package client.scenes;
 
 import commons.Card;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class CardViewCtrl implements EventHandler<MouseEvent> {
@@ -27,7 +29,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent event) {
-        if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
+        if (event.getButton() == MouseButton.PRIMARY) {
             Object source = event.getSource();
 
             if (source == view.getButtonUp()){
@@ -36,9 +38,10 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
             } else if (source == view.getButtonDown()) {
                 // move card down
                 cardListViewCtrl.moveCardDown(this.card);
+            } else if (source == view.getEditButton()) {
+                mainCtrl.showCard(card, true);
             } else {
-                MouseEvent mouseEvent = (MouseEvent) event;
-                mainCtrl.showCard(card);
+                mainCtrl.showCard(card, false);
             }
         }
     }
