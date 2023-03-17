@@ -2,7 +2,6 @@ package client.scenes;
 
 import commons.Card;
 import commons.CardList;
-
 import javafx.scene.control.TitledPane;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
@@ -52,7 +51,6 @@ public class CardListView extends TitledPane {
         listView.setItems(this.cards);
 
         listView.getSelectionModel().getSelectedItems().addListener(controller);
-
         this.setContent(listView);
     }
 

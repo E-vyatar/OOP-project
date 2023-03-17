@@ -2,7 +2,6 @@ package client.scenes;
 
 import commons.Card;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 

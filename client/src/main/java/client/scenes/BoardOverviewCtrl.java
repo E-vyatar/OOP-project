@@ -34,6 +34,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class BoardOverviewCtrl implements Initializable, EventHandler {
 
@@ -134,4 +135,18 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         }
     }
 
+    public void openNewTaskWindow() {
+        mainCtrl.showAddCard();
+    }
+
+    /**
+     * Get a list of current lists in the board
+     * @return a list of lists as CardList
+     */
+    public List<CardList> getAllLists() {
+        return cardListViewCtrlList
+                .stream()
+                .map(CardListViewCtrl::getCardList)
+                .collect(Collectors.toList());
+    }
 }

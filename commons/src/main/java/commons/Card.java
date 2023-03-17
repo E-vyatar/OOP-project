@@ -16,7 +16,7 @@ public class Card {
     public Card() {
     }
 
-    public Card(long id, long listId, String title, long order, long boardId) {
+    public Card(long id, long listId, String title, long idx, long boardId) {
         this.id = id;
         this.listId = listId;
         this.title = title;
@@ -52,6 +52,7 @@ public class Card {
     public void setTitle(String cardTitle) {
         this.title = cardTitle;
     }
+    
     public long getIdx() {
         return idx;
     }
