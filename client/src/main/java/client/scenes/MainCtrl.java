@@ -90,8 +90,14 @@ public class MainCtrl {
 //        }
 //    }
 
-    public void showCard(Card card) {
+    /**
+     * This function shows a card popup
+     * @param card the card to be shown in the popup
+     * @param editable whether it should be a popup to edit
+     */
+    public void showCard(Card card, boolean editable) {
         cardPopupCtrl.setCard(card);
+        cardPopupCtrl.setEditable(editable);
         cardPopupCtrl.show();
     }
 

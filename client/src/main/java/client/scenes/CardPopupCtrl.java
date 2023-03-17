@@ -4,6 +4,8 @@ import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
@@ -23,6 +25,17 @@ public class CardPopupCtrl {
     @FXML
     private TextArea cardDescription;
 
+    @FXML
+    private ButtonBar buttonBar;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button saveButton;
+
     /**
      * This initializes the controller.
      * Note that we only create the stage now,
@@ -30,6 +43,11 @@ public class CardPopupCtrl {
      * and creating the scene would throw a NullPointerException
      */
     public void initialize() {
+        ButtonBar.setButtonData(closeButton, ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonBar.setButtonData(editButton, ButtonBar.ButtonData.RIGHT);
+        ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonBar.setButtonData(saveButton, ButtonBar.ButtonData.APPLY);
+
         this.cardPopup = new Stage();
         this.cardPopup.initModality(Modality.WINDOW_MODAL);
         this.cardPopup.setMinWidth(240.0);
@@ -43,11 +61,26 @@ public class CardPopupCtrl {
         createView();
     }
 
+    /**
+     * Makes the details of the card editable or not
+     * @param editable whether the card should be editable
+     */
+    public void setEditable(boolean editable) {
+        this.cardTitle.setEditable(editable);
+        this.cardDescription.setEditable(editable);
+
+        this.buttonBar.getButtons().clear();
+        if (editable) {
+            this.buttonBar.getButtons().addAll(cancelButton, saveButton);
+        } else {
+            this.buttonBar.getButtons().addAll(closeButton, editButton);
+        }
+    }
+
     private void createView() {
         cardTitle.setText(card.getTitle());
 
         cardDescription.setText("Here there will be a description.");
-
     }
 
     /**
@@ -63,6 +96,14 @@ public class CardPopupCtrl {
     private void save() {
         // TODO: allow to save data when editing card
         throw new NotImplementedException("Saving changes hasn't been implemented yet.");
+    }
+
+    /**
+     * This function makes the card editable.
+     */
+    @FXML
+    private void edit() {
+        setEditable(true);
     }
 
     /**
