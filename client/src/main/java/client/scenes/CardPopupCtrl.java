@@ -49,7 +49,7 @@ public class CardPopupCtrl {
         ButtonBar.setButtonData(saveButton, ButtonBar.ButtonData.APPLY);
 
         this.cardPopup = new Stage();
-        this.cardPopup.initModality(Modality.WINDOW_MODAL);
+        this.cardPopup.initModality(Modality.APPLICATION_MODAL);
         this.cardPopup.setMinWidth(240.0);
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(root));
