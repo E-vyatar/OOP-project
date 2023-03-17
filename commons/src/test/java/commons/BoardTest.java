@@ -10,7 +10,7 @@ class BoardTest {
     void getBoardId() {
         // Test getBoardId
         Board board = new Board(1, null);
-        assertEquals(1, board.getBoardId());
+        assertEquals(1, board.getId());
     }
 
     @Test

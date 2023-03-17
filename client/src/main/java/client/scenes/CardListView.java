@@ -26,7 +26,7 @@ public class CardListView extends TitledPane {
         this.controller = controller;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> card.getListId() == cardList.getCardListId()
+                card -> card.getListId() == cardList.getId()
         );
 
         createView();
@@ -43,7 +43,7 @@ public class CardListView extends TitledPane {
     private void createView() {
 
         this.setCollapsible(false);
-        this.setText(cardList.getCardListTitle());
+        this.setText(cardList.getTitle());
         this.setMaxHeight(Double.MAX_VALUE);
 
         ListView<Card> listView = new ListView<>();
