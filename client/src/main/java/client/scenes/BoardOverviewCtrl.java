@@ -101,9 +101,11 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
+        CardList cardList = CardList.createNewCardList("New List", -1);
+        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, cardList, observableList);
 
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), new BoardListView(mainCtrl, CardList.createNewCardList("New List", -1), observableList));
+        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), cardListViewCtrl.getView());
     }
 
     public void refresh() {
