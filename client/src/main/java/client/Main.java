@@ -41,10 +41,9 @@ public class Main extends Application {
 
 
         var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
-        var editCard = FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
-        mainCtrl.initialize(primaryStage, overview, cardPopup, addCard, editCard, renameListPopup, connectServerCtrl);
+        mainCtrl.initialize(primaryStage, overview, cardPopup, addCard, renameListPopup, connectServerCtrl);
     }
 }

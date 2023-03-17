@@ -35,9 +35,6 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
 
-    private EditCardCtrl editCardCtrl;
-    private Scene editCard;
-
     private RenameListPopupCtrl renameListPopupCtrl;
     private Stage renameListPopup;
     private ConnectServerCtrl connectServerCtrl;
@@ -49,7 +46,6 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<EditCardCtrl, Parent> editCard,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
 
         this.primaryStage = primaryStage;
@@ -67,6 +63,9 @@ public class MainCtrl {
         this.renameListPopup.setX(this.renameListPopup.getX() + 100);
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
+
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
 
         showconnect();
         this.primaryStage.show();
@@ -101,10 +100,18 @@ public class MainCtrl {
         cardPopupCtrl.show();
     }
 
+    /**
+     * Open a new window with "AddCard" scene
+     */
     public void showAddCard() {
-        primaryStage.setTitle("Empty Scene <addCard>");
-        primaryStage.setScene(addCard);
+        Stage cardWindow = new Stage();
+        cardWindow.setTitle("Add new Task");
+        cardWindow.setScene(addCard);
+        addCard.setOnKeyPressed(event -> {
+            addCardCtrl.keyPressed(event);
+        });
         addCardCtrl.refresh();
+        cardWindow.show();
     }
 
     public void showRenameList(CardList cardList) {

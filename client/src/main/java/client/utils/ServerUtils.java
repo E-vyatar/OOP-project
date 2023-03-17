@@ -19,7 +19,10 @@ import commons.Card;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
+
+import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -37,25 +40,18 @@ public class ServerUtils {
 
     public void addCard(Card card) {
         ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("/cards/new") //
+                .target(SERVER).path("cards/new") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
-    public void updateCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("/cards/{id}") //
+    public List<Card> getCardsByList(long listId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("cards/list/{id}") //
+                .resolveTemplate("id", listId)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    public void deleteCard(Card ignoredCard) {
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("/cards/{id}") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .delete(Card.class);
+                .get(new GenericType<List<Card>>() {});
     }
 }
