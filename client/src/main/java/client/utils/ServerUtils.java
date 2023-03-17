@@ -71,6 +71,12 @@ public class ServerUtils {
     }
 
     private final StompSession session = connect("ws://localhost:8080/websocket");
+
+    /**
+     * @param url address
+     *
+     * @return
+     */
     private StompSession connect(String url){
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
@@ -83,6 +89,13 @@ public class ServerUtils {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * @param destination destination for the upcoming messages
+     * @param type  class type
+     * @param consumer  the subscriber
+     * @param <T> generic class
+     */
     public <T> void registerMessages(String destination, Class <T> type, Consumer<T> consumer){
         session.subscribe(SERVER, new StompFrameHandler() {
             @Override
