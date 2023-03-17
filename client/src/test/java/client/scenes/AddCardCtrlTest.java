@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.CardsUtils;
 import client.utils.ServerUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,15 +15,15 @@ class AddCardCtrlTest {
     ServerUtils serverUtilsMock;
 
     @Mock
+    CardsUtils cardsUtilsMock;
+    @Mock
     MainCtrl mainCtrlMock;
 
-    @Mock
-    BoardOverviewCtrl boardOverviewCtrlMock;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        addCardCtrl = new AddCardCtrl(serverUtilsMock,mainCtrlMock,boardOverviewCtrlMock);
+        addCardCtrl = new AddCardCtrl(serverUtilsMock,cardsUtilsMock, mainCtrlMock);
     }
 
     @Test

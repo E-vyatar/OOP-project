@@ -30,7 +30,7 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private CardPopupCtrl cardPopupCtrlCtrl;
+    private CardPopupCtrl cardPopupCtrl;
     private Stage cardPopup;
 
     private AddCardCtrl addCardCtrl;
@@ -57,7 +57,7 @@ public class MainCtrl {
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
 
-        this.cardPopupCtrlCtrl = cardPopup.getKey();
+        this.cardPopupCtrl = cardPopup.getKey();
         this.cardPopup = new Stage();
         this.cardPopup.initModality(Modality.WINDOW_MODAL);
         this.cardPopup.setMinWidth(240.0);
@@ -96,7 +96,7 @@ public class MainCtrl {
 //    }
 
     public void showCard(Card card) {
-        cardPopupCtrlCtrl.setCard(card);
+        cardPopupCtrl.setCard(card);
         cardPopup.show();
     }
 
