@@ -52,7 +52,7 @@ public class Card {
     public void setTitle(String cardTitle) {
         this.title = cardTitle;
     }
-
+    
     public long getIdx() {
         return idx;
     }

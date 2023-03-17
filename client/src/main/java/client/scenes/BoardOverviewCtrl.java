@@ -63,16 +63,14 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
             the cards in a list should be converted into an ObservableList.
          */
         var lists = new ArrayList();
-        List<Card> cards = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, -1 , -1));
+        // Create four lists
+        for (long i = 0; i < 4; i++) {
+            List<Card> cards = new ArrayList<>();
+            for (long j = 0; j < 4; j++) {
+                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j , -1));
             }
-        }
+            ObservableList<Card> observableList = FXCollections.observableList(cards);
 
-        ObservableList<Card> observableList = FXCollections.observableList(cards);
-
-        for (int i = 0; i < 4; i++) {
             CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, new CardList(i, "List " + i, -1), observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
             CardListView cardListView = cardListViewCtrl.getView();
@@ -146,11 +144,9 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
      * @return a list of lists as CardList
      */
     public List<CardList> getAllLists() {
-        return list_of_lists.getChildren()
+        return cardListViewCtrlList
                 .stream()
-                .filter(node -> node instanceof CardListView)
-                .map(node -> (CardListView) node)
-                .map(CardListView::getCardList)
+                .map(CardListViewCtrl::getCardList)
                 .collect(Collectors.toList());
     }
 }

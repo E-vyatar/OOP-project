@@ -4,7 +4,6 @@ import commons.Card;
 import commons.CardList;
 import javafx.scene.control.TitledPane;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
@@ -14,33 +13,25 @@ public class CardListView extends TitledPane {
     private final MainCtrl mainCtrl;
     private final CardListViewCtrl controller;
 
-    private final FilteredList<Card> cards;
-    private CardList cardList;
+    private final ObservableList<Card> cards;
 
     private ListView<Card> listView;
 
-    public CardListView(MainCtrl mainCtrl, CardList cardList, CardListViewCtrl controller, ObservableList<Card> cards) {
+    public CardListView(MainCtrl mainCtrl, CardListViewCtrl controller, ObservableList<Card> cards) {
         super();
         this.mainCtrl = mainCtrl;
-        this.cardList = cardList;
         this.controller = controller;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> card.getListId() == cardList.getId()
+                card -> card.getListId() == controller.getCardList().getId()
         );
 
         createView();
     }
 
-    public CardList getCardList() {
-        return cardList;
-    }
+    protected void createView() {
 
-    public void setCardList(CardList cardList) {
-        this.cardList = cardList;
-        createView();
-    }
-    private void createView() {
+        CardList cardList = this.controller.getCardList();
 
         this.setCollapsible(false);
         this.setText(cardList.getTitle());
@@ -48,10 +39,12 @@ public class CardListView extends TitledPane {
 
         listView = new ListView<>();
 
+        CardListViewCtrl controller = this.controller;
+
         listView.setCellFactory(new Callback<ListView<Card>, ListCell<Card>>() {
             @Override
             public ListCell<Card> call(ListView<Card> param) {
-                CardViewCtrl cardViewCtrl = new CardViewCtrl(mainCtrl);
+                CardViewCtrl cardViewCtrl = new CardViewCtrl(mainCtrl, controller);
                 return cardViewCtrl.getView();
             }
         });
