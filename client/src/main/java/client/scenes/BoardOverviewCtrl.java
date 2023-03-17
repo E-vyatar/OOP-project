@@ -107,7 +107,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), new CardListView(mainCtrl, cardList, cardListViewCtrl, observableList));
+        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), cardListViewCtrl.getView());
     }
 
     public void refresh() {
