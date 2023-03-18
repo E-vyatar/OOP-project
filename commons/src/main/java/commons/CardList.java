@@ -21,6 +21,13 @@ public class CardList {
         this.boardId = boardId;
     }
 
+    public CardList(long id, String title, long idx, long boardId) {
+        this.id = id;
+        this.title = title;
+        this.boardId = boardId;
+        this.idx = idx;
+    }
+
     public long getIdx() {
         return idx;
     }
@@ -56,15 +63,6 @@ public class CardList {
 
     public void setBoardId(long boardId) {
         this.boardId = boardId;
-    }
-
-    public static CardList createNewCardList(String cardListTitle, long firstCardId) {
-        // Some Server side code to create a new cardList and get the ID.
-        // TODO: Implement this.
-
-        long cardListId = -1;
-
-        return new CardList(cardListId, cardListTitle, firstCardId);
     }
 
     @Override

@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,8 +27,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -102,11 +105,47 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
-        CardList cardList = CardList.createNewCardList("New List", -1);
+
+        // Create a new list on the server
+        //TODO get board id from somewhere, currently hardcoded and not working on server/db side
+        CardList cardList = createNewCardList("New List", 1, list_of_lists.getChildren().size());
+        if(cardList == null) {
+            return;
+        }
+
         CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+
         list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), cardListViewCtrl.getView());
+    }
+
+    /**
+     * Creates a new list on the server and returns the list.
+     * @param cardListTitle The title of the list
+     * @param boardId The id of the board the list is on
+     * @return The list that was created and succesfully sent to the server
+     */
+    private CardList createNewCardList(String cardListTitle, long boardId, long idx) {
+
+        // Create the actual list with id 1
+        // TODO: get id from somewhere. Id=-1 does not work on server/db side because of ID>=0 constraint.
+        long cardListId = 1;
+        CardList cardList = new CardList(cardListId, cardListTitle, idx, boardId);
+
+        // Send the list to the server
+        // Show error if the server returns an error, return null
+        try {
+            utils.addList(cardList);
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return null;
+        }
+
+        return cardList;
     }
 
     public void refresh() {
