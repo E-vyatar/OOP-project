@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 public class RenameListPopupCtrl {
     private final ServerUtils utils;
-    private final MainCtrl mainCtrl;
+    private final BoardOverviewCtrl boardOverviewCtrl;
     private CardList cardList;
 
 
@@ -19,14 +19,14 @@ public class RenameListPopupCtrl {
     private TextField listTitle;
 
     @Inject
-    public RenameListPopupCtrl(ServerUtils utils, MainCtrl mainCtrl) {
+    public RenameListPopupCtrl(ServerUtils utils, BoardOverviewCtrl boardOverviewCtrl) {
         this.utils = utils;
-        this.mainCtrl = mainCtrl;
+        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
 
     public void close(ActionEvent actionEvent) {
-        mainCtrl.hideRenameListPopup();
+        boardOverviewCtrl.hideRenameListPopup();
     }
 
     public void save(ActionEvent actionEvent) {
