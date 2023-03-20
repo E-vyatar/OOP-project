@@ -24,6 +24,7 @@ Note taker:      Evyatar Hadasi
 
 ### Brief talk about the functionality and our product so far [10-15min]
 *Here we will discuss about how is everyone currently handling their tasks and have a brief conversation about how everything is going so far*
+*Also we will discuss the stage of all the issues and which will be closed and which won't*
 
 ### Heuristic Evaluation [5-10min]
 *Talk about how the Heuristic Evaluation will take place and what team we will do it together with*
