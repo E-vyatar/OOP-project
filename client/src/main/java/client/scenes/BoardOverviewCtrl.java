@@ -52,7 +52,7 @@ public class BoardOverviewCtrl implements EventHandler {
 
     private List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     @FXML
-    private HBox list_of_lists;
+    private HBox listOfCardLists;
 
     @Inject
     public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
@@ -100,7 +100,7 @@ public class BoardOverviewCtrl implements EventHandler {
             lists.add(cardListView);
         }
 
-        list_of_lists.getChildren().addAll(lists);
+        listOfCardLists.getChildren().addAll(lists);
     }
 
     /**
@@ -112,8 +112,8 @@ public class BoardOverviewCtrl implements EventHandler {
         button.setOnAction(this::addList);
             //set button margin
         HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
-        list_of_lists.setAlignment(Pos.CENTER_RIGHT);
-        list_of_lists.getChildren().add(button);
+        listOfCardLists.setAlignment(Pos.CENTER_RIGHT);
+        listOfCardLists.getChildren().add(button);
     }
 
     /**
@@ -127,7 +127,7 @@ public class BoardOverviewCtrl implements EventHandler {
         CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), cardListViewCtrl.getView());
+        listOfCardLists.getChildren().add((listOfCardLists.getChildren().size() - 1), cardListViewCtrl.getView());
     }
 
     public void refresh() {

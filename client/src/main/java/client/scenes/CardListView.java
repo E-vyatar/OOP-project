@@ -36,6 +36,7 @@ public class CardListView extends TitledPane {
         this.setCollapsible(false);
         this.setText(cardList.getTitle());
         this.setMaxHeight(Double.MAX_VALUE);
+        this.setMinWidth(200);
 
         listView = new ListView<>();
 

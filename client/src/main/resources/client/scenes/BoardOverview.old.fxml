@@ -14,7 +14,7 @@
         </items>
       </ToolBar>
       <ScrollPane fitToHeight="true" prefHeight="400" prefWidth="600" vbarPolicy="NEVER" vmax="0.0" VBox.vgrow="ALWAYS">
-          <HBox fx:id="list_of_lists">
+          <HBox fx:id="listOfCardLists">
           </HBox>
       </ScrollPane>
    </children>

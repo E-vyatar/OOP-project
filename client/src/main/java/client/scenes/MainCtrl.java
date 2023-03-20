@@ -55,7 +55,7 @@ public class MainCtrl {
     }
 
     public void showOverview() {
-        primaryStage.setTitle("Empty Scene <overview>");
+        primaryStage.setTitle("TALIO");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
