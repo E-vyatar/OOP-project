@@ -27,10 +27,21 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new FXConfig());
     private static final FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
 
+    /**
+     * The main method. This starts the client.
+     * @param args the arguments passed to the program.
+     */
     public static void main(String[] args) {
         launch();
     }
 
+    /**
+     * This method is called by JavaFX and starts the program.
+     * @param primaryStage the primary stage for this application, onto which
+     *                     the application scene can be set.
+     *                     Applications may create other stages, if needed, but they will not be
+     *                     primary stages.
+     */
     @Override
     public void start(Stage primaryStage) {
 

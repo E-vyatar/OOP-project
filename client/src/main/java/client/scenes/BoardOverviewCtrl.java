@@ -21,8 +21,6 @@ import commons.CardList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -36,7 +34,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class BoardOverviewCtrl implements Initializable, EventHandler {
+public class BoardOverviewCtrl implements Initializable {
 
     private final ServerUtils utils;
     private final MainCtrl mainCtrl;
@@ -44,17 +42,32 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     @FXML
     private HBox listOfLists;
 
+    /**
+     * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
+     * linked to the overview of the board.
+     * The constructor should not be called manually, since it uses injection.
+     * @param utils
+     * @param mainCtrl
+     */
     @Inject
     public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Initializes the BoardOverviewCtrl.
+     * @param location  this is unused
+     * @param resources this is unused
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createCards();
     }
 
+    /**
+     * This method creates the hardcoded cards.
+     */
     private void createCards() {
         /*
             Currently, this method just creates arbitrary data.
@@ -114,17 +127,11 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         listOfLists.getChildren().add(indexSecondToLast, cardListViewCtrl.getView());
     }
 
+    /**
+     * Refreshes the boardOverview. Currently empty (should be removed?)
+     */
     public void refresh() {
 
-    }
-
-    @Override
-    public void handle(Event event) {
-        Object source = event.getSource();
-        System.out.println("Source: " + source);
-        if (source instanceof CardPopupCtrl) {
-            CardPopupCtrl card = (CardPopupCtrl) source;
-        }
     }
 
     /**
@@ -140,6 +147,9 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         }
     }
 
+    /**
+     * Show pop-up to create a new card.
+     */
     public void openNewTaskWindow() {
         mainCtrl.showAddCard();
     }

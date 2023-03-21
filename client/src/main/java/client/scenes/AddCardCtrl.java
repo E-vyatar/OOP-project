@@ -46,8 +46,15 @@ public class AddCardCtrl {
     @FXML
     private Button cancel;
 
+    /**
+     * Creates the controller to add a card.
+     * This shouldn't be called manually since it relies on injection to work.
+     * @param server the server utils
+     * @param cardsUtils the card utils
+     * @param mainCtrl the main controller
+     */
     @Inject
-    public AddCardCtrl(ServerUtils server,CardsUtils cardsUtils , MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;

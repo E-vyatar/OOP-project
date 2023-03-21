@@ -56,6 +56,10 @@ public class CardPopupCtrl {
     }
 
 
+    /**
+     * Sets the card for the controller.
+     * @param card the card to attach to the controller
+     */
     public void setCard(Card card) {
         this.card = card;
         createView();

@@ -42,6 +42,16 @@ public class MainCtrl {
     private Scene connectServer;
     //=========================================================
 
+    /**
+     * This method initializes MainCtrl. The roots of the views are used to create scenes.
+     * It also starts showing the primary stage / the main window.
+     * @param primaryStage the main window, this is used for ConnectServer and BoardOverview
+     * @param overview a pair of the BoardOverviewCtrl and the root of the to-be scene
+     * @param cardPopup a pair of the CardPopupCtrl and the root of the to-be scene
+     * @param addCard a pair of the AddCardCtrl and the root of the to-be scene
+     * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
+     * @param connectServerCtrl a pair of the connectServerCtrl and the root of the to-be scene.
+     */
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<CardPopupCtrl, Parent> cardPopup,
@@ -68,16 +78,21 @@ public class MainCtrl {
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
 
-        showconnect();
+        showConnect();
         this.primaryStage.show();
     }
 
-    public void showconnect() {
+    /**
+     * This sets the main window to connectServer scene.
+     */
+    public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
-
     }
 
+    /**
+     * This sets the main window to the board overview scene.
+     */
     public void showOverview() {
         primaryStage.setTitle("Empty Scene <overview>");
         primaryStage.setScene(overview);
@@ -115,11 +130,18 @@ public class MainCtrl {
         cardWindow.show();
     }
 
+    /**
+     * This opens a pop-up to rename a CardList
+     * @param cardList the CardList that you're renaming.
+     */
     public void showRenameList(CardList cardList) {
         renameListPopupCtrl.setCardList(cardList);
         renameListPopup.show();
     }
 
+    /**
+     * This hides that pop-up that was shown when {@link this.showRenameList} was called.
+     */
     public void hideRenameListPopup() {
         renameListPopup.hide();
     }

@@ -17,6 +17,14 @@ public class CardListView extends TitledPane {
 
     private ListView<Card> listView;
 
+    /**
+     * Constructs a CardListView.
+     * This shouldn't be called manually. If you need to create a CardListView,
+     * you create a CardListViewController and call getView().
+     * @param mainCtrl the main controller
+     * @param controller the controller to use.
+     * @param cards the list of cards to render
+     */
     public CardListView(MainCtrl mainCtrl,
                         CardListViewCtrl controller,
                         ObservableList<Card> cards) {

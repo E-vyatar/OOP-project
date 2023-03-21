@@ -41,6 +41,10 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
+    /**
+     * This method adds a quote
+     * @param quote the quote to add
+     */
     public void addQuote(Quote quote) {
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/quotes") //
@@ -49,6 +53,10 @@ public class ServerUtils {
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
+    /**
+     * This method adds a card
+     * @param card the card to add
+     */
     public void addCard(Card card) {
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("cards/new") //
@@ -57,6 +65,11 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * Returns every card in a specific {@link commons.CardList}
+     * @param listId the id of the {@link commons.CardList} for which to return cards
+     * @return the cards in the {@link commons.CardList}
+     */
     public List<Card> getCardsByList(long listId) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("cards/list/{id}") //

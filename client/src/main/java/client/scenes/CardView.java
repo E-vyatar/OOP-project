@@ -15,6 +15,10 @@ public class CardView extends ListCell<Card> {
     private Button editButton;
     private Label cardTitle;
 
+    /**
+     * This constructs a CardView
+     * @param controller the controller of the CardView
+     */
     public CardView(CardViewCtrl controller) {
         this.controller = controller;
         createView();
@@ -85,13 +89,26 @@ public class CardView extends ListCell<Card> {
         }
     }
 
+    /**
+     * Returns the button to move a card up
+     * @return the button to move a card up
+     */
     public Button getButtonUp() {
         return buttonUp;
     }
 
+    /**
+     * Returns the button to move a card down
+     * @return the button to move a card down
+     */
     public Button getButtonDown() {
         return buttonDown;
     }
+
+    /**
+     * Returns the button to edit a card
+     * @return the button to edit a card
+     */
     public Button getEditButton() {
         return editButton;
     }

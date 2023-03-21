@@ -13,6 +13,14 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private final CardListView view;
     private ObservableList<Card> cards;
 
+    /**
+     * CardListViewCtrl is the controller for viewing a CardList
+     * and its cards. To get the CardListView, call {@link this.getView}
+     * @param mainCtrl mainCtrl
+     * @param boardOverviewCtrl boardOverviewCtl
+     * @param cardList cardList for which it is used
+     * @param cards cards to display
+     */
     public CardListViewCtrl(MainCtrl mainCtrl,
                             BoardOverviewCtrl boardOverviewCtrl,
                             CardList cardList,
@@ -27,10 +35,17 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         createView();
     }
 
+    /**
+     * Get the cardList attached to the CardListViewCtrl
+     * @return the cardList for which CardListViewCtrl handles the logic
+     */
     public CardList getCardList() {
         return cardList;
     }
 
+    /**
+     * This creates the view.
+     */
     private void createView() {
         this.view.createView();
 
@@ -41,10 +56,19 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         });
     }
 
+    /**
+     * Returns the view for which the controller handles the logic
+     * @return the attached CardListView
+     */
     public CardListView getView() {
         return this.view;
     }
 
+    /**
+     * This method moves a card one item up the list.
+     * If it's the highest card, an error is shown.
+     * @param card the card to move upwards
+     */
     public void moveCardUp(Card card) {
         int indexOf = cards.indexOf(card);
         if (indexOf == 0) {
@@ -57,6 +81,12 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
             cards.add(indexOf - 1, card);
         }
     }
+
+    /**
+     * This method moves the card one item down the list.
+     * If it's the bottom card, an error is shown.
+     * @param card the card to move downwards.
+     */
     public void moveCardDown(Card card) {
         int indexOf = cards.indexOf(card);
         if (indexOf + 1 == cards.size()) {
