@@ -15,7 +15,10 @@
  */
 package client.scenes;
 
+import client.FXConfig;
+import client.FXMLInitializer;
 import client.utils.ServerUtils;
+import com.google.inject.Injector;
 import commons.Card;
 import commons.CardList;
 import javafx.collections.FXCollections;
@@ -37,6 +40,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.google.inject.Guice.createInjector;
 
 public class BoardOverviewCtrl implements EventHandler {
 
@@ -85,6 +90,10 @@ public class BoardOverviewCtrl implements EventHandler {
             When linking with the server side,
             the cards in a list should be converted into an ObservableList.
          */
+
+        Injector INJECTOR = createInjector(new FXConfig());
+        FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
+
         var lists = new ArrayList();
         // Create four lists
         for (long i = 0; i < 4; i++) {
@@ -94,6 +103,7 @@ public class BoardOverviewCtrl implements EventHandler {
             }
             ObservableList<Card> observableList = FXCollections.observableList(cards);
 
+            var cardListViewPair = FXML.load(CardListViewCtrl.class, "client", "scenes", "cardList.fxml");
             CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, new CardList(i, "List " + i, -1), observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
             CardListView cardListView = cardListViewCtrl.getView();
