@@ -29,7 +29,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -48,7 +47,6 @@ public class BoardOverviewCtrl implements EventHandler {
     private Scene addCard;
 
     private RenameListPopupCtrl renameListPopupCtrl;
-    private Stage renameListPopup;
 
     private List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     @FXML
@@ -69,10 +67,6 @@ public class BoardOverviewCtrl implements EventHandler {
         this.addCard = new Scene(addCard.getValue());
 
         this.renameListPopupCtrl = renameListPopup.getKey();
-        this.renameListPopup = new Stage();
-        this.renameListPopup.setX(this.renameListPopup.getX() + 100);
-        this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
-        this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
 
         create_cards();
         createButton();
@@ -181,13 +175,14 @@ public class BoardOverviewCtrl implements EventHandler {
         cardWindow.show();
     }
 
+    /**
+     * Shows a popup to edit the details (i.e. the title)
+     * of a CardList. The popup has an option to rename it.
+     * @param cardList the CardList that you can rename.
+     */
     public void showRenameList(CardList cardList) {
         renameListPopupCtrl.setCardList(cardList);
-        renameListPopup.show();
-    }
-
-    public void hideRenameListPopup() {
-        renameListPopup.hide();
+        renameListPopupCtrl.show();
     }
 
     /**
