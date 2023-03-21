@@ -9,12 +9,64 @@ import javafx.scene.layout.*;
 public class CardView extends ListCell<Card> {
 
     private final CardViewCtrl controller;
+    private HBox hbox;
     private Button buttonUp;
     private Button buttonDown;
     private Button editButton;
+    private Label cardTitle;
 
     public CardView(CardViewCtrl controller) {
         this.controller = controller;
+        createView();
+    }
+
+    /**
+     * This method creates the view, i.e. it creates
+     * all the javafx nodes like Button and HBox.
+     */
+    public void createView() {
+        // This contains the list of buttons and the rest of the card
+        hbox = new HBox();
+
+        // Move card up and down list buttons
+        VBox vbox = new VBox();
+
+        this.buttonUp = new Button();
+        this.buttonUp.setText("↑");
+        this.buttonUp.setOnMouseClicked(this.controller);
+
+        this.buttonDown = new Button();
+        this.buttonDown.setText("↓");
+        this.buttonDown.setOnMouseClicked(this.controller);
+
+        vbox.getChildren().addAll(this.buttonUp, this.buttonDown);
+
+        hbox.setPrefHeight(150.0);
+        hbox.setPrefWidth(200.0);
+
+        this.editButton = new Button();
+        editButton.setId("editButton");
+        editButton.setText("edit");
+        editButton.setOnMouseClicked(this.controller);
+
+        AnchorPane pane = new AnchorPane();
+
+        this.cardTitle = new Label();
+
+        AnchorPane.setTopAnchor(editButton, 8.0);
+        AnchorPane.setRightAnchor(editButton, 8.0);
+
+        pane.getChildren().addAll(cardTitle, editButton);
+
+        hbox.getChildren().addAll(vbox, pane);
+        hbox.setSpacing(8.0); // Put 8 pixels of space between buttons and the rest
+
+        HBox.setHgrow(pane, Priority.ALWAYS);
+
+        this.setGraphic(hbox);
+        this.setMinHeight(150.0);
+
+        hbox.setOnMouseClicked(this.controller);
     }
 
     @Override
@@ -25,51 +77,11 @@ public class CardView extends ListCell<Card> {
             this.controller.setCard(null);
             this.setGraphic(null);
         } else {
-            // This contains the list of buttons and the rest of the card
-            HBox hbox = new HBox();
-
-            // Move card up and down list buttons
-            VBox vbox = new VBox();
-
-            this.buttonUp = new Button();
-            this.buttonUp.setText("↑");
-            this.buttonUp.setOnMouseClicked(this.controller);
-
-            this.buttonDown = new Button();
-            this.buttonDown.setText("↓");
-            this.buttonDown.setOnMouseClicked(this.controller);
-
-            vbox.getChildren().addAll(this.buttonUp, this.buttonDown);
-
-            hbox.setPrefHeight(150.0);
-            hbox.setPrefWidth(200.0);
-
-            this.editButton = new Button();
-            editButton.setId("editButton");
-            editButton.setText("edit");
-            editButton.setOnMouseClicked(this.controller);
-
-            AnchorPane pane = new AnchorPane();
-
-            Label label = new Label();
-            label.setText(card.getTitle());
-
-            AnchorPane.setTopAnchor(editButton, 8.0);
-            AnchorPane.setRightAnchor(editButton, 8.0);
-
-            pane.getChildren().addAll(label, editButton);
-
-            hbox.getChildren().addAll(vbox, pane);
-            hbox.setSpacing(8.0); // Put 8 pixels of space between buttons and the rest
-
-            HBox.setHgrow(pane, Priority.ALWAYS);
+            cardTitle.setText(card.getTitle());
 
             this.setGraphic(hbox);
-            this.setMinHeight(150.0);
 
             this.controller.setCard(card);
-            hbox.setOnMouseClicked(this.controller);
-
         }
     }
 

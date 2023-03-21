@@ -17,7 +17,9 @@ public class CardListView extends TitledPane {
 
     private ListView<Card> listView;
 
-    public CardListView(MainCtrl mainCtrl, CardListViewCtrl controller, ObservableList<Card> cards) {
+    public CardListView(MainCtrl mainCtrl,
+                        CardListViewCtrl controller,
+                        ObservableList<Card> cards) {
         super();
         this.mainCtrl = mainCtrl;
         this.controller = controller;

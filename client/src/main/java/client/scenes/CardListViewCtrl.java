@@ -13,7 +13,10 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private final CardListView view;
     private ObservableList<Card> cards;
 
-    public CardListViewCtrl(MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
+    public CardListViewCtrl(MainCtrl mainCtrl,
+                            BoardOverviewCtrl boardOverviewCtrl,
+                            CardList cardList,
+                            ObservableList<Card> cards) {
         this.mainCtrl = mainCtrl;
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;

@@ -34,16 +34,26 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        var overview = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
-        var cardPopup = FXML.load(CardPopupCtrl.class, "client", "scenes", "CardPopup.fxml");
-        var renameListPopup = FXML.load(RenameListPopupCtrl.class, "client", "scenes", "RenameListPopup.fxml");
-        var connectServerCtrl = FXML.load(ConnectServerCtrl.class, "client", "scenes", "ConnectServer.fxml");
+        var overview = FXML.load(BoardOverviewCtrl.class,
+                "client", "scenes", "BoardOverview.fxml");
+        var cardPopup = FXML.load(CardPopupCtrl.class,
+                "client", "scenes", "CardPopup.fxml");
+        var renameListPopup = FXML.load(RenameListPopupCtrl.class,
+                "client", "scenes", "RenameListPopup.fxml");
+        var connectServerCtrl = FXML.load(ConnectServerCtrl.class,
+                "client", "scenes", "ConnectServer.fxml");
 
 
-        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
+        var addCard = FXML.load(AddCardCtrl.class,
+                "client", "scenes", "AddCard.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
-        mainCtrl.initialize(primaryStage, overview, cardPopup, addCard, renameListPopup, connectServerCtrl);
+        mainCtrl.initialize(primaryStage,
+                overview,
+                cardPopup,
+                addCard,
+                renameListPopup,
+                connectServerCtrl);
     }
 }

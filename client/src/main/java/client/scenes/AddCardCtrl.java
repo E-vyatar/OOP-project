@@ -94,8 +94,10 @@ public class AddCardCtrl {
      */
     private Card getCard() {
         long listSize = server.getCardsByList(list.getValue().getId()).size();
-        Card card = new Card(-1, list.getValue().getId(), title.getText(), listSize+1, list.getValue().getBoardId());
-        return card;
+        long listId = list.getValue().getId();
+        String cardTitle = title.getText();
+        long boardId = list.getValue().getBoardId();
+        return new Card(-1, listId, cardTitle, listSize+1, boardId);
     }
 
     /**

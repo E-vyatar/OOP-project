@@ -16,7 +16,7 @@ public class CardPopupCtrl {
 
     private Stage cardPopup;
 
-    public Card card;
+    private Card card;
 
     @FXML
     private Parent root;

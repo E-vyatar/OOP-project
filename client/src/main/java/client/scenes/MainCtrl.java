@@ -46,7 +46,8 @@ public class MainCtrl {
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup,
+                           Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
 
         this.primaryStage = primaryStage;
 

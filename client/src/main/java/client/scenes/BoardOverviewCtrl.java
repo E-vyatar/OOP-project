@@ -42,7 +42,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     private final MainCtrl mainCtrl;
     private List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     @FXML
-    private HBox list_of_lists;
+    private HBox listOfLists;
 
     @Inject
     public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
@@ -52,10 +52,10 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        create_cards();
+        createCards();
     }
 
-    private void create_cards() {
+    private void createCards() {
         /*
             Currently, this method just creates arbitrary data.
             This data doesn't properly use the format as it's stored in the DB.
@@ -71,13 +71,16 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
             }
             ObservableList<Card> observableList = FXCollections.observableList(cards);
 
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, new CardList(i, "List " + i, -1), observableList);
+            CardList cardList = new CardList(i, "List " + i, -1);
+
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(
+                    mainCtrl, this, cardList, observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
             CardListView cardListView = cardListViewCtrl.getView();
             lists.add(cardListView);
         }
 
-        list_of_lists.getChildren().addAll(lists);
+        listOfLists.getChildren().addAll(lists);
 
         createButton();
     }
@@ -91,8 +94,8 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         button.setOnAction(this::addList);
             //set button margin
         HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
-        list_of_lists.setAlignment(Pos.CENTER_RIGHT);
-        list_of_lists.getChildren().add(button);
+        listOfLists.setAlignment(Pos.CENTER_RIGHT);
+        listOfLists.getChildren().add(button);
     }
 
     /**
@@ -103,10 +106,12 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = CardList.createNewCardList("New List", -1);
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, cardList, observableList);
+        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(
+                mainCtrl, this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), cardListViewCtrl.getView());
+        int indexSecondToLast = listOfLists.getChildren().size() - 1;
+        listOfLists.getChildren().add(indexSecondToLast, cardListViewCtrl.getView());
     }
 
     public void refresh() {
