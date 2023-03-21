@@ -112,7 +112,6 @@ public class BoardOverviewCtrl implements EventHandler {
         button.setOnAction(this::addList);
             //set button margin
         HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
-        listOfCardLists.setAlignment(Pos.CENTER_RIGHT);
         listOfCardLists.getChildren().add(button);
     }
 
