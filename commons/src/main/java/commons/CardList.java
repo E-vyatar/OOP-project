@@ -25,7 +25,8 @@ public class CardList {
     }
 
     /**
-     * Constructor without 'id' parameter (sets id = -1)
+     * Constructor without 'id' parameter (sets id = -1 to avoid errors)
+     *  - ID will be generated automatically by the database
      *
      * @param title the title
      * @param boardId the board's id

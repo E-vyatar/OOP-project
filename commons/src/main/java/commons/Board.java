@@ -23,9 +23,10 @@ public class Board {
     }
 
     /**
-     * Constructor without 'id' parameter (sets id = -1)
+     * Constructor without 'id' parameter (sets id = -1 to avoid errors)
+     *  - The id would be generated automatically by the database.
      *
-     * @param cardLists the list of all the cards
+     * @param cardLists the list of all the CardLists in the board
      */
     public Board(List<CardList> cardLists) {
         this.id = -1;
