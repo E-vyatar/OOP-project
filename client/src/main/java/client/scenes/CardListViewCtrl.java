@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.FXConfig;
 import client.FXMLInitializer;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import commons.Card;
 import commons.CardList;
