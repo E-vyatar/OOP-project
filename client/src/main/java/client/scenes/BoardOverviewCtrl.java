@@ -80,7 +80,6 @@ public class BoardOverviewCtrl implements EventHandler {
         this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
 
         create_cards();
-        createButton();
     }
 
     private void create_cards() {
@@ -91,9 +90,6 @@ public class BoardOverviewCtrl implements EventHandler {
             the cards in a list should be converted into an ObservableList.
          */
 
-        Injector INJECTOR = createInjector(new FXConfig());
-        FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
-
         var lists = new ArrayList();
         // Create four lists
         for (long i = 0; i < 4; i++) {
@@ -103,40 +99,26 @@ public class BoardOverviewCtrl implements EventHandler {
             }
             ObservableList<Card> observableList = FXCollections.observableList(cards);
 
-            var cardListViewPair = FXML.load(CardListViewCtrl.class, "client", "scenes", "cardList.fxml");
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, new CardList(i, "List " + i, -1), observableList);
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, new CardList(i, "List " + i, -1), observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
-            CardListView cardListView = cardListViewCtrl.getView();
-            lists.add(cardListView);
+            lists.add(cardListViewCtrl.getCardListNode());
         }
 
         listOfCardLists.getChildren().addAll(lists);
     }
 
     /**
-     * Creates a button to add a new list to the board
-     */
-    private void createButton() {
-        // Create button and add to list_of_lists
-        Button button = new Button("Add list");
-        button.setOnAction(this::addList);
-            //set button margin
-        HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
-        listOfCardLists.getChildren().add(button);
-    }
-
-    /**
      * Adds a new list to the board
      * @param actionEvent
      */
-    private void addList(ActionEvent actionEvent) {
+    public void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = CardList.createNewCardList("New List", -1);
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
+        CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        listOfCardLists.getChildren().add((listOfCardLists.getChildren().size() - 1), cardListViewCtrl.getView());
+        listOfCardLists.getChildren().add(cardListViewCtrl.getCardListNode());
     }
 
     public void refresh() {
