@@ -1,7 +1,8 @@
 package commons;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -12,6 +13,8 @@ public class CardList {
     long idx;
     long boardId;
 
+    List<Card> cards;
+
     public CardList() {
     }
 
@@ -19,6 +22,7 @@ public class CardList {
         this.id = id;
         this.title = title;
         this.boardId = boardId;
+        this.cards = new ArrayList<>();
     }
 
     public long getIdx() {
@@ -56,6 +60,23 @@ public class CardList {
 
     public void setBoardId(long boardId) {
         this.boardId = boardId;
+    }
+
+    /**
+     * Get the cards inside this CardList
+     * @return a list of cards
+     */
+    @OneToMany(mappedBy = "listId")
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    /**
+     * Set the cards inside this CardList
+     * @param cards the list of cards
+     */
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 
     public static CardList createNewCardList(String cardListTitle, long firstCardId) {

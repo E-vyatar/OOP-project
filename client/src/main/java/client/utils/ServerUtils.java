@@ -15,7 +15,9 @@
  */
 package client.utils;
 
+import commons.Board;
 import commons.Card;
+import commons.CardList;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -30,6 +32,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -64,6 +67,29 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
+    }
+
+    /**
+     * This method gets the board from the server,
+     * @param boardId the id of the board to load
+     * @return the board whose it it was
+     */
+    public Board getBoard(long boardId) {
+        // TODO: actually use the JSON api
+        // I just moved this here, to get rid of some hardcoding.
+        List<CardList> cardLists = new ArrayList<>();
+        // Create four lists
+        for (long i = 0; i < 4; i++) {
+            List<Card> cards = new ArrayList<>();
+            for (long j = 0; j < 4; j++) {
+                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j , -1));
+            }
+
+            CardList cardList = new CardList(i, "CardList " + i, boardId);
+            cardList.getCards().addAll(cards);
+            cardLists.add(cardList);
+        }
+        return new Board(boardId, cardLists);
     }
 
     private final StompSession session = connect("ws://localhost:8080/websocket");

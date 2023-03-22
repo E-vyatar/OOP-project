@@ -16,10 +16,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Card;
+import commons.Board;
 import commons.CardList;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -40,9 +38,10 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
 
     private final ServerUtils utils;
     private final MainCtrl mainCtrl;
-    private List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
+    private List<CardListViewCtrl> cardListViewCtrlList;
     @FXML
-    private HBox list_of_lists;
+    private HBox listOfLists;
+    private Board board;
 
     @Inject
     public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
@@ -52,34 +51,25 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        create_cards();
+        // TODO: currently the id is hardcoded, this should be changed when multiboard feature gets added.
+        this.board = utils.getBoard(0);
+        createCardLists();
+        createButton();
     }
 
-    private void create_cards() {
-        /*
-            Currently, this method just creates arbitrary data.
-            This data doesn't properly use the format as it's stored in the DB.
-            When linking with the server side,
-            the cards in a list should be converted into an ObservableList.
-         */
-        var lists = new ArrayList();
-        // Create four lists
-        for (long i = 0; i < 4; i++) {
-            List<Card> cards = new ArrayList<>();
-            for (long j = 0; j < 4; j++) {
-                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j , -1));
-            }
-            ObservableList<Card> observableList = FXCollections.observableList(cards);
-
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, new CardList(i, "List " + i, -1), observableList);
+    /**
+     * This method creates the CardListViews based on the data in the board.
+     * {@link this.cardListViewCtrlList} will be initialized, and the views
+     * will be added to the scene.
+     */
+    private void createCardLists() {
+        this.cardListViewCtrlList  = new ArrayList<>();
+        var HBoxChildren = this.listOfLists.getChildren();
+        for (CardList cardList : this.board.getCardLists()) {
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this.mainCtrl, this, cardList);
             cardListViewCtrlList.add(cardListViewCtrl);
-            CardListView cardListView = cardListViewCtrl.getView();
-            lists.add(cardListView);
+            HBoxChildren.add(cardListViewCtrl.getView());
         }
-
-        list_of_lists.getChildren().addAll(lists);
-
-        createButton();
     }
 
     /**
@@ -91,8 +81,8 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         button.setOnAction(this::addList);
             //set button margin
         HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
-        list_of_lists.setAlignment(Pos.CENTER_RIGHT);
-        list_of_lists.getChildren().add(button);
+        listOfLists.setAlignment(Pos.CENTER_RIGHT);
+        listOfLists.getChildren().add(button);
     }
 
     /**
@@ -101,12 +91,11 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
      */
     private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
-        ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = CardList.createNewCardList("New List", -1);
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, cardList, observableList);
+        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, cardList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), cardListViewCtrl.getView());
+        listOfLists.getChildren().add((listOfLists.getChildren().size() - 1), cardListViewCtrl.getView());
     }
 
     public void refresh() {

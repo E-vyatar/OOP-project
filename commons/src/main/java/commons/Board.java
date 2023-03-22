@@ -12,7 +12,7 @@ public class Board {
     @Id
     long id;
 
-    @OneToMany
+    @OneToMany(mappedBy="boardId")
     List<CardList> cardLists;
 
     public Board() {
