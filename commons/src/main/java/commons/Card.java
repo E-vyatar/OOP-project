@@ -28,12 +28,12 @@ public class Card {
     }
 
     /**
-     * Constructor id parameter (sets id = -1)
+     * Constructor without 'id' parameter (sets id = -1)
      *
-     * @param listId the list's id
-     * @param title the title
-     * @param idx the position index
-     * @param boardId the board's id
+     * @param listId the Card's list's id
+     * @param title the Card's title
+     * @param idx the Card's position index in its list
+     * @param boardId the Card's board's id
      */
     public Card(long listId, String title, long idx, long boardId) {
         this.id = -1;
