@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.google.inject.Guice.createInjector;
 
 public class BoardOverviewCtrl implements EventHandler {
 
