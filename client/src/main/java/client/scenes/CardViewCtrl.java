@@ -7,13 +7,13 @@ import javafx.scene.input.MouseEvent;
 
 public class CardViewCtrl implements EventHandler<MouseEvent> {
 
-    private final MainCtrl mainCtrl;
+    private final BoardOverviewCtrl boardOverviewCtrl;
     private final CardListViewCtrl cardListViewCtrl;
     private final CardView view;
     private Card card;
 
-    public CardViewCtrl(MainCtrl mainCtrl, CardListViewCtrl cardListViewCtrl) {
-        this.mainCtrl = mainCtrl;
+    public CardViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardListViewCtrl cardListViewCtrl) {
+        this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardListViewCtrl = cardListViewCtrl;
         this.view = new CardView(this);
     }
@@ -38,9 +38,9 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
                 // move card down
                 cardListViewCtrl.moveCardDown(this.card);
             } else if (source == view.getEditButton()) {
-                mainCtrl.showCard(card, true);
+                boardOverviewCtrl.showCard(card, true);
             } else {
-                mainCtrl.showCard(card, false);
+                boardOverviewCtrl.showCard(card, false);
             }
         }
     }
