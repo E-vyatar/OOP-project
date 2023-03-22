@@ -1,54 +1,95 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import commons.Card;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.apache.commons.lang3.NotImplementedException;
-
-import javax.inject.Inject;
 
 public class CardPopupCtrl {
 
-    private final ServerUtils utils;
-    private final MainCtrl mainCtrl;
+    private Stage cardPopup;
 
     public Card card;
 
     @FXML
-    private TextField cardTitle;
-
+    private Parent root;
     @FXML
-    private ChoiceBox list;
+    private TextField cardTitle;
     @FXML
     private TextArea cardDescription;
 
-    @Inject
-    public CardPopupCtrl(ServerUtils utils, MainCtrl mainCtrl) {
-        this.utils = utils;
-        this.mainCtrl = mainCtrl;
+    @FXML
+    private ButtonBar buttonBar;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button saveButton;
+
+    /**
+     * This initializes the controller.
+     * Note that we only create the stage now,
+     * because otherwise the root would not be set yet
+     * and creating the scene would throw a NullPointerException
+     */
+    public void initialize() {
+        ButtonBar.setButtonData(closeButton, ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonBar.setButtonData(editButton, ButtonBar.ButtonData.RIGHT);
+        ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonBar.setButtonData(saveButton, ButtonBar.ButtonData.APPLY);
+
+        this.cardPopup = new Stage();
+        this.cardPopup.initModality(Modality.WINDOW_MODAL);
+        this.cardPopup.setMinWidth(240.0);
+        this.cardPopup.setMinHeight(200.0);
+        this.cardPopup.setScene(new Scene(root));
     }
+
 
     public void setCard(Card card) {
         this.card = card;
         createView();
     }
 
+    /**
+     * Makes the details of the card editable or not
+     * @param editable whether the card should be editable
+     */
+    public void setEditable(boolean editable) {
+        this.cardTitle.setEditable(editable);
+        this.cardDescription.setEditable(editable);
+
+        this.buttonBar.getButtons().clear();
+        if (editable) {
+            this.buttonBar.getButtons().addAll(cancelButton, saveButton);
+        } else {
+            this.buttonBar.getButtons().addAll(closeButton, editButton);
+        }
+    }
+
     private void createView() {
         cardTitle.setText(card.getTitle());
 
-        // temporary, will need to be updated when there is a connection to database
-        list.getSelectionModel().select("List " + card.getListId());
-
         cardDescription.setText("Here there will be a description.");
-
     }
 
+    /**
+     * This function closes the popup.
+     * It is called by pressing the close button in the popup.
+     */
     @FXML
     private void close() {
-        mainCtrl.hideCard();
+        this.cardPopup.hide();
     }
 
     @FXML
@@ -57,8 +98,19 @@ public class CardPopupCtrl {
         throw new NotImplementedException("Saving changes hasn't been implemented yet.");
     }
 
+    /**
+     * This function makes the card editable.
+     */
     @FXML
-    private void showDelete() {
-        mainCtrl.showDeleteCard();
+    private void edit() {
+        setEditable(true);
+    }
+
+    /**
+     * This function shows the popup.
+     * Before calling it, you should call the {@link #setCard(Card)} method.
+     */
+    public void show(){
+        this.cardPopup.show();
     }
 }
