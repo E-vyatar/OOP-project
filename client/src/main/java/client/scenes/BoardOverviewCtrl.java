@@ -166,13 +166,17 @@ public class BoardOverviewCtrl implements EventHandler {
      */
     public void showAddCard() {
         Stage cardWindow = new Stage();
-        cardWindow.setTitle("Add new Task");
+        cardWindow.setTitle("Add new Task to " + addCardCtrl.getCardList().getTitle());
         cardWindow.setScene(addCard);
         addCard.setOnKeyPressed(event -> {
             addCardCtrl.keyPressed(event);
         });
         addCardCtrl.refresh();
         cardWindow.show();
+    }
+
+    public void setCardListForShowAddCard(CardList cardList) {
+        addCardCtrl.setCardList(cardList);
     }
 
     /**
