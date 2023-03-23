@@ -2,10 +2,10 @@ package client.scenes;
 
 import commons.Card;
 import commons.CardList;
-import javafx.scene.control.TitledPane;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import javafx.util.Callback;
 
 public class CardListView extends TitledPane {

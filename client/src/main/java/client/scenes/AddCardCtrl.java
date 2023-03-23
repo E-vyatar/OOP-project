@@ -47,7 +47,7 @@ public class AddCardCtrl {
     private Button cancel;
 
     @Inject
-    public AddCardCtrl(ServerUtils server,CardsUtils cardsUtils , MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;
@@ -90,12 +90,12 @@ public class AddCardCtrl {
 
     /**
      * Create new card object
+     *
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
         long listSize = server.getCardsByList(list.getValue().getId()).size();
-        Card card = new Card(-1, list.getValue().getId(), title.getText(), listSize+1, list.getValue().getBoardId());
-        return card;
+        return new Card(-1, list.getValue().getId(), title.getText(), listSize + 1, list.getValue().getBoardId());
     }
 
     /**
@@ -108,6 +108,7 @@ public class AddCardCtrl {
 
     /**
      * Keyboard shortcuts for the buttons
+     *
      * @param e keyboard event
      */
     public void keyPressed(KeyEvent e) {

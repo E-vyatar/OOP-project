@@ -31,17 +31,13 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
         if (event.getButton() == MouseButton.PRIMARY) {
             Object source = event.getSource();
 
-            if (source == view.getButtonUp()){
+            if (source == view.getButtonUp()) {
                 // move card up
                 cardListViewCtrl.moveCardUp(this.card);
             } else if (source == view.getButtonDown()) {
                 // move card down
                 cardListViewCtrl.moveCardDown(this.card);
-            } else if (source == view.getEditButton()) {
-                boardOverviewCtrl.showCard(card, true);
-            } else {
-                boardOverviewCtrl.showCard(card, false);
-            }
+            } else boardOverviewCtrl.showCard(card, source == view.getEditButton());
         }
     }
 

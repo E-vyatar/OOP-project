@@ -4,7 +4,10 @@ import commons.Card;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 public class CardView extends ListCell<Card> {
 
@@ -80,6 +83,7 @@ public class CardView extends ListCell<Card> {
     public Button getButtonDown() {
         return buttonDown;
     }
+
     public Button getEditButton() {
         return editButton;
     }

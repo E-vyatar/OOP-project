@@ -10,7 +10,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private final BoardOverviewCtrl boardOverviewCtrl;
     private final CardList cardList;
     private final CardListView view;
-    private ObservableList<Card> cards;
+    private final ObservableList<Card> cards;
 
     public CardListViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
         this.boardOverviewCtrl = boardOverviewCtrl;
@@ -52,6 +52,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
             cards.add(indexOf - 1, card);
         }
     }
+
     public void moveCardDown(Card card) {
         int indexOf = cards.indexOf(card);
         if (indexOf + 1 == cards.size()) {
@@ -64,10 +65,12 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
             cards.add(indexOf + 1, card);
         }
     }
+
     /**
      * This listens for changes in which card is selected.
      * In here we check if the change was that a card got selected,
      * and if so we make sure that it will be the only card that is selected.
+     *
      * @param c an object representing the change that was done
      */
     @Override

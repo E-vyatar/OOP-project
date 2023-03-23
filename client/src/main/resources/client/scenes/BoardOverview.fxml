@@ -6,16 +6,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardOverviewCtrl">
-   <children>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
-        <items>
-          <Button mnemonicParsing="false" onAction="#showAddCard" text="Add new Task" />
-        </items>
-      </ToolBar>
-      <ScrollPane fitToHeight="true" prefHeight="400" prefWidth="600" vbarPolicy="NEVER" vmax="0.0" VBox.vgrow="ALWAYS">
-          <HBox fx:id="list_of_lists">
-          </HBox>
-      </ScrollPane>
-   </children>
+<VBox xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="client.scenes.BoardOverviewCtrl">
+    <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <Button mnemonicParsing="false" onAction="#showAddCard" text="Add new Task"/>
+        <Button mnemonicParsing="false" onAction="#addList" text="Add new List"/>
+    </ToolBar>
+    <ScrollPane fitToHeight="true" prefHeight="400" prefWidth="600" vbarPolicy="NEVER" vmax="0.0" VBox.vgrow="ALWAYS">
+        <HBox fx:id="listOfLists">
+        </HBox>
+    </ScrollPane>
 </VBox>

@@ -14,10 +14,8 @@ import org.apache.commons.lang3.NotImplementedException;
 
 public class CardPopupCtrl {
 
-    private Stage cardPopup;
-
     public Card card;
-
+    private Stage cardPopup;
     @FXML
     private Parent root;
     @FXML
@@ -63,6 +61,7 @@ public class CardPopupCtrl {
 
     /**
      * Makes the details of the card editable or not
+     *
      * @param editable whether the card should be editable
      */
     public void setEditable(boolean editable) {
@@ -110,7 +109,7 @@ public class CardPopupCtrl {
      * This function shows the popup.
      * Before calling it, you should call the {@link #setCard(Card)} method.
      */
-    public void show(){
+    public void show() {
         this.cardPopup.show();
     }
 }

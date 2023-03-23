@@ -27,8 +27,6 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private ConnectServerCtrl connectServerCtrl;
-
     private Scene connectServer;
     //=========================================================
 
@@ -38,24 +36,24 @@ public class MainCtrl {
 
         this.primaryStage = primaryStage;
 
-        this.connectServerCtrl = connectServerCtrl.getKey();
         this.connectServer = new Scene(connectServerCtrl.getValue());
 
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
 
-        showconnect();
+        showConnect();
         this.primaryStage.show();
     }
 
-    public void showconnect() {
+    public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
+
 
     }
 
     public void showOverview() {
-        primaryStage.setTitle("Empty Scene <overview>");
+        primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
