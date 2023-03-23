@@ -24,22 +24,30 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import javax.inject.Inject;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class BoardOverviewCtrl implements Initializable, EventHandler {
+public class BoardOverviewCtrl implements EventHandler {
 
     private final ServerUtils utils;
     private final MainCtrl mainCtrl;
+    private CardPopupCtrl cardPopupCtrl;
+
+    private AddCardCtrl addCardCtrl;
+    private Scene addCard;
+
+    private RenameListPopupCtrl renameListPopupCtrl;
+
     private List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     @FXML
     private HBox list_of_lists;
@@ -50,9 +58,18 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         this.mainCtrl = mainCtrl;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
+                           Pair<AddCardCtrl, Parent> addCard,
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+        this.cardPopupCtrl = cardPopup.getKey();
+
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
+
+        this.renameListPopupCtrl = renameListPopup.getKey();
+
         create_cards();
+        createButton();
     }
 
     private void create_cards() {
@@ -71,15 +88,13 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
             }
             ObservableList<Card> observableList = FXCollections.observableList(cards);
 
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, new CardList(i, "List " + i, -1), observableList);
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, new CardList(i, "List " + i, -1), observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
             CardListView cardListView = cardListViewCtrl.getView();
             lists.add(cardListView);
         }
 
         list_of_lists.getChildren().addAll(lists);
-
-        createButton();
     }
 
     /**
@@ -103,7 +118,7 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = CardList.createNewCardList("New List", -1);
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, cardList, observableList);
+        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
         list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), cardListViewCtrl.getView());
@@ -135,8 +150,39 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         }
     }
 
-    public void openNewTaskWindow() {
-        mainCtrl.showAddCard();
+    /**
+     * This function shows a card popup
+     * @param card the card to be shown in the popup
+     * @param editable whether it should be a popup to edit
+     */
+    public void showCard(Card card, boolean editable) {
+        cardPopupCtrl.setCard(card);
+        cardPopupCtrl.setEditable(editable);
+        cardPopupCtrl.show();
+    }
+
+    /**
+     * Open a new window with "AddCard" scene
+     */
+    public void showAddCard() {
+        Stage cardWindow = new Stage();
+        cardWindow.setTitle("Add new Task");
+        cardWindow.setScene(addCard);
+        addCard.setOnKeyPressed(event -> {
+            addCardCtrl.keyPressed(event);
+        });
+        addCardCtrl.refresh();
+        cardWindow.show();
+    }
+
+    /**
+     * Shows a popup to edit the details (i.e. the title)
+     * of a CardList. The popup has an option to rename it.
+     * @param cardList the CardList that you can rename.
+     */
+    public void showRenameList(CardList cardList) {
+        renameListPopupCtrl.setCardList(cardList);
+        renameListPopupCtrl.show();
     }
 
     /**
