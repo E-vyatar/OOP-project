@@ -75,6 +75,19 @@ public class ServerUtils {
                 .get(new GenericType<List<Card>>() {});
     }
 
+    /**
+     * send the server Post request to change card's details
+     * @param card the card to change
+     */
+    public void editCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
     private final StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
