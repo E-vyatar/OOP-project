@@ -1,12 +1,15 @@
 package commons;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
 public class CardList {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
     String title;
     long idx;
@@ -17,6 +20,19 @@ public class CardList {
 
     public CardList(long id, String title, long boardId) {
         this.id = id;
+        this.title = title;
+        this.boardId = boardId;
+    }
+
+    /**
+     * Constructor without 'id' parameter (sets id = -1 to avoid errors)
+     *  - ID will be generated automatically by the database
+     *
+     * @param title the title
+     * @param boardId the board's id
+     */
+    public CardList(String title, long boardId) {
+        this.id = -1;
         this.title = title;
         this.boardId = boardId;
     }
