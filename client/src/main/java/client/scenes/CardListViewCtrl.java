@@ -85,4 +85,8 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     public void clearSelection() {
         this.getView().clearSelection();
     }
+
+    public void showAddCard() {
+        boardOverviewCtrl.setCardListForShowAddCard(cardList);
+    }
 }
