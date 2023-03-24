@@ -94,6 +94,10 @@ public class BoardOverviewCtrl implements EventHandler {
         listOfLists.getChildren().addAll(lists);
     }
 
+    private void getCardsFromServer() {
+
+    }
+
     /**
      * Adds a new list to the board
      *
@@ -102,7 +106,7 @@ public class BoardOverviewCtrl implements EventHandler {
     public void addList(ActionEvent ignoredActionEvent) {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
-        CardList cardList = CardList.createNewCardList("New List", -1);
+        CardList cardList = new CardList("New List", 0, 0);
         CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The first cardId is -1 because it has no cards.

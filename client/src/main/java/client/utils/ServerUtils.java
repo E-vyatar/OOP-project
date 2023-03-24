@@ -83,7 +83,7 @@ public class ServerUtils {
      */
     public void editCard(Card card) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("cards/{id}")
+                .target(server).path("cards/{id}")
                 .resolveTemplate("id", card.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -130,14 +130,4 @@ public class ServerUtils {
         return session != null && session.isConnected();
     }
 
-    /**
-     * @param cardList This method is used to add a new list to the database
-     */
-    public void addList(CardList cardList) {
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("lists/new") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
-    }
 }
