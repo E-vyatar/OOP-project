@@ -27,38 +27,37 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private ConnectServerCtrl connectServerCtrl;
-
     private Scene connectServer;
     //=========================================================
 
-    public void initialize(Stage primaryStage,
-                           Pair<BoardOverviewCtrl, Parent> overview,
-                           Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
+    public void initialize(Stage primaryStage, Pair<BoardOverviewCtrl, Parent> overview, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
 
         this.primaryStage = primaryStage;
 
-        this.connectServerCtrl = connectServerCtrl.getKey();
         this.connectServer = new Scene(connectServerCtrl.getValue());
 
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
 
-        showconnect();
+        showConnect();
         this.primaryStage.show();
     }
 
-    public void showconnect() {
+    public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
-
     }
 
     public void showOverview() {
-        primaryStage.setTitle("TALIO");
+        primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
+
+//    public void showConnectionPopup() {
+//        primaryStage.setTitle("Connection");
+//        primaryStage.setScene(connectServer);
+//    }
 //TODO solve the connection later
 //    public void checkConnection() throws UnknownHostException {
 //        if(connectServerCtrl.connect()){

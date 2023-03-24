@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0"
+            minWidth="1200.0"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19">
+    <GridPane alignment="CENTER" layoutX="20.0" layoutY="24.0" maxHeight="45.0" prefHeight="36.0" prefWidth="1160.0"
+              style="-fx-background-color: black;" AnchorPane.bottomAnchor="660.0" AnchorPane.leftAnchor="20.0"
+              AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        </rowConstraints>
+        <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="11" GridPane.halignment="CENTER"
+                GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+    </GridPane>
+    <ScrollPane layoutX="20.0" layoutY="74.0" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER"
+                AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+                AnchorPane.topAnchor="80.0">
+        <HBox prefHeight="607.0" prefWidth="1167.0">
+            <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+                <ListView prefHeight="200.0" prefWidth="200.0"/>
+            </ScrollPane>
+            <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+                <ListView prefHeight="200.0" prefWidth="200.0"/>
+            </ScrollPane>
+        </HBox>
+    </ScrollPane>
+</AnchorPane>
