@@ -49,16 +49,14 @@ public class DeleteCardCtrl {
     public void deleteCard() {
         try {
             serverUtils.deleteCard(card);
+            closeConfirmation();
+            cardPopupCtrl.close();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-        }
-        finally {
-            closeConfirmation();
-            cardPopupCtrl.close();
         }
     }
 }
