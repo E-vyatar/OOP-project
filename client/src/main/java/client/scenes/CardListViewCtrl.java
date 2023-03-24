@@ -17,6 +17,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards;
+
         this.view = new CardListView(boardOverviewCtrl, this, cards);
 
         createView();
@@ -85,5 +86,29 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      */
     public void clearSelection() {
         this.getView().clearSelection();
+    }
+
+    public Card[] getCards() {
+        return cards.toArray(new Card[0]);
+    }
+
+    public void addCardAfter(Card thisCard, Card card) {
+        int indexOf = cards.indexOf(thisCard);
+        if (indexOf == -1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Can't add card after card that is not in list");
+            alert.show();
+            return;
+        }
+        int oldIndex = cards.indexOf(card);
+        if (oldIndex == -1) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Can't add card that is not in list (for now)");
+            alert.show();
+            return;
+        }
+        cards.remove(oldIndex);
+        cards.add(indexOf, card);
+
     }
 }

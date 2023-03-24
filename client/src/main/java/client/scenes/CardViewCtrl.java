@@ -18,10 +18,6 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
         this.view = new CardView(this);
     }
 
-    public void setCard(Card card) {
-        this.card = card;
-    }
-
     public CardView getView() {
         return this.view;
     }
@@ -41,4 +37,15 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
         }
     }
 
+    public Card getCard() {
+        return this.card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    public BoardOverviewCtrl getBoardOverviewCtrl() {
+        return this.boardOverviewCtrl;
+    }
 }

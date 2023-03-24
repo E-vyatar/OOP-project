@@ -4,10 +4,11 @@ import commons.Card;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 public class CardView extends ListCell<Card> {
 
@@ -18,6 +19,70 @@ public class CardView extends ListCell<Card> {
 
     public CardView(CardViewCtrl controller) {
         this.controller = controller;
+
+        // such a drag
+        setOnDragDetected(event -> {
+            System.out.println("onDragDetected" + controller.getCard().getId());
+
+            /* allow any transfer mode */
+            Dragboard db = startDragAndDrop(TransferMode.ANY);
+
+            /* put a string on dragboard */
+            ClipboardContent content = new ClipboardContent();
+            content.putString(String.valueOf(controller.getCard().getId()));
+            db.setContent(content);
+
+            event.consume();
+        });
+        setOnDragOver(event -> {
+            /* data is dragged over the target */
+            System.out.println("onDragOver" + event.getDragboard().getString());
+
+            /* accept it only if it is  not dragged from the same node
+             * and if it has a string data */
+            if (event.getGestureSource() != this
+                    && event.getDragboard().hasString()) {
+                /* allow for both copying and moving, whatever user chooses */
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+
+            event.consume();
+        });
+        setOnDragEntered(event -> {
+            System.out.println("onMouseDragEntered" + event.getDragboard().getString());
+            setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            event.consume();
+        });
+        setOnDragExited(event -> {
+            System.out.println("onMouseDragExited" + event.getDragboard().getString());
+            setBorder(null);
+            event.consume();
+        });
+        setOnDragDropped(event -> {
+            /* data dropped */
+            System.out.println("onDragDropped" + event.getDragboard().getString());
+            /* if there is a string data on dragboard, read it and use it */
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasString()) {
+                long id = Long.parseLong(db.getString());
+                Card card = controller.getBoardOverviewCtrl().getCard(id);
+                addCardAfter(card);
+                success = true;
+            }
+            /* let the source know whether the string was successfully
+             * transferred and used */
+            event.setDropCompleted(success);
+
+            event.consume();
+        });
+    }
+
+    private void addCardAfter(Card card) {
+        var thisCard = controller.getCard();
+        var list = controller.getBoardOverviewCtrl().getCardListViewCtrl(thisCard.getListId());
+        list.addCardAfter(thisCard, card);
+
     }
 
     @Override

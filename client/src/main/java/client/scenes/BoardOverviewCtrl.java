@@ -100,7 +100,7 @@ public class BoardOverviewCtrl implements EventHandler {
         CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        listOfLists.getChildren().add((listOfLists.getChildren().size() - 1), cardListViewCtrl.getView());
+        listOfLists.getChildren().add((listOfLists.getChildren().size()), cardListViewCtrl.getView());
     }
 
     public void refresh() {
@@ -149,9 +149,7 @@ public class BoardOverviewCtrl implements EventHandler {
         Stage cardWindow = new Stage();
         cardWindow.setTitle("Add new Task");
         cardWindow.setScene(addCard);
-        addCard.setOnKeyPressed(event -> {
-            addCardCtrl.keyPressed(event);
-        });
+        addCard.setOnKeyPressed(event -> addCardCtrl.keyPressed(event));
         addCardCtrl.refresh();
         cardWindow.show();
     }
@@ -174,5 +172,25 @@ public class BoardOverviewCtrl implements EventHandler {
      */
     public List<CardList> getAllLists() {
         return cardListViewCtrlList.stream().map(CardListViewCtrl::getCardList).collect(Collectors.toList());
+    }
+
+    public Card getCard(long id) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            for (Card card : cardListViewCtrl.getCards()) {
+                if (card.getId() == id) {
+                    return card;
+                }
+            }
+        }
+        return null;
+    }
+
+    public CardListViewCtrl getCardListViewCtrl(long id) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            if (cardListViewCtrl.getCardList().getId() == id) {
+                return cardListViewCtrl;
+            }
+        }
+        return null;
     }
 }
