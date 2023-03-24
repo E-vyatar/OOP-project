@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,7 +27,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -51,7 +54,7 @@ public class BoardOverviewCtrl implements EventHandler {
     public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
-        if (!this.utils.isConnectionAlive()) showConnect();
+//        if (!this.utils.isConnectionAlive()) showConnect();
     }
 
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup, Pair<AddCardCtrl, Parent> addCard, Pair<RenameListPopupCtrl, Parent> renameListPopup) {
@@ -82,7 +85,7 @@ public class BoardOverviewCtrl implements EventHandler {
             }
             ObservableList<Card> observableList = FXCollections.observableList(cards);
 
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, new CardList(i, "List " + i, -1), observableList);
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, new CardList("List " + i, 0, 0), observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
             CardListView cardListView = cardListViewCtrl.getView();
             lists.add(cardListView);
@@ -93,6 +96,8 @@ public class BoardOverviewCtrl implements EventHandler {
 
     /**
      * Adds a new list to the board
+     *
+     * @param ignoredActionEvent
      */
     public void addList(ActionEvent ignoredActionEvent) {
         // Create a new list where cards can be added to
@@ -155,8 +160,8 @@ public class BoardOverviewCtrl implements EventHandler {
         cardWindow.show();
     }
 
-    public void showConnect() {
-//        mainCtrl.showConnect();
+    public void setCardListForShowAddCard(CardList cardList) {
+        addCardCtrl.setCardList(cardList);
     }
 
     /**

@@ -45,6 +45,11 @@ public class ServerUtils {
         session = connect("ws://" + hostname + ":8080/websocket");
     }
 
+    /**
+     * send the server Put request to add a new card to the database
+     *
+     * @param card the card to add to the database
+     */
     public void addCard(Card card) {
         ClientBuilder.newClient(new ClientConfig())
                 .target(server)
@@ -54,6 +59,12 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * send the server Get request for all the cards of a specific list
+     *
+     * @param listId id of the list to get the cards from
+     * @return list of all the cards in the requested list
+     */
     public List<Card> getCardsByList(long listId) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(server)
@@ -64,6 +75,21 @@ public class ServerUtils {
                 .get(new GenericType<>() {
                 });
     }
+
+    /**
+     * send the server Post request to change card's details
+     *
+     * @param card the card to change
+     */
+    public void editCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
 
     /**
      * @param url address
@@ -102,5 +128,16 @@ public class ServerUtils {
 
     public boolean isConnectionAlive() {
         return session != null && session.isConnected();
+    }
+
+    /**
+     * @param cardList This method is used to add a new list to the database
+     */
+    public void addList(CardList cardList) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("lists/new") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 }

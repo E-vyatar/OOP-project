@@ -131,4 +131,8 @@ public class AddCardCtrl {
         clearFields();
         cardsUtils.initializeListsDropDown(list);
     }
+
+    public Stage getCardList() {
+        return (Stage) cancel.getScene().getWindow();
+    }
 }

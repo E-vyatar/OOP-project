@@ -1,25 +1,34 @@
 package client.scenes;
 
+import client.utils.CardsUtils;
+import client.utils.ServerUtils;
 import commons.Card;
+import commons.CardList;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.NotImplementedException;
+
+import javax.inject.Inject;
 
 public class CardPopupCtrl {
 
-    public Card card;
     private Stage cardPopup;
+
+    public Card card;
+
+    public CardsUtils cardsUtils;
+    public ServerUtils serverUtils;
+
     @FXML
     private Parent root;
     @FXML
     private TextField cardTitle;
+    @FXML
+    private ChoiceBox<CardList> list;
     @FXML
     private TextArea cardDescription;
 
@@ -33,6 +42,17 @@ public class CardPopupCtrl {
     private Button cancelButton;
     @FXML
     private Button saveButton;
+
+    /**
+     * constructor
+     * @param cardsUtils CardsUtils reference
+     * @param serverUtils ServerUtils reference
+     */
+    @Inject
+    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils) {
+        this.cardsUtils = cardsUtils;
+        this.serverUtils = serverUtils;
+    }
 
     /**
      * This initializes the controller.
@@ -61,7 +81,6 @@ public class CardPopupCtrl {
 
     /**
      * Makes the details of the card editable or not
-     *
      * @param editable whether the card should be editable
      */
     public void setEditable(boolean editable) {
@@ -78,7 +97,8 @@ public class CardPopupCtrl {
 
     private void createView() {
         cardTitle.setText(card.getTitle());
-
+        cardsUtils.initializeListsDropDown(list);
+        list.getSelectionModel().select((int) card.getListId());
         cardDescription.setText("Here there will be a description.");
     }
 
@@ -94,7 +114,33 @@ public class CardPopupCtrl {
     @FXML
     private void save() {
         // TODO: allow to save data when editing card
-        throw new NotImplementedException("Saving changes hasn't been implemented yet.");
+//        throw new NotImplementedException("Saving changes hasn't been implemented yet.");
+        saveCardChanges();
+    }
+
+    /**
+     * update card's fields
+     * send server request to change a card's details
+     */
+    public void saveCardChanges() {
+        if (cardsUtils.fieldsNotEmpty(cardTitle, list)) {
+            try {
+                card.setListId(list.getValue().getId());
+                card.setTitle(cardTitle.getText());
+                serverUtils.editCard(card);
+                close();
+            } catch (WebApplicationException e) {
+
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+                return;
+            }
+
+        } else {
+            cardsUtils.markFields(cardTitle, list);
+        }
     }
 
     /**
@@ -109,7 +155,7 @@ public class CardPopupCtrl {
      * This function shows the popup.
      * Before calling it, you should call the {@link #setCard(Card)} method.
      */
-    public void show() {
+    public void show(){
         this.cardPopup.show();
     }
 }

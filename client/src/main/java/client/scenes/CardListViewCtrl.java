@@ -115,4 +115,8 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     public void highlightCard(Card card) {
         view.highlightCard(card);
     }
+
+    public void showAddCard() {
+        boardOverviewCtrl.setCardListForShowAddCard(cardList);
+    }
 }
