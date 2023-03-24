@@ -24,7 +24,7 @@ public class Board {
 
     /**
      * Constructor without 'id' parameter (sets id = -1 to avoid errors)
-     *  - The id would be generated automatically by the database.
+     * - The id would be generated automatically by the database.
      *
      * @param cardLists the list of all the CardLists in the board
      */
@@ -44,10 +44,6 @@ public class Board {
 
     public List<CardList> getCardLists() {
         return cardLists;
-    }
-
-    public void setCardLists(List<CardList> cardLists) {
-        this.cardLists = cardLists;
     }
 
     @Override
