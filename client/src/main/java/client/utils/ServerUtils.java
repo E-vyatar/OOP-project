@@ -65,7 +65,8 @@ public class ServerUtils {
 
     public void deleteCard(Card card) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("cards/{id}")
+                .target(server)
+                .path("cards/{id}")
                 .resolveTemplate("id", card.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)

@@ -58,9 +58,6 @@ public class BoardOverviewCtrl implements EventHandler {
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup, Pair<AddCardCtrl, Parent> addCard, Pair<RenameListPopupCtrl, Parent> renameListPopup) {
         this.cardPopupCtrl = cardPopup.getKey();
 
-        this.deleteCardCtrl = deleteCard.getKey();
-        this.deleteCard = new Scene(deleteCard.getValue());
-
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
 

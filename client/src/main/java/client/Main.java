@@ -43,7 +43,7 @@ public class Main extends Application {
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCard);
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup);
 
         var connectServerCtrl = FXML.load(ConnectServerCtrl.class, "client", "scenes", "ConnectServer.fxml");
         var listOfBoardsCtrl = FXML.load(ListOfBoardsCtrl.class, "client", "scenes", "ListOfBoards.fxml");

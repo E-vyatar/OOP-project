@@ -50,7 +50,6 @@ public class DeleteCardCtrl {
         try {
             serverUtils.deleteCard(card);
             closeConfirmation();
-            cardPopupCtrl.close();
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);

@@ -51,7 +51,6 @@ public class CardPopupCtrl {
     public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils, DeleteCardCtrl deleteCardCtrl) {
         this.cardsUtils = cardsUtils;
         this.serverUtils = serverUtils;
-        this.deleteCardCtrl = deleteCardCtrl;
     }
 
     /**
