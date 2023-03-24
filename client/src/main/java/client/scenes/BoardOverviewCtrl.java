@@ -26,6 +26,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -34,6 +35,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 public class BoardOverviewCtrl implements EventHandler {
 
@@ -73,7 +75,8 @@ public class BoardOverviewCtrl implements EventHandler {
             When linking with the server side,
             the cards in a list should be converted into an ObservableList.
          */
-        ArrayList<CardListView> lists = new ArrayList<>();
+
+        ArrayList<AnchorPane> lists = new ArrayList<>();
         // Create four lists
         for (long i = 0; i < 4; i++) {
             List<Card> cards = new ArrayList<>();
@@ -82,10 +85,9 @@ public class BoardOverviewCtrl implements EventHandler {
             }
             ObservableList<Card> observableList = FXCollections.observableList(cards);
 
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, new CardList("List " + i, 0, 0), observableList);
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, new CardList("List " + i, 0, -1), observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
-            CardListView cardListView = cardListViewCtrl.getView();
-            lists.add(cardListView);
+            lists.add(cardListViewCtrl.getCardListNode());
         }
 
         listOfLists.getChildren().addAll(lists);
@@ -98,17 +100,31 @@ public class BoardOverviewCtrl implements EventHandler {
     /**
      * Adds a new list to the board
      *
-     * @param ignoredActionEvent
+     * @param actionEvent
      */
-    public void addList(ActionEvent ignoredActionEvent) {
+    @FXML
+    private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = new CardList("New List", 0, 0);
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
+        CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The first cardId is -1 because it has no cards.
-        listOfLists.getChildren().add((listOfLists.getChildren().size()), cardListViewCtrl.getView());
+        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+        listOfLists.getChildren().add((listOfLists.getChildren().size()), cardListViewCtrl.getCardListNode());
     }
+
+    /**
+     * when clicking Disconnect from Server, the Stompsession is ended and scene is set up back to ConnectServerCtrl
+     *
+     * @param actionEvent
+     */
+    public void disconnect(ActionEvent actionEvent) {
+        utils.getSession().disconnect();
+        System.out.println("The client has been disconnected");
+
+        mainCtrl.showConnect();
+    }
+
 
     public void refresh() {
 
@@ -206,6 +222,8 @@ public class BoardOverviewCtrl implements EventHandler {
     }
 
     public void moveCard(Card card, CardList cardList, long index) {
+        System.out.println("Moving card " + card.getId() + " to list " + cardList.getId() + " at index " + index);
+
         var oldList = getCardListViewCtrl(card.getListId());
         var newList = getCardListViewCtrl(cardList.getId());
         // TODO: wait for server to confirm move
@@ -222,7 +240,7 @@ public class BoardOverviewCtrl implements EventHandler {
         var list = getCardListViewCtrl(listId);
         var target = getCardListViewCtrl(targetId);
         int index = cardListViewCtrlList.indexOf(target);
-        var view = list.getView();
+        var view = list.getCardListNode();
         // TODO: wait for server to confirm move
 
         listOfLists.getChildren().remove(view);

@@ -92,6 +92,14 @@ public class ServerUtils {
 
 
     /**
+     * @return returns the session, used it in disconnect method in board overview
+     */
+    public StompSession getSession() {
+        return session;
+    }
+
+
+    /**
      * @param url address
      */
     private StompSession connect(String url) {
@@ -105,6 +113,7 @@ public class ServerUtils {
             throw new RuntimeException(e);
         }
     }
+
 
     /**
      * @param destination destination for the upcoming messages

@@ -1,18 +1,48 @@
 package client.scenes;
 
+import client.FXConfig;
+import client.FXMLInitializer;
+import com.google.inject.Injector;
 import commons.Card;
 import commons.CardList;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
+
+import static com.google.inject.Guice.createInjector;
 
 public class CardListViewCtrl implements ListChangeListener<Card> {
-    private final BoardOverviewCtrl boardOverviewCtrl;
-    private final CardList cardList;
-    private final CardListView view;
-    private final ObservableList<Card> cards;
+    private BoardOverviewCtrl boardOverviewCtrl;
+    private CardList cardList;
+    private ObservableList<Card> cards;
+    @FXML
+    private ListView<Card> cardListView;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button addCardButton;
+    @FXML
+    private AnchorPane cardListNode;
+    private CardListView view;
 
-    public CardListViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
+    public static CardListViewCtrl createNewCardListViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
+        Injector INJECTOR = createInjector(new FXConfig());
+        FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
+
+        var viewCtrl = FXML.load(CardListViewCtrl.class, "client", "scenes", "cardList.fxml");
+
+        viewCtrl.getKey().initialize(boardOverviewCtrl, cardList, cards);
+
+        return viewCtrl.getKey();
+    }
+
+    public void initialize(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
@@ -28,17 +58,26 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     }
 
     private void createView() {
-        this.view.createView();
+        CardList cardList = this.getCardList();
 
-        view.setOnMouseClicked(event -> {
+        CardListViewCtrl controller = this;
+
+        cardListView.setCellFactory(new Callback<ListView<Card>, ListCell<Card>>() {
+            @Override
+            public ListCell<Card> call(ListView<Card> param) {
+                CardViewCtrl cardViewCtrl = new CardViewCtrl(boardOverviewCtrl, controller);
+                return cardViewCtrl.getView();
+            }
+        });
+        cardListView.setItems(this.cards);
+
+        cardListView.getSelectionModel().getSelectedItems().addListener(controller);
+
+        cardListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 boardOverviewCtrl.showRenameList(cardList);
             }
         });
-    }
-
-    public CardListView getView() {
-        return this.view;
     }
 
     public void moveCardUp(Card card) {
@@ -85,7 +124,11 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      * This unselects all selected cards in the list.
      */
     public void clearSelection() {
-        this.getView().clearSelection();
+        cardListView.getSelectionModel().clearSelection();
+    }
+
+    public AnchorPane getCardListNode() {
+        return cardListNode;
     }
 
     public Card[] getCards() {
