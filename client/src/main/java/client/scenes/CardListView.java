@@ -10,16 +10,16 @@ import javafx.util.Callback;
 
 public class CardListView extends TitledPane {
 
-    private final MainCtrl mainCtrl;
+    private final BoardOverviewCtrl boardOverviewCtrl;
     private final CardListViewCtrl controller;
 
     private final ObservableList<Card> cards;
 
     private ListView<Card> listView;
 
-    public CardListView(MainCtrl mainCtrl, CardListViewCtrl controller, ObservableList<Card> cards) {
+    public CardListView(BoardOverviewCtrl boardOverviewCtrl, CardListViewCtrl controller, ObservableList<Card> cards) {
         super();
-        this.mainCtrl = mainCtrl;
+        this.boardOverviewCtrl = boardOverviewCtrl;
         this.controller = controller;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
@@ -44,7 +44,7 @@ public class CardListView extends TitledPane {
         listView.setCellFactory(new Callback<ListView<Card>, ListCell<Card>>() {
             @Override
             public ListCell<Card> call(ListView<Card> param) {
-                CardViewCtrl cardViewCtrl = new CardViewCtrl(mainCtrl, controller);
+                CardViewCtrl cardViewCtrl = new CardViewCtrl(boardOverviewCtrl, controller);
                 return cardViewCtrl.getView();
             }
         });

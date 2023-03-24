@@ -10,7 +10,7 @@
    <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
-          <Button mnemonicParsing="false" onAction="#openNewTaskWindow" text="Add new Task" />
+          <Button mnemonicParsing="false" onAction="#showAddCard" text="Add new Task" />
         </items>
       </ToolBar>
       <ScrollPane fitToHeight="true" prefHeight="400" prefWidth="600" vbarPolicy="NEVER" vmax="0.0" VBox.vgrow="ALWAYS">
