@@ -82,7 +82,7 @@ public class AddCardCtrl {
             }
 
             clearFields();
-            mainCtrl.showOverview();
+            mainCtrl.showOverview(0);
         } else {
             cardsUtils.markFields(title, list);
         }

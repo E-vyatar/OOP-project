@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import commons.Board;
 import commons.Card;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -64,6 +65,20 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
+    }
+
+    /**
+     * Get all the board that exists
+     * (note that this also sends all lists and cards,
+     * this should probably be changed in the future)
+     * @return a list of all existing boards
+     */
+    public List<Board> getBoards() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("boards/all")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<>() {});
     }
 
     private final StompSession session = connect("ws://localhost:8080/websocket");

@@ -29,7 +29,7 @@ public class ConnectServerCtrl implements Initializable {
 
     public void connect() throws UnknownHostException {
 //        server.setAddress(InetAddress.getByName(addressServer.getText()));
-        mainCtrl.showOverview();
+        mainCtrl.showListOfBoards();
     }
 
 }
