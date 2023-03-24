@@ -14,8 +14,13 @@ import server.database.ListRepository;
 public class ListController {
 
     private final ListRepository listRepository;
-    Logger logger = LoggerFactory.getLogger(ListController.class);
+    private final Logger logger = LoggerFactory.getLogger(ListController.class);
 
+    /**
+     * Constructor
+     *
+     * @param listRepository the repository (used for querying the DB)
+     */
     public ListController(ListRepository listRepository) {
         this.listRepository = listRepository;
     }
