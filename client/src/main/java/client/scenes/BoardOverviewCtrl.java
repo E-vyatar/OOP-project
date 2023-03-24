@@ -115,6 +115,17 @@ public class BoardOverviewCtrl implements EventHandler {
         listOfCardLists.getChildren().add(cardListViewCtrl.getCardListNode());
     }
 
+    /**
+     * when clicking Disconnect from Server, the Stompsession is ended and scene is set up back to ConnectServerCtrl
+     * @param actionEvent
+     */
+    public void disconnect(ActionEvent actionEvent){
+        utils.getSession().disconnect();
+        System.out.println("The client has been disconnected");
+
+        mainCtrl.showconnect();
+    }
+
     public void refresh() {
 
     }
