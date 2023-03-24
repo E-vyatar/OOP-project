@@ -69,6 +69,14 @@ public class ServerUtils {
     private final StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
+     * @return returns the session, used it in disconnect method in board overview
+     */
+    public StompSession getSession(){
+        return session;
+    }
+
+
+    /**
      * @param url address
      *
      * @return
@@ -85,6 +93,7 @@ public class ServerUtils {
             throw new RuntimeException(e);
         }
     }
+
 
     /**
      * @param destination destination for the upcoming messages
