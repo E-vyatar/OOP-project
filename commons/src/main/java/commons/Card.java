@@ -7,15 +7,27 @@ import javax.persistence.Id;
 public class Card {
 
     @Id
-    long id;
-    long listId;
-    String title;
-    long idx;
-    long boardId;
+    private long id;
+    private long listId;
+    private String title;
+    private long idx;
+    private long boardId;
 
+    /**
+     * Empty constructor
+     */
     public Card() {
     }
 
+    /**
+     * Constructor
+     *
+     * @param id the Card ID
+     * @param listId this Card's List ID
+     * @param title the Card's title
+     * @param idx the position index of card in list
+     * @param boardId the Card's Board ID
+     */
     public Card(long id, long listId, String title, long idx, long boardId) {
         this.id = id;
         this.listId = listId;
@@ -24,11 +36,12 @@ public class Card {
         this.boardId = boardId;
     }
 
-    @Override
-    public String toString() {
-        return "Card{" + "id='" + id + '\'' + ", cardListId='" + listId + '\'' + ", title='" + title + '\'' + ", nextCardId='" + idx + '\'' + ", boardId='" + boardId + '\'' + '}';
-    }
 
+    /**
+     * Getter for Card ID
+     *
+     * @return the Card ID
+     */
     public long getId() {
         return id;
     }
@@ -52,7 +65,7 @@ public class Card {
     public void setTitle(String cardTitle) {
         this.title = cardTitle;
     }
-    
+
     public long getIdx() {
         return idx;
     }
@@ -69,6 +82,9 @@ public class Card {
         this.boardId = boardId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,6 +99,18 @@ public class Card {
         return title.equals(card.title);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Card{" + "id='" + id + '\'' + ", cardListId='" + listId + '\'' + ", title='" +
+            title + '\'' + ", nextCardId='" + idx + '\'' + ", boardId='" + boardId + '\'' + '}';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
