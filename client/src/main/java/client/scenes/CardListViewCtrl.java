@@ -92,23 +92,14 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         return cards.toArray(new Card[0]);
     }
 
-    public void addCardAfter(Card thisCard, Card card) {
-        int indexOf = cards.indexOf(thisCard);
-        if (indexOf == -1) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Can't add card after card that is not in list");
-            alert.show();
-            return;
-        }
-        int oldIndex = cards.indexOf(card);
-        if (oldIndex == -1) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Can't add card that is not in list (for now)");
-            alert.show();
-            return;
-        }
-        cards.remove(oldIndex);
-        cards.add(indexOf, card);
+    public void removeCard(Card card) {
+        cards.remove(card);
+    }
 
+    public void addCard(Card card, int index) {
+        System.out.println("Adding card " + card + " at index " + index);
+        card.setListId(cardList.getId());
+        cards.add(index, card);
+        card.setIdx(index);
     }
 }

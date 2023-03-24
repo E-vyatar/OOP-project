@@ -84,9 +84,9 @@ public class CardView extends ListCell<Card> {
     }
 
     private void addCardAfter(Card card) {
-        var thisCard = controller.getCard();
         var list = controller.getCardListViewCtrl();
-        list.addCardAfter(thisCard, card);
+        var idx = controller.getCard().getIdx();
+        controller.getBoardOverviewCtrl().moveCard(card, list.getCardList(), (int) idx);
     }
 
     @Override

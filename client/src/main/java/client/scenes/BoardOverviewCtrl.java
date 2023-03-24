@@ -193,4 +193,11 @@ public class BoardOverviewCtrl implements EventHandler {
         }
         return null;
     }
+
+    public void moveCard(Card card, CardList cardList, int index) {
+        var oldList = getCardListViewCtrl(card.getListId());
+        var newList = getCardListViewCtrl(cardList.getId());
+        oldList.removeCard(card);
+        newList.addCard(card, index);
+    }
 }
