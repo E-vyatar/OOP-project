@@ -3,9 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane maxHeight="1.7976931348623157E308"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            maxHeight="1.7976931348623157E308"
             xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="client.scenes.CardPopupCtrl"
             fx:id="root"
             stylesheets="@../styles/CardPopup.css">
@@ -13,9 +13,9 @@
         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER" fx:id="buttonBar">
             <buttons>
                 <Button mnemonicParsing="false" onAction="#close" text="Close" fx:id="closeButton"/>
-                <Button mnemonicParsing="false" onAction="#edit" text="Edit" fx:id="editButton" />
-                <Button mnemonicParsing="false" onAction="#close" text="Cancel" fx:id="cancelButton" />
-                <Button mnemonicParsing="false" onAction="#save" text="Save" fx:id="saveButton" />
+                <Button mnemonicParsing="false" onAction="#edit" text="Edit" fx:id="editButton"/>
+                <Button mnemonicParsing="false" onAction="#close" text="Cancel" fx:id="cancelButton"/>
+                <Button mnemonicParsing="false" onAction="#save" text="Save" fx:id="saveButton"/>
             </buttons>
             <BorderPane.margin>
                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>

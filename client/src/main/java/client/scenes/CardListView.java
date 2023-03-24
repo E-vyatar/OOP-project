@@ -68,7 +68,7 @@ public class CardListView extends TitledPane {
             event.consume();
         });
         setOnDragEntered(event -> {
-            if(event.getDragboard().getString().startsWith("c")) {
+            if (event.getDragboard().getString().startsWith("c")) {
                 if (this.controller.getCards().length == 0) {
                     setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                 }
@@ -130,4 +130,7 @@ public class CardListView extends TitledPane {
         this.listView.getSelectionModel().clearSelection();
     }
 
+    public void highlightCard(Card card) {
+        this.listView.getSelectionModel().select(card);
+    }
 }

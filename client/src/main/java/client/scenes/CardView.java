@@ -27,6 +27,9 @@ public class CardView extends ListCell<Card> {
 
         // such a drag
         setOnDragDetected(event -> {
+            if (controller.getCard() == null) {
+                return;
+            }
             System.out.println("onDragDetected " + controller.getCard().getId());
 
             /* allow any transfer mode */
@@ -44,15 +47,23 @@ public class CardView extends ListCell<Card> {
              * and if it has a string data */
             if (event.getGestureSource() != this
                     && event.getDragboard().hasString()
-                    && event.getDragboard().getString().startsWith("c")) {
+            ) {
                 /* allow for both copying and moving, whatever user chooses */
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                if (event.getDragboard().getString().startsWith("c")) {
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
             }
 
             event.consume();
+
         });
         setOnDragEntered(event -> {
-            setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            if (event.getGestureSource() != this
+                    && event.getDragboard().hasString()
+                    && event.getDragboard().getString().startsWith("c")
+            ) {
+                setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            }
             event.consume();
         });
         setOnDragExited(event -> {
@@ -63,10 +74,16 @@ public class CardView extends ListCell<Card> {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasString()) {
-                long id = Long.parseLong(db.getString().substring(1));
-                Card card = controller.getBoardOverviewCtrl().getCard(id);
-                controller.addCardAt(card, getIndex());
-                success = true;
+                if (db.getString().startsWith("c")) {
+                    long id = Long.parseLong(db.getString().substring(1));
+                    Card card = controller.getBoardOverviewCtrl().getCard(id);
+                    controller.addCardAt(card, getIndex());
+                    success = true;
+                } else {
+                    long id = Long.parseLong(db.getString());
+                    controller.getBoardOverviewCtrl().moveList(id, controller.getCardList().getId());
+                    success = true;
+                }
             }
             /* let the source know whether the string was successfully
              * transferred and used */

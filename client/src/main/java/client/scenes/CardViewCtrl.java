@@ -1,6 +1,7 @@
 package client.scenes;
 
 import commons.Card;
+import commons.CardList;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -53,4 +54,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
         boardOverviewCtrl.moveCard(card, cardListViewCtrl.getCardList(), idx);
     }
 
+    public CardList getCardList() {
+        return cardListViewCtrl.getCardList();
+    }
 }

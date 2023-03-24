@@ -51,6 +51,7 @@ public class BoardOverviewCtrl implements EventHandler {
     public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
+        if (!this.utils.isConnectionAlive()) showConnect();
     }
 
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup, Pair<AddCardCtrl, Parent> addCard, Pair<RenameListPopupCtrl, Parent> renameListPopup) {
@@ -93,13 +94,13 @@ public class BoardOverviewCtrl implements EventHandler {
     /**
      * Adds a new list to the board
      */
-    public void addList(ActionEvent actionEvent) {
+    public void addList(ActionEvent ignoredActionEvent) {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = CardList.createNewCardList("New List", -1);
         CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+        // Add a new list to the list of lists. The first cardId is -1 because it has no cards.
         listOfLists.getChildren().add((listOfLists.getChildren().size()), cardListViewCtrl.getView());
     }
 
@@ -154,6 +155,10 @@ public class BoardOverviewCtrl implements EventHandler {
         cardWindow.show();
     }
 
+    public void showConnect() {
+//        mainCtrl.showConnect();
+    }
+
     /**
      * Shows a popup to edit the details (i.e. the title)
      * of a CardList. The popup has an option to rename it.
@@ -197,13 +202,27 @@ public class BoardOverviewCtrl implements EventHandler {
     public void moveCard(Card card, CardList cardList, long index) {
         var oldList = getCardListViewCtrl(card.getListId());
         var newList = getCardListViewCtrl(cardList.getId());
+        // TODO: wait for server to confirm move
         oldList.removeCard(card);
         newList.addCard(card, index);
+
+
+        // highlight the card
+        newList.highlightCard(card);
+
     }
 
-    public void moveList(CardListViewCtrl cardListViewCtrl) {
-        int index = cardListViewCtrlList.indexOf(cardListViewCtrl);
-        listOfLists.getChildren().remove(cardListViewCtrl.getView());
-        listOfLists.getChildren().add(index, cardListViewCtrl.getView());
+    public void moveList(long listId, long targetId) {
+        var list = getCardListViewCtrl(listId);
+        var target = getCardListViewCtrl(targetId);
+        int index = cardListViewCtrlList.indexOf(target);
+        var view = list.getView();
+        // TODO: wait for server to confirm move
+
+        listOfLists.getChildren().remove(view);
+        listOfLists.getChildren().add(index, view);
+        cardListViewCtrlList.remove(list);
+        cardListViewCtrlList.add(index, list);
+
     }
 }

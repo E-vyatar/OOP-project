@@ -99,4 +99,8 @@ public class ServerUtils {
             }
         });
     }
+
+    public boolean isConnectionAlive() {
+        return session != null && session.isConnected();
+    }
 }

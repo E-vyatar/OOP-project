@@ -94,6 +94,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     public void removeCard(Card card) {
         cards.remove(card);
+        // TODO fix empty card bug
     }
 
     public void addCard(Card card, long index) {
@@ -104,11 +105,14 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     }
 
     public void moveList(long listId) {
-        cardList.setId(listId);
-        boardOverviewCtrl.moveList(this);
+        boardOverviewCtrl.moveList(listId, this.getCardList().getId());
     }
 
     public void moveCard(long cardId) {
         boardOverviewCtrl.moveCard(boardOverviewCtrl.getCard(cardId), getCardList(), getCards().length);
+    }
+
+    public void highlightCard(Card card) {
+        view.highlightCard(card);
     }
 }

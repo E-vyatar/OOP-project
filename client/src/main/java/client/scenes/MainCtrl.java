@@ -30,9 +30,7 @@ public class MainCtrl {
     private Scene connectServer;
     //=========================================================
 
-    public void initialize(Stage primaryStage,
-                           Pair<BoardOverviewCtrl, Parent> overview,
-                           Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
+    public void initialize(Stage primaryStage, Pair<BoardOverviewCtrl, Parent> overview, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
 
         this.primaryStage = primaryStage;
 
@@ -48,8 +46,6 @@ public class MainCtrl {
     public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
-
-
     }
 
     public void showOverview() {
@@ -57,6 +53,11 @@ public class MainCtrl {
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
+
+//    public void showConnectionPopup() {
+//        primaryStage.setTitle("Connection");
+//        primaryStage.setScene(connectServer);
+//    }
 //TODO solve the connection later
 //    public void checkConnection() throws UnknownHostException {
 //        if(connectServerCtrl.connect()){
