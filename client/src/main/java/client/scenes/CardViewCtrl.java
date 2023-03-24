@@ -48,4 +48,8 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
     public BoardOverviewCtrl getBoardOverviewCtrl() {
         return this.boardOverviewCtrl;
     }
+
+    public CardListViewCtrl getCardListViewCtrl() {
+        return this.cardListViewCtrl;
+    }
 }

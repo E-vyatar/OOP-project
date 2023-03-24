@@ -20,6 +20,11 @@ public class CardView extends ListCell<Card> {
     public CardView(CardViewCtrl controller) {
         this.controller = controller;
 
+        setDragEvents();
+    }
+
+    private void setDragEvents() {
+
         // such a drag
         setOnDragDetected(event -> {
             System.out.println("onDragDetected" + controller.getCard().getId());
@@ -80,9 +85,8 @@ public class CardView extends ListCell<Card> {
 
     private void addCardAfter(Card card) {
         var thisCard = controller.getCard();
-        var list = controller.getBoardOverviewCtrl().getCardListViewCtrl(thisCard.getListId());
+        var list = controller.getCardListViewCtrl();
         list.addCardAfter(thisCard, card);
-
     }
 
     @Override
