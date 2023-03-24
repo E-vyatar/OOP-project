@@ -17,28 +17,41 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
 import commons.CardList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import javax.inject.Inject;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class BoardOverviewCtrl implements Initializable, EventHandler {
+public class BoardOverviewCtrl implements EventHandler {
 
     private final ServerUtils utils;
     private final MainCtrl mainCtrl;
+
+    private CardPopupCtrl cardPopupCtrl;
+
+    private AddCardCtrl addCardCtrl;
+    private Scene addCard;
+
+    private RenameListPopupCtrl renameListPopupCtrl;
+
     private List<CardListViewCtrl> cardListViewCtrlList;
+
     @FXML
     private HBox listOfLists;
     private Board board;
@@ -49,28 +62,42 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         this.mainCtrl = mainCtrl;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // TODO: currently the id is hardcoded, this should be changed when multiboard feature gets added.
-        this.board = utils.getBoard(0);
-        createCardLists();
-        createButton();
-    }
-
     /**
      * This method creates the CardListViews based on the data in the board.
      * {@link this.cardListViewCtrlList} will be initialized, and the views
      * will be added to the scene.
      */
     private void createCardLists() {
-        this.cardListViewCtrlList  = new ArrayList<>();
+        this.cardListViewCtrlList = new ArrayList<>();
         var HBoxChildren = this.listOfLists.getChildren();
         for (CardList cardList : this.board.getCardLists()) {
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this.mainCtrl, this, cardList);
+            // Right now, we're creating an observable list here,
+            // we should investigate whether it can be in commons,
+            // So everything can be dynamic automatically.
+            ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
             HBoxChildren.add(cardListViewCtrl.getView());
         }
     }
+
+    public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
+                           Pair<AddCardCtrl, Parent> addCard,
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+        this.cardPopupCtrl = cardPopup.getKey();
+
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
+
+        this.renameListPopupCtrl = renameListPopup.getKey();
+
+
+        // This should be moved in the multi-board feature
+        this.board = utils.getBoard(0);
+        createCardLists();
+        createButton();
+    }
+
 
     /**
      * Creates a button to add a new list to the board
@@ -92,7 +119,11 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
     private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
         CardList cardList = CardList.createNewCardList("New List", -1);
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(mainCtrl, this, cardList);
+
+        board.getCardLists().add(cardList);
+        // TODO: communicate with server and integrate this with the board
+        ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
+        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
         listOfLists.getChildren().add((listOfLists.getChildren().size() - 1), cardListViewCtrl.getView());
@@ -124,8 +155,39 @@ public class BoardOverviewCtrl implements Initializable, EventHandler {
         }
     }
 
-    public void openNewTaskWindow() {
-        mainCtrl.showAddCard();
+    /**
+     * This function shows a card popup
+     * @param card the card to be shown in the popup
+     * @param editable whether it should be a popup to edit
+     */
+    public void showCard(Card card, boolean editable) {
+        cardPopupCtrl.setCard(card);
+        cardPopupCtrl.setEditable(editable);
+        cardPopupCtrl.show();
+    }
+
+    /**
+     * Open a new window with "AddCard" scene
+     */
+    public void showAddCard() {
+        Stage cardWindow = new Stage();
+        cardWindow.setTitle("Add new Task");
+        cardWindow.setScene(addCard);
+        addCard.setOnKeyPressed(event -> {
+            addCardCtrl.keyPressed(event);
+        });
+        addCardCtrl.refresh();
+        cardWindow.show();
+    }
+
+    /**
+     * Shows a popup to edit the details (i.e. the title)
+     * of a CardList. The popup has an option to rename it.
+     * @param cardList the CardList that you can rename.
+     */
+    public void showRenameList(CardList cardList) {
+        renameListPopupCtrl.setCardList(cardList);
+        renameListPopupCtrl.show();
     }
 
     /**

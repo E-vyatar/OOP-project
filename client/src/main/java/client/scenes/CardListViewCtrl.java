@@ -8,14 +8,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 public class CardListViewCtrl implements ListChangeListener<Card> {
-    private final MainCtrl mainCtrl;
     private final BoardOverviewCtrl boardOverviewCtrl;
     private final CardList cardList;
     private final CardListView view;
     private ObservableList<Card> cards;
 
-    public CardListViewCtrl(MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl, CardList cardList) {
-        this.mainCtrl = mainCtrl;
+    public CardListViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
         // Track changes made to the list,
@@ -23,9 +21,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         // not the original list.
         // TODO: investigate whether we can (and should) use an ObservableList in commons
         this.cards = FXCollections.observableList(cardList.getCards());
-        this.view = new CardListView(mainCtrl, this, cards);
-
-        createView();
+        this.view = new CardListView(boardOverviewCtrl, this, cards);
     }
 
     public CardList getCardList() {
@@ -37,7 +33,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
         view.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                mainCtrl.showRenameList(cardList);
+                boardOverviewCtrl.showRenameList(cardList);
             }
         });
     }
