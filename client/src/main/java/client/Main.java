@@ -38,7 +38,7 @@ public class Main extends Application {
         var renameListPopup = FXML.load(RenameListPopupCtrl.class, "client", "scenes", "RenameListPopup.fxml");
         var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
 
-        var overview = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
+        var overview = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "boardOverview.fxml");
 
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);

@@ -81,7 +81,7 @@ public class ServerUtils {
     /**
      * This method gets the board from the server,
      * @param boardId the id of the board to load
-     * @return the board whose it it was
+     * @return the board whose it was
      */
     public Board getBoard(long boardId) {
         // TODO: actually use the JSON api
@@ -94,7 +94,7 @@ public class ServerUtils {
                 cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j , -1));
             }
 
-            CardList cardList = new CardList(i, "CardList " + i, boardId);
+            CardList cardList = new CardList("CardList " + i, boardId, 0);
             cardList.getCards().addAll(cards);
             cardLists.add(cardList);
         }

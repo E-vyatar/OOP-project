@@ -117,18 +117,10 @@ public class BoardOverviewCtrl implements EventHandler {
     /**
      * Adds a new list to the board
      *
-     * @param actionEvent
+     * @param actionEvent the action event
      */
     private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
-        ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
-
-        // Create a new list on the server
-        //TODO get board id from somewhere, currently hardcoded and not working on server/db side
-        CardList cardList = createNewCardList("New List", 1, list_of_lists.getChildren().size());
-        if (cardList == null) {
-            return;
-        }
 
         CardList cardList = CardList.createNewCardList("New List", -1);
 
@@ -137,7 +129,7 @@ public class BoardOverviewCtrl implements EventHandler {
         ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
         CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+        // Add a new list to the list of lists. The firstCardId is -1 because it has no cards.
         listOfLists.getChildren().add((listOfLists.getChildren().size() - 1), cardListViewCtrl.getView());
     }
 
@@ -146,7 +138,7 @@ public class BoardOverviewCtrl implements EventHandler {
      *
      * @param cardListTitle The title of the list
      * @param boardId       The id of the board the list is on
-     * @return The list that was created and succesfully sent to the server
+     * @return The list that was created and successfully sent to the server
      */
     private CardList createNewCardList(String cardListTitle, long boardId, long idx) {
 
@@ -177,11 +169,7 @@ public class BoardOverviewCtrl implements EventHandler {
 
     @Override
     public void handle(Event event) {
-        Object source = event.getSource();
-        System.out.println("Source: " + source);
-        if (source instanceof CardPopupCtrl) {
-            CardPopupCtrl card = (CardPopupCtrl) source;
-        }
+        
     }
 
     /**
@@ -217,9 +205,7 @@ public class BoardOverviewCtrl implements EventHandler {
         Stage cardWindow = new Stage();
         cardWindow.setTitle("Add new Task to " + addCardCtrl.getCardList().getTitle());
         cardWindow.setScene(addCard);
-        addCard.setOnKeyPressed(event -> {
-            addCardCtrl.keyPressed(event);
-        });
+        addCard.setOnKeyPressed(event -> addCardCtrl.keyPressed(event));
         addCardCtrl.refresh();
         cardWindow.show();
     }
