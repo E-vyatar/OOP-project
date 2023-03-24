@@ -18,7 +18,7 @@ public class CardPopupCtrl {
 
     private Stage cardPopup;
 
-    public Card card;
+    private Card card;
 
     public CardsUtils cardsUtils;
     public ServerUtils serverUtils;
@@ -74,6 +74,10 @@ public class CardPopupCtrl {
     }
 
 
+    /**
+     * Sets the card for the controller.
+     * @param card the card to attach to the controller
+     */
     public void setCard(Card card) {
         this.card = card;
         createView();
