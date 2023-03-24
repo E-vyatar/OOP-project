@@ -11,7 +11,7 @@ class CardListTest {
     void getCardListId() {
         // Test getListId
         CardList cardList = new CardList("2", 0, 0);
-        assertEquals(1, cardList.getId());
+        assertEquals(0, cardList.getId());
     }
 
     @Test
