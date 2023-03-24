@@ -19,6 +19,7 @@ public class CardsUtils {
 
     /**
      * constructor
+     *
      * @param boardOverviewCtrl reference to board controller for lists references
      */
     @Inject
@@ -28,6 +29,7 @@ public class CardsUtils {
 
     /**
      * set a dropdown with all current lists in the board, displaying the lists' names
+     *
      * @param list ChoiceBox to put the lists in
      */
     public void initializeListsDropDown(ChoiceBox<CardList> list) {
@@ -56,8 +58,9 @@ public class CardsUtils {
 
     /**
      * check fields' values are not empty
+     *
      * @param cardTitle text field to check the value of
-     * @param list choice box to check the value of
+     * @param list      choice box to check the value of
      * @return true if every field has a value, false otherwise
      */
     public boolean fieldsNotEmpty(TextField cardTitle, ChoiceBox<CardList> list) {
@@ -66,8 +69,9 @@ public class CardsUtils {
 
     /**
      * change fields' border colour to red for 0.5 second
+     *
      * @param cardTitle text field to change the border colour of
-     * @param list choice box to change the border colour of
+     * @param list      choice box to change the border colour of
      */
     public void markFields(TextField cardTitle, ChoiceBox<CardList> list) {
         if (cardTitle.getText().isBlank()) {

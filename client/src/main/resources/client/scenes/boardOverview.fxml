@@ -15,7 +15,7 @@
          <center>
             <ScrollPane id="listPane" fitToHeight="true" fitToWidth="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: none;" vbarPolicy="NEVER">
                <content>
-                  <HBox fx:id="listOfCardLists" alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="615.0" prefWidth="1167.0" style="-fx-background-color: #555555;" />
+                  <HBox fx:id="listOfLists" alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="615.0" prefWidth="1167.0" style="-fx-background-color: #555555;" />
                </content>
                <BorderPane.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" />

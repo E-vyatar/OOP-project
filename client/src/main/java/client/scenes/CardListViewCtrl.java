@@ -29,12 +29,20 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private Button addCardButton;
     @FXML
     private AnchorPane cardListNode;
-    private final BoardOverviewCtrl boardOverviewCtrl;
-    private final CardList cardList;
-    private final CardListView view;
-    private final ObservableList<Card> cards;
+    private CardListView view;
 
-    public void initialize(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards){
+    public static CardListViewCtrl createNewCardListViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
+        Injector INJECTOR = createInjector(new FXConfig());
+        FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
+
+        var viewCtrl = FXML.load(CardListViewCtrl.class, "client", "scenes", "cardList.fxml");
+
+        viewCtrl.getKey().initialize(boardOverviewCtrl, cardList, cards);
+
+        return viewCtrl.getKey();
+    }
+
+    public void initialize(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
@@ -117,17 +125,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      */
     public void clearSelection() {
         cardListView.getSelectionModel().clearSelection();
-    }
-
-    public static CardListViewCtrl createNewCardListViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards){
-        Injector INJECTOR = createInjector(new FXConfig());
-        FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
-
-        var viewCtrl = FXML.load(CardListViewCtrl.class, "client", "scenes", "cardList.fxml");
-
-        viewCtrl.getKey().initialize(boardOverviewCtrl, cardList, cards);
-
-        return viewCtrl.getKey();
     }
 
     public AnchorPane getCardListNode() {

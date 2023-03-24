@@ -94,7 +94,7 @@ public class ServerUtils {
     /**
      * @return returns the session, used it in disconnect method in board overview
      */
-    public StompSession getSession(){
+    public StompSession getSession() {
         return session;
     }
 
