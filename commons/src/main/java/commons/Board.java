@@ -11,14 +11,16 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 
+    String name;
     @OneToMany
     List<CardList> cardLists;
 
     public Board() {
     }
 
-    public Board(long id, List<CardList> cardLists) {
+    public Board(long id, String name, List<CardList> cardLists) {
         this.id = id;
+        this.name = name;
         this.cardLists = cardLists;
     }
 
@@ -59,5 +61,12 @@ public class Board {
         return Objects.hash(id, cardLists);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
 

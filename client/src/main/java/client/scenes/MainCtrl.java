@@ -27,17 +27,29 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
+    private ConnectServerCtrl connectServerCtrl;
+
     private Scene connectServer;
+
+    private ListOfBoardsCtrl listOfBoardsCtrl;
+    private Scene listOfBoards;
     //=========================================================
 
-    public void initialize(Stage primaryStage, Pair<BoardOverviewCtrl, Parent> overview, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
+    public void initialize(Stage primaryStage,
+                           Pair<BoardOverviewCtrl, Parent> overview,
+                           Pair<ConnectServerCtrl, Parent> connectServerCtrl,
+                           Pair<ListOfBoardsCtrl, Parent> listOfBoards) {
 
         this.primaryStage = primaryStage;
 
+        this.connectServerCtrl = connectServerCtrl.getKey();
         this.connectServer = new Scene(connectServerCtrl.getValue());
 
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
+
+        this.listOfBoards = new Scene(listOfBoards.getValue());
+        this.listOfBoardsCtrl = listOfBoards.getKey();
 
         showConnect();
         this.primaryStage.show();
@@ -46,18 +58,20 @@ public class MainCtrl {
     public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
+
     }
 
-    public void showOverview() {
+    /**
+     * Show the board overview
+     * TODO: let BoardOverviewCtrl display the right board
+     *
+     * @param boardId the board for which to show the board overview
+     */
+    public void showOverview(long boardId) {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
-
-//    public void showConnectionPopup() {
-//        primaryStage.setTitle("Connection");
-//        primaryStage.setScene(connectServer);
-//    }
 //TODO solve the connection later
 //    public void checkConnection() throws UnknownHostException {
 //        if(connectServerCtrl.connect()){
@@ -65,4 +79,12 @@ public class MainCtrl {
 //        }
 //    }
 
+    /**
+     * Show the list with all known boards.
+     */
+    public void showListOfBoards() {
+        listOfBoardsCtrl.refresh();
+        primaryStage.setTitle("List of boards");
+        primaryStage.setScene(listOfBoards);
+    }
 }

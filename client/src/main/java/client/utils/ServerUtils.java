@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import commons.Board;
 import commons.Card;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -41,8 +42,10 @@ public class ServerUtils {
     private String server;
 
     public void setHostnameAndConnect(String hostname) {
+        System.out.println("Connecting to server: " + hostname);
         this.server = "http://" + hostname + ":8080";
         session = connect("ws://" + hostname + ":8080/websocket");
+
     }
 
     /**
@@ -56,6 +59,7 @@ public class ServerUtils {
                 .path("cards/new")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
+//                .header("keep-alive", "timeout=5, max=100")
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
@@ -90,6 +94,23 @@ public class ServerUtils {
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * Get all the board that exists
+     * (note that this also sends all lists and cards,
+     * this should probably be changed in the future)
+     *
+     * @return a list of all existing boards
+     */
+    public List<Board> getBoards() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("boards/all")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<>() {
+                });
+    }
+
+//    private final StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
      * @return returns the session, used it in disconnect method in board overview
