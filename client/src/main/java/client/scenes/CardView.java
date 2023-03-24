@@ -27,26 +27,24 @@ public class CardView extends ListCell<Card> {
 
         // such a drag
         setOnDragDetected(event -> {
-            System.out.println("onDragDetected" + controller.getCard().getId());
+            System.out.println("onDragDetected " + controller.getCard().getId());
 
             /* allow any transfer mode */
             Dragboard db = startDragAndDrop(TransferMode.ANY);
 
             /* put a string on dragboard */
             ClipboardContent content = new ClipboardContent();
-            content.putString(String.valueOf(controller.getCard().getId()));
+            content.putString("c" + controller.getCard().getId());
             db.setContent(content);
 
             event.consume();
         });
         setOnDragOver(event -> {
-            /* data is dragged over the target */
-            System.out.println("onDragOver" + event.getDragboard().getString());
-
             /* accept it only if it is  not dragged from the same node
              * and if it has a string data */
             if (event.getGestureSource() != this
-                    && event.getDragboard().hasString()) {
+                    && event.getDragboard().hasString()
+                    && event.getDragboard().getString().startsWith("c")) {
                 /* allow for both copying and moving, whatever user chooses */
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
@@ -54,40 +52,29 @@ public class CardView extends ListCell<Card> {
             event.consume();
         });
         setOnDragEntered(event -> {
-            System.out.println("onMouseDragEntered" + event.getDragboard().getString());
             setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             event.consume();
         });
         setOnDragExited(event -> {
-            System.out.println("onMouseDragExited" + event.getDragboard().getString());
             setBorder(null);
             event.consume();
         });
         setOnDragDropped(event -> {
-            /* data dropped */
-            System.out.println("onDragDropped" + event.getDragboard().getString());
-            /* if there is a string data on dragboard, read it and use it */
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasString()) {
-                long id = Long.parseLong(db.getString());
+                long id = Long.parseLong(db.getString().substring(1));
                 Card card = controller.getBoardOverviewCtrl().getCard(id);
-                addCardAfter(card);
+                controller.addCardAt(card, getIndex());
                 success = true;
             }
             /* let the source know whether the string was successfully
              * transferred and used */
             event.setDropCompleted(success);
-
             event.consume();
         });
     }
 
-    private void addCardAfter(Card card) {
-        var list = controller.getCardListViewCtrl();
-        var idx = controller.getCard().getIdx();
-        controller.getBoardOverviewCtrl().moveCard(card, list.getCardList(), (int) idx);
-    }
 
     @Override
     protected void updateItem(Card card, boolean empty) {

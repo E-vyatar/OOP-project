@@ -194,10 +194,16 @@ public class BoardOverviewCtrl implements EventHandler {
         return null;
     }
 
-    public void moveCard(Card card, CardList cardList, int index) {
+    public void moveCard(Card card, CardList cardList, long index) {
         var oldList = getCardListViewCtrl(card.getListId());
         var newList = getCardListViewCtrl(cardList.getId());
         oldList.removeCard(card);
         newList.addCard(card, index);
+    }
+
+    public void moveList(CardListViewCtrl cardListViewCtrl) {
+        int index = cardListViewCtrlList.indexOf(cardListViewCtrl);
+        listOfLists.getChildren().remove(cardListViewCtrl.getView());
+        listOfLists.getChildren().add(index, cardListViewCtrl.getView());
     }
 }

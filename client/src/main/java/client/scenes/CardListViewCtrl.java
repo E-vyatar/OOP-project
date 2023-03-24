@@ -96,10 +96,19 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         cards.remove(card);
     }
 
-    public void addCard(Card card, int index) {
+    public void addCard(Card card, long index) {
         System.out.println("Adding card " + card + " at index " + index);
         card.setListId(cardList.getId());
-        cards.add(index, card);
+        cards.add((int) index, card);
         card.setIdx(index);
+    }
+
+    public void moveList(long listId) {
+        cardList.setId(listId);
+        boardOverviewCtrl.moveList(this);
+    }
+
+    public void moveCard(long cardId) {
+        boardOverviewCtrl.moveCard(boardOverviewCtrl.getCard(cardId), getCardList(), getCards().length);
     }
 }
