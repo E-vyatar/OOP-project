@@ -33,7 +33,8 @@ public class ListOfBoardsCtrl {
 
     /**
      * This constructs an instance of ListOfBoards.
-     * @param mainCtrl the main controller
+     *
+     * @param mainCtrl    the main controller
      * @param serverUtils the server utils
      */
     @Inject
@@ -43,10 +44,10 @@ public class ListOfBoardsCtrl {
     }
 
     /**
-     * Initialize the controller.
+     * Refresh the controller.
      * This loads data from the backend and sets the listView.
      */
-    public void initialize() {
+    public void refresh() {
         ObservableList<Board> data = FXCollections.observableList(serverUtils.getBoards());
         this.boards.setItems(data);
         this.boards.setCellFactory(new Callback<ListView<Board>, ListCell<Board>>() {
@@ -70,6 +71,7 @@ public class ListOfBoardsCtrl {
 
     /**
      * Disconnect from server
+     *
      * @param mouseEvent the mouse event
      */
     public void disconnect(MouseEvent mouseEvent) {
@@ -78,6 +80,7 @@ public class ListOfBoardsCtrl {
 
     /**
      * Add a new board
+     *
      * @param mouseEvent the mouse event
      */
     public void addBoard(MouseEvent mouseEvent) {
@@ -86,17 +89,19 @@ public class ListOfBoardsCtrl {
 
     /**
      * Create a new board
+     *
      * @param mouseEvent the mouse event
      */
     public void newBoard(MouseEvent mouseEvent) {
         throw new NotImplementedException();
     }
+
     static class BoardCell extends ListCell<Board> {
 
         @Override
         public void updateItem(Board item, boolean empty) {
             super.updateItem(item, empty);
-            if (empty || item == null){
+            if (empty || item == null) {
                 this.setGraphic(null);
             } else {
                 Label label = new Label(item.getName());

@@ -4,14 +4,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19"
             fx:controller="client.scenes.DeleteCardCtrl">
     <Label layoutX="56.0" layoutY="65.0" prefHeight="154.0" prefWidth="489.0"
            text="Are you sure you want to delete this card?" wrapText="true">
         <font>
-          <Font size="48.0"/>
+            <Font size="48.0"/>
         </font>
     </Label>
     <Button layoutX="426.0" layoutY="320.0" mnemonicParsing="false" onAction="#ok" text="Delete">
@@ -21,7 +21,7 @@
     </Button>
     <Button layoutX="300.0" layoutY="320.0" mnemonicParsing="false" onAction="#cancel" text="Cancel">
         <font>
-          <Font size="24.0"/>
+            <Font size="24.0"/>
         </font>
     </Button>
 </AnchorPane>

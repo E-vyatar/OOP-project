@@ -18,21 +18,21 @@ public class CardList {
     public CardList() {
     }
 
-    public CardList(long id, String title, long boardId) {
-        this.id = id;
-        this.title = title;
-        this.boardId = boardId;
-    }
-
     /**
      * Constructor without 'id' parameter (sets id = -1 to avoid errors)
-     *  - ID will be generated automatically by the database
+     * - ID will be generated automatically by the database
      *
-     * @param title the title
+     * @param title   the title
      * @param boardId the board's id
      */
-    public CardList(String title, long boardId) {
-        this.id = -1;
+    public CardList(String title, long boardId, long idx) {
+        this.title = title;
+        this.boardId = boardId;
+        this.idx = idx;
+    }
+
+    public CardList(long id, String title, long idx, long boardId) {
+        this.id = id;
         this.title = title;
         this.boardId = boardId;
     }
@@ -72,15 +72,6 @@ public class CardList {
 
     public void setBoardId(long boardId) {
         this.boardId = boardId;
-    }
-
-    public static CardList createNewCardList(String cardListTitle, long firstCardId) {
-        // Some Server side code to create a new cardList and get the ID.
-        // TODO: Implement this.
-
-        long cardListId = -1;
-
-        return new CardList(cardListId, cardListTitle, firstCardId);
     }
 
     @Override

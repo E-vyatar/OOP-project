@@ -51,11 +51,11 @@ public class MainCtrl {
         this.listOfBoards = new Scene(listOfBoards.getValue());
         this.listOfBoardsCtrl = listOfBoards.getKey();
 
-        showconnect();
+        showConnect();
         this.primaryStage.show();
     }
 
-    public void showconnect() {
+    public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
 
@@ -64,10 +64,11 @@ public class MainCtrl {
     /**
      * Show the board overview
      * TODO: let BoardOverviewCtrl display the right board
+     *
      * @param boardId the board for which to show the board overview
      */
     public void showOverview(long boardId) {
-        primaryStage.setTitle("Empty Scene <overview>");
+        primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
@@ -82,6 +83,7 @@ public class MainCtrl {
      * Show the list with all known boards.
      */
     public void showListOfBoards() {
+        listOfBoardsCtrl.refresh();
         primaryStage.setTitle("List of boards");
         primaryStage.setScene(listOfBoards);
     }

@@ -7,14 +7,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
 public class ConnectServerCtrl implements Initializable {
-    private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final ServerUtils server;
     @FXML
-    private TextField addressServer;
+    private TextField hostnameField;
 
     @Inject
     public ConnectServerCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -24,12 +23,12 @@ public class ConnectServerCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        hostnameField.setText("localhost");
     }
 
-    public void connect() throws UnknownHostException {
-//        server.setAddress(InetAddress.getByName(addressServer.getText()));
-        mainCtrl.showListOfBoards();
+    public void connect() {
+        server.setHostnameAndConnect(hostnameField.getText());
+        mainCtrl.showOverview(0);
     }
 
 }
