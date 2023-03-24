@@ -16,6 +16,7 @@
 package client.utils;
 
 import commons.Card;
+import commons.CardList;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -104,5 +105,18 @@ public class ServerUtils {
                 consumer.accept((T) payload);
             }
         });
+    }
+
+    /**
+     * @param cardList
+     *
+     * This method is used to add a new list to the database
+     */
+    public void addList(CardList cardList) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("lists/new") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 }

@@ -18,6 +18,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,8 +28,10 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -58,9 +61,7 @@ public class BoardOverviewCtrl implements EventHandler {
         this.mainCtrl = mainCtrl;
     }
 
-    public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
-                           Pair<AddCardCtrl, Parent> addCard,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+    public void initialize(Pair<CardPopupCtrl, Parent> cardPopup, Pair<AddCardCtrl, Parent> addCard, Pair<RenameListPopupCtrl, Parent> renameListPopup) {
         this.cardPopupCtrl = cardPopup.getKey();
 
         this.addCardCtrl = addCard.getKey();
@@ -84,11 +85,11 @@ public class BoardOverviewCtrl implements EventHandler {
         for (long i = 0; i < 4; i++) {
             List<Card> cards = new ArrayList<>();
             for (long j = 0; j < 4; j++) {
-                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j , -1));
+                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j, -1));
             }
             ObservableList<Card> observableList = FXCollections.observableList(cards);
 
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, new CardList(i, "List " + i, -1), observableList);
+            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, new CardList("List " + i, 0, 0), observableList);
             cardListViewCtrlList.add(cardListViewCtrl);
             CardListView cardListView = cardListViewCtrl.getView();
             lists.add(cardListView);
@@ -104,7 +105,7 @@ public class BoardOverviewCtrl implements EventHandler {
         // Create button and add to list_of_lists
         Button button = new Button("Add list");
         button.setOnAction(this::addList);
-            //set button margin
+        //set button margin
         HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
         list_of_lists.setAlignment(Pos.CENTER_RIGHT);
         list_of_lists.getChildren().add(button);
@@ -112,16 +113,54 @@ public class BoardOverviewCtrl implements EventHandler {
 
     /**
      * Adds a new list to the board
+     *
      * @param actionEvent
      */
     private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
-        CardList cardList = CardList.createNewCardList("New List", -1);
+
+        // Create a new list on the server
+        //TODO get board id from somewhere, currently hardcoded and not working on server/db side
+        CardList cardList = createNewCardList("New List", 1, list_of_lists.getChildren().size());
+        if (cardList == null) {
+            return;
+        }
+
         CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+
         list_of_lists.getChildren().add((list_of_lists.getChildren().size() - 1), cardListViewCtrl.getView());
+    }
+
+    /**
+     * Creates a new list on the server and returns the list.
+     *
+     * @param cardListTitle The title of the list
+     * @param boardId       The id of the board the list is on
+     * @return The list that was created and succesfully sent to the server
+     */
+    private CardList createNewCardList(String cardListTitle, long boardId, long idx) {
+
+        // Create the actual list with id 1
+        // TODO: get id from somewhere. Id=-1 does not work on server/db side because of ID>=0 constraint.
+        long cardListId = 1;
+        CardList cardList = new CardList(cardListId, cardListTitle, idx, boardId);
+
+        // Send the list to the server
+        // Show error if the server returns an error, return null
+        try {
+            utils.addList(cardList);
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return null;
+        }
+
+        return cardList;
     }
 
     public void refresh() {
@@ -139,6 +178,7 @@ public class BoardOverviewCtrl implements EventHandler {
 
     /**
      * This method unselects all cards except the cards in the given list.
+     *
      * @param exclude The CardListViewCtrl for which to not unselect cards.
      */
     public void unselectCards(CardListViewCtrl exclude) {
@@ -152,7 +192,8 @@ public class BoardOverviewCtrl implements EventHandler {
 
     /**
      * This function shows a card popup
-     * @param card the card to be shown in the popup
+     *
+     * @param card     the card to be shown in the popup
      * @param editable whether it should be a popup to edit
      */
     public void showCard(Card card, boolean editable) {
@@ -178,6 +219,7 @@ public class BoardOverviewCtrl implements EventHandler {
     /**
      * Shows a popup to edit the details (i.e. the title)
      * of a CardList. The popup has an option to rename it.
+     *
      * @param cardList the CardList that you can rename.
      */
     public void showRenameList(CardList cardList) {
@@ -187,12 +229,10 @@ public class BoardOverviewCtrl implements EventHandler {
 
     /**
      * Get a list of current lists in the board
+     *
      * @return a list of lists as CardList
      */
     public List<CardList> getAllLists() {
-        return cardListViewCtrlList
-                .stream()
-                .map(CardListViewCtrl::getCardList)
-                .collect(Collectors.toList());
+        return cardListViewCtrlList.stream().map(CardListViewCtrl::getCardList).collect(Collectors.toList());
     }
 }
