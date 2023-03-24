@@ -15,11 +15,8 @@
  */
 package client.scenes;
 
-import commons.Card;
-import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -30,23 +27,18 @@ public class MainCtrl {
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
 
-    private CardPopupCtrl cardPopupCtrl;
-
-    private AddCardCtrl addCardCtrl;
-    private Scene addCard;
-
-    private RenameListPopupCtrl renameListPopupCtrl;
-    private Stage renameListPopup;
     private ConnectServerCtrl connectServerCtrl;
 
     private Scene connectServer;
+
+    private ListOfBoardsCtrl listOfBoardsCtrl;
+    private Scene listOfBoards;
     //=========================================================
 
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
-                           Pair<CardPopupCtrl, Parent> cardPopup,
-                           Pair<AddCardCtrl, Parent> addCard,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup, Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
+                           Pair<ConnectServerCtrl, Parent> connectServerCtrl,
+                           Pair<ListOfBoardsCtrl, Parent> listOfBoards) {
 
         this.primaryStage = primaryStage;
 
@@ -56,29 +48,27 @@ public class MainCtrl {
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
 
-        this.cardPopupCtrl = cardPopup.getKey();
+        this.listOfBoards = new Scene(listOfBoards.getValue());
+        this.listOfBoardsCtrl = listOfBoards.getKey();
 
-        this.renameListPopupCtrl = renameListPopup.getKey();
-        this.renameListPopup = new Stage();
-        this.renameListPopup.setX(this.renameListPopup.getX() + 100);
-        this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
-        this.renameListPopup.setScene(new Scene(renameListPopup.getValue(), 300, 200));
-
-        this.addCardCtrl = addCard.getKey();
-        this.addCard = new Scene(addCard.getValue());
-
-        showconnect();
+        showConnect();
         this.primaryStage.show();
     }
 
-    public void showconnect() {
+    public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
 
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Empty Scene <overview>");
+    /**
+     * Show the board overview
+     * TODO: let BoardOverviewCtrl display the right board
+     *
+     * @param boardId the board for which to show the board overview
+     */
+    public void showOverview(long boardId) {
+        primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
@@ -90,37 +80,11 @@ public class MainCtrl {
 //    }
 
     /**
-     * This function shows a card popup
-     * @param card the card to be shown in the popup
-     * @param editable whether it should be a popup to edit
+     * Show the list with all known boards.
      */
-    public void showCard(Card card, boolean editable) {
-        cardPopupCtrl.setCard(card);
-        cardPopupCtrl.setEditable(editable);
-        cardPopupCtrl.show();
+    public void showListOfBoards() {
+        listOfBoardsCtrl.refresh();
+        primaryStage.setTitle("List of boards");
+        primaryStage.setScene(listOfBoards);
     }
-
-    /**
-     * Open a new window with "AddCard" scene
-     */
-    public void showAddCard() {
-        Stage cardWindow = new Stage();
-        cardWindow.setTitle("Add new Task");
-        cardWindow.setScene(addCard);
-        addCard.setOnKeyPressed(event -> {
-            addCardCtrl.keyPressed(event);
-        });
-        addCardCtrl.refresh();
-        cardWindow.show();
-    }
-
-    public void showRenameList(CardList cardList) {
-        renameListPopupCtrl.setCardList(cardList);
-        renameListPopup.show();
-    }
-
-    public void hideRenameListPopup() {
-        renameListPopup.hide();
-    }
-
 }

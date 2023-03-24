@@ -25,7 +25,6 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
@@ -41,13 +40,19 @@ public class AddCardCtrl {
     private TextField title;
 
     @FXML
-    private ComboBox<CardList> list;
-
-    @FXML
     private Button cancel;
 
+    private CardList cardList;
+
+    /**
+     * constructor
+     *
+     * @param server     server utilities reference
+     * @param cardsUtils card utilities reference
+     * @param mainCtrl   main controller reference
+     */
     @Inject
-    public AddCardCtrl(ServerUtils server,CardsUtils cardsUtils , MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;
@@ -63,12 +68,11 @@ public class AddCardCtrl {
     }
 
     /**
-     * Close the "Add new task" window
-     * TODO
-     * Add card to list
+     * send the server a request to add new card
+     * and close the window
      */
     public void ok() {
-        if (cardsUtils.fieldsNotEmpty(title, list)) {
+        if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
                 server.addCard(getCard());
                 closeWindow();
@@ -82,20 +86,21 @@ public class AddCardCtrl {
             }
 
             clearFields();
-            mainCtrl.showOverview();
+            mainCtrl.showOverview(0);
         } else {
-            cardsUtils.markFields(title, list);
+            cardsUtils.markFields(title, null);
         }
     }
 
     /**
      * Create new card object
+     *
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        long listSize = server.getCardsByList(list.getValue().getId()).size();
-        Card card = new Card(-1, list.getValue().getId(), title.getText(), listSize+1, list.getValue().getBoardId());
-        return card;
+        long listSize = server.getCardsByList(cardList.getId()).size();
+        return new Card(
+                -1, cardList.getId(), title.getText(), listSize + 1, cardList.getBoardId());
     }
 
     /**
@@ -108,6 +113,7 @@ public class AddCardCtrl {
 
     /**
      * Keyboard shortcuts for the buttons
+     *
      * @param e keyboard event
      */
     public void keyPressed(KeyEvent e) {
@@ -128,6 +134,13 @@ public class AddCardCtrl {
      */
     public void refresh() {
         clearFields();
-        cardsUtils.initializeListsDropDown(list);
+    }
+
+    public CardList getCardList() {
+        return cardList;
+    }
+
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
     }
 }
