@@ -57,6 +57,15 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    public void deleteCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
     public List<Card> getCardsByList(long listId) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("cards/list/{id}") //

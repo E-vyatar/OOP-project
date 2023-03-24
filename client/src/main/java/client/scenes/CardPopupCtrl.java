@@ -1,5 +1,8 @@
 package client.scenes;
 
+import client.utils.CardsUtils;
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Card;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -18,6 +21,10 @@ public class CardPopupCtrl {
 
     public Card card;
 
+    private CardsUtils cardsUtils;
+    private ServerUtils serverUtils;
+    private DeleteCardCtrl deleteCardCtrl;
+
     @FXML
     private Parent root;
     @FXML
@@ -32,9 +39,23 @@ public class CardPopupCtrl {
     @FXML
     private Button editButton;
     @FXML
+    private Button deleteButton;
+    @FXML
     private Button cancelButton;
     @FXML
     private Button saveButton;
+
+    /**
+     * constructor
+     * @param cardsUtils CardsUtils reference
+     * @param serverUtils ServerUtils reference
+     */
+    @Inject
+    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils, DeleteCardCtrl deleteCardCtrl) {
+        this.cardsUtils = cardsUtils;
+        this.serverUtils = serverUtils;
+        this.deleteCardCtrl = deleteCardCtrl;
+    }
 
     /**
      * This initializes the controller.
@@ -45,6 +66,7 @@ public class CardPopupCtrl {
     public void initialize() {
         ButtonBar.setButtonData(closeButton, ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonBar.setButtonData(editButton, ButtonBar.ButtonData.RIGHT);
+        ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.LEFT);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonBar.setButtonData(saveButton, ButtonBar.ButtonData.APPLY);
 
@@ -71,7 +93,7 @@ public class CardPopupCtrl {
 
         this.buttonBar.getButtons().clear();
         if (editable) {
-            this.buttonBar.getButtons().addAll(cancelButton, saveButton);
+            this.buttonBar.getButtons().addAll(deleteButton, cancelButton, saveButton);
         } else {
             this.buttonBar.getButtons().addAll(closeButton, editButton);
         }
@@ -88,7 +110,7 @@ public class CardPopupCtrl {
      * It is called by pressing the close button in the popup.
      */
     @FXML
-    private void close() {
+    public void close() {
         this.cardPopup.hide();
     }
 

@@ -43,6 +43,9 @@ public class BoardOverviewCtrl implements EventHandler {
     private final MainCtrl mainCtrl;
     private CardPopupCtrl cardPopupCtrl;
 
+    private DeleteCardCtrl deleteCardCtrl;
+    private Scene deleteCard;
+
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
 
@@ -60,8 +63,12 @@ public class BoardOverviewCtrl implements EventHandler {
 
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup,
+                           Pair<DeleteCardCtrl, Parent> deleteCard) {
         this.cardPopupCtrl = cardPopup.getKey();
+
+        this.deleteCardCtrl = deleteCard.getKey();
+        this.deleteCard = new Scene(deleteCard.getValue());
 
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());

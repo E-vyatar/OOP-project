@@ -37,13 +37,14 @@ public class Main extends Application {
         var cardPopup = FXML.load(CardPopupCtrl.class, "client", "scenes", "CardPopup.fxml");
         var renameListPopup = FXML.load(RenameListPopupCtrl.class, "client", "scenes", "RenameListPopup.fxml");
         var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
+        var deleteCard = FXML.load(DeleteCardCtrl.class, "client", "scenes", "DeleteCard.fxml");
 
         var overview = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "BoardOverview.fxml");
 
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup);
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCard);
 
         var connectServerCtrl = FXML.load(ConnectServerCtrl.class, "client", "scenes", "ConnectServer.fxml");
 
