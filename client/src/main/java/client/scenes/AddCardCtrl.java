@@ -23,10 +23,7 @@ import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -41,17 +38,15 @@ public class AddCardCtrl {
     private TextField title;
 
     @FXML
-    private ComboBox<CardList> list;
-
-    @FXML
     private Button cancel;
 
+    private CardList cardList;
+
     /**
-     * Creates the controller to add a card.
-     * This shouldn't be called manually since it relies on injection to work.
-     * @param server the server utils
-     * @param cardsUtils the card utils
-     * @param mainCtrl the main controller
+     * constructor
+     * @param server server utilities reference
+     * @param cardsUtils card utilities reference
+     * @param mainCtrl main controller reference
      */
     @Inject
     public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
@@ -70,12 +65,11 @@ public class AddCardCtrl {
     }
 
     /**
-     * Close the "Add new task" window
-     * TODO
-     * Add card to list
+     * send the server a request to add new card
+     * and close the window
      */
     public void ok() {
-        if (cardsUtils.fieldsNotEmpty(title, list)) {
+        if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
                 server.addCard(getCard());
                 closeWindow();
@@ -91,7 +85,7 @@ public class AddCardCtrl {
             clearFields();
             mainCtrl.showOverview();
         } else {
-            cardsUtils.markFields(title, list);
+            cardsUtils.markFields(title, null);
         }
     }
 
@@ -100,11 +94,10 @@ public class AddCardCtrl {
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        long listSize = server.getCardsByList(list.getValue().getId()).size();
-        long listId = list.getValue().getId();
-        String cardTitle = title.getText();
-        long boardId = list.getValue().getBoardId();
-        return new Card(-1, listId, cardTitle, listSize+1, boardId);
+        long listSize = server.getCardsByList(cardList.getId()).size();
+        Card card = new Card(
+                -1, cardList.getId(), title.getText(), listSize+1, cardList.getBoardId());
+        return card;
     }
 
     /**
@@ -112,7 +105,6 @@ public class AddCardCtrl {
      */
     private void clearFields() {
         title.clear();
-//        list.getItems().clear();
     }
 
     /**
@@ -137,6 +129,21 @@ public class AddCardCtrl {
      */
     public void refresh() {
         clearFields();
-        cardsUtils.initializeListsDropDown(list);
+    }
+
+    /**
+     * Get the CardList for which you're adding a card
+     * @return the CardList
+     */
+    public CardList getCardList() {
+        return cardList;
+    }
+
+    /**
+     * Set the CardList for which you're adding a card
+     * @param cardList the cardlist
+     */
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
     }
 }

@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 public class CardListViewCtrl implements ListChangeListener<Card> {
-    private final MainCtrl mainCtrl;
     private final BoardOverviewCtrl boardOverviewCtrl;
     private final CardList cardList;
     private final CardListView view;
@@ -16,21 +15,18 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     /**
      * CardListViewCtrl is the controller for viewing a CardList
      * and its cards. To get the CardListView, call {@link this.getView}
-     * @param mainCtrl mainCtrl
      * @param boardOverviewCtrl boardOverviewCtl
      * @param cardList cardList for which it is used
      * @param cards cards to display
      */
-    public CardListViewCtrl(MainCtrl mainCtrl,
-                            BoardOverviewCtrl boardOverviewCtrl,
+    public CardListViewCtrl(BoardOverviewCtrl boardOverviewCtrl,
                             CardList cardList,
                             ObservableList<Card> cards) {
-        this.mainCtrl = mainCtrl;
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
         this.cards = cards;
-        this.view = new CardListView(mainCtrl, this, cards);
+        this.view = new CardListView(boardOverviewCtrl, this, cards);
 
         createView();
     }
@@ -51,7 +47,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
         view.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                mainCtrl.showRenameList(cardList);
+                boardOverviewCtrl.showRenameList(cardList);
             }
         });
     }
@@ -117,5 +113,13 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      */
     public void clearSelection() {
         this.getView().clearSelection();
+    }
+
+
+    /**
+     * TODO
+     */
+    public void showAddCard() {
+        boardOverviewCtrl.setCardListForShowAddCard(cardList);
     }
 }

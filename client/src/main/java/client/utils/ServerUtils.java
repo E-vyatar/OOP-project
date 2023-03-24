@@ -16,6 +16,7 @@
 package client.utils;
 
 import commons.Card;
+import commons.CardList;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -54,8 +55,8 @@ public class ServerUtils {
     }
 
     /**
-     * This method adds a card
-     * @param card the card to add
+     * send the server Put request to add a new card to the database
+     * @param card the card to add to the database
      */
     public void addCard(Card card) {
         ClientBuilder.newClient(new ClientConfig()) //
@@ -66,9 +67,9 @@ public class ServerUtils {
     }
 
     /**
-     * Returns every card in a specific {@link commons.CardList}
-     * @param listId the id of the {@link commons.CardList} for which to return cards
-     * @return the cards in the {@link commons.CardList}
+     * send the server Get request for all the cards of a specific list
+     * @param listId id of the list to get the cards from
+     * @return list of all the cards in the requested list
      */
     public List<Card> getCardsByList(long listId) {
         return ClientBuilder.newClient(new ClientConfig()) //
@@ -77,6 +78,19 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
+    }
+
+    /**
+     * send the server Post request to change card's details
+     * @param card the card to change
+     */
+    public void editCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
     private final StompSession session = connect("ws://localhost:8080/websocket");
@@ -117,5 +131,18 @@ public class ServerUtils {
                 consumer.accept((T) payload);
             }
         });
+    }
+
+    /**
+     * @param cardList
+     *
+     * This method is used to add a new list to the database
+     */
+    public void addList(CardList cardList) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("lists/new") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 }
