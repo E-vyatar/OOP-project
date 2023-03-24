@@ -4,63 +4,76 @@ import client.scenes.BoardOverviewCtrl;
 import commons.CardList;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
+import javafx.collections.FXCollections;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import javax.inject.Inject;
-import java.util.List;
 
 public class CardsUtils {
 
 
     private final BoardOverviewCtrl boardOverviewCtrl;
 
+    /**
+     * constructor
+     *
+     * @param boardOverviewCtrl reference to board controller for lists references
+     */
     @Inject
     public CardsUtils(BoardOverviewCtrl boardOverviewCtrl) {
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
-    public void initializeListsDropDown(ComboBox<CardList> list) {
-        List<CardList> cardsLists = boardOverviewCtrl.getAllLists();
-        list.setCellFactory(listView -> new ListCell<>() {
+    /**
+     * set a dropdown with all current lists in the board, displaying the lists' names
+     *
+     * @param list ChoiceBox to put the lists in
+     */
+    public void initializeListsDropDown(ChoiceBox<CardList> list) {
+        StringConverter<CardList> stringConverter = new StringConverter<>() {
             @Override
-            protected void updateItem(CardList item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getTitle());
+            public String toString(CardList object) {
+                if (object != null) {
+                    return object.getTitle();
                 }
-            }
-        });
-        list.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(CardList cardList) {
-                if (cardList != null) {
-                    return cardList.getTitle();
-                } else {
-                    return "";
-                }
+                return "";
             }
 
             @Override
             public CardList fromString(String string) {
-                // not used, but must be implemented
                 return null;
             }
-        });
+        };
+
+        list.setConverter(stringConverter);
+
         list.getItems().clear();
-        list.getItems().addAll(cardsLists);
+        list.getItems().addAll(
+                FXCollections.observableList(boardOverviewCtrl.getAllLists())
+        );
     }
 
-    public boolean fieldsNotEmpty(TextField cardTitle, ComboBox<CardList> list) {
+    /**
+     * check fields' values are not empty
+     *
+     * @param cardTitle text field to check the value of
+     * @param list      choice box to check the value of
+     * @return true if every field has a value, false otherwise
+     */
+    public boolean fieldsNotEmpty(TextField cardTitle, ChoiceBox<CardList> list) {
         return !cardTitle.getText().isBlank() && !list.getSelectionModel().isEmpty();
     }
 
-    public void markFields(TextField cardTitle, ComboBox<CardList> list) {
+    /**
+     * change fields' border colour to red for 0.5 second
+     *
+     * @param cardTitle text field to change the border colour of
+     * @param list      choice box to change the border colour of
+     */
+    public void markFields(TextField cardTitle, ChoiceBox<CardList> list) {
         if (cardTitle.getText().isBlank()) {
             cardTitle.setStyle("-fx-border-color: red ; -fx-border-width: 2px");
         }

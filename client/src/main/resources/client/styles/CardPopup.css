@@ -3,6 +3,7 @@
     -fx-text-box-border: transparent;
     -fx-background-color: inherit;
 }
+
 /* Make it look like normal text when it's not editable */
 #cardDescription:readonly {
     -fx-background-color: transparent;

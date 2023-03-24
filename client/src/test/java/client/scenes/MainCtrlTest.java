@@ -30,6 +30,6 @@ public class MainCtrlTest {
     @Test
     public void writeSomeTests() {
         // TODO create replacement objects and write some tests
-        // sut.initialize(null, null, null);
+        // sut.refresh(null, null, null);
     }
 }
