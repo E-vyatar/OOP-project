@@ -63,6 +63,24 @@ public class Board {
     }
 
     /**
+     * Getter for Board Title
+     *
+     * @return the title of the board
+     */
+    public String getTitle() {
+        return this.title;
+    }
+
+    /**
+     * Setter for board title
+     *
+     * @param title the new title of the board
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
      * Getter for cardList (list of all CardLists)
      *
      * @return the List of all CardLists on the board
@@ -108,14 +126,6 @@ public class Board {
             "id=" + id +
             ", cardLists=" + cardLists +
             '}';
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }
 
