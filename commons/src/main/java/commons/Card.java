@@ -160,23 +160,14 @@ public class Card {
             '}';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Card card)) return false;
-        return id == card.id
-            && listId == card.listId
-            && boardId == card.boardId
-            && idx == card.idx
-            && Objects.equals(title, card.title);
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return id == card.id && listId == card.listId && boardId == card.boardId && idx == card.idx && Objects.equals(title, card.title);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         return Objects.hash(id, listId, boardId, title, idx);

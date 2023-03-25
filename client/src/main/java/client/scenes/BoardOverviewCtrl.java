@@ -122,45 +122,26 @@ public class BoardOverviewCtrl implements EventHandler {
     private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
 
-        CardList cardList = CardList.createNewCardList("New List", -1);
+        CardList cardList = new CardList("New List", board.getId(), board.getCardLists().size());
 
-        board.getCardLists().add(cardList);
-        // TODO: communicate with server and integrate this with the board
-        ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
-        cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstCardId is -1 because it has no cards.
-        listOfLists.getChildren().add((listOfLists.getChildren().size() - 1), cardListViewCtrl.getView());
-    }
-
-    /**
-     * Creates a new list on the server and returns the list.
-     *
-     * @param cardListTitle The title of the list
-     * @param boardId       The id of the board the list is on
-     * @return The list that was created and successfully sent to the server
-     */
-    private CardList createNewCardList(String cardListTitle, long boardId, long idx) {
-
-        // Create the actual list with id 1
-        // TODO: get id from somewhere. Id=-1 does not work on server/db side because of ID>=0 constraint.
-        long cardListId = 1;
-        CardList cardList = new CardList(cardListId, cardListTitle, idx, boardId);
-
-        // Send the list to the server
-        // Show error if the server returns an error, return null
         try {
-            utils.addList(cardList);
+            utils.createNewCardList(cardList);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            return null;
+            return;
         }
 
-        return cardList;
+        board.getCardLists().add(cardList);
+
+        ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
+        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
+        cardListViewCtrlList.add(cardListViewCtrl);
+        // Add a new list to the list of lists. The firstCardId is -1 because it has no cards.
+        listOfLists.getChildren().add((listOfLists.getChildren().size() - 1), cardListViewCtrl.getView());
     }
 
     public void refresh() {

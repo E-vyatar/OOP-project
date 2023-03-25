@@ -143,25 +143,17 @@ public class CardList {
         this.cards = cards;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CardList cardList)) return false;
-        return id == cardList.id
-            && idx == cardList.idx
-            && boardId == cardList.boardId
-            && Objects.equals(title, cardList.title);
+        if (o == null || getClass() != o.getClass()) return false;
+        CardList cardList = (CardList) o;
+        return id == cardList.id && boardId == cardList.boardId && idx == cardList.idx && Objects.equals(title, cardList.title) && Objects.equals(cards, cardList.cards);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, idx, boardId);
+        return Objects.hash(id, boardId, title, idx, cards);
     }
 
     /**

@@ -32,6 +32,11 @@ public class Board {
         this.id = id;
     }
 
+    public Board(long boardId, List<CardList> cardLists) {
+        this.id = boardId;
+        this.cardLists = cardLists;
+    }
+
     /**
      * Getter for ID
      *
@@ -68,22 +73,17 @@ public class Board {
         this.cardLists = cardLists;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cardLists);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Board board)) return false;
-        return id == board.id && cardLists.equals(board.cardLists);
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return id == board.id && Objects.equals(cardLists, board.cardLists);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cardLists);
     }
 
     /**

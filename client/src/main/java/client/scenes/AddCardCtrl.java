@@ -71,7 +71,7 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-                server.addCard(getCard());
+                server.createNewCard(getCard());
                 closeWindow();
             } catch (WebApplicationException e) {
 
@@ -96,7 +96,7 @@ public class AddCardCtrl {
     private Card getCard() {
         long listSize = server.getCardsByList(cardList.getId()).size();
         Card card = new Card(
-                -1, cardList.getId(), title.getText(), listSize+1, cardList.getBoardId());
+                -1, cardList.getId(), cardList.getBoardId(), title.getText(),listSize+1);
         return card;
     }
 

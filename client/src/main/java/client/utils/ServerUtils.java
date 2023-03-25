@@ -18,7 +18,6 @@ package client.utils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
-import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -44,25 +43,72 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
-    public void addQuote(Quote quote) {
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+    private final StompSession session = connect("ws://localhost:8080/websocket");
+
+    /**
+     * This method gets the board from the server,
+     * @param boardId the id of the board to load
+     * @return the board whose it was
+     */
+    public Board getBoard(long boardId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("boards/{id}") //
+                .resolveTemplate("id", boardId) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+                .get(Board.class);
     }
 
     /**
      * send the server Put request to add a new card to the database
      * @param card the card to add to the database
      */
-    public void addCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig()) //
+    public Card createNewCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("cards/new") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
+
+    /**
+     * send the server Post request to change card's details
+     * @param card the card to change
+     */
+    public Card editCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * @param cardList
+     *
+     * This method is used to add a new list to the database
+     */
+    public CardList createNewCardList(CardList cardList) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("lists/new") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+    }
+    
+    public CardList editCardList(CardList cardList) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("lists/{id}")
+                .resolveTemplate("id", cardList.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+    }
+
+
+
+
 
     /**
      * send the server Get request for all the cards of a specific list
@@ -77,44 +123,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Card>>() {});
     }
-
-    /**
-     * This method gets the board from the server,
-     * @param boardId the id of the board to load
-     * @return the board whose it was
-     */
-    public Board getBoard(long boardId) {
-        // TODO: actually use the JSON api
-        // I just moved this here, to get rid of some hardcoding.
-        List<CardList> cardLists = new ArrayList<>();
-        // Create four lists
-        for (long i = 0; i < 4; i++) {
-            List<Card> cards = new ArrayList<>();
-            for (long j = 0; j < 4; j++) {
-                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j , -1));
-            }
-
-            CardList cardList = new CardList("CardList " + i, boardId, 0);
-            cardList.getCards().addAll(cards);
-            cardLists.add(cardList);
-        }
-        return new Board(boardId, cardLists);
-    }
-
-    /**
-     * send the server Post request to change card's details
-     * @param card the card to change
-     */
-    public void editCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("cards/{id}")
-                .resolveTemplate("id", card.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    private final StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
      * @param url address
@@ -152,18 +160,5 @@ public class ServerUtils {
                 consumer.accept((T) payload);
             }
         });
-    }
-
-    /**
-     * @param cardList
-     *
-     * This method is used to add a new list to the database
-     */
-    public void addList(CardList cardList) {
-        ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("lists/new") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 }
