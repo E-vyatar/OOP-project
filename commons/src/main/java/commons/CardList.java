@@ -9,113 +9,173 @@ import java.util.Objects;
 public class CardList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
-    String title;
-    long idx;
-    long boardId;
+    private long id;
+    private long boardId;
+    private String title;
+    private long idx;
 
-    List<Card> cards;
+    @OneToMany(mappedBy = "listId")
+    @OrderColumn(name = "idx")
+    private List<Card> cards = new ArrayList<>();
 
+    /**
+     * Empty constructor.
+     */
     public CardList() {
     }
 
     /**
-     * Constructor without 'id' parameter (sets id = -1 to avoid errors)
+     * Constructor (without 'id' parameter)
      *  - ID will be generated automatically by the database
      *
      * @param title the title
      * @param boardId the board's id
+     * @param idx the position index of this CardList in the board
      */
     public CardList(String title, long boardId, long idx) {
         this.title = title;
         this.boardId = boardId;
         this.idx = idx;
-        this.cards = new ArrayList<>();
     }
 
+    /**
+     * Constructor (with id parameter)
+     *
+     * @param id the id of the CardList
+     * @param title the title of the CardList
+     * @param idx the position index of the CardList in the board
+     * @param boardId the board ID of this CardList
+     */
     public CardList(long id, String title, long idx, long boardId) {
         this.id = id;
         this.title = title;
         this.boardId = boardId;
-        this.cards = new ArrayList<>();
         this.idx = idx;
     }
 
-    public long getIdx() {
-        return idx;
-    }
-
-    public void setIdx(long idx) {
-        this.idx = idx;
-    }
-
-    public void renameCardList(String newName) {
-        this.title = newName;
-    }
-
-    @Id
+    /**
+     * Getter for Id
+     *
+     * @return the id of this CardList
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Setter for id
+     *
+     * @param cardListId the new id of this CardList
+     */
     public void setId(long cardListId) {
         this.id = cardListId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String cardListTitle) {
-        this.title = cardListTitle;
-    }
-
+    /**
+     * Getter for board ID of this CardList
+     *
+     * @return the board ID of this CardList
+     */
     public long getBoardId() {
         return boardId;
     }
 
+    /**
+     * Setter for board ID of this CardList
+     *
+     * @param boardId the new board ID of this CardList
+     */
     public void setBoardId(long boardId) {
         this.boardId = boardId;
     }
 
     /**
+     * Getter for title
+     *
+     * @return the title of this CardList
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Setter for title
+     *
+     * @param newTitle the new title of the id
+     */
+    public void setTitle(String newTitle) {
+        this.title = newTitle;
+    }
+
+    /**
+     * Getter for position index.
+     *
+     * @return the position index of this CardList in the board
+     */
+    public long getIdx() {
+        return idx;
+    }
+
+    /**
+     * Setter for position index.
+     *
+     * @param idx the new position of the CardList in the board
+     */
+    public void setIdx(long idx) {
+        this.idx = idx;
+    }
+
+    /**
      * Get the cards inside this CardList
+     *
      * @return a list of cards
      */
-    @OneToMany(mappedBy = "listId")
     public List<Card> getCards() {
         return cards;
     }
 
     /**
      * Set the cards inside this CardList
+     *
      * @param cards the list of cards
      */
     public void setCards(List<Card> cards) {
         this.cards = cards;
     }
 
-    public static CardList createNewCardList(String cardListTitle, long firstCardId) {
-        // Some Server side code to create a new cardList and get the ID.
-        // TODO: Implement this.
-
-        long cardListId = -1;
-
-        return new CardList(cardListId, cardListTitle, firstCardId);
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CardList)) return false;
-        CardList cardList = (CardList) o;
-        return id == cardList.id && idx == cardList.idx && boardId == cardList.boardId && Objects.equals(title, cardList.title);
+        if (!(o instanceof CardList cardList)) return false;
+        return id == cardList.id
+            && idx == cardList.idx
+            && boardId == cardList.boardId
+            && Objects.equals(title, cardList.title);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, title, idx, boardId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "CardList{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", idx=" + idx +
+            ", boardId=" + boardId +
+            ", cards=" + cards +
+            '}';
+    }
 
 }

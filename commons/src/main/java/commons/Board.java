@@ -1,6 +1,7 @@
 package commons;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,59 +10,91 @@ import java.util.Objects;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
+    private long id;
 
-    @OneToMany(mappedBy="boardId")
-    List<CardList> cardLists;
+    @OneToMany(mappedBy = "boardId")
+    @OrderColumn(name = "idx")
+    private List<CardList> cardLists = new ArrayList<>();
 
+    /**
+     * Empty constructor.
+     * Functions as a constructor without id parameter.
+     */
     public Board() {
     }
 
-    public Board(long id, List<CardList> cardLists) {
+    /**
+     * Constructor (with id parameter)
+     *
+     * @param id the id of the board
+     */
+    public Board(long id) {
         this.id = id;
-        this.cardLists = cardLists;
     }
 
     /**
-     * Constructor without 'id' parameter (sets id = -1 to avoid errors)
-     *  - The id would be generated automatically by the database.
+     * Getter for ID
      *
-     * @param cardLists the list of all the CardLists in the board
+     * @return the id of the board
      */
-    public Board(List<CardList> cardLists) {
-        this.id = -1;
-        this.cardLists = cardLists;
-    }
-
-
     public long getId() {
         return id;
     }
 
+    /**
+     * Setter for ID
+     *
+     * @param boardId the new id of the board
+     */
     public void setId(long boardId) {
         this.id = boardId;
     }
 
+    /**
+     * Getter for cardList (list of all CardLists)
+     *
+     * @return the List of all CardLists on the board
+     */
     public List<CardList> getCardLists() {
         return cardLists;
     }
 
+    /**
+     * Setter for cardList (list of all CardLists)
+     *
+     * @param cardLists the new cardList (list of all CardLists)
+     */
     public void setCardLists(List<CardList> cardLists) {
         this.cardLists = cardLists;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Board board = (Board) o;
-        return id == board.id && Objects.equals(cardLists, board.cardLists);
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, cardLists);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Board board)) return false;
+        return id == board.id && cardLists.equals(board.cardLists);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Board{" +
+            "id=" + id +
+            ", cardLists=" + cardLists +
+            '}';
+    }
 }
 
