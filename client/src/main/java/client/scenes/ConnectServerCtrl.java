@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ConnectServerCtrl implements Initializable {
+
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     @FXML

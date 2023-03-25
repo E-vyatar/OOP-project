@@ -27,7 +27,6 @@ public class ListOfBoardsCtrl {
 
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
-
     @FXML
     private ListView<Board> boards;
 

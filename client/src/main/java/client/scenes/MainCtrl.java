@@ -23,14 +23,10 @@ import javafx.util.Pair;
 public class MainCtrl {
 
     private Stage primaryStage;
-
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
-
     private ConnectServerCtrl connectServerCtrl;
-
     private Scene connectServer;
-
     private ListOfBoardsCtrl listOfBoardsCtrl;
     private Scene listOfBoards;
     //=========================================================
