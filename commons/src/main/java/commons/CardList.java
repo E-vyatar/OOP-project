@@ -143,6 +143,9 @@ public class CardList {
         this.cards = cards;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -151,6 +154,9 @@ public class CardList {
         return id == cardList.id && boardId == cardList.boardId && idx == cardList.idx && Objects.equals(title, cardList.title) && Objects.equals(cards, cardList.cards);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, boardId, title, idx, cards);
