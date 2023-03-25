@@ -74,8 +74,6 @@ public class BoardOverviewCtrl implements EventHandler {
         var HBoxChildren = this.listOfLists.getChildren();
         for (CardList cardList : this.board.getCardLists()) {
             // Right now, we're creating an observable list here,
-            // we should investigate whether it can be in commons,
-            // So everything can be dynamic automatically.
             ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
             CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
             cardListViewCtrlList.add(cardListViewCtrl);

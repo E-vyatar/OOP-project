@@ -94,9 +94,9 @@ public class AddCardCtrl {
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        long listSize = server.getCardsByList(cardList.getId()).size();
+        long listSize = server.getCardsByList(cardList.getId()).size(); // cardList.getCards().size();
         Card card = new Card(
-                -1, cardList.getId(), cardList.getBoardId(), title.getText(),listSize+1);
+                -1, cardList.getId(), cardList.getBoardId(), title.getText(),listSize);
         return card;
     }
 

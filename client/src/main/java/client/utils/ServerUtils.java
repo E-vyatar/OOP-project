@@ -85,6 +85,19 @@ public class ServerUtils {
     }
 
     /**
+     * send the server Delete request to delete a card from the database
+     * @param card the card to delete
+     */
+    public void deleteCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
      * @param cardList
      *
      * This method is used to add a new list to the database
@@ -96,7 +109,12 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
-    
+
+    /**
+     * @param cardList
+     *
+     * This method is used to edit a list in the database
+     */
     public CardList editCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("lists/{id}")
@@ -106,6 +124,19 @@ public class ServerUtils {
                 .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
+    /**
+     * @param cardList
+     *
+     * This method is used to delete a list from the database
+     */
+    public void deleteCardList(CardList cardList) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("lists/{id}")
+                .resolveTemplate("id", cardList.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
 
 
 
@@ -115,6 +146,8 @@ public class ServerUtils {
      * @param listId id of the list to get the cards from
      * @return list of all the cards in the requested list
      */
+    // TODO: Talking about the usage in AddCardCtrl.
+    //  Is it necessary as we should have up to date lists on the client side too?
     public List<Card> getCardsByList(long listId) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("cards/list/{id}") //

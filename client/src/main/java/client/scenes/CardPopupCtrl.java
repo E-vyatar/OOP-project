@@ -128,10 +128,17 @@ public class CardPopupCtrl {
      */
     public void saveCardChanges() {
         if (cardsUtils.fieldsNotEmpty(cardTitle, list)) {
+            String tempTitle = null;
+            long tempListId = 0;
             try {
+                // save old values
+                tempTitle = card.getTitle();
+                tempListId = card.getListId();
+
                 card.setListId(list.getValue().getId());
                 card.setTitle(cardTitle.getText());
-                serverUtils.editCard(card);
+
+                Card returnCard = serverUtils.editCard(card);
                 close();
             } catch (WebApplicationException e) {
 
@@ -139,6 +146,11 @@ public class CardPopupCtrl {
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
+
+                // revert changes
+                card.setTitle(tempTitle);
+                card.setListId(tempListId);
+
                 return;
             }
 
