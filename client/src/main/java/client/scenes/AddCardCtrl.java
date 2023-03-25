@@ -71,7 +71,7 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-                server.createNewCard(getCard());
+                server.createCard(getCard());
                 closeWindow();
             } catch (WebApplicationException e) {
 
@@ -94,10 +94,9 @@ public class AddCardCtrl {
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        long listSize = server.getCardsByList(cardList.getId()).size(); // cardList.getCards().size();
-        Card card = new Card(
+        long listSize = server.getCardsByList(cardList.getId()).size();
+        return new Card(
                 -1, cardList.getId(), cardList.getBoardId(), title.getText(),listSize);
-        return card;
     }
 
     /**
@@ -113,14 +112,10 @@ public class AddCardCtrl {
      */
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
-            case ENTER:
-                ok();
-                break;
-            case ESCAPE:
-                closeWindow();
-                break;
-            default:
-                break;
+            case ENTER -> ok();
+            case ESCAPE -> closeWindow();
+            default -> {
+            }
         }
     }
 

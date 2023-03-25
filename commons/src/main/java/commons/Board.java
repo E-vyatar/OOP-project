@@ -73,6 +73,9 @@ public class Board {
         this.cardLists = cardLists;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,6 +84,9 @@ public class Board {
         return id == board.id && Objects.equals(cardLists, board.cardLists);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, cardLists);

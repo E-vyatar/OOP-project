@@ -23,8 +23,6 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -41,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BoardOverviewCtrl implements EventHandler {
+public class BoardOverviewCtrl {
 
     private final ServerUtils utils;
     private final MainCtrl mainCtrl;
@@ -123,7 +121,7 @@ public class BoardOverviewCtrl implements EventHandler {
         CardList cardList = new CardList("New List", board.getId(), board.getCardLists().size());
 
         try {
-            utils.createNewCardList(cardList);
+            utils.createCardList(cardList);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -144,11 +142,6 @@ public class BoardOverviewCtrl implements EventHandler {
 
     public void refresh() {
 
-    }
-
-    @Override
-    public void handle(Event event) {
-        
     }
 
     /**

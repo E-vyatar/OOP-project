@@ -31,7 +31,6 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -46,7 +45,8 @@ public class ServerUtils {
     private final StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
-     * This method gets the board from the server,
+     * Sends HTTP request to get board
+     *
      * @param boardId the id of the board to load
      * @return the board whose it was
      */
@@ -60,10 +60,11 @@ public class ServerUtils {
     }
 
     /**
-     * send the server Put request to add a new card to the database
+     * Sends HTTP request to server to add a new card
+     *
      * @param card the card to add to the database
      */
-    public Card createNewCard(Card card) {
+    public Card createCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("cards/new") //
                 .request(APPLICATION_JSON) //
@@ -72,7 +73,8 @@ public class ServerUtils {
     }
 
     /**
-     * send the server Post request to change card's details
+     * Sends HTTP request to change card's details
+     *
      * @param card the card to change
      */
     public Card editCard(Card card) {
@@ -98,11 +100,11 @@ public class ServerUtils {
     }
 
     /**
-     * @param cardList
+     * Sends HTTP request to add a new CardList to the database
      *
-     * This method is used to add a new list to the database
+     * @param cardList the CardList
      */
-    public CardList createNewCardList(CardList cardList) {
+    public CardList createCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("lists/new") //
                 .request(APPLICATION_JSON) //
@@ -143,6 +145,7 @@ public class ServerUtils {
 
     /**
      * send the server Get request for all the cards of a specific list
+     *
      * @param listId id of the list to get the cards from
      * @return list of all the cards in the requested list
      */
@@ -154,13 +157,13 @@ public class ServerUtils {
                 .resolveTemplate("id", listId)
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Card>>() {});
+                .get(new GenericType<>() {});
     }
 
     /**
      * @param url address
      *
-     * @return
+     * @return StompSession
      */
     private StompSession connect(String url){
         var client = new StandardWebSocketClient();
@@ -168,9 +171,7 @@ public class ServerUtils {
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
         try{
             return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

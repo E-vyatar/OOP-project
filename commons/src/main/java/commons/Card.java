@@ -160,6 +160,9 @@ public class Card {
             '}';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -168,6 +171,9 @@ public class Card {
         return id == card.id && listId == card.listId && boardId == card.boardId && idx == card.idx && Objects.equals(title, card.title);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, listId, boardId, title, idx);
