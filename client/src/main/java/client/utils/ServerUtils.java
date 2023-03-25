@@ -42,6 +42,13 @@ public class ServerUtils {
     private StompSession session;
     private String server;
 
+    public void setHostnameAndConnect(String hostname) {
+        System.out.println("Connecting to server: " + hostname);
+        this.server = "http://" + hostname + ":8080";
+        session = connect("ws://" + hostname + ":8080/websocket");
+
+    }
+
     /**
      * Sends HTTP request to get board
      *
@@ -55,13 +62,6 @@ public class ServerUtils {
             .request(APPLICATION_JSON) //
             .accept(APPLICATION_JSON) //
             .get(Board.class);
-    }
-
-    public void setHostnameAndConnect(String hostname) {
-        System.out.println("Connecting to server: " + hostname);
-        this.server = "http://" + hostname + ":8080";
-        session = connect("ws://" + hostname + ":8080/websocket");
-
     }
 
     /**
@@ -82,6 +82,7 @@ public class ServerUtils {
      * Sends HTTP request to change card's details
      *
      * @param card the card to change
+     * @return The updated instance of Card
      */
     public Card editCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig())
@@ -96,10 +97,11 @@ public class ServerUtils {
      * Sends HTTP request to add a new CardList to the database
      *
      * @param cardList the Card
+     * @return the new CardList
      */
-    public CardList createCardList(CardList cardList) {
+    public CardList addCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("lists/new") //
+                .target(server).path("lists/new") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
@@ -107,7 +109,7 @@ public class ServerUtils {
 
     public CardList editCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("lists/{id}")
+                .target(server).path("lists/{id}")
                 .resolveTemplate("id", cardList.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
@@ -129,20 +131,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .get(new GenericType<>() {
                 });
-    }
-
-    /**
-     * send the server Post request to change card's details
-     *
-     * @param card the card to change
-     */
-    public void editCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("cards/{id}")
-                .resolveTemplate("id", card.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
     /**

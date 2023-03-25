@@ -104,7 +104,7 @@ public class ListOfBoardsCtrl {
             if (empty || item == null) {
                 this.setGraphic(null);
             } else {
-                Label label = new Label(item.getName());
+                Label label = new Label(item.getTitle());
                 this.setGraphic(label);
                 this.getStyleClass().add("board");
             }

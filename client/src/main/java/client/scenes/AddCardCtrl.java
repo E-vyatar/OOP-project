@@ -72,7 +72,7 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-                server.createCard(getCard());
+                server.addCard(getCard());
                 closeWindow();
             } catch (WebApplicationException e) {
 
@@ -84,7 +84,7 @@ public class AddCardCtrl {
             }
 
             clearFields();
-            mainCtrl.showOverview();
+            mainCtrl.showOverview(0);
         } else {
             cardsUtils.markFields(title, null);
         }
