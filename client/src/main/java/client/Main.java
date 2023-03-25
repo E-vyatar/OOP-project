@@ -46,7 +46,8 @@ public class Main extends Application {
         overview.getKey().initialize(cardPopup, addCard, renameListPopup);
 
         var connectServerCtrl = FXML.load(ConnectServerCtrl.class, "client", "scenes", "ConnectServer.fxml");
+        var listOfBoardsCtrl = FXML.load(ListOfBoardsCtrl.class, "client", "scenes", "ListOfBoards.fxml");
 
-        mainCtrl.initialize(primaryStage, overview, connectServerCtrl);
+        mainCtrl.initialize(primaryStage, overview, connectServerCtrl, listOfBoardsCtrl);
     }
 }

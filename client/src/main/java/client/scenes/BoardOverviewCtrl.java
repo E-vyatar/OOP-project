@@ -16,21 +16,18 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Board;
 import commons.Card;
 import commons.CardList;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -39,51 +36,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BoardOverviewCtrl {
+
+public class BoardOverviewCtrl implements EventHandler {
 
     private final ServerUtils utils;
     private final MainCtrl mainCtrl;
-
+    private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     private CardPopupCtrl cardPopupCtrl;
-
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
-
     private RenameListPopupCtrl renameListPopupCtrl;
-
-    private List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     @FXML
     private HBox listOfLists;
-    private Board board;
 
     @Inject
     public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
+//        if (!this.utils.isConnectionAlive()) showConnect();
     }
 
-    /**
-     * This method creates the CardListViews based on the data in the board.
-     * {@link this.cardListViewCtrlList} will be initialized, and the views
-     * will be added to the scene.
-     */
-    private void createCardLists() {
-        this.cardListViewCtrlList = new ArrayList<>();
-        var HBoxChildren = this.listOfLists.getChildren();
-        for (CardList cardList : this.board.getCardLists()) {
-            // Right now, we're creating an observable list here,
-            // we should investigate whether it can be in commons,
-            // So everything can be dynamic automatically.
-            ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
-            CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
-            cardListViewCtrlList.add(cardListViewCtrl);
-            HBoxChildren.add(cardListViewCtrl.getView());
-        }
-    }
-
-    public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
-                           Pair<AddCardCtrl, Parent> addCard,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+    public void initialize(Pair<CardPopupCtrl, Parent> cardPopup, Pair<AddCardCtrl, Parent> addCard, Pair<RenameListPopupCtrl, Parent> renameListPopup) {
         this.cardPopupCtrl = cardPopup.getKey();
 
         this.addCardCtrl = addCard.getKey();
@@ -91,59 +64,79 @@ public class BoardOverviewCtrl {
 
         this.renameListPopupCtrl = renameListPopup.getKey();
 
-
-        // This should be moved in the multi-board feature
-        this.board = utils.getBoard(0);
-        createCardLists();
-        createButton();
+        createCards();
     }
 
+    @Deprecated
+    private void createCards() {
+        /*
+            Currently, this method just creates arbitrary data.
+            This data doesn't properly use the format as it's stored in the DB.
+            When linking with the server side,
+            the cards in a list should be converted into an ObservableList.
+         */
 
-    /**
-     * Creates a button to add a new list to the board
-     */
-    private void createButton() {
-        // Create button and add to list_of_lists
-        Button button = new Button("Add list");
-        button.setOnAction(this::addList);
-        //set button margin
-        HBox.setMargin(button, new javafx.geometry.Insets(0, 0, 0, 25));
-        listOfLists.setAlignment(Pos.CENTER_RIGHT);
-        listOfLists.getChildren().add(button);
+        ArrayList<AnchorPane> lists = new ArrayList<>();
+        // Create four lists
+        for (long i = 0; i < 4; i++) {
+            List<Card> cards = new ArrayList<>();
+            for (long j = 0; j < 4; j++) {
+                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j, -1));
+            }
+            ObservableList<Card> observableList = FXCollections.observableList(cards);
+
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, new CardList("List " + i, 0, -1), observableList);
+            cardListViewCtrlList.add(cardListViewCtrl);
+            lists.add(cardListViewCtrl.getCardListNode());
+        }
+
+        listOfLists.getChildren().addAll(lists);
+    }
+
+    private void getCardsFromServer() {
+
     }
 
     /**
      * Adds a new list to the board
      *
-     * @param actionEvent the action event
+     * @param actionEvent
      */
+    @FXML
     private void addList(ActionEvent actionEvent) {
         // Create a new list where cards can be added to
-
-        CardList cardList = new CardList("New List", board.getId(), board.getCardLists().size());
-
-        try {
-            utils.createCardList(cardList);
-        } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
-        }
-
-        board.getCardLists().add(cardList);
-
-        ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
-        CardListViewCtrl cardListViewCtrl = new CardListViewCtrl(this, cardList, observableList);
+        ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
+        CardList cardList = new CardList("New List", 0, 0);
+        CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstCardId is -1 because it has no cards.
-        listOfLists.getChildren().add((listOfLists.getChildren().size() - 1), cardListViewCtrl.getView());
+        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+        listOfLists.getChildren().add((listOfLists.getChildren().size()), cardListViewCtrl.getCardListNode());
     }
+
+    /**
+     * when clicking Disconnect from Server, the Stompsession is ended and scene is set up back to ConnectServerCtrl
+     *
+     * @param actionEvent
+     */
+    public void disconnect(ActionEvent actionEvent) {
+        utils.getSession().disconnect();
+        System.out.println("The client has been disconnected");
+
+        mainCtrl.showConnect();
+    }
+
 
     public void refresh() {
 
+    }
+
+    @Override
+    public void handle(Event event) {
+        Object source = event.getSource();
+        System.out.println("Source: " + source);
+        if (source instanceof CardPopupCtrl) {
+            CardPopupCtrl card = (CardPopupCtrl) source;
+        }
     }
 
     /**
@@ -177,7 +170,7 @@ public class BoardOverviewCtrl {
      */
     public void showAddCard() {
         Stage cardWindow = new Stage();
-        cardWindow.setTitle("Add new Task to " + addCardCtrl.getCardList().getTitle());
+        cardWindow.setTitle("Add new Task");
         cardWindow.setScene(addCard);
         addCard.setOnKeyPressed(event -> addCardCtrl.keyPressed(event));
         addCardCtrl.refresh();
@@ -205,9 +198,55 @@ public class BoardOverviewCtrl {
      * @return a list of lists as CardList
      */
     public List<CardList> getAllLists() {
-        return cardListViewCtrlList
-                .stream()
-                .map(CardListViewCtrl::getCardList)
-                .collect(Collectors.toList());
+        return cardListViewCtrlList.stream().map(CardListViewCtrl::getCardList).collect(Collectors.toList());
+    }
+
+    public Card getCard(long id) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            for (Card card : cardListViewCtrl.getCards()) {
+                if (card.getId() == id) {
+                    return card;
+                }
+            }
+        }
+        return null;
+    }
+
+    public CardListViewCtrl getCardListViewCtrl(long id) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            if (cardListViewCtrl.getCardList().getId() == id) {
+                return cardListViewCtrl;
+            }
+        }
+        return null;
+    }
+
+    public void moveCard(Card card, CardList cardList, long index) {
+        System.out.println("Moving card " + card.getId() + " to list " + cardList.getId() + " at index " + index);
+
+        var oldList = getCardListViewCtrl(card.getListId());
+        var newList = getCardListViewCtrl(cardList.getId());
+        // TODO: wait for server to confirm move
+        oldList.removeCard(card);
+        newList.addCard(card, index);
+
+
+        // highlight the card
+        newList.highlightCard(card);
+
+    }
+
+    public void moveList(long listId, long targetId) {
+        var list = getCardListViewCtrl(listId);
+        var target = getCardListViewCtrl(targetId);
+        int index = cardListViewCtrlList.indexOf(target);
+        var view = list.getCardListNode();
+        // TODO: wait for server to confirm move
+
+        listOfLists.getChildren().remove(view);
+        listOfLists.getChildren().add(index, view);
+        cardListViewCtrlList.remove(list);
+        cardListViewCtrlList.add(index, list);
+
     }
 }

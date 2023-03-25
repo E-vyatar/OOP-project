@@ -44,12 +44,13 @@ public class AddCardCtrl {
 
     /**
      * constructor
-     * @param server server utilities reference
+     *
+     * @param server     server utilities reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl main controller reference
      */
     @Inject
-    public AddCardCtrl(ServerUtils server,CardsUtils cardsUtils , MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;
@@ -91,12 +92,13 @@ public class AddCardCtrl {
 
     /**
      * Create new card object
+     *
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
         long listSize = server.getCardsByList(cardList.getId()).size();
         return new Card(
-                -1, cardList.getId(), cardList.getBoardId(), title.getText(),listSize+1);
+                -1, cardList.getId(), cardList.getBoardId(), title.getText(), listSize+1);
     }
 
     /**
@@ -108,6 +110,7 @@ public class AddCardCtrl {
 
     /**
      * Keyboard shortcuts for the buttons
+     *
      * @param e keyboard event
      */
     public void keyPressed(KeyEvent e) {

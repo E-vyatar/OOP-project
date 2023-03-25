@@ -1,6 +1,7 @@
 package client.scenes;
 
 import commons.Card;
+import commons.CardList;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -18,10 +19,6 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
         this.view = new CardView(this);
     }
 
-    public void setCard(Card card) {
-        this.card = card;
-    }
-
     public CardView getView() {
         return this.view;
     }
@@ -31,18 +28,33 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
         if (event.getButton() == MouseButton.PRIMARY) {
             Object source = event.getSource();
 
-            if (source == view.getButtonUp()){
+            if (source == view.getButtonUp()) {
                 // move card up
                 cardListViewCtrl.moveCardUp(this.card);
             } else if (source == view.getButtonDown()) {
                 // move card down
                 cardListViewCtrl.moveCardDown(this.card);
-            } else if (source == view.getEditButton()) {
-                boardOverviewCtrl.showCard(card, true);
-            } else {
-                boardOverviewCtrl.showCard(card, false);
-            }
+            } else boardOverviewCtrl.showCard(card, source == view.getEditButton());
         }
     }
 
+    public Card getCard() {
+        return this.card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    public BoardOverviewCtrl getBoardOverviewCtrl() {
+        return this.boardOverviewCtrl;
+    }
+
+    void addCardAt(Card card, long idx) {
+        boardOverviewCtrl.moveCard(card, cardListViewCtrl.getCardList(), idx);
+    }
+
+    public CardList getCardList() {
+        return cardListViewCtrl.getCardList();
+    }
 }

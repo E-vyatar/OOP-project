@@ -16,13 +16,10 @@ import javax.inject.Inject;
 
 public class CardPopupCtrl {
 
-    private Stage cardPopup;
-
-    private Card card;
-
+    public Card card;
     public CardsUtils cardsUtils;
     public ServerUtils serverUtils;
-
+    private Stage cardPopup;
     @FXML
     private Parent root;
     @FXML
@@ -45,7 +42,8 @@ public class CardPopupCtrl {
 
     /**
      * constructor
-     * @param cardsUtils CardsUtils reference
+     *
+     * @param cardsUtils  CardsUtils reference
      * @param serverUtils ServerUtils reference
      */
     @Inject
@@ -85,6 +83,7 @@ public class CardPopupCtrl {
 
     /**
      * Makes the details of the card editable or not
+     *
      * @param editable whether the card should be editable
      */
     public void setEditable(boolean editable) {
@@ -139,7 +138,6 @@ public class CardPopupCtrl {
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
-                return;
             }
 
         } else {
@@ -159,7 +157,7 @@ public class CardPopupCtrl {
      * This function shows the popup.
      * Before calling it, you should call the {@link #setCard(Card)} method.
      */
-    public void show(){
+    public void show() {
         this.cardPopup.show();
     }
 }

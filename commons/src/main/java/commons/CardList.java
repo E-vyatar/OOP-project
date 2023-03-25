@@ -50,7 +50,6 @@ public class CardList {
         this.id = id;
         this.title = title;
         this.boardId = boardId;
-        this.idx = idx;
     }
 
     /**

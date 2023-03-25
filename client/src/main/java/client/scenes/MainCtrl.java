@@ -30,11 +30,15 @@ public class MainCtrl {
     private ConnectServerCtrl connectServerCtrl;
 
     private Scene connectServer;
+
+    private ListOfBoardsCtrl listOfBoardsCtrl;
+    private Scene listOfBoards;
     //=========================================================
 
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
-                           Pair<ConnectServerCtrl, Parent> connectServerCtrl) {
+                           Pair<ConnectServerCtrl, Parent> connectServerCtrl,
+                           Pair<ListOfBoardsCtrl, Parent> listOfBoards) {
 
         this.primaryStage = primaryStage;
 
@@ -44,18 +48,27 @@ public class MainCtrl {
         this.overview = new Scene(overview.getValue());
         this.overviewCtrl = overview.getKey();
 
-        showconnect();
+        this.listOfBoards = new Scene(listOfBoards.getValue());
+        this.listOfBoardsCtrl = listOfBoards.getKey();
+
+        showConnect();
         this.primaryStage.show();
     }
 
-    public void showconnect() {
+    public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
 
     }
 
-    public void showOverview() {
-        primaryStage.setTitle("Empty Scene <overview>");
+    /**
+     * Show the board overview
+     * TODO: let BoardOverviewCtrl display the right board
+     *
+     * @param boardId the board for which to show the board overview
+     */
+    public void showOverview(long boardId) {
+        primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
@@ -66,4 +79,12 @@ public class MainCtrl {
 //        }
 //    }
 
+    /**
+     * Show the list with all known boards.
+     */
+    public void showListOfBoards() {
+        listOfBoardsCtrl.refresh();
+        primaryStage.setTitle("List of boards");
+        primaryStage.setScene(listOfBoards);
+    }
 }
