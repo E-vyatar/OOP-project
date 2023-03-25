@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,15 +17,13 @@ public class RenameListPopupCtrl {
     private final BoardOverviewCtrl boardOverviewCtrl;
     private Stage renameListPopup;
     private CardList cardList;
-
-
     @FXML
     private Parent root;
     @FXML
     private TextField listTitle;
 
     @Inject
-    public RenameListPopupCtrl(ServerUtils utils, BoardOverviewCtrl boardOverviewCtrl) {
+    public RenameListPopupCtrl(BoardOverviewCtrl boardOverviewCtrl) {
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
 

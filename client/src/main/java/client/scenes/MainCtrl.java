@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -22,6 +24,7 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
+    private final ServerUtils server;
     private Stage primaryStage;
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
@@ -29,6 +32,11 @@ public class MainCtrl {
     private Scene connectServer;
     private ListOfBoardsCtrl listOfBoardsCtrl;
     private Scene listOfBoards;
+
+    @Inject
+    public MainCtrl(ServerUtils server) {
+        this.server = server;
+    }
 
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
@@ -53,7 +61,6 @@ public class MainCtrl {
     public void showConnect() {
         primaryStage.setTitle("Connect");
         primaryStage.setScene(connectServer);
-
     }
 
     /**
@@ -65,7 +72,7 @@ public class MainCtrl {
     public void showOverview(long boardId) {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+        overviewCtrl.refresh(boardId);
     }
 
 //TODO solve the connection later
@@ -83,4 +90,14 @@ public class MainCtrl {
         primaryStage.setTitle("List of boards");
         primaryStage.setScene(listOfBoards);
     }
+
+    /**
+     * Getter for the ServerUtil of this client
+     *
+     * @return The SeverUtils of this client
+     */
+    public ServerUtils getServer() {
+        return server;
+    }
+
 }

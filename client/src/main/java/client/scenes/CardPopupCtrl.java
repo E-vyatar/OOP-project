@@ -18,7 +18,7 @@ public class CardPopupCtrl {
 
     public Card card;
     public CardsUtils cardsUtils;
-    public ServerUtils serverUtils;
+    public ServerUtils server;
     private Stage cardPopup;
     @FXML
     private Parent root;
@@ -49,7 +49,7 @@ public class CardPopupCtrl {
     @Inject
     public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils) {
         this.cardsUtils = cardsUtils;
-        this.serverUtils = serverUtils;
+        this.server = serverUtils;
     }
 
     /**
@@ -130,7 +130,7 @@ public class CardPopupCtrl {
             try {
                 card.setListId(list.getValue().getId());
                 card.setTitle(cardTitle.getText());
-                serverUtils.editCard(card);
+                server.editCard(card);
                 close();
             } catch (WebApplicationException e) {
 

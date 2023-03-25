@@ -17,9 +17,9 @@ public class ConnectServerCtrl implements Initializable {
     private TextField hostnameField;
 
     @Inject
-    public ConnectServerCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public ConnectServerCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
-        this.server = server;
+        this.server = mainCtrl.getServer();
     }
 
     @Override

@@ -129,10 +129,20 @@ public class AddCardCtrl {
         clearFields();
     }
 
+    /**
+     * Getter for the CardList of this controller
+     *
+     * @return The corresponding CardList
+     */
     public CardList getCardList() {
         return cardList;
     }
 
+    /**
+     * Setter for the CardList of this controller
+     *
+     * @param cardList the new CardList
+     */
     public void setCardList(CardList cardList) {
         this.cardList = cardList;
     }
