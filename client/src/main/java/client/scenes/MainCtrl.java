@@ -29,7 +29,6 @@ public class MainCtrl {
     private Scene connectServer;
     private ListOfBoardsCtrl listOfBoardsCtrl;
     private Scene listOfBoards;
-    //=========================================================
 
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
@@ -68,6 +67,7 @@ public class MainCtrl {
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }
+
 //TODO solve the connection later
 //    public void checkConnection() throws UnknownHostException {
 //        if(connectServerCtrl.connect()){
