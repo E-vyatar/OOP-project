@@ -39,12 +39,12 @@ public class CardList {
     }
 
     /**
-     * Constructor (with id parameter)
+     * Constructor with 'id' parameter
      *
-     * @param id the id of the CardList
-     * @param title the title of the CardList
-     * @param idx the position index of the CardList in the board
-     * @param boardId the board ID of this CardList
+     * @param id the CardList's id
+     * @param title   the title
+     * @param boardId the board's id
+     * @param idx the index for the order of cardlists in the board
      */
     public CardList(long id, String title, long idx, long boardId) {
         this.id = id;
@@ -72,9 +72,9 @@ public class CardList {
     }
 
     /**
-     * Getter for board ID of this CardList
+     * Getter for the id of the Board the CardList is in
      *
-     * @return the board ID of this CardList
+     * @return the Board's id
      */
     public long getBoardId() {
         return boardId;
@@ -147,6 +147,7 @@ public class CardList {
      * Checks if the ID of the CardLists match
      *
      * @param o the Object to compare to
+     * @return whether they're equal
      */
     @Override
     public boolean equals(Object o) {
@@ -157,7 +158,8 @@ public class CardList {
     }
 
     /**
-     * {@inheritDoc}
+     * Generate a hashcode for the CardList
+     * @return the hashcode
      */
     @Override
     public int hashCode() {

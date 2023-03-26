@@ -47,8 +47,9 @@ public class BoardOverviewCtrl {
     private HBox listOfLists;
 
     /**
-     * Constructor
-     *
+     * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
+     * linked to the overview of the board.
+     * The constructor should not be called manually, since it uses injection.
      * @param mainCtrl the MainCtrl of the app
      */
     @Inject
@@ -60,9 +61,9 @@ public class BoardOverviewCtrl {
     /**
      * Initialises the different popup controllers.
      *
-     * @param cardPopup the pair of CardPopupCtrl with its root
-     * @param addCard the pair of AddCardCtrl with its root
-     * @param renameListPopup the pair of RenameListPopupCtrl with its root
+     * @param cardPopup a pair of the CardPopupCtrl and the root of the to-be scene
+     * @param addCard a pair of the AddCardCtrl and the root of the to-be scene
+     * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
      */
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
@@ -77,7 +78,6 @@ public class BoardOverviewCtrl {
 
     }
 
-    // TODO replace with server call:
     /**
      * Adds a new list to the board
      *
@@ -88,17 +88,17 @@ public class BoardOverviewCtrl {
         // Create a new list where cards can be added to
         ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = new CardList("New List", 0, 0);
-        CardListViewCtrl cardListViewCtrl = CardListViewCtrl.
-            createNewCardListViewCtrl(this, cardList, observableList);
+        CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
+                this, cardList, observableList);
         cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstCardId is -1 because it has no cards.
-        listOfLists.getChildren()
-            .add((listOfLists.getChildren().size()), cardListViewCtrl.getCardListNode());
+        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
+        int numLists = listOfLists.getChildren().size();
+        listOfLists.getChildren().add(numLists, cardListViewCtrl.getCardListNode());
     }
 
     /**
      * When clicking Disconnect from Server, the StompSession is ended
-     * and scene is set up back to ConnectServerCtrl.
+     * and scene is set up back to ConnectServerCtrl
      *
      * @param actionEvent -
      */
@@ -192,13 +192,10 @@ public class BoardOverviewCtrl {
         cardWindow.show();
     }
 
-    // TODO: redundant
     /**
-     * Sets the cardList for AddCardCtrl.
-     * Used by CardListViewCtrl to show AddCard Popup, so
-     * could potentially be replaced by using a getter & setter (for addCardList) in CardListView
+     * Sets the CardList for which you're adding a card
      *
-     * @param cardList the new CardList for which the popup should now be.
+     * @param cardList the cardlist
      */
     public void setCardListForShowAddCard(CardList cardList) {
         addCardCtrl.setCardList(cardList);
@@ -221,8 +218,9 @@ public class BoardOverviewCtrl {
      * @return a list of lists as CardList
      */
     public List<CardList> getAllLists() {
-        return cardListViewCtrlList.stream().map(CardListViewCtrl::getCardList)
-            .collect(Collectors.toList());
+        return cardListViewCtrlList.stream()
+                .map(CardListViewCtrl::getCardList)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -265,8 +263,8 @@ public class BoardOverviewCtrl {
      * @param index the new position index of the card in the CardList
      */
     public void moveCard(Card card, CardList cardList, long index) {
-        System.out.println(
-            "Moving card " + card.getId() + " to list " + cardList.getId() + " at index " + index);
+        System.out.println("Moving card " + card.getId() +
+                " to list " + cardList.getId() + " at index " + index);
 
         var oldList = getCardListViewCtrl(card.getListId());
         var newList = getCardListViewCtrl(cardList.getId());
@@ -280,10 +278,10 @@ public class BoardOverviewCtrl {
     }
 
     /**
-     * Moves CardList (for drag & drop).
+     * Move a list from a certain index to a new one.
      *
-     * @param listId the list ID
-     * @param targetId
+     * @param listId the old index
+     * @param targetId the new index
      */
     public void moveList(long listId, long targetId) {
         var list = getCardListViewCtrl(listId);

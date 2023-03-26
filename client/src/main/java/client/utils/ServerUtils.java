@@ -42,11 +42,14 @@ public class ServerUtils {
     private StompSession session;
     private String server;
 
+    /**
+     * Set the hostname of the server and then connect to it
+     * @param hostname the hostname
+     */
     public void setHostnameAndConnect(String hostname) {
         System.out.println("Connecting to server: " + hostname);
         this.server = "http://" + hostname + ":8080";
         session = connect("ws://" + hostname + ":8080/websocket");
-
     }
 
     /**
@@ -178,9 +181,9 @@ public class ServerUtils {
 
     /**
      * @param destination destination for the upcoming messages
-     * @param type  class type
-     * @param consumer  the subscriber
-     * @param <T> generic class
+     * @param type        class type
+     * @param consumer    the subscriber
+     * @param <T>         generic class
      */
     public <T> void registerMessages(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(server, new StompFrameHandler() {
@@ -196,6 +199,10 @@ public class ServerUtils {
         });
     }
 
+    /**
+     * Check if the connection is alive
+     * @return whether the connection is alive
+     */
     public boolean isConnectionAlive() {
         return session != null && session.isConnected();
     }

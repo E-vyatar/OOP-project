@@ -14,7 +14,7 @@ import server.database.CardRepositroy;
 public class CardController {
 
     private final CardRepositroy cardRepository;
-    private final Logger logger = LoggerFactory.getLogger(CardController.class);
+    private Logger logger = LoggerFactory.getLogger(CardController.class);
 
     /**
      * Constructor

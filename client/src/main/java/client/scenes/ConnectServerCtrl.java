@@ -16,6 +16,11 @@ public class ConnectServerCtrl implements Initializable {
     @FXML
     private TextField hostnameField;
 
+    /**
+     * Creates a ConnectServerCtrl with the given server utils and main controller.
+     * This class relies on injection so the constructor should not be called manually.
+     * @param mainCtrl
+     */
     @Inject
     public ConnectServerCtrl(MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -27,6 +32,11 @@ public class ConnectServerCtrl implements Initializable {
         hostnameField.setText("localhost");
     }
 
+    /**
+     * This method is called when the user clicks on the connect button.
+     * It should connect to the server (currently not implemented),
+     * and it then shows the board overview.
+     */
     public void connect() {
         server.setHostnameAndConnect(hostnameField.getText());
         mainCtrl.showOverview(0);

@@ -45,7 +45,7 @@ public class Board {
     }
 
     /**
-     * Getter for ID
+     * Getter for board ID
      *
      * @return the id of the board
      */
@@ -54,9 +54,9 @@ public class Board {
     }
 
     /**
-     * Setter for ID
+     * Setter for board ID
      *
-     * @param boardId the new id of the board
+     * @param boardId the new board ID
      */
     public void setId(long boardId) {
         this.id = boardId;
@@ -81,9 +81,9 @@ public class Board {
     }
 
     /**
-     * Getter for cardList (list of all CardLists)
+     * Getter for List of CardLists on this board.
      *
-     * @return the List of all CardLists on the board
+     * @return the List of CardLists on the board
      */
     public List<CardList> getCardLists() {
         return cardLists;
