@@ -63,6 +63,10 @@ public class ServerUtils {
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * send the server Delete request to remove a card from the database
+     * @param card the card to remove from the database
+     */
     public void deleteCard(Card card) {
         ClientBuilder.newClient(new ClientConfig())
                 .target(server)
