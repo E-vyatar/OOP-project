@@ -10,15 +10,28 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
-    long listId;
-    String title;
-    long idx;
-    long boardId;
 
+    private long id;
+    private long listId;
+    private String title;
+    private long idx;
+    private long boardId;
+
+    /**
+     * Empty constructor
+     */
     public Card() {
     }
 
+    /**
+     * Constructor
+     *
+     * @param id the Card ID
+     * @param listId this Card's List ID
+     * @param title the Card's title
+     * @param idx the position index of card in list
+     * @param boardId the Card's Board ID
+     */
     public Card(long id, long listId, String title, long idx, long boardId) {
         this.id = id;
         this.listId = listId;
@@ -44,52 +57,92 @@ public class Card {
         this.boardId = boardId;
     }
 
-    @Override
-    public String toString() {
-        return "Card{" + "id='" + id + '\'' + ", cardListId='" + listId + '\'' + ", title='" + title + '\'' + ", nextCardId='" + idx + '\'' + ", boardId='" + boardId + '\'' + '}';
-    }
-
+    /**
+     * Getter for Card ID
+     *
+     * @return the Card ID
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Set the Card's id
+     * @param cardId the new Card's id
+     */
     public void setId(long cardId) {
         this.id = cardId;
     }
 
+    /**
+     * Get the id of the CardList the Card is in
+     * @return the CardList's id
+     */
     public long getListId() {
         return listId;
     }
 
+    /**
+     * Set the id of the CardList the Card is in
+     * @param cardListId the id of the new CardList
+     */
     public void setListId(long cardListId) {
         this.listId = cardListId;
     }
 
+    /**
+     * Get the title of the card
+     * @return the card's title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Set the title of the card
+     * @param cardTitle the new card's title
+     */
     public void setTitle(String cardTitle) {
         this.title = cardTitle;
     }
-    
+
+    /**
+     * Get the index of the card with respect to other cards in the same CardList
+     * @return the index
+     */
     public long getIdx() {
         return idx;
     }
 
-    public void setIdx(long nextCardId) {
-        this.idx = nextCardId;
+    /**
+     * Set the index of the card with respect to other cards in the same CardList
+     * @param idx the new index
+     */
+    public void setIdx(long idx) {
+        this.idx = idx;
     }
 
+    /**
+     * Get the id of the board the card is in
+     * @return the board's id
+     */
     public long getBoardId() {
         return boardId;
     }
 
+    /**
+     * Set the id of the board the card is in
+     * @param boardId the board's id
+     */
     public void setBoardId(long boardId) {
         this.boardId = boardId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @SuppressWarnings("cyclomaticComplexity")
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -103,6 +156,18 @@ public class Card {
         return title.equals(card.title);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Card{" + "id='" + id + '\'' + ", cardListId='" + listId + '\'' + ", title='" +
+            title + '\'' + ", nextCardId='" + idx + '\'' + ", boardId='" + boardId + '\'' + '}';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));

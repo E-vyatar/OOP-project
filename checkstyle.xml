@@ -29,7 +29,10 @@
         <property name="fileNamePattern" value=".*Test\.java$"/>
     </module>
 
+    <module name="SuppressWarningsFilter"/>
+
     <module name="TreeWalker">
+        <module name="SuppressWarningsHolder"/>
         <module name="MissingJavadocMethod">
             <property name="severity" value="warning"/>
             <property name="scope" value="public"/>
@@ -61,6 +64,7 @@
             <property name="max" value="6"/>
         </module>
         <module name="CyclomaticComplexity">
+            <property name="id" value="cyclomaticComplexity"/>
             <property name="severity" value="warning"/>
             <property name="switchBlockAsSingleDecisionPoint" value="true"/>
             <property name="max" value="6"/>
