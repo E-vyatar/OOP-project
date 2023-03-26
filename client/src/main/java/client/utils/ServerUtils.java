@@ -110,6 +110,12 @@ public class ServerUtils {
                 .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
+    /**
+     * Sends HTTP request to edit a CardList in the database
+     *
+     * @param cardList the CardList containing the changes
+     * @return the CardList saved in the database
+     */
     public CardList editCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("lists/{id}")

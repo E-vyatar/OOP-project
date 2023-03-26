@@ -33,6 +33,11 @@ public class MainCtrl {
     private ListOfBoardsCtrl listOfBoardsCtrl;
     private Scene listOfBoards;
 
+    /**
+     * This is and @Inject contractor and should not be called.
+     *
+     * @param server the ServerUtils for this app
+     */
     @Inject
     public MainCtrl(ServerUtils server) {
         this.server = server;

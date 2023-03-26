@@ -19,7 +19,7 @@ public class ConnectServerCtrl implements Initializable {
     /**
      * Creates a ConnectServerCtrl with the given server utils and main controller.
      * This class relies on injection so the constructor should not be called manually.
-     * @param mainCtrl
+     * @param mainCtrl the MainCtrl of the app
      */
     @Inject
     public ConnectServerCtrl(MainCtrl mainCtrl) {
@@ -27,6 +27,14 @@ public class ConnectServerCtrl implements Initializable {
         this.server = mainCtrl.getServer();
     }
 
+    /**
+     * Currently it only autofills server input with "localhost)
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hostnameField.setText("localhost");

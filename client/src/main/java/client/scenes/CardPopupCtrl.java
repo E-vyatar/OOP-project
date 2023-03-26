@@ -16,9 +16,9 @@ import javax.inject.Inject;
 
 public class CardPopupCtrl {
 
-    public Card card;
-    public CardsUtils cardsUtils;
-    public ServerUtils server;
+    private Card card;
+    private final CardsUtils cardsUtils;
+    private final ServerUtils server;
     private Stage cardPopup;
     @FXML
     private Parent root;

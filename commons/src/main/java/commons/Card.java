@@ -28,7 +28,7 @@ public class Card {
      *
      * @param id the Card ID
      * @param listId this Card's List ID
-     *                    * @param boardId the Card's Board ID
+     * @param boardId the Card's Board ID
      * @param title the Card's title
      * @param idx the position index of card in list
      */
