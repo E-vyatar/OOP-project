@@ -58,7 +58,7 @@ public class BoardOverviewCtrl {
     }
 
     /**
-     * Initialises the BoardOverview:
+     * Initialises the different popup controllers.
      *
      * @param cardPopup the pair of CardPopupCtrl with its root
      * @param addCard the pair of AddCardCtrl with its root
@@ -97,7 +97,8 @@ public class BoardOverviewCtrl {
     }
 
     /**
-     * when clicking Disconnect from Server, the StompSession is ended and scene is set up back to ConnectServerCtrl
+     * When clicking Disconnect from Server, the StompSession is ended
+     * and scene is set up back to ConnectServerCtrl.
      *
      * @param actionEvent -
      */
@@ -191,6 +192,14 @@ public class BoardOverviewCtrl {
         cardWindow.show();
     }
 
+    // TODO: redundant
+    /**
+     * Sets the cardList for AddCardCtrl.
+     * Used by CardListViewCtrl to show AddCard Popup, so
+     * could potentially be replaced by using a getter & setter (for addCardList) in CardListView
+     *
+     * @param cardList the new CardList for which the popup should now be.
+     */
     public void setCardListForShowAddCard(CardList cardList) {
         addCardCtrl.setCardList(cardList);
     }
@@ -216,9 +225,15 @@ public class BoardOverviewCtrl {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Gets a Card from the board using the Card ID
+     *
+     * @param id the ID of the Card
+     * @return the Card with that ID (or null)
+     */
     public Card getCard(long id) {
-        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
-            for (Card card : cardListViewCtrl.getCards()) {
+        for (CardList cardList : board.getCardLists()) {
+            for (Card card : cardList.getCards()) {
                 if (card.getId() == id) {
                     return card;
                 }
@@ -227,6 +242,12 @@ public class BoardOverviewCtrl {
         return null;
     }
 
+    /**
+     * Gets the CardListViewController for the specific CardList ID
+     *
+     * @param id the id of the CardList
+     * @return the CardListViewCtrl for that CardList (or null)
+     */
     public CardListViewCtrl getCardListViewCtrl(long id) {
         for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
             if (cardListViewCtrl.getCardList().getId() == id) {
@@ -236,6 +257,13 @@ public class BoardOverviewCtrl {
         return null;
     }
 
+    /**
+     * Moves Card (for drag & drop).
+     *
+     * @param card the Card to be moved
+     * @param cardList the CardList the card is moved to
+     * @param index the new position index of the card in the CardList
+     */
     public void moveCard(Card card, CardList cardList, long index) {
         System.out.println(
             "Moving card " + card.getId() + " to list " + cardList.getId() + " at index " + index);
@@ -251,6 +279,12 @@ public class BoardOverviewCtrl {
 
     }
 
+    /**
+     * Moves CardList (for drag & drop).
+     *
+     * @param listId the list ID
+     * @param targetId
+     */
     public void moveList(long listId, long targetId) {
         var list = getCardListViewCtrl(listId);
         var target = getCardListViewCtrl(targetId);
@@ -263,5 +297,14 @@ public class BoardOverviewCtrl {
         cardListViewCtrlList.remove(list);
         cardListViewCtrlList.add(index, list);
 
+    }
+
+    /**
+     * Getter for ServerUtils of this app
+     *
+     * @return The ServerUtils for this app
+     */
+    public ServerUtils getServer() {
+        return server;
     }
 }

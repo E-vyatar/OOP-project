@@ -13,16 +13,25 @@ import javafx.scene.paint.Color;
 
 public class CardListView extends TitledPane {
 
-    private final BoardOverviewCtrl boardOverviewCtrl;
+    private final BoardOverviewCtrl boardCtrl;
+
     private final CardListViewCtrl controller;
 
     private final ObservableList<Card> cards;
 
     private ListView<Card> listView;
 
-    public CardListView(BoardOverviewCtrl boardOverviewCtrl, CardListViewCtrl controller, ObservableList<Card> cards) {
+    /**
+     * Constructor
+     *
+     * @param controller the corresponding
+     * @param cards the cards in the CardList (in an Observable List)
+     */
+    public CardListView(BoardOverviewCtrl boardOverviewCtrl,
+                        CardListViewCtrl controller,
+                        ObservableList<Card> cards) {
         super();
-        this.boardOverviewCtrl = boardOverviewCtrl;
+        this.boardCtrl = boardOverviewCtrl;
         this.controller = controller;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
@@ -114,7 +123,7 @@ public class CardListView extends TitledPane {
         CardListViewCtrl controller = this.controller;
 
         listView.setCellFactory(param -> {
-            CardViewCtrl cardViewCtrl = new CardViewCtrl(boardOverviewCtrl, controller);
+            CardViewCtrl cardViewCtrl = new CardViewCtrl(boardCtrl, controller);
             return cardViewCtrl.getView();
         });
         listView.setItems(this.cards);

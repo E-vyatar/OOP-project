@@ -161,14 +161,16 @@ public class Card {
     }
 
     /**
-     * {@inheritDoc}
+     * Checks if the IDs of the cards match
+     *
+     * @param o the Object to compare to
      */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return id == card.id && listId == card.listId && boardId == card.boardId && idx == card.idx && Objects.equals(title, card.title);
+        return id == card.id;
     }
 
     /**

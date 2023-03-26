@@ -50,6 +50,7 @@ public class CardList {
         this.id = id;
         this.title = title;
         this.boardId = boardId;
+        this.idx = idx;
     }
 
     /**
@@ -143,14 +144,16 @@ public class CardList {
     }
 
     /**
-     * {@inheritDoc}
+     * Checks if the ID of the CardLists match
+     *
+     * @param o the Object to compare to
      */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CardList cardList = (CardList) o;
-        return id == cardList.id && boardId == cardList.boardId && idx == cardList.idx && Objects.equals(title, cardList.title) && Objects.equals(cards, cardList.cards);
+        return id == cardList.id;
     }
 
     /**
