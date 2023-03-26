@@ -11,7 +11,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    String name;
+    private String name;
     @OneToMany
     private List<CardList> cardLists;
 
@@ -92,10 +92,18 @@ public class Board {
         return Objects.hash(id, cardLists);
     }
 
+    /**
+     * Get the name of a board
+     * @return the board's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the name of the board
+     * @param name the board's name
+     */
     public void setName(String name) {
         this.name = name;
     }
