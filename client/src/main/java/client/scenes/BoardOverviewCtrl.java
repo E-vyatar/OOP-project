@@ -17,8 +17,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -85,11 +83,9 @@ public class BoardOverviewCtrl {
      */
     @FXML
     private void addList(ActionEvent actionEvent) {
-        // Create a new list where cards can be added to
-        ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
         CardList cardList = new CardList("New List", 0, 0);
         CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
-                this, cardList, observableList);
+                this, cardList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
         int numLists = listOfLists.getChildren().size();
@@ -122,6 +118,14 @@ public class BoardOverviewCtrl {
         // Get board with ID = 0
         board = server.getBoard(boardId);
 
+        generateView();
+    }
+
+    /**
+     * Clears & generates the Board view
+     * <p> TODO: Adapt so that listOfLists is ListView instead of HBox (for drag & drop) </p>
+     */
+    public void generateView() {
         // Deletes all the ListCtrl
         cardListViewCtrlList.clear();
 
@@ -132,15 +136,11 @@ public class BoardOverviewCtrl {
         //      (to add them to the overview)
         for(CardList cardList : board.getCardLists()) {
 
-            // Creates an ObservableList for the cards in this list
-            ObservableList<Card> observableList = FXCollections.observableList(cardList.getCards());
-
             // Creates new controller for this list (using creatNewCardListViewCtrl)
             CardListViewCtrl cardListViewCtrl =
                 CardListViewCtrl.createNewCardListViewCtrl(
                     this,
-                    cardList,
-                    observableList // the list of cards (created before)
+                    cardList
                 );
 
             // Adds the controller to the controller list

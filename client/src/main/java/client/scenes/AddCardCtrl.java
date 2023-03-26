@@ -45,14 +45,13 @@ public class AddCardCtrl {
     /**
      * constructor
      *
-     * @param server     server utilities reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
+    public AddCardCtrl(CardsUtils cardsUtils, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
-        this.server = server;
+        this.server = mainCtrl.getServer();
         this.cardsUtils = cardsUtils;
     }
 
