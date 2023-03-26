@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -28,6 +29,8 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private Button addCardButton;
     @FXML
     private AnchorPane cardListNode;
+    @FXML
+    private Text cardListTitle;
     private CardListView view;
 
     /**
@@ -93,6 +96,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
             return cardViewCtrl.getView();
         });
         cardListView.setItems(this.cards);
+        cardListTitle.setText(cardList.getTitle());
 
         cardListView.getSelectionModel().getSelectedItems().addListener(controller);
 
