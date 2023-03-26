@@ -51,7 +51,6 @@ public class Card {
      * @param idx     the Card's position index in its list
      */
     public Card(long listId, long boardId, String title, long idx) {
-        this.id = -1;
         this.listId = listId;
         this.boardId = boardId;
         this.title = title;
@@ -158,7 +157,7 @@ public class Card {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return id == card.id;
+        return this.id == card.id;
     }
 
     /**
