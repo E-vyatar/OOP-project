@@ -24,6 +24,7 @@ import java.util.Random;
 public class Config {
 
     @Bean
+    @SuppressWarnings("MissingJavadocMethod")
     public Random getRandom() {
         return new Random();
     }

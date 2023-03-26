@@ -26,6 +26,10 @@ import java.net.UnknownHostException;
 @EntityScan(basePackages = {"commons", "server"})
 public class Main {
 
+    /**
+     * The main function. It starts the server.
+     * @param args parameters with which the application is started
+     */
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
         InetAddress myIp;
