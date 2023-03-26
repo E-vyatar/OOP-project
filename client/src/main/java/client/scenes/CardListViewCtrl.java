@@ -32,24 +32,41 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private CardListView view;
 
     /**
+     * This constructs an instance of CardListViewCtrl
      * CardListViewCtrl is the controller for viewing a CardList
      * and its cards. To get the CardListView, call {@link this.getView}
-     * @param boardOverviewCtrl boardOverviewCtl
+     * @param boardOverviewCtrl boardOverviewCtrl
      * @param cardList cardList for which it is used
      * @param cards cards to display
+     * @return the constructed CardListViewCtrl
      */
-    public static CardListViewCtrl createNewCardListViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
-        Injector INJECTOR = createInjector(new FXConfig());
-        FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
+    @SuppressWarnings("LocalVariableName")
+    public static CardListViewCtrl createNewCardListViewCtrl(
+            BoardOverviewCtrl boardOverviewCtrl,
+            CardList cardList,
+            ObservableList<Card> cards) {
 
-        var viewCtrl = FXML.load(CardListViewCtrl.class, "client", "scenes", "cardList.fxml");
+        Injector injector = createInjector(new FXConfig());
+        FXMLInitializer FXMLInitializer = new FXMLInitializer(injector);
+
+        var viewCtrl = FXMLInitializer.load(CardListViewCtrl.class,
+                "client", "scenes", "cardList.fxml");
 
         viewCtrl.getKey().initialize(boardOverviewCtrl, cardList, cards);
 
         return viewCtrl.getKey();
     }
 
-    public void initialize(BoardOverviewCtrl boardOverviewCtrl, CardList cardList, ObservableList<Card> cards) {
+    /**
+     * Initalize the controller.
+     * This includes creating the view.
+     * @param boardOverviewCtrl the board overview controller
+     * @param cardList the cardList
+     * @param cards the cards
+     */
+    private void initialize(BoardOverviewCtrl boardOverviewCtrl,
+                           CardList cardList,
+                           ObservableList<Card> cards) {
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
@@ -159,34 +176,52 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         cardListView.getSelectionModel().clearSelection();
     }
 
+    /**
+     * Get the root node of the CardListView
+     * @return the root node
+     */
     public AnchorPane getCardListNode() {
         return cardListNode;
     }
 
+    /**
+     * Get the cards of this CardListViewCtrl
+     * @return the cards
+     */
     public Card[] getCards() {
         return cards.toArray(new Card[0]);
     }
 
+    /**
+     * Remove a card from the view
+     * @param card the card to remove
+     */
     public void removeCard(Card card) {
         cards.remove(card);
         // TODO fix empty card bug
     }
 
+    /**
+     * Add a card
+     * @param card the card to add
+     * @param index where to add the card
+     */
     public void addCard(Card card, long index) {
         System.out.println("Adding card " + card + " at index " + index);
         card.setListId(cardList.getId());
         cards.add((int) index, card);
         card.setIdx(index);
     }
-
+    @SuppressWarnings("MissingJavadocMethod")
     public void moveList(long listId) {
         boardOverviewCtrl.moveList(listId, this.getCardList().getId());
     }
-
+    @SuppressWarnings("MissingJavadocMethod")
     public void moveCard(long cardId) {
-        boardOverviewCtrl.moveCard(boardOverviewCtrl.getCard(cardId), getCardList(), getCards().length);
+        Card card = boardOverviewCtrl.getCard(cardId);
+        boardOverviewCtrl.moveCard(card, getCardList(), getCards().length);
     }
-
+    @SuppressWarnings("MissingJavadocMethod")
     public void highlightCard(Card card) {
         view.highlightCard(card);
     }

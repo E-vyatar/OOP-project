@@ -29,6 +29,7 @@ public class CardView extends ListCell<Card> {
         setDragEvents();
     }
 
+    @SuppressWarnings({"MethodLength","CyclomaticComplexity"})
     private void setDragEvents() {
 
         // such a drag
@@ -68,7 +69,9 @@ public class CardView extends ListCell<Card> {
                     && event.getDragboard().hasString()
                     && event.getDragboard().getString().startsWith("c")
             ) {
-                setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                setBorder(new Border(new BorderStroke(
+                        Color.RED, BorderStrokeStyle.SOLID,
+                        CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
             event.consume();
         });
@@ -87,7 +90,8 @@ public class CardView extends ListCell<Card> {
                     success = true;
                 } else {
                     long id = Long.parseLong(db.getString());
-                    controller.getBoardOverviewCtrl().moveList(id, controller.getCardList().getId());
+                    controller.getBoardOverviewCtrl()
+                            .moveList(id, controller.getCardList().getId());
                     success = true;
                 }
             }
@@ -100,6 +104,7 @@ public class CardView extends ListCell<Card> {
 
 
     @Override
+    @SuppressWarnings("MethodLength")
     protected void updateItem(Card card, boolean empty) {
         super.updateItem(card, empty);
 

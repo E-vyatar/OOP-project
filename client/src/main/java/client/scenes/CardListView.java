@@ -43,6 +43,7 @@ public class CardListView extends TitledPane {
         createView();
     }
 
+    @SuppressWarnings({"MethodLength", "CyclomaticComplexity"})
     private void setDragEvents() {
         setOnDragDetected(event -> {
             System.out.println("onDragDetected" + controller.getCardList().getId());
@@ -80,10 +81,14 @@ public class CardListView extends TitledPane {
         setOnDragEntered(event -> {
             if (event.getDragboard().getString().startsWith("c")) {
                 if (this.controller.getCards().length == 0) {
-                    setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                    setBorder(new Border(new BorderStroke(
+                            Color.RED, BorderStrokeStyle.SOLID,
+                            CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                 }
             } else {
-                setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                setBorder(new Border(new BorderStroke(
+                        Color.RED, BorderStrokeStyle.SOLID,
+                        CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
             event.consume();
         });
@@ -140,6 +145,10 @@ public class CardListView extends TitledPane {
         this.listView.getSelectionModel().clearSelection();
     }
 
+    /**
+     * Highlight a certain card
+     * @param card the card to be highlighted
+     */
     public void highlightCard(Card card) {
         this.listView.getSelectionModel().select(card);
     }
