@@ -15,10 +15,8 @@ import javax.inject.Inject;
 
 public class RenameListPopupCtrl {
 
-    private Stage renameListPopup;
-
-    private final ServerUtils utils;
     private final BoardOverviewCtrl boardOverviewCtrl;
+    private Stage renameListPopup;
     private CardList cardList;
 
 
@@ -34,9 +32,9 @@ public class RenameListPopupCtrl {
      */
     @Inject
     public RenameListPopupCtrl(ServerUtils utils, BoardOverviewCtrl boardOverviewCtrl) {
-        this.utils = utils;
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
+
     /**
      * This initializes the controller.
      * Note that we only create the stage now,
@@ -61,6 +59,7 @@ public class RenameListPopupCtrl {
     /**
      * This closes the popup.
      * Currently, the popup is closed irrespective of the parameter passed.
+     *
      * @param actionEvent the event that triggers the call of this function
      */
     public void close(ActionEvent actionEvent) {

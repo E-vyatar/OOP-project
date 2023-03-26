@@ -11,6 +11,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    String name;
     @OneToMany
     private List<CardList> cardLists;
 
@@ -24,16 +25,18 @@ public class Board {
      * Constructor.
      *
      * @param id the id of the board
+     * @param name the name of the board
      * @param cardLists the list of CardLists in the board
      */
-    public Board(long id, List<CardList> cardLists) {
+    public Board(long id, String name, List<CardList> cardLists) {
         this.id = id;
+        this.name = name;
         this.cardLists = cardLists;
     }
 
     /**
      * Constructor without 'id' parameter (sets id = -1 to avoid errors)
-     *  - The id would be generated automatically by the database.
+     * - The id would be generated automatically by the database.
      *
      * @param cardLists the list of all the CardLists in the board
      */
@@ -71,15 +74,6 @@ public class Board {
     }
 
     /**
-     * Setter for cardLists (List of CardLists on this board)
-     *
-     * @param cardLists the new List of CardLists
-     */
-    public void setCardLists(List<CardList> cardLists) {
-        this.cardLists = cardLists;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -98,5 +92,12 @@ public class Board {
         return Objects.hash(id, cardLists);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
 

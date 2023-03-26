@@ -23,7 +23,9 @@ import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -44,9 +46,10 @@ public class AddCardCtrl {
 
     /**
      * constructor
-     * @param server server utilities reference
+     *
+     * @param server     server utilities reference
      * @param cardsUtils card utilities reference
-     * @param mainCtrl main controller reference
+     * @param mainCtrl   main controller reference
      */
     @Inject
     public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
@@ -83,7 +86,7 @@ public class AddCardCtrl {
             }
 
             clearFields();
-            mainCtrl.showOverview();
+            mainCtrl.showOverview(0);
         } else {
             cardsUtils.markFields(title, null);
         }
@@ -91,13 +94,13 @@ public class AddCardCtrl {
 
     /**
      * Create new card object
+     *
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
         long listSize = server.getCardsByList(cardList.getId()).size();
-        Card card = new Card(
-                -1, cardList.getId(), title.getText(), listSize+1, cardList.getBoardId());
-        return card;
+        return new Card(
+                -1, cardList.getId(), title.getText(), listSize + 1, cardList.getBoardId());
     }
 
     /**
@@ -105,10 +108,12 @@ public class AddCardCtrl {
      */
     private void clearFields() {
         title.clear();
+//        list.getItems().clear();
     }
 
     /**
      * Keyboard shortcuts for the buttons
+     *
      * @param e keyboard event
      */
     public void keyPressed(KeyEvent e) {

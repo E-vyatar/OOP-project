@@ -7,14 +7,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
 public class ConnectServerCtrl implements Initializable {
-    private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final ServerUtils server;
     @FXML
-    private TextField addressServer;
+    private TextField hostnameField;
 
     /**
      * Creates a ConnectServerCtrl with the given server utils and main controller.
@@ -34,21 +33,17 @@ public class ConnectServerCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        hostnameField.setText("localhost");
     }
 
     /**
      * This method is called when the user clicks on the connect button.
      * It should connect to the server (currently not implemented),
      * and it then shows the board overview.
-     * @throws UnknownHostException currently not thrown
-     * TODO: have it actually set the server address.
-     * In addition it should probably not thrown an exception since this is called by the UI.
-     * you probably want to have an Error dialog shown.
      */
-    public void connect() throws UnknownHostException {
-//        server.setAddress(InetAddress.getByName(addressServer.getText()));
-        mainCtrl.showOverview();
+    public void connect() {
+        server.setHostnameAndConnect(hostnameField.getText());
+        mainCtrl.showOverview(0);
     }
 
 }
