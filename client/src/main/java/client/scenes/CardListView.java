@@ -20,7 +20,17 @@ public class CardListView extends TitledPane {
 
     private ListView<Card> listView;
 
-    public CardListView(BoardOverviewCtrl boardOverviewCtrl, CardListViewCtrl controller, ObservableList<Card> cards) {
+    /**
+     * Constructs a CardListView.
+     * This shouldn't be called manually. If you need to create a CardListView,
+     * you create a CardListViewController and call getView().
+     * @param boardOverviewCtrl the board overview controller
+     * @param controller the controller to use.
+     * @param cards the list of cards to render
+     */
+    public CardListView(BoardOverviewCtrl boardOverviewCtrl,
+                        CardListViewCtrl controller,
+                        ObservableList<Card> cards) {
         super();
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.controller = controller;
@@ -33,6 +43,7 @@ public class CardListView extends TitledPane {
         createView();
     }
 
+    @SuppressWarnings({"MethodLength", "CyclomaticComplexity"})
     private void setDragEvents() {
         setOnDragDetected(event -> {
             System.out.println("onDragDetected" + controller.getCardList().getId());
@@ -70,10 +81,14 @@ public class CardListView extends TitledPane {
         setOnDragEntered(event -> {
             if (event.getDragboard().getString().startsWith("c")) {
                 if (this.controller.getCards().length == 0) {
-                    setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                    setBorder(new Border(new BorderStroke(
+                            Color.RED, BorderStrokeStyle.SOLID,
+                            CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                 }
             } else {
-                setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                setBorder(new Border(new BorderStroke(
+                        Color.RED, BorderStrokeStyle.SOLID,
+                        CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
             event.consume();
         });
@@ -130,6 +145,10 @@ public class CardListView extends TitledPane {
         this.listView.getSelectionModel().clearSelection();
     }
 
+    /**
+     * Highlight a certain card
+     * @param card the card to be highlighted
+     */
     public void highlightCard(Card card) {
         this.listView.getSelectionModel().select(card);
     }

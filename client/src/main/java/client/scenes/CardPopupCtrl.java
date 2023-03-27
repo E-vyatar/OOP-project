@@ -16,10 +16,13 @@ import javax.inject.Inject;
 
 public class CardPopupCtrl {
 
-    public Card card;
-    public CardsUtils cardsUtils;
-    public ServerUtils serverUtils;
     private Stage cardPopup;
+
+    private Card card;
+
+    private CardsUtils cardsUtils;
+    private ServerUtils serverUtils;
+
     @FXML
     private Parent root;
     @FXML
@@ -74,6 +77,10 @@ public class CardPopupCtrl {
     }
 
 
+    /**
+     * Sets the card for the controller.
+     * @param card the card to attach to the controller
+     */
     public void setCard(Card card) {
         this.card = card;
         createView();

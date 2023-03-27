@@ -136,10 +136,18 @@ public class AddCardCtrl {
         clearFields();
     }
 
+    /**
+     * Get the CardList for which you're adding a card
+     * @return the CardList
+     */
     public CardList getCardList() {
         return cardList;
     }
 
+    /**
+     * Set the CardList for which you're adding a card
+     * @param cardList the cardlist
+     */
     public void setCardList(CardList cardList) {
         this.cardList = cardList;
     }
