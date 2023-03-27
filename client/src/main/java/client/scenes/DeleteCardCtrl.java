@@ -3,8 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Card;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
@@ -14,38 +12,44 @@ import javax.inject.Inject;
 
 public class DeleteCardCtrl {
 
-    private final CardPopupCtrl cardPopupCtrl;
     private final ServerUtils serverUtils;
 
     private Stage stage;
-
     private Card card;
 
-    @FXML
-    private Parent root;
-
+    /**
+     * Constructor
+     * @param serverUtils Reference to ServerUtils
+     */
     @Inject
-    public DeleteCardCtrl(CardPopupCtrl cardPopupCtrl, ServerUtils serverUtils) {
-        this.cardPopupCtrl = cardPopupCtrl;
+    public DeleteCardCtrl(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
     }
 
-    public void initialize() {
-        stage = new Stage();
+    /**
+     * Initialize the deletion confirmation window
+     * @param scene Scene to present in the stage
+     * @param card The Card to delete
+     */
+    public void initialize(Scene scene, Card card) {
+        this.card = card;
+        this.stage = new Stage();
         stage.setTitle("Are you sure you want to delete this card?");
-        stage.setScene(new Scene(root));
-        this.card = cardPopupCtrl.card;
+        stage.setScene(scene);
         stage.show();
     }
 
-    public void setCard(Card card) {
-        this.card = card;
-    }
-
+    /**
+     * Close the window
+     */
     public void closeConfirmation() {
         stage.hide();
     }
 
+    /**
+     * Send Delete request to the server of the chosen card
+     * and close the window
+     */
     public void deleteCard() {
         try {
             serverUtils.deleteCard(card);

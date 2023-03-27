@@ -1,7 +1,10 @@
 package client.scenes;
 
+import client.FXConfig;
+import client.FXMLInitializer;
 import client.utils.CardsUtils;
 import client.utils.ServerUtils;
+import com.google.inject.Injector;
 import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
@@ -14,15 +17,18 @@ import javafx.stage.Stage;
 
 import javax.inject.Inject;
 
+import static com.google.inject.Guice.createInjector;
+
 public class CardPopupCtrl {
 
     private Stage cardPopup;
 
     private Card card;
 
-    private CardsUtils cardsUtils;
-    private ServerUtils serverUtils;
-
+    private final CardsUtils cardsUtils;
+    private final ServerUtils serverUtils;
+    private DeleteCardCtrl deleteCardCtrl;
+    private Scene deleteCardScene;
     @FXML
     private Parent root;
     @FXML
@@ -51,7 +57,7 @@ public class CardPopupCtrl {
      * @param serverUtils ServerUtils reference
      */
     @Inject
-    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils, DeleteCardCtrl deleteCardCtrl) {
+    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils) {
         this.cardsUtils = cardsUtils;
         this.serverUtils = serverUtils;
     }
@@ -74,6 +80,13 @@ public class CardPopupCtrl {
         this.cardPopup.setMinWidth(240.0);
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(root));
+
+        Injector injector = createInjector(new FXConfig());
+        FXMLInitializer fxmlInitializer = new FXMLInitializer(injector);
+        var deleteCtrl =
+                fxmlInitializer.load(DeleteCardCtrl.class, "client", "scenes", "DeleteCard.fxml");
+        this.deleteCardCtrl = deleteCtrl.getKey();
+        this.deleteCardScene = new Scene(deleteCtrl.getValue());
     }
 
 
@@ -164,5 +177,12 @@ public class CardPopupCtrl {
      */
     public void show() {
         this.cardPopup.show();
+    }
+
+    /**
+     * Initialize deletion confirmation window and set its scene
+     */
+    public void showDeleteConfirmation() {
+        deleteCardCtrl.initialize(deleteCardScene, card);
     }
 }
