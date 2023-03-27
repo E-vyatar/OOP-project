@@ -52,8 +52,8 @@ public class BoardOverviewCtrl implements EventHandler {
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
      * linked to the overview of the board.
      * The constructor should not be called manually, since it uses injection.
-     * @param utils
-     * @param mainCtrl
+     * @param utils class containing the methods to load data from the server
+     * @param mainCtrl the main controller
      */
     @Inject
     public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
@@ -145,7 +145,7 @@ public class BoardOverviewCtrl implements EventHandler {
      * when clicking Disconnect from Server, the Stompsession is ended
      * and scene is set up back to ConnectServerCtrl
      *
-     * @param actionEvent
+     * @param actionEvent unused
      */
     public void disconnect(ActionEvent actionEvent) {
         utils.getSession().disconnect();

@@ -186,7 +186,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     /**
      * Get the cards of this CardListViewCtrl
-     * @return the cards
+     * @return an array of the cards
      */
     public Card[] getCards() {
         return cards.toArray(new Card[0]);
