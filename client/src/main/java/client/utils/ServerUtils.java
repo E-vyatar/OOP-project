@@ -64,6 +64,20 @@ public class ServerUtils {
     }
 
     /**
+     * send the server Delete request to remove a card from the database
+     * @param card the card to remove from the database
+     */
+    public void deleteCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
      * send the server Get request for all the cards of a specific list
      *
      * @param listId id of the list to get the cards from
