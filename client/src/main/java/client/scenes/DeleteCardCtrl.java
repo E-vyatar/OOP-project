@@ -14,7 +14,6 @@ import javax.inject.Inject;
 
 public class DeleteCardCtrl {
 
-    private final CardPopupCtrl cardPopupCtrl;
     private final ServerUtils serverUtils;
 
     private Stage stage;
@@ -24,28 +23,44 @@ public class DeleteCardCtrl {
     @FXML
     private Parent root;
 
+    /**
+     * Create an instance of DeleteCardCtrl
+     * @param serverUtils the class containing the methods to communicate with the server
+     */
     @Inject
-    public DeleteCardCtrl(CardPopupCtrl cardPopupCtrl, ServerUtils serverUtils) {
-        this.cardPopupCtrl = cardPopupCtrl;
+    public DeleteCardCtrl(ServerUtils serverUtils) {
         this.serverUtils = serverUtils;
     }
 
+    /**
+     * This iniatializes the scene
+     */
     public void initialize() {
         stage = new Stage();
         stage.setTitle("Are you sure you want to delete this card?");
         stage.setScene(new Scene(root));
-        this.card = cardPopupCtrl.card;
         stage.show();
     }
 
+    /**
+     * This sets the card to be deleted.
+     * This must be called before it becomes visibile.
+     * @param card card
+     */
     public void setCard(Card card) {
         this.card = card;
     }
 
+    /**
+     * This closes the popup.
+     */
     public void closeConfirmation() {
         stage.hide();
     }
 
+    /**
+     * This deletes the attached card.
+     */
     public void deleteCard() {
         try {
             serverUtils.deleteCard(card);
