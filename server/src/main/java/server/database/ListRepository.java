@@ -17,7 +17,7 @@ public interface ListRepository extends CrudRepository<CardList, Long> {
     /**
      * Find a specific CardList by id
      * @param listId the list's id
-     * @return the cardlist, if it found one
+     * @return an optional of the cardlist if it found one, otherwise an empty optional
      */
     Optional<CardList> findById(long listId);
 }

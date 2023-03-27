@@ -10,7 +10,7 @@ public interface CardRepositroy extends CrudRepository<Card, Long> {
     /**
      * Find a card given a cardId
      * @param cardId the card's id
-     * @return the card, if found
+     * @return an optional filled with the card if the card exists, otherwise an empty optional
      */
     Optional<Card> findById(long cardId);
 
