@@ -35,6 +35,7 @@ public class AddCardCtrl {
     private final ServerUtils server;
     private final CardsUtils cardsUtils;
     private final MainCtrl mainCtrl;
+    private final BoardOverviewCtrl boardOverviewCtrl;
 
     @FXML
     private TextField title;
@@ -50,12 +51,15 @@ public class AddCardCtrl {
      * @param server     server utilities reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
+     * @param boardOverviewCtrl board overview reference
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils,
+                       MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;
+        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
     /**
@@ -70,11 +74,17 @@ public class AddCardCtrl {
     /**
      * send the server a request to add new card
      * and close the window
+     * TODO:
+     * get card from server and pass to addCardToBoardOverview
      */
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-                server.addCard(getCard());
+//                server.addCard(getCard());
+                // need to have Card returned from method
+//                Card returnedCard = server.addCard(getCard());
+                Card returnedCard = new Card(-1, cardList.getId(), title.getText(), 3, 0);
+                boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
                 closeWindow();
             } catch (WebApplicationException e) {
 

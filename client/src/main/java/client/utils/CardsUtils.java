@@ -64,7 +64,11 @@ public class CardsUtils {
      * @return true if every field has a value, false otherwise
      */
     public boolean fieldsNotEmpty(TextField cardTitle, ChoiceBox<CardList> list) {
-        return !cardTitle.getText().isBlank() && !list.getSelectionModel().isEmpty();
+        boolean res = true;
+        if (list != null) {
+            res = !list.getSelectionModel().isEmpty();
+        }
+        return !cardTitle.getText().isBlank() && res;
     }
 
     /**
@@ -77,12 +81,14 @@ public class CardsUtils {
         if (cardTitle.getText().isBlank()) {
             cardTitle.setStyle("-fx-border-color: red ; -fx-border-width: 2px");
         }
-        if (list.getSelectionModel().isEmpty()) {
+        if (list != null && list.getSelectionModel().isEmpty()) {
             list.setStyle("-fx-border-color: red ; -fx-border-width: 2px");
         }
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             cardTitle.setStyle("");
-            list.setStyle("");
+            if (list != null) {
+                list.setStyle("");
+            }
         }));
         timeline.play();
     }

@@ -204,9 +204,13 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     /**
      * Add a card
      * @param card the card to add
-     * @param index where to add the card
+     * @param index where to add the card.
+     *              If index is negative the card will be added at the end of the list
      */
     public void addCard(Card card, long index) {
+        if (index < 0) {
+            index = cards.size();
+        }
         System.out.println("Adding card " + card + " at index " + index);
         card.setListId(cardList.getId());
         cards.add((int) index, card);
@@ -228,9 +232,10 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
 
     /**
-     * TODO
+     * Set the CardList of the AddCard window and open the window
      */
     public void showAddCard() {
         boardOverviewCtrl.setCardListForShowAddCard(cardList);
+        boardOverviewCtrl.showAddCard();
     }
 }

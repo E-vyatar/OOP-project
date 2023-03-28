@@ -204,10 +204,22 @@ public class BoardOverviewCtrl implements EventHandler {
 
     /**
      * Set the cardlist for which you're adding a card
+     * In a different method from `showAddCard` because it's easier to pass a parameter
      * @param cardList the cardlist
      */
     public void setCardListForShowAddCard(CardList cardList) {
         addCardCtrl.setCardList(cardList);
+    }
+
+    /**
+     * Add card to the list view. addCard is called with negative index
+     * to put the card at the end of the list
+     * @param cardList The list to add the card to
+     * @param card The card to add to the list
+     */
+    public void addCardToBoardOverview(CardList cardList, Card card) {
+        int idx = getAllLists().indexOf(cardList);
+        cardListViewCtrlList.get(idx).addCard(card, -1);
     }
 
     /**
