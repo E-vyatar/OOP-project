@@ -2,8 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.inject.Inject;
