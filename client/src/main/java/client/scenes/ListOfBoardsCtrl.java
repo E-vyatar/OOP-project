@@ -90,12 +90,12 @@ public class ListOfBoardsCtrl {
     }
 
     /**
-     * Create a new board
+     * Go to the interface to create a new board
      *
      * @param mouseEvent the mouse event
      */
     public void newBoard(MouseEvent mouseEvent) {
-        throw new NotImplementedException();
+        mainCtrl.showCreateBoard();
     }
 
     static class BoardCell extends ListCell<Board> {
@@ -106,7 +106,7 @@ public class ListOfBoardsCtrl {
             if (empty || item == null) {
                 this.setGraphic(null);
             } else {
-                Label label = new Label(item.getName());
+                Label label = new Label(item.getTitle());
                 this.setGraphic(label);
                 this.getStyleClass().add("board");
             }

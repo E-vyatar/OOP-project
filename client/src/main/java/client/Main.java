@@ -64,7 +64,13 @@ public class Main extends Application {
                 "client", "scenes", "ConnectServer.fxml");
         var listOfBoardsCtrl = FXML.load(ListOfBoardsCtrl.class,
                 "client", "scenes", "ListOfBoards.fxml");
+        var createBoard = FXML.load(CreateBoardCtrl.class,
+                "client", "scenes", "CreateBoard.fxml");
 
-        mainCtrl.initialize(primaryStage, overview, connectServerCtrl, listOfBoardsCtrl);
+        mainCtrl.initialize(primaryStage,
+                overview,
+                connectServerCtrl,
+                listOfBoardsCtrl,
+                createBoard);
     }
 }

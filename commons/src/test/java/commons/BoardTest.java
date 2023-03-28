@@ -35,14 +35,14 @@ class BoardTest {
     @Test
     void testGetName() {
         Board board1 = new Board(1, "board 1", null);
-        assertEquals("board 1", board1.getName());
+        assertEquals("board 1", board1.getTitle());
         Board board2 = new Board(2, "board 2", null);
-        assertEquals("board 2", board2.getName());
+        assertEquals("board 2", board2.getTitle());
     }
     @Test
     void setName() {
         Board board1 = new Board(1, "untitled", null);
-        board1.setName("Personal TODOs");
-        assertEquals("Personal TODOs", board1.getName());
+        board1.setTitle("Personal TODOs");
+        assertEquals("Personal TODOs", board1.getTitle());
     }
 }

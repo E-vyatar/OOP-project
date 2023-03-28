@@ -33,6 +33,9 @@ public class MainCtrl {
 
     private ListOfBoardsCtrl listOfBoardsCtrl;
     private Scene listOfBoards;
+
+    private CreateBoardCtrl createBoardCtrl;
+    private Scene createBoard;
     //=========================================================
 
     /**
@@ -42,11 +45,13 @@ public class MainCtrl {
      * @param overview a pair of the BoardOverviewCtrl and the root of the to-be scene
      * @param connectServerCtrl a pair of the connectServerCtrl and the root of the to-be scene.
      * @param listOfBoards a pair of the ListOfBoardsCtrl and the root of the to-be scene.
+     * @param createBoard a pair of the CreateBoardCtrl and the root of the to-be scene.
      */
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<ConnectServerCtrl, Parent> connectServerCtrl,
-                           Pair<ListOfBoardsCtrl, Parent> listOfBoards) {
+                           Pair<ListOfBoardsCtrl, Parent> listOfBoards,
+                           Pair<CreateBoardCtrl, Parent> createBoard) {
 
         this.primaryStage = primaryStage;
 
@@ -58,6 +63,9 @@ public class MainCtrl {
 
         this.listOfBoards = new Scene(listOfBoards.getValue());
         this.listOfBoardsCtrl = listOfBoards.getKey();
+
+        this.createBoard = new Scene(createBoard.getValue());
+        this.createBoardCtrl = createBoard.getKey();
 
         showConnect();
         this.primaryStage.show();
@@ -96,5 +104,14 @@ public class MainCtrl {
         listOfBoardsCtrl.refresh();
         primaryStage.setTitle("List of boards");
         primaryStage.setScene(listOfBoards);
+    }
+
+    /**
+     * Shows the UI to create a new board
+     */
+    public void showCreateBoard() {
+        createBoardCtrl.clear();
+        primaryStage.setTitle("Create board");
+        primaryStage.setScene(createBoard);
     }
 }

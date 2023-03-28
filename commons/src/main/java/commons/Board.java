@@ -1,6 +1,7 @@
 package commons;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String name;
+    private String title;
     @OneToMany
     private List<CardList> cardLists;
 
@@ -25,12 +26,12 @@ public class Board {
      * Constructor.
      *
      * @param id the id of the board
-     * @param name the name of the board
+     * @param title the name of the board
      * @param cardLists the list of CardLists in the board
      */
-    public Board(long id, String name, List<CardList> cardLists) {
+    public Board(long id, String title, List<CardList> cardLists) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.cardLists = cardLists;
     }
 
@@ -38,11 +39,11 @@ public class Board {
      * Constructor without 'id' parameter (sets id = -1 to avoid errors)
      * - The id would be generated automatically by the database.
      *
-     * @param cardLists the list of all the CardLists in the board
+     * @param title the name of the board
      */
-    public Board(List<CardList> cardLists) {
-        this.id = -1;
-        this.cardLists = cardLists;
+    public Board(String title) {
+        this.title = title;
+        this.cardLists = new ArrayList<>();
     }
 
 
@@ -96,16 +97,16 @@ public class Board {
      * Get the name of a board
      * @return the board's name
      */
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     /**
      * Set the name of the board
-     * @param name the board's name
+     * @param title the board's name
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
 

@@ -67,6 +67,20 @@ public class ServerUtils {
     }
 
     /**
+     * send the server Put request to add a new board to the database
+     *
+     * @param board the board to add to the database
+     */
+    public void addBoard(Board board) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("boards/new")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
+    /**
      * send the server Delete request to remove a card from the database
      * @param card the card to remove from the database
      */

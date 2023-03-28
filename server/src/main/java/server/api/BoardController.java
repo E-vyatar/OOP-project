@@ -1,6 +1,8 @@
 package server.api;
 
 import commons.Board;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 
@@ -10,6 +12,7 @@ import java.util.Optional;
 @RequestMapping("/boards")
 public class BoardController {
     private final BoardRepository boardRepository;
+    private Logger logger = LoggerFactory.getLogger(CardController.class);
 
     /**
      * Constructor
@@ -63,8 +66,9 @@ public class BoardController {
      * @param board the board to create
      * @return the created board
      */
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Board createBoard(@RequestBody Board board) {
+        logger.info("createBoard() called with: board = [" + board + "]");
         return boardRepository.save(board);
     }
 
