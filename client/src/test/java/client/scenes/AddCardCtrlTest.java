@@ -12,7 +12,7 @@ class AddCardCtrlTest {
     AddCardCtrl addCardCtrl;
 
     @Mock
-    ServerUtils serveUtilsMock;
+    ServerUtils serverUtilsMock;
     @Mock
     CardsUtils cardsUtilsMock;
     @Mock
