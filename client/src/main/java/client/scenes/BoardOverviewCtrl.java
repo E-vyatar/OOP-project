@@ -16,6 +16,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import commons.Card;
 import commons.CardList;
 import javafx.collections.FXCollections;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
 public class BoardOverviewCtrl implements EventHandler {
 
     private final ServerUtils utils;
+    private final SocketsUtils socketsUtils;
     private final MainCtrl mainCtrl;
     private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     private CardPopupCtrl cardPopupCtrl;
@@ -54,11 +56,14 @@ public class BoardOverviewCtrl implements EventHandler {
      * The constructor should not be called manually, since it uses injection.
      * @param utils class containing the methods to load data from the server
      * @param mainCtrl the main controller
+     * @param socketsUtils socket utils
      */
     @Inject
-    public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
+    public BoardOverviewCtrl(ServerUtils utils, SocketsUtils socketsUtils, MainCtrl mainCtrl) {
         this.utils = utils;
         this.mainCtrl = mainCtrl;
+        this.socketsUtils = socketsUtils;
+        socketsUtils.initialize(this);
 //        if (!this.utils.isConnectionAlive()) showConnect();
     }
     /**
@@ -148,7 +153,7 @@ public class BoardOverviewCtrl implements EventHandler {
      * @param actionEvent unused
      */
     public void disconnect(ActionEvent actionEvent) {
-        utils.getSession().disconnect();
+        socketsUtils.getSession().disconnect();
         System.out.println("The client has been disconnected");
 
         mainCtrl.showConnect();
