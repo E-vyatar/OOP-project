@@ -97,7 +97,7 @@ public class BoardOverviewCtrl {
      * When clicking Disconnect from Server, the StompSession is ended
      * and scene is set up back to ConnectServerCtrl
      *
-     * @param actionEvent -
+     * @param actionEvent unused
      */
     public void disconnect(ActionEvent actionEvent) {
         server.getSession().disconnect();

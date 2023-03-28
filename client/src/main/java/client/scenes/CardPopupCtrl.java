@@ -36,6 +36,8 @@ public class CardPopupCtrl {
     @FXML
     private Button editButton;
     @FXML
+    private Button deleteButton;
+    @FXML
     private Button cancelButton;
     @FXML
     private Button saveButton;
@@ -61,6 +63,7 @@ public class CardPopupCtrl {
     public void initialize() {
         ButtonBar.setButtonData(closeButton, ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonBar.setButtonData(editButton, ButtonBar.ButtonData.RIGHT);
+        ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.LEFT);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonBar.setButtonData(saveButton, ButtonBar.ButtonData.APPLY);
 
@@ -92,7 +95,7 @@ public class CardPopupCtrl {
 
         this.buttonBar.getButtons().clear();
         if (editable) {
-            this.buttonBar.getButtons().addAll(cancelButton, saveButton);
+            this.buttonBar.getButtons().addAll(deleteButton, cancelButton, saveButton);
         } else {
             this.buttonBar.getButtons().addAll(closeButton, editButton);
         }
