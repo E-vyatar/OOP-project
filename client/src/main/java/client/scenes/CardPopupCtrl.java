@@ -16,13 +16,10 @@ import javax.inject.Inject;
 
 public class CardPopupCtrl {
 
-    private Stage cardPopup;
-
     private Card card;
-
-    private CardsUtils cardsUtils;
-    private ServerUtils serverUtils;
-
+    private final CardsUtils cardsUtils;
+    private final ServerUtils server;
+    private Stage cardPopup;
     @FXML
     private Parent root;
     @FXML
@@ -47,13 +44,14 @@ public class CardPopupCtrl {
 
     /**
      * constructor
-     * @param cardsUtils CardsUtils reference
-     * @param serverUtils ServerUtils reference
+     *
+     * @param cardsUtils  CardsUtils reference
+     * @param server ServerUtils reference
      */
     @Inject
-    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils) {
+    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils server) {
         this.cardsUtils = cardsUtils;
-        this.serverUtils = serverUtils;
+        this.server = server;
     }
 
     /**
@@ -135,7 +133,7 @@ public class CardPopupCtrl {
             try {
                 card.setListId(list.getValue().getId());
                 card.setTitle(cardTitle.getText());
-                serverUtils.editCard(card);
+                server.editCard(card);
                 close();
             } catch (WebApplicationException e) {
 
