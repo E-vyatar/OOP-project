@@ -34,7 +34,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button id = "disconnectButton" layoutX="24.0" layoutY="13.0" mnemonicParsing="false" onAction="#disconnect" prefHeight="25.0" prefWidth="212.0" style="-fx-background-color: #22d15c;" text="Disconnect from Server">
+                  <Button id="disconnectButton" layoutX="24.0" layoutY="13.0" mnemonicParsing="false" onAction="#returnToBoardList" prefHeight="25.0" prefWidth="212.0" style="-fx-background-color: #22d15c;" text="Return to boardlist">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

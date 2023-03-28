@@ -142,16 +142,13 @@ public class BoardOverviewCtrl implements EventHandler {
     }
 
     /**
-     * when clicking Disconnect from Server, the Stompsession is ended
-     * and scene is set up back to ConnectServerCtrl
+     * when clicking Return to list of boards,
+     * you see the list of boards again
      *
      * @param actionEvent unused
      */
-    public void disconnect(ActionEvent actionEvent) {
-        utils.getSession().disconnect();
-        System.out.println("The client has been disconnected");
-
-        mainCtrl.showConnect();
+    public void returnToBoardList(ActionEvent actionEvent) {
+        mainCtrl.showListOfBoards();
     }
 
     @Override

@@ -72,12 +72,16 @@ public class ListOfBoardsCtrl {
     }
 
     /**
-     * Disconnect from server
+     * Disconnect from server. When called, the Stompsession is ended
+     * and scene is set up back to ConnectServerCtrl
      *
-     * @param mouseEvent the mouse event
+     * @param mouseEvent the mouse event - unused
      */
     public void disconnect(MouseEvent mouseEvent) {
-        throw new NotImplementedException();
+        serverUtils.getSession().disconnect();
+        System.out.println("The client has been disconnected");
+
+        mainCtrl.showConnect();
     }
 
     /**
