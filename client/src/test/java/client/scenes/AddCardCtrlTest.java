@@ -22,7 +22,7 @@ class AddCardCtrlTest {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        addCardCtrl = new AddCardCtrl(cardsUtilsMock, serveUtilsMock, mainCtrlMock);
+        addCardCtrl = new AddCardCtrl(cardsUtilsMock, serverUtilsMock, mainCtrlMock);
     }
 
     @Test
