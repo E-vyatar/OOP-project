@@ -51,7 +51,7 @@ public class CardPopupCtrl {
      * @param serverUtils ServerUtils reference
      */
     @Inject
-    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils, DeleteCardCtrl deleteCardCtrl) {
+    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils) {
         this.cardsUtils = cardsUtils;
         this.serverUtils = serverUtils;
     }
