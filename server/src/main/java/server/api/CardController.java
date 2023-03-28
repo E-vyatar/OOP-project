@@ -14,8 +14,12 @@ import server.database.CardRepositroy;
 public class CardController {
 
     private final CardRepositroy cardRepository;
-    Logger logger = LoggerFactory.getLogger(CardController.class);
+    private Logger logger = LoggerFactory.getLogger(CardController.class);
 
+    /**
+     * Initialize a card controller.
+     * @param cardRepositroy the card repository to use with the card controller
+     */
     public CardController(CardRepositroy cardRepositroy) {
         this.cardRepository = cardRepositroy;
     }

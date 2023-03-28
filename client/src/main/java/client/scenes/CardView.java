@@ -13,16 +13,23 @@ import javafx.scene.paint.Color;
 public class CardView extends ListCell<Card> {
 
     private final CardViewCtrl controller;
+    private HBox hbox;
     private Button buttonUp;
     private Button buttonDown;
     private Button editButton;
+    private Label cardTitle;
 
+    /**
+     * This constructs a CardView
+     * @param controller the controller of the CardView
+     */
     public CardView(CardViewCtrl controller) {
         this.controller = controller;
 
         setDragEvents();
     }
 
+    @SuppressWarnings({"MethodLength","CyclomaticComplexity"})
     private void setDragEvents() {
 
         // such a drag
@@ -62,7 +69,9 @@ public class CardView extends ListCell<Card> {
                     && event.getDragboard().hasString()
                     && event.getDragboard().getString().startsWith("c")
             ) {
-                setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                setBorder(new Border(new BorderStroke(
+                        Color.RED, BorderStrokeStyle.SOLID,
+                        CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
             event.consume();
         });
@@ -81,7 +90,8 @@ public class CardView extends ListCell<Card> {
                     success = true;
                 } else {
                     long id = Long.parseLong(db.getString());
-                    controller.getBoardOverviewCtrl().moveList(id, controller.getCardList().getId());
+                    controller.getBoardOverviewCtrl()
+                            .moveList(id, controller.getCardList().getId());
                     success = true;
                 }
             }
@@ -94,6 +104,7 @@ public class CardView extends ListCell<Card> {
 
 
     @Override
+    @SuppressWarnings("MethodLength")
     protected void updateItem(Card card, boolean empty) {
         super.updateItem(card, empty);
 
@@ -149,14 +160,26 @@ public class CardView extends ListCell<Card> {
         }
     }
 
+    /**
+     * Returns the button to move a card up
+     * @return the button to move a card up
+     */
     public Button getButtonUp() {
         return buttonUp;
     }
 
+    /**
+     * Returns the button to move a card down
+     * @return the button to move a card down
+     */
     public Button getButtonDown() {
         return buttonDown;
     }
 
+    /**
+     * Returns the button to edit a card
+     * @return the button to edit a card
+     */
     public Button getEditButton() {
         return editButton;
     }

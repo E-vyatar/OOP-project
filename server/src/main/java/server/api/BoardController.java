@@ -11,6 +11,11 @@ import java.util.Optional;
 public class BoardController {
     private final BoardRepository boardRepository;
 
+    /**
+     * Constructor
+     *
+     * @param boardRepository the repository (has all the necessary queries)
+     */
     public BoardController(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }
@@ -40,6 +45,7 @@ public class BoardController {
      * Updates a board
      *
      * @param id the id of the board
+     * @param board the board to be updated
      * @return the updated board
      */
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")

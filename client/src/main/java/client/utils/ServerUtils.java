@@ -41,11 +41,14 @@ public class ServerUtils {
     private StompSession session;
     private String server;
 
+    /**
+     * Set the hostname of the server and then connect to it
+     * @param hostname the hostname
+     */
     public void setHostnameAndConnect(String hostname) {
         System.out.println("Connecting to server: " + hostname);
         this.server = "http://" + hostname + ":8080";
         session = connect("ws://" + hostname + ":8080/websocket");
-
     }
 
     /**
@@ -61,6 +64,20 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
 //                .header("keep-alive", "timeout=5, max=100")
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * send the server Delete request to remove a card from the database
+     * @param card the card to remove from the database
+     */
+    public void deleteCard(Card card) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
     }
 
     /**
@@ -113,6 +130,14 @@ public class ServerUtils {
 //    private final StompSession session = connect("ws://localhost:8080/websocket");
 
     /**
+     * @return returns the session, used it in disconnect method in board overview
+     */
+    public StompSession getSession() {
+        return session;
+    }
+
+
+    /**
      * @param url address
      */
     private StompSession connect(String url) {
@@ -126,6 +151,7 @@ public class ServerUtils {
             throw new RuntimeException(e);
         }
     }
+
 
     /**
      * @param destination destination for the upcoming messages
@@ -147,6 +173,10 @@ public class ServerUtils {
         });
     }
 
+    /**
+     * Check if the connection is alive
+     * @return whether the connection is alive
+     */
     public boolean isConnectionAlive() {
         return session != null && session.isConnected();
     }

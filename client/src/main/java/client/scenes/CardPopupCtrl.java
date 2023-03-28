@@ -18,10 +18,10 @@ public class CardPopupCtrl {
 
     private Stage cardPopup;
 
-    public Card card;
+    private Card card;
 
-    public CardsUtils cardsUtils;
-    public ServerUtils serverUtils;
+    private CardsUtils cardsUtils;
+    private ServerUtils serverUtils;
 
     @FXML
     private Parent root;
@@ -38,6 +38,8 @@ public class CardPopupCtrl {
     private Button closeButton;
     @FXML
     private Button editButton;
+    @FXML
+    private Button deleteButton;
     @FXML
     private Button cancelButton;
     @FXML
@@ -63,6 +65,7 @@ public class CardPopupCtrl {
     public void initialize() {
         ButtonBar.setButtonData(closeButton, ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonBar.setButtonData(editButton, ButtonBar.ButtonData.RIGHT);
+        ButtonBar.setButtonData(deleteButton, ButtonBar.ButtonData.LEFT);
         ButtonBar.setButtonData(cancelButton, ButtonBar.ButtonData.CANCEL_CLOSE);
         ButtonBar.setButtonData(saveButton, ButtonBar.ButtonData.APPLY);
 
@@ -74,6 +77,10 @@ public class CardPopupCtrl {
     }
 
 
+    /**
+     * Sets the card for the controller.
+     * @param card the card to attach to the controller
+     */
     public void setCard(Card card) {
         this.card = card;
         createView();
@@ -81,6 +88,7 @@ public class CardPopupCtrl {
 
     /**
      * Makes the details of the card editable or not
+     *
      * @param editable whether the card should be editable
      */
     public void setEditable(boolean editable) {
@@ -89,7 +97,7 @@ public class CardPopupCtrl {
 
         this.buttonBar.getButtons().clear();
         if (editable) {
-            this.buttonBar.getButtons().addAll(cancelButton, saveButton);
+            this.buttonBar.getButtons().addAll(deleteButton, cancelButton, saveButton);
         } else {
             this.buttonBar.getButtons().addAll(closeButton, editButton);
         }
@@ -135,7 +143,6 @@ public class CardPopupCtrl {
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText(e.getMessage());
                 alert.showAndWait();
-                return;
             }
 
         } else {
@@ -155,7 +162,7 @@ public class CardPopupCtrl {
      * This function shows the popup.
      * Before calling it, you should call the {@link #setCard(Card)} method.
      */
-    public void show(){
+    public void show() {
         this.cardPopup.show();
     }
 }

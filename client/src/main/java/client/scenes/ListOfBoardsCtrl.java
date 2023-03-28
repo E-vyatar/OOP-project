@@ -59,14 +59,16 @@ public class ListOfBoardsCtrl {
             }
         });
         // When you select (i.e.) click a board, open that board.
-        this.boards.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Board>() {
-            @Override
-            public void changed(ObservableValue<? extends Board> observable, Board oldValue, Board newValue) {
-                if (newValue != null) {
-                    mainCtrl.showOverview(newValue.getId());
-                }
-            }
-        });
+        this.boards.getSelectionModel().selectedItemProperty()
+                .addListener(new ChangeListener<Board>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Board> observable,
+                                        Board oldValue, Board newValue) {
+                        if (newValue != null) {
+                            mainCtrl.showOverview(newValue.getId());
+                        }
+                    }
+                });
     }
 
     /**

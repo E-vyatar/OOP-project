@@ -16,6 +16,7 @@
             <buttons>
                 <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" text="Close" />
                 <Button fx:id="editButton" mnemonicParsing="false" onAction="#edit" text="Edit" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" text="Delete" />
                 <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#close" text="Cancel" />
                 <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" text="Save" />
             </buttons>
