@@ -63,7 +63,7 @@ public class ListOfBoardsCtrl {
             @Override
             public void changed(ObservableValue<? extends Board> observable, Board oldValue, Board newValue) {
                 if (newValue != null) {
-                    mainCtrl.showOverview(0);
+                    mainCtrl.showOverview(newValue.getId());
                 }
             }
         });

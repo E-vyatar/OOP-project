@@ -28,7 +28,7 @@ public class ConnectServerCtrl implements Initializable {
 
     public void connect() {
         server.setHostnameAndConnect(hostnameField.getText());
-        mainCtrl.showOverview(0);
+        mainCtrl.showListOfBoards();
     }
 
 }
