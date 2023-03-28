@@ -20,11 +20,12 @@ public class ConnectServerCtrl implements Initializable {
      * Creates a ConnectServerCtrl with the given server utils and main controller.
      * This class relies on injection so the constructor should not be called manually.
      * @param mainCtrl the MainCtrl of the app
+     * @param server the ServerUtils of the app
      */
     @Inject
-    public ConnectServerCtrl(MainCtrl mainCtrl) {
+    public ConnectServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
-        this.server = mainCtrl.getServer();
+        this.server = server;
     }
 
     /**

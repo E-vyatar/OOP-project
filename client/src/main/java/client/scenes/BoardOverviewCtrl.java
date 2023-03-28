@@ -49,11 +49,12 @@ public class BoardOverviewCtrl {
      * linked to the overview of the board.
      * The constructor should not be called manually, since it uses injection.
      * @param mainCtrl the MainCtrl of the app
+     * @param server the ServerUtils of the app
      */
     @Inject
-    public BoardOverviewCtrl(MainCtrl mainCtrl) {
+    public BoardOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
-        this.server = mainCtrl.getServer();
+        this.server = server;
     }
 
     /**

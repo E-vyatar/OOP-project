@@ -44,12 +44,12 @@ public class CardPopupCtrl {
      * constructor
      *
      * @param cardsUtils  CardsUtils reference
-     * @param serverUtils ServerUtils reference
+     * @param server ServerUtils reference
      */
     @Inject
-    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils serverUtils) {
+    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils server) {
         this.cardsUtils = cardsUtils;
-        this.server = serverUtils;
+        this.server = server;
     }
 
     /**
