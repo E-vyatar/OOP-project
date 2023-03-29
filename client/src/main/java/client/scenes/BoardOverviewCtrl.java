@@ -121,7 +121,6 @@ public class BoardOverviewCtrl {
      */
     public void refresh(long boardId) {
 
-        // Get board with ID = 0
         board = server.getBoard(boardId);
 
         generateView();
