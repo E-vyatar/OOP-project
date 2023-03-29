@@ -1,26 +1,32 @@
 package server.api;
 
 import commons.Board;
+import commons.CardList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
+import server.database.ListRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/boards")
 public class BoardController {
     private final BoardRepository boardRepository;
+    private final ListRepository listRepository;
     private Logger logger = LoggerFactory.getLogger(CardController.class);
 
     /**
      * Constructor
      *
-     * @param boardRepository the repository (has all the necessary queries)
+     * @param boardRepository the repository (used for all board-related queries)
+     * @param listRepository the list repository (used to initialize a new board with empty lists)
      */
-    public BoardController(BoardRepository boardRepository) {
+    public BoardController(BoardRepository boardRepository, ListRepository listRepository) {
         this.boardRepository = boardRepository;
+        this.listRepository = listRepository;
     }
 
     /**
@@ -69,7 +75,16 @@ public class BoardController {
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Board createBoard(@RequestBody Board board) {
         logger.info("createBoard() called with: board = [" + board + "]");
-        return boardRepository.save(board);
+        // We add three empty lists, so that the user can make a quick start
+        Board result = boardRepository.save(board);
+        List<CardList> cardLists = List.of(
+                new CardList("To Do", board.getId(), 0),
+                new CardList("Doing", board.getId(), 1),
+                new CardList("Done", board.getId(), 2)
+        );
+        result.getCardLists().addAll(cardLists);
+        listRepository.saveAll(cardLists);
+        return result;
     }
 
     /**
