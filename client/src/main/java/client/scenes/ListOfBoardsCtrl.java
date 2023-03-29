@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -56,6 +57,9 @@ public class ListOfBoardsCtrl {
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         mainCtrl.showOverview(newValue.getId());
+                        // Make sure it's unselected, so when you return to this view
+                        // it looks the same as before.
+                        this.boards.getSelectionModel().clearSelection();
                     }
                 });
     }
