@@ -17,11 +17,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.*;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -84,13 +87,27 @@ public class BoardOverviewCtrl {
      */
     @FXML
     private void addList(ActionEvent actionEvent) {
-        CardList cardList = new CardList("New List", 0, 0);
-        CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
-                this, cardList);
-        cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        int numLists = listOfLists.getChildren().size();
-        listOfLists.getChildren().add(numLists, cardListViewCtrl.getCardListNode());
+        // Create cardList without specified ID
+        CardList cardList = new CardList("New List", board.getId(), board.getCardLists().size());
+
+        try {
+            // Add cardList to server and retrieve object with ID
+            cardList = server.addCardList(cardList);
+
+            board.getCardLists().add(cardList);
+
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
+                    this, cardList);
+            cardListViewCtrlList.add(cardListViewCtrl);
+
+            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     /**
