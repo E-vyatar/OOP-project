@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import commons.Board;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionModel;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -25,6 +25,7 @@ public class ListOfBoardsCtrl {
 
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final SocketsUtils sockets;
     @FXML
     private ListView<Board> boards;
 
@@ -32,12 +33,14 @@ public class ListOfBoardsCtrl {
      * This constructs an instance of ListOfBoards.
      *
      * @param mainCtrl    the main controller
-     * @param server the server utils
+     * @param server the server utils - used to load list of boards
+     * @param sockets the socket utils - used to disconnect connection
      */
     @Inject
-    public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils server, SocketsUtils sockets) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.sockets = sockets;
     }
 
     /**
@@ -71,7 +74,7 @@ public class ListOfBoardsCtrl {
      * @param mouseEvent the mouse event - unused
      */
     public void disconnect(MouseEvent mouseEvent) {
-        server.getSession().disconnect();
+        sockets.getSession().disconnect();
         System.out.println("The client has been disconnected");
 
         mainCtrl.showConnect();

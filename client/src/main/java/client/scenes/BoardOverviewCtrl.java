@@ -17,6 +17,9 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.*;
+import client.utils.SocketsUtils;
+import commons.Card;
+import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -33,8 +36,10 @@ import java.util.stream.Collectors;
 
 public class BoardOverviewCtrl {
 
-    private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final SocketsUtils socketsUtils;
+
+    private final MainCtrl mainCtrl;
     private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     private CardPopupCtrl cardPopupCtrl;
     private AddCardCtrl addCardCtrl;
@@ -48,13 +53,16 @@ public class BoardOverviewCtrl {
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
      * linked to the overview of the board.
      * The constructor should not be called manually, since it uses injection.
-     * @param mainCtrl the MainCtrl of the app
-     * @param server the ServerUtils of the app
+     * @param server class containing the methods to load data from the server
+     * @param mainCtrl the main controller
+     * @param socketsUtils socket utils - used to receive changes from the server
      */
     @Inject
-    public BoardOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
-        this.mainCtrl = mainCtrl;
+    public BoardOverviewCtrl(ServerUtils server, SocketsUtils socketsUtils, MainCtrl mainCtrl) {
         this.server = server;
+        this.mainCtrl = mainCtrl;
+        this.socketsUtils = socketsUtils;
+        socketsUtils.initialize(this);
     }
 
     /**

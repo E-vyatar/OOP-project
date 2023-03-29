@@ -15,8 +15,6 @@
  */
 package client.scenes;
 
-import client.utils.ServerUtils;
-import com.google.inject.Inject;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
