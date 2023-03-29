@@ -59,7 +59,9 @@ public class ListOfBoardsCtrl {
         this.boards.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
-                        mainCtrl.showOverview(newValue.getId());
+                        long boardId = newValue.getId();
+                        mainCtrl.showOverview(boardId);
+                        sockets.listenForBoard(boardId);
                         // Make sure it's unselected, so when you return to this view
                         // it looks the same as before.
                         this.boards.getSelectionModel().clearSelection();
