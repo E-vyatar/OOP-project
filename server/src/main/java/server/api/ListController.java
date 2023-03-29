@@ -1,8 +1,11 @@
 package server.api;
 
+import commons.Card;
 import commons.CardList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.database.ListRepository;
 
@@ -40,6 +43,12 @@ public class ListController {
      * @param cardList list to be created
      * @return the created list
      */
+    @MessageMapping("/lists")
+    @SendTo("/topic/lists")
+    public CardList addListMessage(CardList cardList){
+        listRepository.save(cardList);
+        return cardList;
+    }
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public CardList createList(@RequestBody CardList cardList) {
         logger.info("createList() called with: cardList = [" + cardList + "]");
@@ -75,6 +84,16 @@ public class ListController {
      * @param cardList the list to update
      * @return the updated list
      */
+    @MessageMapping("/lists")
+    @SendTo("/topic/lists")
+    public CardList editMessage(CardList cardList, long id){
+        if(listRepository.findById(id).isPresent()){
+            cardList.setId(id);
+            listRepository.save(cardList);
+            return cardList;
+        }
+        return null;
+    }
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public CardList updateList(@PathVariable("id") long id, @RequestBody CardList cardList) {
         logger.info("updateList() called with: id = [" + id + "], cardList = [" + cardList + "]");

@@ -71,6 +71,10 @@ public class SocketsUtils {
         });
     }
 
+    public void send(String destination, Object o){
+        session.send(destination, o);
+    }
+
     /**
      * this initializes the utils class so it can use the controller
      * @param boardOverviewCtrl board overview controller

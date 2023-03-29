@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import client.utils.SocketsUtils;
 import com.google.inject.Inject;
+import commons.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -49,6 +50,9 @@ public class ConnectServerCtrl implements Initializable {
         server.setHostnameAndConnect(hostnameField.getText());
         sockets.setHostnameAndConnect(hostnameField.getText());
         mainCtrl.showOverview(0);
+        sockets.registerMessages("/topic/cards", Card.class,card -> {
+
+        } );
     }
 
 }

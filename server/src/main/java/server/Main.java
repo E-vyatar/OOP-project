@@ -32,14 +32,5 @@ public class Main {
      */
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-        InetAddress myIp;
-        String addressIP;
-        try {
-            myIp = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
-        addressIP = myIp.getHostAddress();
-        System.out.println(addressIP);
     }
 }

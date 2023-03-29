@@ -3,6 +3,8 @@ package server.api;
 import commons.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardRepositroy;
 
@@ -30,6 +32,12 @@ public class CardController {
      * @param card the card to create
      * @return the created card
      */
+    @MessageMapping("/cards/new")
+    @SendTo("/topic/cards/new")
+    public Card addMessage(Card card){
+        cardRepository.save(card);
+        return card;
+    }
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");
@@ -86,6 +94,16 @@ public class CardController {
      * @param card the card to update
      * @return the updated card
      */
+    @MessageMapping("/cards")
+    @SendTo("/topic/cards")
+    public Card updateMessage(Card card, long id){
+        if(cardRepository.findById(id).isPresent()){
+            card.setId(id);
+            cardRepository.save(card);
+            return card;
+        }
+        return null;
+    }
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public Card updateCard(@PathVariable("id") long id, @RequestBody Card card) {
         logger.info("updateCard() called with: id = [" + id + "], card = [" + card + "]");
@@ -101,6 +119,11 @@ public class CardController {
      *
      * @param id the id of the card
      */
+//    @MessageMapping("/cards")
+//    @SendTo("/topic/cards")
+//    public void deleteMessage(long id){
+//
+//    }
     @DeleteMapping("{id}")
     public void deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);
