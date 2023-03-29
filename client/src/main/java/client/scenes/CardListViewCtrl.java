@@ -96,15 +96,9 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
             return cardViewCtrl.getView();
         });
         cardListView.setItems(this.cards);
-        cardListTitle.setText(cardList.getTitle());
+        setTitle(cardList.getTitle());
 
         cardListView.getSelectionModel().getSelectedItems().addListener(controller);
-
-        cardListView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                boardOverviewCtrl.showRenameList(cardList);
-            }
-        });
     }
 
     /**
@@ -231,5 +225,23 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      */
     public void showAddCard() {
         boardOverviewCtrl.setCardListForShowAddCard(cardList);
+    }
+
+    /**
+     * Tells {@link BoardOverviewCtrl} to show RenameList Popup.
+     * (It's used in {@link RenameListPopupCtrl})
+     *
+     */
+    public void showRenameList() {
+        boardOverviewCtrl.showRenameList(cardList);
+    }
+
+    /**
+     * Sets the displayed title in the CardList view
+     *
+     * @param title the new title
+     */
+    public void setTitle(String title) {
+        cardListTitle.setText(title);
     }
 }

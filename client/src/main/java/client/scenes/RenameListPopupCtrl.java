@@ -1,20 +1,19 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.CardList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.NotImplementedException;
 
 import javax.inject.Inject;
 
 public class RenameListPopupCtrl {
 
-    private final BoardOverviewCtrl boardOverviewCtrl;
+    private final ServerUtils server;
     private Stage renameListPopup;
     private CardList cardList;
     @FXML
@@ -25,11 +24,11 @@ public class RenameListPopupCtrl {
     /**
      * This constructs the controller for the pop-up to rename a list.
      *
-     * @param boardOverviewCtrl the main controller
+     * @param server the SeverUtils
      */
     @Inject
-    public RenameListPopupCtrl(BoardOverviewCtrl boardOverviewCtrl) {
-        this.boardOverviewCtrl = boardOverviewCtrl;
+    public RenameListPopupCtrl(ServerUtils server) {
+        this.server = server;
     }
 
     /**
@@ -56,10 +55,8 @@ public class RenameListPopupCtrl {
     /**
      * This closes the popup.
      * Currently, the popup is closed irrespective of the parameter passed.
-     *
-     * @param actionEvent the event that triggers the call of this function
      */
-    public void close(ActionEvent actionEvent) {
+    public void close() {
         this.renameListPopup.hide();
     }
 
@@ -67,11 +64,18 @@ public class RenameListPopupCtrl {
      * This saves the result of the renaming.
      * Currently, doesn't work yet.
      *
-     * @param actionEvent -
      */
-    public void save(ActionEvent actionEvent) {
-        // TODO
-        throw new NotImplementedException("This must be implemented later");
+    public void save() {
+        String title = listTitle.getText();
+        listTitle.setStyle("-fx-border-color: inherit");
+        if (title.isEmpty()) {
+            listTitle.setStyle("-fx-border-color: red");
+        } else {
+            cardList.setTitle(title);
+            server.editCardList(cardList);
+            close();
+        }
+
     }
 
     /**
