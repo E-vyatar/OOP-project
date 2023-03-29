@@ -23,9 +23,7 @@ import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -48,7 +46,6 @@ public class AddCardCtrl {
     /**
      * constructor
      *
-     * @param server     server utilities reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
      * @param boardOverviewCtrl board overview reference
@@ -110,7 +107,7 @@ public class AddCardCtrl {
     private Card getCard() {
         long listSize = server.getCardsByList(cardList.getId()).size();
         return new Card(
-                -1, cardList.getId(), title.getText(), listSize + 1, cardList.getBoardId());
+            -1, cardList.getId(), cardList.getBoardId(), title.getText(), listSize+1);
     }
 
     /**
@@ -118,7 +115,6 @@ public class AddCardCtrl {
      */
     private void clearFields() {
         title.clear();
-//        list.getItems().clear();
     }
 
     /**
@@ -128,14 +124,10 @@ public class AddCardCtrl {
      */
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
-            case ENTER:
-                ok();
-                break;
-            case ESCAPE:
-                closeWindow();
-                break;
-            default:
-                break;
+            case ENTER -> ok();
+            case ESCAPE -> closeWindow();
+            default -> {
+            }
         }
     }
 

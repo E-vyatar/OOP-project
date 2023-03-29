@@ -17,11 +17,12 @@ public class CardController {
     private Logger logger = LoggerFactory.getLogger(CardController.class);
 
     /**
-     * Initialize a card controller.
-     * @param cardRepositroy the card repository to use with the card controller
+     * Constructor
+     *
+     * @param cardRepository the repository (used for querying the DB)
      */
-    public CardController(CardRepositroy cardRepositroy) {
-        this.cardRepository = cardRepositroy;
+    public CardController(CardRepositroy cardRepository) {
+        this.cardRepository = cardRepository;
     }
 
     /**

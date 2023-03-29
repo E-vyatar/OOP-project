@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import commons.CardList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,8 +17,6 @@ public class RenameListPopupCtrl {
     private final BoardOverviewCtrl boardOverviewCtrl;
     private Stage renameListPopup;
     private CardList cardList;
-
-
     @FXML
     private Parent root;
     @FXML
@@ -27,11 +24,11 @@ public class RenameListPopupCtrl {
 
     /**
      * This constructs the controller for the pop-up to rename a list.
-     * @param utils the server utils
+     *
      * @param boardOverviewCtrl the main controller
      */
     @Inject
-    public RenameListPopupCtrl(ServerUtils utils, BoardOverviewCtrl boardOverviewCtrl) {
+    public RenameListPopupCtrl(BoardOverviewCtrl boardOverviewCtrl) {
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
@@ -69,7 +66,8 @@ public class RenameListPopupCtrl {
     /**
      * This saves the result of the renaming.
      * Currently, doesn't work yet.
-     * @param actionEvent not sure what this is
+     *
+     * @param actionEvent -
      */
     public void save(ActionEvent actionEvent) {
         // TODO

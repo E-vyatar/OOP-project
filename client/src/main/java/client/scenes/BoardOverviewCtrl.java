@@ -16,17 +16,11 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Card;
-import commons.CardList;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import commons.*;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -36,15 +30,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BoardOverviewCtrl implements EventHandler {
 
-    private final ServerUtils utils;
+public class BoardOverviewCtrl {
+
     private final MainCtrl mainCtrl;
+    private final ServerUtils server;
     private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     private CardPopupCtrl cardPopupCtrl;
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
     private RenameListPopupCtrl renameListPopupCtrl;
+    private Board board;
     @FXML
     private HBox listOfLists;
 
@@ -52,16 +48,18 @@ public class BoardOverviewCtrl implements EventHandler {
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
      * linked to the overview of the board.
      * The constructor should not be called manually, since it uses injection.
-     * @param utils class containing the methods to load data from the server
-     * @param mainCtrl the main controller
+     * @param mainCtrl the MainCtrl of the app
+     * @param server the ServerUtils of the app
      */
     @Inject
-    public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
-        this.utils = utils;
+    public BoardOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
-//        if (!this.utils.isConnectionAlive()) showConnect();
+        this.server = server;
     }
+
     /**
+     * Initialises the different popup controllers.
+     *
      * @param cardPopup a pair of the CardPopupCtrl and the root of the to-be scene
      * @param addCard a pair of the AddCardCtrl and the root of the to-be scene
      * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
@@ -70,52 +68,9 @@ public class BoardOverviewCtrl implements EventHandler {
                            Pair<AddCardCtrl, Parent> addCard,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup) {
         this.cardPopupCtrl = cardPopup.getKey();
-
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
-
         this.renameListPopupCtrl = renameListPopup.getKey();
-
-        createCards();
-    }
-
-    /**
-     * Refresh the board. Right now it doesn't do anything,
-     * but when we have the multi-board feature this is necessary.
-     */
-    public void refresh() {
-
-    }
-
-    /**
-     * This method creates the hardcoded cards.
-     */
-    @Deprecated
-    private void createCards() {
-        /*
-            Currently, this method just creates arbitrary data.
-            This data doesn't properly use the format as it's stored in the DB.
-            When linking with the server side,
-            the cards in a list should be converted into an ObservableList.
-         */
-
-        ArrayList<AnchorPane> lists = new ArrayList<>();
-        // Create four lists
-        for (long i = 0; i < 4; i++) {
-            List<Card> cards = new ArrayList<>();
-            for (long j = 0; j < 4; j++) {
-                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j, -1));
-            }
-            ObservableList<Card> observableList = FXCollections.observableList(cards);
-
-            CardList cardList = new CardList("List " + i, 0, 0);
-            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
-                    this, cardList, observableList);
-            cardListViewCtrlList.add(cardListViewCtrl);
-            lists.add(cardListViewCtrl.getCardListNode());
-        }
-
-        listOfLists.getChildren().addAll(lists);
     }
 
     private void getCardsFromServer() {
@@ -125,16 +80,13 @@ public class BoardOverviewCtrl implements EventHandler {
     /**
      * Adds a new list to the board
      *
-     * @param actionEvent
+     * @param actionEvent -
      */
     @FXML
     private void addList(ActionEvent actionEvent) {
-        // Create a new list where cards can be added to
-        ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
-
         CardList cardList = new CardList("New List", 0, 0);
         CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
-                this, cardList, observableList);
+                this, cardList);
         cardListViewCtrlList.add(cardListViewCtrl);
         // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
         int numLists = listOfLists.getChildren().size();
@@ -142,25 +94,64 @@ public class BoardOverviewCtrl implements EventHandler {
     }
 
     /**
-     * when clicking Disconnect from Server, the Stompsession is ended
+     * When clicking Disconnect from Server, the StompSession is ended
      * and scene is set up back to ConnectServerCtrl
      *
      * @param actionEvent unused
      */
     public void disconnect(ActionEvent actionEvent) {
-        utils.getSession().disconnect();
+        server.getSession().disconnect();
         System.out.println("The client has been disconnected");
 
         mainCtrl.showConnect();
     }
 
-    @Override
-    @SuppressWarnings("MissingJavadocMethod")
-    public void handle(Event event) {
-        Object source = event.getSource();
-        System.out.println("Source: " + source);
-        if (source instanceof CardPopupCtrl) {
-            CardPopupCtrl card = (CardPopupCtrl) source;
+
+    /**
+     * Meant to refresh the board.
+     * Currently, it completely resets the board (deleting all the lists)
+     * & rebuilds it (using the board fetched from the server).
+     *
+     * @param boardId the id of the board to be fetched
+     */
+    public void refresh(long boardId) {
+
+        // Get board with ID = 0
+        board = server.getBoard(boardId);
+
+        generateView();
+    }
+
+    /**
+     * Clears & generates the Board view
+     * <p> TODO: Adapt so that listOfLists is ListView instead of HBox (for drag & drop) </p>
+     */
+    public void generateView() {
+        // Deletes all the ListCtrl
+        cardListViewCtrlList.clear();
+
+        // Deletes all lists in the View
+        listOfLists.getChildren().clear();
+
+        // Loops through the cardLists in the board:
+        //      (to add them to the overview)
+        for(CardList cardList : board.getCardLists()) {
+
+            // Creates new controller for this list (using creatNewCardListViewCtrl)
+            CardListViewCtrl cardListViewCtrl =
+                CardListViewCtrl.createNewCardListViewCtrl(
+                    this,
+                    cardList
+                );
+
+            // Adds the controller to the controller list
+            cardListViewCtrlList.add(cardListViewCtrl);
+
+            // Adds the CardList to the HBox
+            listOfLists.getChildren().add(
+                (int) cardList.getIdx(),
+                cardListViewCtrl.getCardListNode()
+            );
         }
     }
 
@@ -191,7 +182,7 @@ public class BoardOverviewCtrl implements EventHandler {
     }
 
     /**
-     * Open a new window with "AddCard" scene
+     * Opens a new window with "AddCard" scene
      */
     public void showAddCard() {
         Stage cardWindow = new Stage();
@@ -243,10 +234,16 @@ public class BoardOverviewCtrl implements EventHandler {
                 .map(CardListViewCtrl::getCardList)
                 .collect(Collectors.toList());
     }
-    @SuppressWarnings("MissingJavadocMethod")
+
+    /**
+     * Gets a Card from the board using the Card ID
+     *
+     * @param id the ID of the Card
+     * @return the Card with that ID (or null)
+     */
     public Card getCard(long id) {
-        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
-            for (Card card : cardListViewCtrl.getCards()) {
+        for (CardList cardList : board.getCardLists()) {
+            for (Card card : cardList.getCards()) {
                 if (card.getId() == id) {
                     return card;
                 }
@@ -254,7 +251,13 @@ public class BoardOverviewCtrl implements EventHandler {
         }
         return null;
     }
-    @SuppressWarnings("MissingJavadocMethod")
+
+    /**
+     * Gets the CardListViewController for the specific CardList ID
+     *
+     * @param id the id of the CardList
+     * @return the CardListViewCtrl for that CardList (or null)
+     */
     public CardListViewCtrl getCardListViewCtrl(long id) {
         for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
             if (cardListViewCtrl.getCardList().getId() == id) {
@@ -263,7 +266,14 @@ public class BoardOverviewCtrl implements EventHandler {
         }
         return null;
     }
-    @SuppressWarnings("MissingJavadocMethod")
+
+    /**
+     * Moves Card (for drag & drop).
+     *
+     * @param card the Card to be moved
+     * @param cardList the CardList the card is moved to
+     * @param index the new position index of the card in the CardList
+     */
     public void moveCard(Card card, CardList cardList, long index) {
         System.out.println("Moving card " + card.getId() +
                 " to list " + cardList.getId() + " at index " + index);
@@ -274,14 +284,14 @@ public class BoardOverviewCtrl implements EventHandler {
         oldList.removeCard(card);
         newList.addCard(card, index);
 
-
         // highlight the card
         newList.highlightCard(card);
 
     }
 
     /**
-     * Move a list from a certain index to a new one
+     * Move a list from a certain index to a new one.
+     *
      * @param listId the old index
      * @param targetId the new index
      */
@@ -297,5 +307,14 @@ public class BoardOverviewCtrl implements EventHandler {
         cardListViewCtrlList.remove(list);
         cardListViewCtrlList.add(index, list);
 
+    }
+
+    /**
+     * Getter for ServerUtils of this app
+     *
+     * @return The ServerUtils for this app
+     */
+    public ServerUtils getServer() {
+        return server;
     }
 }

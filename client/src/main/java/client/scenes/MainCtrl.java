@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -22,18 +24,24 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
+    private final ServerUtils server;
     private Stage primaryStage;
-
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
-
     private ConnectServerCtrl connectServerCtrl;
-
     private Scene connectServer;
-
     private ListOfBoardsCtrl listOfBoardsCtrl;
     private Scene listOfBoards;
-    //=========================================================
+
+    /**
+     * This is and @Inject contractor and should not be called.
+     *
+     * @param server the ServerUtils for this app
+     */
+    @Inject
+    public MainCtrl(ServerUtils server) {
+        this.server = server;
+    }
 
     /**
      * This method initializes MainCtrl. The roots of the views are used to create scenes.
@@ -80,8 +88,9 @@ public class MainCtrl {
     public void showOverview(long boardId) {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+        overviewCtrl.refresh(boardId);
     }
+
 //TODO solve the connection later
 //    public void checkConnection() throws UnknownHostException {
 //        if(connectServerCtrl.connect()){
@@ -97,4 +106,14 @@ public class MainCtrl {
         primaryStage.setTitle("List of boards");
         primaryStage.setScene(listOfBoards);
     }
+
+    /**
+     * Getter for the ServerUtil of this client
+     *
+     * @return The SeverUtils of this client
+     */
+    public ServerUtils getServer() {
+        return server;
+    }
+
 }

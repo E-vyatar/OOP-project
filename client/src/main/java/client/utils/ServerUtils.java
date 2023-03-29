@@ -17,6 +17,7 @@ package client.utils;
 
 import commons.Board;
 import commons.Card;
+import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -52,7 +53,22 @@ public class ServerUtils {
     }
 
     /**
-     * send the server Put request to add a new card to the database
+     * Sends HTTP request to get board
+     *
+     * @param boardId the id of the board to load
+     * @return the board whose it was
+     */
+    public Board getBoard(long boardId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+            .target(server).path("boards/{id}") //
+            .resolveTemplate("id", boardId) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(Board.class);
+    }
+
+    /**
+     * Sends HTTP request to server to add a new card
      *
      * @param card the card to add to the database
      */
@@ -62,8 +78,51 @@ public class ServerUtils {
                 .path("cards/new")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-//                .header("keep-alive", "timeout=5, max=100")
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Sends HTTP request to change card's details
+     *
+     * @param card the card to change
+     * @return The updated instance of Card
+     */
+    public Card editCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("cards/{id}")
+                .resolveTemplate("id", card.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Sends HTTP request to add a new CardList to the database
+     *
+     * @param cardList the Card
+     * @return the new CardList
+     */
+    public CardList addCardList(CardList cardList) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("lists/new") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+    }
+
+    /**
+     * Sends HTTP request to edit a CardList in the database
+     *
+     * @param cardList the CardList containing the changes
+     * @return the CardList saved in the database
+     */
+    public CardList editCardList(CardList cardList) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("lists/{id}")
+                .resolveTemplate("id", cardList.getId())
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
     /**
@@ -98,20 +157,6 @@ public class ServerUtils {
     }
 
     /**
-     * send the server Post request to change card's details
-     *
-     * @param card the card to change
-     */
-    public void editCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("cards/{id}")
-                .resolveTemplate("id", card.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    /**
      * Get all the board that exists
      * (note that this also sends all lists and cards,
      * this should probably be changed in the future)
@@ -139,6 +184,8 @@ public class ServerUtils {
 
     /**
      * @param url address
+     *
+     * @return StompSession
      */
     private StompSession connect(String url) {
         var client = new StandardWebSocketClient();
@@ -151,7 +198,6 @@ public class ServerUtils {
             throw new RuntimeException(e);
         }
     }
-
 
     /**
      * @param destination destination for the upcoming messages
