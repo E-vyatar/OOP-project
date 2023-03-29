@@ -95,6 +95,19 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
+    
+    public boolean moveCard(long cardId, long boardId, long newListId, long newIndex){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("cards/move")
+                .queryParam("cardId", cardId)
+                .queryParam("newListId", newListId)
+                .queryParam("boardId", boardId)
+                .queryParam("newIndex", newIndex)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity("", APPLICATION_JSON), Boolean.class);
+
+    }
 
     /**
      * Sends HTTP request to add a new CardList to the database
