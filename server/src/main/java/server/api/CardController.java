@@ -34,6 +34,8 @@ public class CardController {
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");
+        long listSize = cardRepository.countByListId(card.getListId());
+        card.setIdx(listSize);
         return cardRepository.save(card);
     }
 

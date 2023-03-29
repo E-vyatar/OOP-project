@@ -71,9 +71,10 @@ public class ServerUtils {
      * Sends HTTP request to server to add a new card
      *
      * @param card the card to add to the database
+     * @return The Card that was added to the database
      */
-    public void addCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
+    public Card addCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig())
                 .target(server)
                 .path("cards/new")
                 .request(APPLICATION_JSON)

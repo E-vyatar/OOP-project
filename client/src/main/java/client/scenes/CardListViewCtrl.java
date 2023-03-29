@@ -73,6 +73,8 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         this.view = new CardListView(boardOverviewCtrl, this, cards);
 
         createView();
+
+        addCardButton.setOnAction(event -> showAddCard());
     }
 
     /**

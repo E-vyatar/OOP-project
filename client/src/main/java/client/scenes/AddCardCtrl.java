@@ -46,6 +46,7 @@ public class AddCardCtrl {
     /**
      * constructor
      *
+     * @param server server utilities reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
      * @param boardOverviewCtrl board overview reference
@@ -77,10 +78,7 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-//                server.addCard(getCard());
-                // need to have Card returned from method
-//                Card returnedCard = server.addCard(getCard());
-                Card returnedCard = new Card(-1, cardList.getId(), title.getText(), 3, 0);
+                Card returnedCard = server.addCard(getCard());
                 boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
                 closeWindow();
             } catch (WebApplicationException e) {
@@ -101,13 +99,13 @@ public class AddCardCtrl {
 
     /**
      * Create new card object
+     * List index is -1 because the actual index is
+     * generated when sending the request to the database
      *
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        long listSize = server.getCardsByList(cardList.getId()).size();
-        return new Card(
-            -1, cardList.getId(), cardList.getBoardId(), title.getText(), listSize+1);
+        return new Card(cardList.getId(), cardList.getBoardId(), title.getText(), -1);
     }
 
     /**

@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -186,10 +187,11 @@ public class BoardOverviewCtrl {
      */
     public void showAddCard() {
         Stage cardWindow = new Stage();
-        cardWindow.setTitle("Add new Task");
+        cardWindow.setTitle("Add new Task to " + addCardCtrl.getCardList().getTitle());
         cardWindow.setScene(addCard);
         addCard.setOnKeyPressed(event -> addCardCtrl.keyPressed(event));
         addCardCtrl.refresh();
+        cardWindow.initModality(Modality.APPLICATION_MODAL);
         cardWindow.show();
     }
 
@@ -209,8 +211,7 @@ public class BoardOverviewCtrl {
      * @param card The card to add to the list
      */
     public void addCardToBoardOverview(CardList cardList, Card card) {
-        int idx = getAllLists().indexOf(cardList);
-        cardListViewCtrlList.get(idx).addCard(card, -1);
+        getCardListViewCtrl(cardList.getId()).addCard(card, -1);
     }
 
     /**

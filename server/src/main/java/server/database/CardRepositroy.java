@@ -29,4 +29,11 @@ public interface CardRepositroy extends CrudRepository<Card, Long> {
      * @return an iterator over all found cards
      */
     Iterable<Card> findAllByBoardId(long boardId);
+
+    /**
+     * Count the cards in a list
+     * @param listId The id of the list
+     * @return Number of cards in a list
+     */
+    long countByListId(long listId);
 }
