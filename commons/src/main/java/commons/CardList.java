@@ -1,9 +1,8 @@
 package commons;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -11,23 +10,27 @@ public class CardList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    private long boardId;
     private String title;
     private long idx;
-    private long boardId;
+
+    @OneToMany(mappedBy = "listId")
+    @OrderColumn(name = "idx")
+    private List<Card> cards = new ArrayList<>();
 
     /**
-     * This is an empty constructor. It doesn't initialize any values.
+     * Empty constructor.
      */
     public CardList() {
     }
 
     /**
-     * Constructor without 'id' parameter (sets id = -1 to avoid errors)
-     * - ID will be generated automatically by the database
+     * Constructor (without 'id' parameter)
+     *  - ID will be generated automatically by the database
      *
-     * @param title   the title
+     * @param title the title
      * @param boardId the board's id
-     * @param idx the index for the order of cardlists in the board
+     * @param idx the position index of this CardList in the board
      */
     public CardList(String title, long boardId, long idx) {
         this.title = title;
@@ -47,69 +50,30 @@ public class CardList {
         this.id = id;
         this.title = title;
         this.boardId = boardId;
-    }
-
-    /**
-     * Get the index of the CardList that specifies where in the board it is
-     * with respect to other CardLists
-     * @return the index
-     */
-    public long getIdx() {
-        return idx;
-    }
-
-    /**
-     * Get the index of the CardList that specifies where in the board it is
-     * with respect to other CardLists
-     * @param idx the new index
-     */
-    public void setIdx(long idx) {
         this.idx = idx;
     }
 
     /**
-     * Change the title of the CardList to the new title
-     * @param title the new title
+     * Getter for Id
+     *
+     * @return the id of this CardList
      */
-    public void renameCardList(String title) {
-        this.title = title;
-    }
-
-    /**
-     * Get the id of the CardList
-     * @return the CardList's id
-     */
-    @Id
     public long getId() {
         return id;
     }
 
     /**
-     * Set the id of the CardList
-     * @param cardListId the new CardList's id
+     * Setter for id
+     *
+     * @param cardListId the new id of this CardList
      */
     public void setId(long cardListId) {
         this.id = cardListId;
     }
 
     /**
-     * Get the title of the CardList
-     * @return the CardList's title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * Set the title of the CardList
-     * @param cardListTitle the new title of the CardList
-     */
-    public void setTitle(String cardListTitle) {
-        this.title = cardListTitle;
-    }
-
-    /**
-     * Get the id of the Board the CardList is in
+     * Getter for the id of the Board the CardList is in
+     *
      * @return the Board's id
      */
     public long getBoardId() {
@@ -117,25 +81,80 @@ public class CardList {
     }
 
     /**
-     * Set the id of the board the CardList is in
-     * @param boardId the new Board's id
+     * Setter for board ID of this CardList
+     *
+     * @param boardId the new board ID of this CardList
      */
     public void setBoardId(long boardId) {
         this.boardId = boardId;
     }
 
     /**
-     * Check for object equality
-     * @param o the object to compare it with
+     * Getter for title
+     *
+     * @return the title of this CardList
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Setter for title
+     *
+     * @param newTitle the new title of the id
+     */
+    public void setTitle(String newTitle) {
+        this.title = newTitle;
+    }
+
+    /**
+     * Getter for position index.
+     *
+     * @return the position index of this CardList in the board
+     */
+    public long getIdx() {
+        return idx;
+    }
+
+    /**
+     * Setter for position index.
+     *
+     * @param idx the new position of the CardList in the board
+     */
+    public void setIdx(long idx) {
+        this.idx = idx;
+    }
+
+    /**
+     * Get the cards inside this CardList
+     *
+     * @return a list of cards
+     */
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    /**
+     * Set the cards inside this CardList
+     *
+     * @param cards the list of cards
+     */
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    /**
+     * Checks if the ID of the CardLists match
+     *
+     * @param o the Object to compare to
      * @return whether they're equal
      */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CardList)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         CardList cardList = (CardList) o;
-        return id == cardList.id && idx == cardList.idx && boardId == cardList.boardId &&
-                Objects.equals(title, cardList.title);
+        return id == cardList.id;
     }
 
     /**
@@ -144,8 +163,21 @@ public class CardList {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, idx, boardId);
+        return Objects.hash(id, boardId, title, idx, cards);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "CardList{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", idx=" + idx +
+            ", boardId=" + boardId +
+            ", cards=" + cards +
+            '}';
+    }
 
 }

@@ -35,5 +35,6 @@ public class FXConfig implements Module {
         binder.bind(CardPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(RenameListPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ConnectServerCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
     }
 }

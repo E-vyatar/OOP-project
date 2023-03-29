@@ -5,15 +5,15 @@ import client.FXMLInitializer;
 import com.google.inject.Injector;
 import commons.Card;
 import commons.CardList;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
+import javafx.scene.text.Text;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -29,6 +29,8 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private Button addCardButton;
     @FXML
     private AnchorPane cardListNode;
+    @FXML
+    private Text cardListTitle;
     private CardListView view;
 
     /**
@@ -37,14 +39,12 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      * and its cards. To get the CardListView, call {@link this.getView}
      * @param boardOverviewCtrl boardOverviewCtrl
      * @param cardList cardList for which it is used
-     * @param cards cards to display
      * @return the constructed CardListViewCtrl
      */
     @SuppressWarnings("LocalVariableName")
     public static CardListViewCtrl createNewCardListViewCtrl(
             BoardOverviewCtrl boardOverviewCtrl,
-            CardList cardList,
-            ObservableList<Card> cards) {
+            CardList cardList) {
 
         Injector injector = createInjector(new FXConfig());
         FXMLInitializer FXMLInitializer = new FXMLInitializer(injector);
@@ -52,25 +52,23 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         var viewCtrl = FXMLInitializer.load(CardListViewCtrl.class,
                 "client", "scenes", "cardList.fxml");
 
-        viewCtrl.getKey().initialize(boardOverviewCtrl, cardList, cards);
+        viewCtrl.getKey().initialize(boardOverviewCtrl, cardList);
 
         return viewCtrl.getKey();
     }
 
     /**
-     * Initalize the controller.
+     * Initialise the controller.
      * This includes creating the view.
      * @param boardOverviewCtrl the board overview controller
      * @param cardList the cardList
-     * @param cards the cards
      */
     private void initialize(BoardOverviewCtrl boardOverviewCtrl,
-                           CardList cardList,
-                           ObservableList<Card> cards) {
+                           CardList cardList) {
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
-        this.cards = cards;
+        this.cards = FXCollections.observableList(cardList.getCards());
 
         this.view = new CardListView(boardOverviewCtrl, this, cards);
 
@@ -93,14 +91,12 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
         CardListViewCtrl controller = this;
 
-        cardListView.setCellFactory(new Callback<ListView<Card>, ListCell<Card>>() {
-            @Override
-            public ListCell<Card> call(ListView<Card> param) {
-                CardViewCtrl cardViewCtrl = new CardViewCtrl(boardOverviewCtrl, controller);
-                return cardViewCtrl.getView();
-            }
+        cardListView.setCellFactory(param -> {
+            CardViewCtrl cardViewCtrl = new CardViewCtrl(boardOverviewCtrl, controller);
+            return cardViewCtrl.getView();
         });
         cardListView.setItems(this.cards);
+        cardListTitle.setText(cardList.getTitle());
 
         cardListView.getSelectionModel().getSelectedItems().addListener(controller);
 
@@ -212,15 +208,18 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         cards.add((int) index, card);
         card.setIdx(index);
     }
+
     @SuppressWarnings("MissingJavadocMethod")
     public void moveList(long listId) {
         boardOverviewCtrl.moveList(listId, this.getCardList().getId());
     }
+
     @SuppressWarnings("MissingJavadocMethod")
     public void moveCard(long cardId) {
         Card card = boardOverviewCtrl.getCard(cardId);
         boardOverviewCtrl.moveCard(card, getCardList(), getCards().length);
     }
+
     @SuppressWarnings("MissingJavadocMethod")
     public void highlightCard(Card card) {
         view.highlightCard(card);

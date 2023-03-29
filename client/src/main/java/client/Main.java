@@ -45,26 +45,36 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        var cardPopup = FXML.load(CardPopupCtrl.class,
-                "client", "scenes", "CardPopup.fxml");
-        var renameListPopup = FXML.load(RenameListPopupCtrl.class,
-                "client", "scenes", "RenameListPopup.fxml");
-        var addCard = FXML.load(AddCardCtrl.class,
-                "client", "scenes", "AddCard.fxml");
+        var overview = FXML.load(
+            BoardOverviewCtrl.class,
+            "client", "scenes", "boardOverview.fxml");
 
-        var overview = FXML.load(BoardOverviewCtrl.class,
-                "client", "scenes", "boardOverview.fxml");
+        var cardPopup = FXML.load(
+                CardPopupCtrl.class,
+                "client", "scenes", "CardPopup.fxml");
+
+        var renameListPopup = FXML.load(
+            RenameListPopupCtrl.class,
+            "client", "scenes", "RenameListPopup.fxml");
+
+        var addCard = FXML.load(
+            AddCardCtrl.class,
+            "client", "scenes", "AddCard.fxml");
+
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup);
 
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup);
-
-        var connectServerCtrl = FXML.load(ConnectServerCtrl.class,
+        var connectServerCtrl = FXML.load(
+                ConnectServerCtrl.class,
                 "client", "scenes", "ConnectServer.fxml");
-        var listOfBoardsCtrl = FXML.load(ListOfBoardsCtrl.class,
+
+        var listOfBoardsCtrl = FXML.load(
+                ListOfBoardsCtrl.class,
                 "client", "scenes", "ListOfBoards.fxml");
-        var createBoard = FXML.load(CreateBoardCtrl.class,
+        var createBoard = FXML.load(
+                CreateBoardCtrl.class,
                 "client", "scenes", "CreateBoard.fxml");
 
         mainCtrl.initialize(primaryStage,

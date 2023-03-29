@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,19 +25,16 @@ import javafx.util.Pair;
 public class MainCtrl {
 
     private Stage primaryStage;
-
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
-
     private ConnectServerCtrl connectServerCtrl;
-
     private Scene connectServer;
-
     private ListOfBoardsCtrl listOfBoardsCtrl;
     private Scene listOfBoards;
 
     private CreateBoardCtrl createBoardCtrl;
     private Scene createBoard;
+
     //=========================================================
 
     /**
@@ -88,8 +87,9 @@ public class MainCtrl {
     public void showOverview(long boardId) {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+        overviewCtrl.refresh(boardId);
     }
+
 //TODO solve the connection later
 //    public void checkConnection() throws UnknownHostException {
 //        if(connectServerCtrl.connect()){
@@ -107,6 +107,7 @@ public class MainCtrl {
     }
 
     /**
+
      * Shows the UI to create a new board
      */
     public void showCreateBoard() {
