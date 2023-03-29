@@ -8,7 +8,8 @@ import java.util.Objects;
 @Entity
 public class CardList {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "list_id_seq")
+    @SequenceGenerator(name = "list_id_seq", initialValue = 10, allocationSize = 1)
     private long id;
     private long boardId;
     private String title;
