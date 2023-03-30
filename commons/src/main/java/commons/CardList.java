@@ -14,7 +14,7 @@ public class CardList {
     private String title;
     private long idx;
 
-    @OneToMany(mappedBy = "listId")
+    @OneToMany(mappedBy = "listId", cascade = CascadeType.MERGE)
     @OrderColumn(name = "idx")
     private List<Card> cards = new ArrayList<>();
 
@@ -26,11 +26,11 @@ public class CardList {
 
     /**
      * Constructor (without 'id' parameter)
-     *  - ID will be generated automatically by the database
+     * - ID will be generated automatically by the database
      *
-     * @param title the title
+     * @param title   the title
      * @param boardId the board's id
-     * @param idx the position index of this CardList in the board
+     * @param idx     the position index of this CardList in the board
      */
     public CardList(String title, long boardId, long idx) {
         this.title = title;
@@ -41,10 +41,10 @@ public class CardList {
     /**
      * Constructor with 'id' parameter
      *
-     * @param id the CardList's id
+     * @param id      the CardList's id
      * @param title   the title
      * @param boardId the board's id
-     * @param idx the index for the order of cardlists in the board
+     * @param idx     the index for the order of cardlists in the board
      */
     public CardList(long id, String title, long idx, long boardId) {
         this.id = id;
@@ -159,6 +159,7 @@ public class CardList {
 
     /**
      * Generate a hashcode for the CardList
+     *
      * @return the hashcode
      */
     @Override

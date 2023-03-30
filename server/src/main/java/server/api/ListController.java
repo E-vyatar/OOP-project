@@ -72,20 +72,20 @@ public class ListController {
     /**
      * Updates an existing list
      *
-     * @param id the id of the list
+     * @param id       the id of the list
      * @param cardList the list to update
      * @return the updated list
      */
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public CardList updateList(@PathVariable("id") long id, @RequestBody CardList cardList) {
         logger.info("updateList() called with: id = [" + id + "], cardList = [" + cardList + "]");
-        if (listRepository.findById(id).isPresent()) {
-//            CardList cardList1 = listRepository.findById(id).get();
-//            cardList1.setTitle(cardList.getTitle());
-//            return listRepository.save(cardList1);
-            cardList.setId(id);
-            return listRepository.save(cardList);
+        var cardList1Opt = listRepository.findById(id);
+        if (cardList1Opt.isPresent()) {
+            var list = cardList1Opt.get();
+            list.setTitle(cardList.getTitle());
+            return listRepository.save(list);
         }
+
         return null;
     }
 
