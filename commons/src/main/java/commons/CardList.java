@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 public class CardList {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long boardId;
     private String title;

@@ -15,7 +15,7 @@ public class RenameListPopupCtrl {
 
     private final ServerUtils server;
     private Stage renameListPopup;
-    private CardList cardList;
+    private CardListViewCtrl controller;
     @FXML
     private Parent root;
     @FXML
@@ -71,18 +71,22 @@ public class RenameListPopupCtrl {
         if (title.isEmpty()) {
             listTitle.setStyle("-fx-border-color: red");
         } else {
-            cardList.setTitle(title);
-            server.editCardList(cardList);
+            CardList temp = controller.getCardList();
+            temp.setTitle(title);
+            temp = server.editCardList(temp);
+            controller.setCardList(temp);
+            controller.resetTitle();
             close();
         }
 
     }
 
     /**
-     * Sets the {@link CardList} that you want to rename
-     * @param cardList the {@link CardList} to rename
+     * Sets the {@link CardListViewCtrl} of the CardList that you want to rename.
+     *
+     * @param controller the {@link CardListViewCtrl} of the CardList to rename
      */
-    public void setCardList(CardList cardList) {
-        this.cardList = cardList;
+    public void setCardListViewCtrl(CardListViewCtrl controller) {
+        this.controller = controller;
     }
 }

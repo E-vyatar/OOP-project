@@ -80,6 +80,9 @@ public class ListController {
     public CardList updateList(@PathVariable("id") long id, @RequestBody CardList cardList) {
         logger.info("updateList() called with: id = [" + id + "], cardList = [" + cardList + "]");
         if (listRepository.findById(id).isPresent()) {
+//            CardList cardList1 = listRepository.findById(id).get();
+//            cardList1.setTitle(cardList.getTitle());
+//            return listRepository.save(cardList1);
             cardList.setId(id);
             return listRepository.save(cardList);
         }

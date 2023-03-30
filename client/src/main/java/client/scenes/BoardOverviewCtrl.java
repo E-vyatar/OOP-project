@@ -206,10 +206,10 @@ public class BoardOverviewCtrl {
      * Shows a popup to edit the details (i.e. the title)
      * of a CardList. The popup has an option to rename it.
      *
-     * @param cardList the CardList that you can rename.
+     * @param controller the controller of the CardList that you can rename.
      */
-    public void showRenameList(CardList cardList) {
-        renameListPopupCtrl.setCardList(cardList);
+    public void showRenameList(CardListViewCtrl controller) {
+        renameListPopupCtrl.setCardListViewCtrl(controller);
         renameListPopupCtrl.show();
     }
 

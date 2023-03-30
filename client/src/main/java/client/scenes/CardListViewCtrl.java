@@ -34,7 +34,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private CardListView view;
 
     /**
-     * This constructs an instance of CardListViewCtrl
+     * This constructs an instance of CardListViewCtrl.
      * CardListViewCtrl is the controller for viewing a CardList
      * and its cards. To get the CardListView, call {@link this.getView}
      * @param boardOverviewCtrl boardOverviewCtrl
@@ -96,7 +96,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
             return cardViewCtrl.getView();
         });
         cardListView.setItems(this.cards);
-        setTitle(cardList.getTitle());
+        resetTitle();
 
         cardListView.getSelectionModel().getSelectedItems().addListener(controller);
     }
@@ -233,15 +233,22 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      *
      */
     public void showRenameList() {
-        boardOverviewCtrl.showRenameList(cardList);
+        boardOverviewCtrl.showRenameList(this);
     }
 
     /**
      * Sets the displayed title in the CardList view
-     *
-     * @param title the new title
      */
-    public void setTitle(String title) {
-        cardListTitle.setText(title);
+    public void resetTitle() {
+        cardListTitle.setText(cardList.getTitle());
+    }
+
+    /**
+     * Sets the CardList for this controller
+     *
+     * @param cardList the new CardList for this controller
+     */
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
     }
 }
