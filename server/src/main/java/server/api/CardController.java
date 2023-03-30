@@ -103,10 +103,12 @@ public class CardController {
      * Delete a card
      *
      * @param id the id of the card
+     * @return true if card doesn't exist in the database after deletion, false otherwise
      */
     @DeleteMapping("{id}")
-    public void deleteCard(@PathVariable("id") long id) {
+    public boolean deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);
+        return !cardRepository.existsById(id);
     }
 
     // TODO: POST --> mapping = "move", reqBody = cardId, listId, boardId newIndex

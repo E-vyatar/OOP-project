@@ -1,10 +1,7 @@
 package client.scenes;
 
-import client.FXConfig;
-import client.FXMLInitializer;
 import client.utils.CardsUtils;
 import client.utils.ServerUtils;
-import com.google.inject.Injector;
 import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
@@ -17,16 +14,13 @@ import javafx.stage.Stage;
 
 import javax.inject.Inject;
 
-import static com.google.inject.Guice.createInjector;
-
 public class CardPopupCtrl {
 
     private Card card;
     private final CardsUtils cardsUtils;
     private final ServerUtils server;
     private Stage cardPopup;
-    private DeleteCardCtrl deleteCardCtrl;
-    private Scene deleteCardScene;
+    private BoardOverviewCtrl boardOverviewCtrl;
     @FXML
     private Parent root;
     @FXML
@@ -54,11 +48,14 @@ public class CardPopupCtrl {
      *
      * @param cardsUtils  CardsUtils reference
      * @param server ServerUtils reference
+     * @param boardOverviewCtrl BoardOverviewCtrl reference
      */
     @Inject
-    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils server) {
+    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils server,
+                         BoardOverviewCtrl boardOverviewCtrl) {
         this.cardsUtils = cardsUtils;
         this.server = server;
+        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
     /**
@@ -79,13 +76,6 @@ public class CardPopupCtrl {
         this.cardPopup.setMinWidth(240.0);
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(root));
-
-        Injector injector = createInjector(new FXConfig());
-        FXMLInitializer fxmlInitializer = new FXMLInitializer(injector);
-        var deleteCtrl =
-                fxmlInitializer.load(DeleteCardCtrl.class, "client", "scenes", "DeleteCard.fxml");
-        this.deleteCardCtrl = deleteCtrl.getKey();
-        this.deleteCardScene = new Scene(deleteCtrl.getValue());
     }
 
 
@@ -127,7 +117,7 @@ public class CardPopupCtrl {
      * It is called by pressing the close button in the popup.
      */
     @FXML
-    private void close() {
+    public void close() {
         this.cardPopup.hide();
     }
 
@@ -182,6 +172,6 @@ public class CardPopupCtrl {
      * Initialize deletion confirmation window and set its scene
      */
     public void showDeleteConfirmation() {
-        deleteCardCtrl.initialize(deleteCardScene, card);
+        boardOverviewCtrl.showDeleteCard(card);
     }
 }

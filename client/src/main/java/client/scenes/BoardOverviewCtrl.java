@@ -40,6 +40,8 @@ public class BoardOverviewCtrl {
     private CardPopupCtrl cardPopupCtrl;
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
+        private DeleteCardCtrl deleteCardCtrl;
+    private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
     private Board board;
     @FXML
@@ -64,14 +66,18 @@ public class BoardOverviewCtrl {
      * @param cardPopup a pair of the CardPopupCtrl and the root of the to-be scene
      * @param addCard a pair of the AddCardCtrl and the root of the to-be scene
      * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
+     * @param deleteCard a pair of the DeleteCardCtrl and the root of the to-be scene
      */
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup,
+                           Pair<DeleteCardCtrl, Parent> deleteCard) {
         this.cardPopupCtrl = cardPopup.getKey();
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
         this.renameListPopupCtrl = renameListPopup.getKey();
+        this.deleteCardCtrl = deleteCard.getKey();
+        this.deleteCard = new Scene(deleteCard.getValue());
     }
 
     private void getCardsFromServer() {
@@ -212,6 +218,35 @@ public class BoardOverviewCtrl {
      */
     public void addCardToBoardOverview(CardList cardList, Card card) {
         getCardListViewCtrl(cardList.getId()).addCard(card, -1);
+    }
+
+    /**
+     * Open a new window with "DeleteCard" scene
+     * @param card Card to delete
+     */
+    public void showDeleteCard(Card card) {
+        deleteCardCtrl.setCard(card);
+        Stage stage = new Stage();
+        stage.setTitle("Are you sure you want to delete this card?");
+        stage.setScene(deleteCard);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        deleteCardCtrl.setStage(stage);
+        deleteCardCtrl.getStage().show();
+    }
+
+    /**
+     * Remove card from the board overview
+     * @param card Card to remove from the board
+     */
+    public void removeDeletedCard(Card card) {
+        getCardListViewCtrl(card.getListId()).removeCard(card);
+    }
+
+    /**
+     * Close card pop-up window
+     */
+    public void closeCardPopUp() {
+        cardPopupCtrl.close();
     }
 
     /**

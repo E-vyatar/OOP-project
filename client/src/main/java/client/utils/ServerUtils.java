@@ -129,15 +129,16 @@ public class ServerUtils {
     /**
      * send the server Delete request to remove a card from the database
      * @param card the card to remove from the database
+     * @return true if card was deleted from the database, false otherwise
      */
-    public void deleteCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
+    public boolean deleteCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig())
                 .target(server)
                 .path("cards/{id}")
                 .resolveTemplate("id", card.getId())
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .delete();
+                .delete().readEntity(Boolean.class);
     }
 
     /**
