@@ -37,20 +37,21 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      * This constructs an instance of CardListViewCtrl
      * CardListViewCtrl is the controller for viewing a CardList
      * and its cards. To get the CardListView, call {@link this.getView}
+     *
      * @param boardOverviewCtrl boardOverviewCtrl
-     * @param cardList cardList for which it is used
+     * @param cardList          cardList for which it is used
      * @return the constructed CardListViewCtrl
      */
     @SuppressWarnings("LocalVariableName")
     public static CardListViewCtrl createNewCardListViewCtrl(
-            BoardOverviewCtrl boardOverviewCtrl,
-            CardList cardList) {
+        BoardOverviewCtrl boardOverviewCtrl,
+        CardList cardList) {
 
         Injector injector = createInjector(new FXConfig());
         FXMLInitializer FXMLInitializer = new FXMLInitializer(injector);
 
         var viewCtrl = FXMLInitializer.load(CardListViewCtrl.class,
-                "client", "scenes", "cardList.fxml");
+            "client", "scenes", "cardList.fxml");
 
         viewCtrl.getKey().initialize(boardOverviewCtrl, cardList);
 
@@ -60,11 +61,12 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     /**
      * Initialise the controller.
      * This includes creating the view.
+     *
      * @param boardOverviewCtrl the board overview controller
-     * @param cardList the cardList
+     * @param cardList          the cardList
      */
     private void initialize(BoardOverviewCtrl boardOverviewCtrl,
-                           CardList cardList) {
+                            CardList cardList) {
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
         // Only keep the cards that have the same id as this list.
@@ -77,6 +79,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     /**
      * Get the cardList attached to the CardListViewCtrl
+     *
      * @return the cardList for which CardListViewCtrl handles the logic
      */
     public CardList getCardList() {
@@ -109,6 +112,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     /**
      * Returns the view for which the controller handles the logic
+     *
      * @return the attached CardListView
      */
     public CardListView getView() {
@@ -118,6 +122,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     /**
      * This method moves a card one item up the list.
      * If it's the highest card, an error is shown.
+     *
      * @param card the card to move upwards
      */
     public void moveCardUp(Card card) {
@@ -136,6 +141,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     /**
      * This method moves the card one item down the list.
      * If it's the bottom card, an error is shown.
+     *
      * @param card the card to move downwards.
      */
     public void moveCardDown(Card card) {
@@ -174,6 +180,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     /**
      * Get the root node of the CardListView
+     *
      * @return the root node
      */
     public AnchorPane getCardListNode() {
@@ -182,6 +189,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     /**
      * Get the cards of this CardListViewCtrl
+     *
      * @return an array of the cards
      */
     public Card[] getCards() {
@@ -190,6 +198,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     /**
      * Remove a card from the view
+     *
      * @param card the card to remove
      */
     public void removeCard(Card card) {
@@ -199,7 +208,8 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     /**
      * Add a card
-     * @param card the card to add
+     *
+     * @param card  the card to add
      * @param index where to add the card
      */
     public void addCard(Card card, long index) {

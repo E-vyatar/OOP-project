@@ -25,6 +25,7 @@ public class DeleteCardCtrl {
 
     /**
      * Create an instance of DeleteCardCtrl
+     *
      * @param serverUtils the class containing the methods to communicate with the server
      */
     @Inject
@@ -45,6 +46,7 @@ public class DeleteCardCtrl {
     /**
      * This sets the card to be deleted.
      * This must be called before it becomes visibile.
+     *
      * @param card card
      */
     public void setCard(Card card) {

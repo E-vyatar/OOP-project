@@ -6,17 +6,15 @@ import java.util.Objects;
 public class MoveCardMessage implements Serializable {
     private long cardId;
     private long newListId;
-    private long boardId;
     private long newIndex;
 
     public MoveCardMessage() {
     }
 
 
-    public MoveCardMessage(long cardId, long boardId, long newListId, long newIndex) {
+    public MoveCardMessage(long cardId, long newListId, long newIndex) {
         this.cardId = cardId;
         this.newListId = newListId;
-        this.boardId = boardId;
         this.newIndex = newIndex;
     }
 
@@ -26,10 +24,6 @@ public class MoveCardMessage implements Serializable {
 
     public long getNewListId() {
         return newListId;
-    }
-
-    public long getBoardId() {
-        return boardId;
     }
 
     public long getNewIndex() {
@@ -44,10 +38,6 @@ public class MoveCardMessage implements Serializable {
         this.newListId = newListId;
     }
 
-    public void setBoardId(long boardId) {
-        this.boardId = boardId;
-    }
-
     public void setNewIndex(long newIndex) {
         this.newIndex = newIndex;
     }
@@ -57,21 +47,20 @@ public class MoveCardMessage implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MoveCardMessage that = (MoveCardMessage) o;
-        return cardId == that.cardId && newListId == that.newListId && boardId == that.boardId && newIndex == that.newIndex;
+        return cardId == that.cardId && newListId == that.newListId && newIndex == that.newIndex;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cardId, newListId, boardId, newIndex);
+        return Objects.hash(cardId, newListId, newIndex);
     }
 
     @Override
     public String toString() {
         return "MoveCardMessage{" +
-                "cardId=" + cardId +
-                ", newListId=" + newListId +
-                ", boardId=" + boardId +
-                ", newIndex=" + newIndex +
-                '}';
+            "cardId=" + cardId +
+            ", newListId=" + newListId +
+            ", newIndex=" + newIndex +
+            '}';
     }
 }

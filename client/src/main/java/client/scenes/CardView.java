@@ -21,6 +21,7 @@ public class CardView extends ListCell<Card> {
 
     /**
      * This constructs a CardView
+     *
      * @param controller the controller of the CardView
      */
     public CardView(CardViewCtrl controller) {
@@ -29,7 +30,7 @@ public class CardView extends ListCell<Card> {
         setDragEvents();
     }
 
-    @SuppressWarnings({"MethodLength","CyclomaticComplexity"})
+    @SuppressWarnings({"MethodLength", "CyclomaticComplexity"})
     private void setDragEvents() {
 
         // such a drag
@@ -53,7 +54,7 @@ public class CardView extends ListCell<Card> {
             /* accept it only if it is  not dragged from the same node
              * and if it has a string data */
             if (event.getGestureSource() != this
-                    && event.getDragboard().hasString()
+                && event.getDragboard().hasString()
             ) {
                 /* allow for both copying and moving, whatever user chooses */
                 if (event.getDragboard().getString().startsWith("c")) {
@@ -66,12 +67,12 @@ public class CardView extends ListCell<Card> {
         });
         setOnDragEntered(event -> {
             if (event.getGestureSource() != this
-                    && event.getDragboard().hasString()
-                    && event.getDragboard().getString().startsWith("c")
+                && event.getDragboard().hasString()
+                && event.getDragboard().getString().startsWith("c")
             ) {
                 setBorder(new Border(new BorderStroke(
-                        Color.RED, BorderStrokeStyle.SOLID,
-                        CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                    Color.RED, BorderStrokeStyle.SOLID,
+                    CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
             event.consume();
         });
@@ -93,7 +94,7 @@ public class CardView extends ListCell<Card> {
                 } else {
                     long id = Long.parseLong(db.getString());
                     controller.getBoardOverviewCtrl()
-                            .moveList(id, controller.getCardList().getId());
+                        .moveList(id, controller.getCardList().getId());
                     success = true;
                 }
             }
@@ -164,6 +165,7 @@ public class CardView extends ListCell<Card> {
 
     /**
      * Returns the button to move a card up
+     *
      * @return the button to move a card up
      */
     public Button getButtonUp() {
@@ -172,6 +174,7 @@ public class CardView extends ListCell<Card> {
 
     /**
      * Returns the button to move a card down
+     *
      * @return the button to move a card down
      */
     public Button getButtonDown() {
@@ -180,6 +183,7 @@ public class CardView extends ListCell<Card> {
 
     /**
      * Returns the button to edit a card
+     *
      * @return the button to edit a card
      */
     public Button getEditButton() {

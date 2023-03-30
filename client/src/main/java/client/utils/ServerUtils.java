@@ -32,9 +32,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -64,11 +62,11 @@ public class ServerUtils {
      */
     public Board getBoard(long boardId) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("boards/{id}") //
-                .resolveTemplate("id", boardId) //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(Board.class);
+            .target(server).path("boards/{id}") //
+            .resolveTemplate("id", boardId) //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .get(Board.class);
     }
 
     /**
@@ -78,11 +76,11 @@ public class ServerUtils {
      */
     public void addCard(Card card) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(server)
-                .path("cards/new")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+            .target(server)
+            .path("cards/new")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
     /**
@@ -93,24 +91,24 @@ public class ServerUtils {
      */
     public Card editCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("cards/{id}")
-                .resolveTemplate("id", card.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+            .target(server).path("cards/{id}")
+            .resolveTemplate("id", card.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
-    public boolean moveCard(long cardId, long boardId, long newListId, long newIndex) {
+    public boolean moveCard(long cardId, long newListId, long newIndex) {
 
-        MoveCardMessage message = new MoveCardMessage(cardId, boardId, newListId, newIndex);
+        MoveCardMessage message = new MoveCardMessage(cardId, newListId, newIndex);
 
         System.out.println("Sending move card message: " + message.toString());
 
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("cards/move")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(message, APPLICATION_JSON), Boolean.class);
+            .target(server).path("cards/move")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(message, APPLICATION_JSON), Boolean.class);
     }
 
     /**
@@ -121,10 +119,10 @@ public class ServerUtils {
      */
     public CardList addCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("lists/new") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+            .target(server).path("lists/new") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
     /**
@@ -135,11 +133,11 @@ public class ServerUtils {
      */
     public CardList editCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("lists/{id}")
-                .resolveTemplate("id", cardList.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+            .target(server).path("lists/{id}")
+            .resolveTemplate("id", cardList.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
     /**
@@ -149,12 +147,12 @@ public class ServerUtils {
      */
     public void deleteCard(Card card) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(server)
-                .path("cards/{id}")
-                .resolveTemplate("id", card.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete();
+            .target(server)
+            .path("cards/{id}")
+            .resolveTemplate("id", card.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete();
     }
 
     /**
@@ -165,13 +163,13 @@ public class ServerUtils {
      */
     public List<Card> getCardsByList(long listId) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server)
-                .path("cards/list/{id}")
-                .resolveTemplate("id", listId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {
-                });
+            .target(server)
+            .path("cards/list/{id}")
+            .resolveTemplate("id", listId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<>() {
+            });
     }
 
     /**
@@ -183,11 +181,11 @@ public class ServerUtils {
      */
     public List<Board> getBoards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("boards/all")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {
-                });
+            .target(server).path("boards/all")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<>() {
+            });
     }
 
 //    private final StompSession session = connect("ws://localhost:8080/websocket");

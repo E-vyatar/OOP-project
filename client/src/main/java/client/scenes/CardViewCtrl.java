@@ -15,8 +15,9 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
 
     /**
      * Constructs CardViewCtrl
+     *
      * @param boardOverviewCtrl the board overview controller
-     * @param cardListViewCtrl the controller of the CardList of this card.
+     * @param cardListViewCtrl  the controller of the CardList of this card.
      */
     public CardViewCtrl(BoardOverviewCtrl boardOverviewCtrl, CardListViewCtrl cardListViewCtrl) {
         this.boardOverviewCtrl = boardOverviewCtrl;
@@ -26,6 +27,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
 
     /**
      * Get the view of this controller
+     *
      * @return the view
      */
     public CardView getView() {
@@ -38,6 +40,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
      * 1. move a card
      * 2. View a card (to edit or not to edit)
      * 3. Do nothing
+     *
      * @param event the event which occurred
      */
     @Override
@@ -57,6 +60,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
 
     /**
      * Get the card of this controller
+     *
      * @return the card
      */
     public Card getCard() {
@@ -65,6 +69,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
 
     /**
      * Set the card of this controller
+     *
      * @param card the card
      */
     public void setCard(Card card) {
@@ -73,6 +78,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
 
     /**
      * Get the BoardOverviewCtrl
+     *
      * @return the board overview controller
      */
     public BoardOverviewCtrl getBoardOverviewCtrl() {
@@ -85,6 +91,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
 
     /**
      * Get the cardlist of which the card is a part of
+     *
      * @return the CardList
      */
     public CardList getCardList() {
