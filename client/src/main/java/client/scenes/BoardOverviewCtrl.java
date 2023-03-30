@@ -17,11 +17,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.*;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -48,8 +51,9 @@ public class BoardOverviewCtrl {
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
      * linked to the overview of the board.
      * The constructor should not be called manually, since it uses injection.
+     *
      * @param mainCtrl the MainCtrl of the app
-     * @param server the ServerUtils of the app
+     * @param server   the ServerUtils of the app
      */
     @Inject
     public BoardOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -60,8 +64,8 @@ public class BoardOverviewCtrl {
     /**
      * Initialises the different popup controllers.
      *
-     * @param cardPopup a pair of the CardPopupCtrl and the root of the to-be scene
-     * @param addCard a pair of the AddCardCtrl and the root of the to-be scene
+     * @param cardPopup       a pair of the CardPopupCtrl and the root of the to-be scene
+     * @param addCard         a pair of the AddCardCtrl and the root of the to-be scene
      * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
      */
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
@@ -84,13 +88,27 @@ public class BoardOverviewCtrl {
      */
     @FXML
     private void addList(ActionEvent actionEvent) {
-        CardList cardList = new CardList("New List", 0, 0);
-        CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
+        // Create cardList without specified ID
+        CardList cardList = new CardList("New List", board.getId(), board.getCardLists().size());
+
+        try {
+            // Add cardList to server and retrieve object with ID
+            cardList = server.addCardList(cardList);
+
+            board.getCardLists().add(cardList);
+
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
                 this, cardList);
-        cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        int numLists = listOfLists.getChildren().size();
-        listOfLists.getChildren().add(numLists, cardListViewCtrl.getCardListNode());
+            cardListViewCtrlList.add(cardListViewCtrl);
+
+            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     /**
@@ -101,7 +119,6 @@ public class BoardOverviewCtrl {
      */
     public void disconnect(ActionEvent actionEvent) {
         server.getSession().disconnect();
-        System.out.println("The client has been disconnected");
 
         mainCtrl.showConnect();
     }
@@ -135,7 +152,7 @@ public class BoardOverviewCtrl {
 
         // Loops through the cardLists in the board:
         //      (to add them to the overview)
-        for(CardList cardList : board.getCardLists()) {
+        for (CardList cardList : board.getCardLists()) {
 
             // Creates new controller for this list (using creatNewCardListViewCtrl)
             CardListViewCtrl cardListViewCtrl =
@@ -220,8 +237,8 @@ public class BoardOverviewCtrl {
      */
     public List<CardList> getAllLists() {
         return cardListViewCtrlList.stream()
-                .map(CardListViewCtrl::getCardList)
-                .collect(Collectors.toList());
+            .map(CardListViewCtrl::getCardList)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -259,17 +276,23 @@ public class BoardOverviewCtrl {
     /**
      * Moves Card (for drag & drop).
      *
-     * @param card the Card to be moved
+     * @param card     the Card to be moved
      * @param cardList the CardList the card is moved to
-     * @param index the new position index of the card in the CardList
+     * @param index    the new position index of the card in the CardList
      */
     public void moveCard(Card card, CardList cardList, long index) {
-        System.out.println("Moving card " + card.getId() +
-                " to list " + cardList.getId() + " at index " + index);
 
         var oldList = getCardListViewCtrl(card.getListId());
         var newList = getCardListViewCtrl(cardList.getId());
+
         // TODO: wait for server to confirm move
+
+        if (!server.moveCard(card.getId(), newList.getCardList().getId(),
+            index)) {
+            return;
+        }
+
+
         oldList.removeCard(card);
         newList.addCard(card, index);
 
@@ -281,7 +304,7 @@ public class BoardOverviewCtrl {
     /**
      * Move a list from a certain index to a new one.
      *
-     * @param listId the old index
+     * @param listId   the old index
      * @param targetId the new index
      */
     public void moveList(long listId, long targetId) {

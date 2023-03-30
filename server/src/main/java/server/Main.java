@@ -28,6 +28,7 @@ public class Main {
 
     /**
      * The main function. It starts the server.
+     *
      * @param args parameters with which the application is started
      */
     public static void main(String[] args) {
@@ -40,6 +41,5 @@ public class Main {
             throw new RuntimeException(e);
         }
         addressIP = myIp.getHostAddress();
-        System.out.println(addressIP);
     }
 }
