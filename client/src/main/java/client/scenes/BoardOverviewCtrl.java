@@ -40,7 +40,7 @@ public class BoardOverviewCtrl {
     private CardPopupCtrl cardPopupCtrl;
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
-        private DeleteCardCtrl deleteCardCtrl;
+    private DeleteCardCtrl deleteCardCtrl;
     private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
     private Board board;
