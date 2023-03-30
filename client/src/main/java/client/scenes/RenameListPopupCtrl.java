@@ -81,6 +81,10 @@ public class RenameListPopupCtrl {
 
     }
 
+    public void delete() {
+
+    }
+
     /**
      * Sets the {@link CardListViewCtrl} of the CardList that you want to rename.
      *
