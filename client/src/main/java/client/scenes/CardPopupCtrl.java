@@ -46,8 +46,8 @@ public class CardPopupCtrl {
     /**
      * constructor
      *
-     * @param cardsUtils  CardsUtils reference
-     * @param server ServerUtils reference
+     * @param cardsUtils CardsUtils reference
+     * @param server     ServerUtils reference
      * @param boardOverviewCtrl BoardOverviewCtrl reference
      */
     @Inject
@@ -81,6 +81,7 @@ public class CardPopupCtrl {
 
     /**
      * Sets the card for the controller.
+     *
      * @param card the card to attach to the controller
      */
     public void setCard(Card card) {

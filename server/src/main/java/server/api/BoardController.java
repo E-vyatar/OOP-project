@@ -44,7 +44,7 @@ public class BoardController {
     /**
      * Updates a board
      *
-     * @param id the id of the board
+     * @param id    the id of the board
      * @param board the board to be updated
      * @return the updated board
      */

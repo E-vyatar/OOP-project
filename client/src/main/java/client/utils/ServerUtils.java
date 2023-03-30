@@ -18,6 +18,7 @@ package client.utils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.messages.MoveCardMessage;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -44,10 +45,10 @@ public class ServerUtils {
 
     /**
      * Set the hostname of the server and then connect to it
+     *
      * @param hostname the hostname
      */
     public void setHostnameAndConnect(String hostname) {
-        System.out.println("Connecting to server: " + hostname);
         this.server = "http://" + hostname + ":8080";
         session = connect("ws://" + hostname + ":8080/websocket");
     }
@@ -90,11 +91,30 @@ public class ServerUtils {
      */
     public Card editCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("cards/{id}")
-                .resolveTemplate("id", card.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+            .target(server).path("cards/{id}")
+            .resolveTemplate("id", card.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Sends HTTP request to move a card
+     *
+     * @param cardId   the id of the card to move
+     * @param newListId the id of the list to move the card to
+     * @param newIndex the index of the card in the new list
+     * @return list of all the cards in the database
+     */
+    public boolean moveCard(long cardId, long newListId, long newIndex) {
+
+        MoveCardMessage message = new MoveCardMessage(cardId, newListId, newIndex);
+
+        return ClientBuilder.newClient(new ClientConfig())
+            .target(server).path("cards/move")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(message, APPLICATION_JSON), Boolean.class);
     }
 
     /**
@@ -105,10 +125,10 @@ public class ServerUtils {
      */
     public CardList addCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("lists/new") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+            .target(server).path("lists/new") //
+            .request(APPLICATION_JSON) //
+            .accept(APPLICATION_JSON) //
+            .put(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
     /**
@@ -119,26 +139,27 @@ public class ServerUtils {
      */
     public CardList editCardList(CardList cardList) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("lists/{id}")
-                .resolveTemplate("id", cardList.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+            .target(server).path("lists/{id}")
+            .resolveTemplate("id", cardList.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
     /**
      * send the server Delete request to remove a card from the database
+     *
      * @param card the card to remove from the database
      * @return true if card was deleted from the database, false otherwise
      */
     public boolean deleteCard(Card card) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server)
-                .path("cards/{id}")
-                .resolveTemplate("id", card.getId())
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete().readEntity(Boolean.class);
+            .target(server)
+            .path("cards/{id}")
+            .resolveTemplate("id", card.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete().readEntity(Boolean.class);
     }
 
     /**
@@ -149,13 +170,13 @@ public class ServerUtils {
      */
     public List<Card> getCardsByList(long listId) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server)
-                .path("cards/list/{id}")
-                .resolveTemplate("id", listId)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {
-                });
+            .target(server)
+            .path("cards/list/{id}")
+            .resolveTemplate("id", listId)
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<>() {
+            });
     }
 
     /**
@@ -167,11 +188,11 @@ public class ServerUtils {
      */
     public List<Board> getBoards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("boards/all")
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(new GenericType<>() {
-                });
+            .target(server).path("boards/all")
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .get(new GenericType<>() {
+            });
     }
 
 //    private final StompSession session = connect("ws://localhost:8080/websocket");
@@ -186,7 +207,6 @@ public class ServerUtils {
 
     /**
      * @param url address
-     *
      * @return StompSession
      */
     private StompSession connect(String url) {
@@ -223,6 +243,7 @@ public class ServerUtils {
 
     /**
      * Check if the connection is alive
+     *
      * @return whether the connection is alive
      */
     public boolean isConnectionAlive() {

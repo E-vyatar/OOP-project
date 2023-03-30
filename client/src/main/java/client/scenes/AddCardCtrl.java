@@ -46,9 +46,9 @@ public class AddCardCtrl {
     /**
      * constructor
      *
-     * @param server server utilities reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
+     * @param server     the ServerUtils reference
      * @param boardOverviewCtrl board overview reference
      */
     @Inject
@@ -72,8 +72,6 @@ public class AddCardCtrl {
     /**
      * send the server a request to add new card
      * and close the window
-     * TODO:
-     * get card from server and pass to addCardToBoardOverview
      */
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
@@ -138,6 +136,7 @@ public class AddCardCtrl {
 
     /**
      * Get the CardList for which you're adding a card
+     *
      * @return the CardList
      */
     public CardList getCardList() {
@@ -146,6 +145,7 @@ public class AddCardCtrl {
 
     /**
      * Set the CardList for which you're adding a card
+     *
      * @param cardList the cardlist
      */
     public void setCardList(CardList cardList) {

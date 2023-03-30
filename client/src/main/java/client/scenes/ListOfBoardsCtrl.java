@@ -30,8 +30,8 @@ public class ListOfBoardsCtrl {
     /**
      * This constructs an instance of ListOfBoards.
      *
-     * @param mainCtrl    the main controller
-     * @param server the server utils
+     * @param mainCtrl the main controller
+     * @param server   the server utils
      */
     @Inject
     public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils server) {
@@ -53,11 +53,11 @@ public class ListOfBoardsCtrl {
         });
         // When you select (i.e.) click a board, open that board.
         this.boards.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    if (newValue != null) {
-                        mainCtrl.showOverview(0);
-                    }
-                });
+            .addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    mainCtrl.showOverview(0);
+                }
+            });
     }
 
     /**

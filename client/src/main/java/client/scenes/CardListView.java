@@ -24,9 +24,10 @@ public class CardListView extends TitledPane {
      * Constructs a CardListView.
      * This shouldn't be called manually. If you need to create a CardListView,
      * you create a CardListViewController and call getView().
+     *
      * @param boardOverviewCtrl the board overview controller
-     * @param controller the controller to use.
-     * @param cards the list of cards to render
+     * @param controller        the controller to use.
+     * @param cards             the list of cards to render
      */
     public CardListView(BoardOverviewCtrl boardOverviewCtrl,
                         CardListViewCtrl controller,
@@ -36,7 +37,7 @@ public class CardListView extends TitledPane {
         this.controller = controller;
         // Only keep the cards that have the same id as this list.
         this.cards = cards.filtered(
-                card -> card.getListId() == controller.getCardList().getId()
+            card -> card.getListId() == controller.getCardList().getId()
         );
 
         setDragEvents();
@@ -46,7 +47,6 @@ public class CardListView extends TitledPane {
     @SuppressWarnings({"MethodLength", "CyclomaticComplexity"})
     private void setDragEvents() {
         setOnDragDetected(event -> {
-            System.out.println("onDragDetected" + controller.getCardList().getId());
 
             /* allow any transfer mode */
             Dragboard db = startDragAndDrop(TransferMode.ANY);
@@ -63,7 +63,7 @@ public class CardListView extends TitledPane {
             /* accept it only if it is  not dragged from the same node
              * and if it has a string data */
             if (event.getGestureSource() != this
-                    && event.getDragboard().hasString()) {
+                && event.getDragboard().hasString()) {
                 /* allow for both copying and moving, whatever user chooses */
                 if (event.getDragboard().getString().startsWith("c")) {
                     if (this.controller.getCards().length == 0) {
@@ -82,18 +82,17 @@ public class CardListView extends TitledPane {
             if (event.getDragboard().getString().startsWith("c")) {
                 if (this.controller.getCards().length == 0) {
                     setBorder(new Border(new BorderStroke(
-                            Color.RED, BorderStrokeStyle.SOLID,
-                            CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                        Color.RED, BorderStrokeStyle.SOLID,
+                        CornerRadii.EMPTY, BorderWidths.DEFAULT)));
                 }
             } else {
                 setBorder(new Border(new BorderStroke(
-                        Color.RED, BorderStrokeStyle.SOLID,
-                        CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                    Color.RED, BorderStrokeStyle.SOLID,
+                    CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
             event.consume();
         });
         setOnDragExited(event -> {
-            System.out.println("onMouseDragExited" + event.getDragboard().getString());
             setBorder(null);
             event.consume();
         });
@@ -147,6 +146,7 @@ public class CardListView extends TitledPane {
 
     /**
      * Highlight a certain card
+     *
      * @param card the card to be highlighted
      */
     public void highlightCard(Card card) {
