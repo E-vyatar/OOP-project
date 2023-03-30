@@ -18,6 +18,7 @@ package client.utils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.messages.MoveCardMessage;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -31,7 +32,9 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -95,18 +98,18 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
-    
+
     public boolean moveCard(long cardId, long boardId, long newListId, long newIndex){
+
+        MoveCardMessage message = new MoveCardMessage(cardId, boardId, newListId, newIndex);
+
+        System.out.println("Sending move card message: " + message.toString());
+
         return ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("cards/move")
-                .queryParam("cardId", cardId)
-                .queryParam("newListId", newListId)
-                .queryParam("boardId", boardId)
-                .queryParam("newIndex", newIndex)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity("", APPLICATION_JSON), Boolean.class);
-
+                .post(Entity.entity(message, APPLICATION_JSON), Boolean.class);
     }
 
     /**

@@ -286,7 +286,14 @@ public class BoardOverviewCtrl {
 
         var oldList = getCardListViewCtrl(card.getListId());
         var newList = getCardListViewCtrl(cardList.getId());
+
         // TODO: wait for server to confirm move
+
+        if(!server.moveCard(card.getId(), card.getBoardId(), newList.getCardList().getId(), index)){
+            return;
+        }
+
+
         oldList.removeCard(card);
         newList.addCard(card, index);
 

@@ -1,6 +1,7 @@
 package server.database;
 
 import commons.Card;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -37,8 +38,9 @@ public interface CardRepositroy extends CrudRepository<Card, Long> {
      * @param idx the index of the card
      * @param newIndex the new index of the card
      */
+    @Modifying
     @Query(value = "UPDATE Card c SET c.idx = c.idx - 1 WHERE c.listId = ?1 AND c.idx > ?2 AND c.idx <= ?3")
-    void updateIdxBetweenDown(long listId, long idx, int newIndex);
+    void updateIdxBetweenDown(long listId, long idx, long newIndex);
 
     /**
      * Update the index of all cards in a list
@@ -46,14 +48,16 @@ public interface CardRepositroy extends CrudRepository<Card, Long> {
      * @param idx the index of the card
      * @param newIndex the new index of the card
      */
+    @Modifying
     @Query(value = "UPDATE Card c SET c.idx = c.idx + 1 WHERE c.listId = ?1 AND c.idx >= ?2 AND c.idx < ?3")
-    void updateIdxBetweenUp(long listId, int newIndex, long idx);
+    void updateIdxBetweenUp(long listId, long newIndex, long idx);
 
     /**
      * Update the index of all cards in a list
      * @param listId the id of the list where the card is removed from
      * @param idx the index of the card
      */
+    @Modifying
     @Query(value = "UPDATE Card c SET c.idx = c.idx - 1 WHERE c.listId = ?1 AND c.idx > ?2")
     void moveAllCardsHigherThanIndexDown(long listId, long idx);
 
@@ -62,6 +66,7 @@ public interface CardRepositroy extends CrudRepository<Card, Long> {
      * @param newListId the id of the list (where a card is moved to)
      * @param newIndex the index of where a card is moved to
      */
+    @Modifying
     @Query(value = "UPDATE Card c SET c.idx = c.idx + 1 WHERE c.listId = ?1 AND c.idx >= ?2")
-    void moveAllCardsHigherEqualThanIndexUp(long newListId, int newIndex);
+    void moveAllCardsHigherEqualThanIndexUp(long newListId, long newIndex);
 }

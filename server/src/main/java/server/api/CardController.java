@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Card;
+import commons.messages.MoveCardMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,15 +114,24 @@ public class CardController {
      *
      * Transactional annotation is used to ensure that the database is updated in a consistent way
      *
-     * @param cardId   the id of the card
-     * @param newListId the id of the new list
-     * @param boardId the id of the board
-     * @param newIndex the new index of the card
+     * @param message the message containing the card id, the new list id, the board id and the new index
      * @return true if the card was moved successfully, false otherwise
      */
     @PostMapping(value = "move", consumes = "application/json", produces = "application/json")
     @Transactional
-    public boolean moveCard(@RequestBody long cardId, long newListId, long boardId, int newIndex) {
+    public boolean moveCard(@RequestBody MoveCardMessage message) {
+
+        long cardId = message.getCardId();
+        long newListId = message.getNewListId();
+        long boardId = message.getBoardId();
+        long newIndex = message.getNewIndex();
+
+        //print the values
+        System.out.println("cardId: " + cardId);
+        System.out.println("newListId: " + newListId);
+        System.out.println("boardId: " + boardId);
+        System.out.println("newIndex: " + newIndex);
+
         // log the call
         logger.info("moveCard() called with: cardId = [" + cardId + "], listId = [" + newListId + "], boardId = [" + boardId + "], newIndex = [" + newIndex + "]");
 
@@ -151,6 +161,7 @@ public class CardController {
                     card.setIdx(newIndex);
 
                 } else {
+                    System.out.println("new index is lower");
                     // update all cards with index between new and old index
                     cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
 

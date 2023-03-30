@@ -87,11 +87,9 @@ public class CardView extends ListCell<Card> {
                     long id = Long.parseLong(db.getString().substring(1));
                     Card card = controller.getBoardOverviewCtrl().getCard(id);
 
-                    // Move on db/server first, and only move on client if server succeeds
-                    if(controller.getBoardOverviewCtrl().getServer().moveCard(card.getId(), card.getBoardId(), card.getListId(), getIndex())) {
-                        controller.addCardAt(card, getIndex());
-                        success = true;
-                    }
+                    controller.addCardAt(card, getIndex());
+                    success = true;
+
                 } else {
                     long id = Long.parseLong(db.getString());
                     controller.getBoardOverviewCtrl()
