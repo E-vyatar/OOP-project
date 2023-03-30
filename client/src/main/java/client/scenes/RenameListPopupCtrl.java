@@ -81,6 +81,10 @@ public class RenameListPopupCtrl {
 
     }
 
+    /**
+     * Deletes card
+     * TODO
+     */
     public void delete() {
 
     }
