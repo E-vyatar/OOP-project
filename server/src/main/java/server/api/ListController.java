@@ -84,8 +84,8 @@ public class ListController {
      * @param cardList the list to update
      * @return the updated list
      */
-    @MessageMapping("/lists")
-    @SendTo("/topic/lists")
+    @MessageMapping("/lists/{id}")
+    @SendTo("/topic/lists/{id}")
     public CardList editMessage(CardList cardList, long id){
         if(listRepository.findById(id).isPresent()){
             cardList.setId(id);

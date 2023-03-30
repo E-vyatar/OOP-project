@@ -32,7 +32,7 @@ public class CardController {
      * @param card the card to create
      * @return the created card
      */
-    @MessageMapping("/cards/new")
+    @MessageMapping("/cards/new") // app/cards/new
     @SendTo("/topic/cards/new")
     public Card addMessage(Card card){
         cardRepository.save(card);
@@ -94,8 +94,8 @@ public class CardController {
      * @param card the card to update
      * @return the updated card
      */
-    @MessageMapping("/cards")
-    @SendTo("/topic/cards")
+    @MessageMapping("/cards/{id}")
+    @SendTo("/topic/cards/{id}")
     public Card updateMessage(Card card, long id){
         if(cardRepository.findById(id).isPresent()){
             card.setId(id);

@@ -18,6 +18,7 @@ package client.scenes;
 
 import client.utils.CardsUtils;
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -33,6 +34,7 @@ import javafx.stage.Stage;
 public class AddCardCtrl {
 
     private final ServerUtils server;
+    private final SocketsUtils socketsUtils;
     private final CardsUtils cardsUtils;
     private final MainCtrl mainCtrl;
 
@@ -52,10 +54,11 @@ public class AddCardCtrl {
      * @param mainCtrl   main controller reference
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils, MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, SocketsUtils socketUtils, CardsUtils cardsUtils, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;
+        this.socketsUtils = socketUtils;
     }
 
     /**
@@ -74,8 +77,8 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-
-                server.addCard(getCard());
+                socketsUtils.send("/app/cards/new", getCard());
+//                server.addCard(getCard());
                 closeWindow();
             } catch (WebApplicationException e) {
 

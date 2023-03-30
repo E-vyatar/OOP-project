@@ -50,9 +50,9 @@ public class ConnectServerCtrl implements Initializable {
         server.setHostnameAndConnect(hostnameField.getText());
         sockets.setHostnameAndConnect(hostnameField.getText());
         mainCtrl.showOverview(0);
-        sockets.registerMessages("/topic/cards", Card.class,card -> {
-
-        } );
+//        sockets.registerMessages("/topic/cards", Card.class,card -> {
+//
+//        } );
     }
 
 }

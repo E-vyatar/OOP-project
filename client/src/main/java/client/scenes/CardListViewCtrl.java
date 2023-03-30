@@ -73,6 +73,9 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         this.cards = cards;
 
         this.view = new CardListView(boardOverviewCtrl, this, cards);
+        boardOverviewCtrl.getSocketsUtils().registerMessages("/topic/cards/new", Card.class, card ->{
+            cards.add(card);
+        });
 
         createView();
     }

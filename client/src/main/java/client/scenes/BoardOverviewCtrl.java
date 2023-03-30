@@ -91,7 +91,12 @@ public class BoardOverviewCtrl implements EventHandler {
     public void refresh() {
 
     }
-
+    public ServerUtils getServerUtils(){
+        return utils;
+    }
+    public SocketsUtils getSocketsUtils(){
+        return socketsUtils;
+    }
     /**
      * This method creates the hardcoded cards.
      */
@@ -155,7 +160,6 @@ public class BoardOverviewCtrl implements EventHandler {
     public void disconnect(ActionEvent actionEvent) {
         socketsUtils.getSession().disconnect();
         System.out.println("The client has been disconnected");
-
         mainCtrl.showConnect();
     }
 
