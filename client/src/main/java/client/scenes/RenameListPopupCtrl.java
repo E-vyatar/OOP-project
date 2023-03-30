@@ -14,6 +14,7 @@ import javax.inject.Inject;
 public class RenameListPopupCtrl {
 
     private final ServerUtils server;
+    private final BoardOverviewCtrl boardOverviewCtrl;
     private Stage renameListPopup;
     private CardListViewCtrl controller;
     @FXML
@@ -25,10 +26,12 @@ public class RenameListPopupCtrl {
      * This constructs the controller for the pop-up to rename a list.
      *
      * @param server the SeverUtils
+     * @param boardOverviewCtrl the BoardOverview
      */
     @Inject
-    public RenameListPopupCtrl(ServerUtils server) {
+    public RenameListPopupCtrl(ServerUtils server, BoardOverviewCtrl boardOverviewCtrl) {
         this.server = server;
+        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
     /**
@@ -86,7 +89,9 @@ public class RenameListPopupCtrl {
      * TODO
      */
     public void delete() {
-
+        server.deleteCardList(controller.getCardList());
+        boardOverviewCtrl.deleteList(controller);
+        close();
     }
 
     /**

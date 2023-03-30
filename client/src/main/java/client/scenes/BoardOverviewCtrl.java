@@ -73,10 +73,6 @@ public class BoardOverviewCtrl {
         this.renameListPopupCtrl = renameListPopup.getKey();
     }
 
-    private void getCardsFromServer() {
-
-    }
-
     /**
      * Adds a new list to the board
      *
@@ -305,5 +301,16 @@ public class BoardOverviewCtrl {
      */
     public ServerUtils getServer() {
         return server;
+    }
+
+    /**
+     * Deletes a list from the view using the lists Controller
+     *
+     * @param cardListViewCtrl the controller of the list to delete
+     */
+    public void deleteList(CardListViewCtrl cardListViewCtrl) {
+        cardListViewCtrlList.remove(cardListViewCtrl);
+        listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
+        board.getCardLists().remove(cardListViewCtrl.getCardList());
     }
 }

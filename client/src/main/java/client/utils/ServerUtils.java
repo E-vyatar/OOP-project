@@ -140,6 +140,21 @@ public class ServerUtils {
     }
 
     /**
+     * Deletes cardList from server
+     *
+     * @param cardList cardList to delete
+     */
+    public void deleteCardList(CardList cardList) {
+        ClientBuilder.newClient(new ClientConfig())
+            .target(server)
+            .path("lists/{id}")
+            .resolveTemplate("id", cardList.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete();
+    }
+
+    /**
      * send the server Get request for all the cards of a specific list
      *
      * @param listId id of the list to get the cards from
