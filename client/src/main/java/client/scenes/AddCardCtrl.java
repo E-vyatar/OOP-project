@@ -74,6 +74,7 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
+
                 server.addCard(getCard());
                 closeWindow();
             } catch (WebApplicationException e) {
