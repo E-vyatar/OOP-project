@@ -47,6 +47,7 @@ public class ServerUtils {
 
     /**
      * Set the hostname of the server and then connect to it
+     *
      * @param hostname the hostname
      */
     public void setHostnameAndConnect(String hostname) {
@@ -63,11 +64,11 @@ public class ServerUtils {
      */
     public Board getBoard(long boardId) {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(server).path("boards/{id}") //
-            .resolveTemplate("id", boardId) //
-            .request(APPLICATION_JSON) //
-            .accept(APPLICATION_JSON) //
-            .get(Board.class);
+                .target(server).path("boards/{id}") //
+                .resolveTemplate("id", boardId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(Board.class);
     }
 
     /**
@@ -99,7 +100,7 @@ public class ServerUtils {
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
-    public boolean moveCard(long cardId, long boardId, long newListId, long newIndex){
+    public boolean moveCard(long cardId, long boardId, long newListId, long newIndex) {
 
         MoveCardMessage message = new MoveCardMessage(cardId, boardId, newListId, newIndex);
 
@@ -143,6 +144,7 @@ public class ServerUtils {
 
     /**
      * send the server Delete request to remove a card from the database
+     *
      * @param card the card to remove from the database
      */
     public void deleteCard(Card card) {
@@ -200,7 +202,6 @@ public class ServerUtils {
 
     /**
      * @param url address
-     *
      * @return StompSession
      */
     private StompSession connect(String url) {
@@ -237,6 +238,7 @@ public class ServerUtils {
 
     /**
      * Check if the connection is alive
+     *
      * @return whether the connection is alive
      */
     public boolean isConnectionAlive() {

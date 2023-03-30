@@ -111,7 +111,7 @@ public class CardController {
 
     /**
      * Move a card
-     *
+     * <p>
      * Transactional annotation is used to ensure that the database is updated in a consistent way
      *
      * @param message the message containing the card id, the new list id, the board id and the new index
@@ -141,32 +141,29 @@ public class CardController {
             Card card = cardRepository.findById(cardId).get();
 
             // check if boardId is valid
-            if(boardId != card.getBoardId()) {
+            if (boardId != card.getBoardId()) {
                 return false;
             }
 
             //check if the card is being moved in the same list
-            if(newListId == card.getListId()) {
+            if (newListId == card.getListId()) {
                 // check if the card is being moved to the same index
-                if(newIndex == card.getIdx()) {
+                if (newIndex == card.getIdx()) {
                     return true;
                 }
 
                 // check if the card is being moved to a higher index
-                if(newIndex > card.getIdx()) {
+                if (newIndex > card.getIdx()) {
                     // update all cards with index between old and new index
                     cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
 
-                    // update the index of the card
-                    card.setIdx(newIndex);
 
                 } else {
                     System.out.println("new index is lower");
                     // update all cards with index between new and old index
                     cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
 
-                    // update the index of the card
-                    card.setIdx(newIndex);
+
                 }
             } else {
                 // move all cards in the old list down
@@ -177,10 +174,9 @@ public class CardController {
 
                 // update the list id of the card
                 card.setListId(newListId);
-
-                // update the index of the card
-                card.setIdx(newIndex);
             }
+            // update the index of the card
+            card.setIdx(newIndex);
 
 
             cardRepository.save(card);

@@ -13,7 +13,7 @@ public class MoveCardMessage implements Serializable {
     }
 
 
-    public MoveCardMessage(long cardId, long newListId, long boardId, long newIndex) {
+    public MoveCardMessage(long cardId, long boardId, long newListId, long newIndex) {
         this.cardId = cardId;
         this.newListId = newListId;
         this.boardId = boardId;

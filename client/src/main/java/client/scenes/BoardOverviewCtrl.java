@@ -290,6 +290,7 @@ public class BoardOverviewCtrl {
         // TODO: wait for server to confirm move
 
         if(!server.moveCard(card.getId(), card.getBoardId(), newList.getCardList().getId(), index)){
+            System.out.println("move failed, aborting");
             return;
         }
 
