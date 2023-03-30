@@ -164,13 +164,8 @@ public class Card {
      */
     @Override
     public String toString() {
-        return "Card{" +
-            "id=" + id +
-            ", listId=" + listId +
-            ", title='" + title + '\'' +
-            ", idx=" + idx +
-            ", boardId=" + boardId +
-            '}';
+        return "Card{" + "id=" + id + ", listId=" + listId + ", title='" + title + '\'' + ", idx=" +
+            idx + ", boardId=" + boardId + '}';
     }
 
     /**
@@ -181,6 +176,11 @@ public class Card {
         return Objects.hash(id, listId, boardId, title, idx);
     }
 
+    /**
+     * gets a card list
+     *
+     * @return the card list
+     */
     public CardList getCardList() {
         return cardList;
     }
