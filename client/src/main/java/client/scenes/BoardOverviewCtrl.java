@@ -204,6 +204,29 @@ public class BoardOverviewCtrl {
         cardPopupCtrl.show();
     }
 
+
+    /**
+     * Updates the edited card in the board overview, both title and list
+     * @param originalCard The old version of the card
+     * @param editedCard The new edited version of the card
+     * @param editedListId ID of the new list of the card
+     */
+    public void updateCard(Card originalCard, Card editedCard, long editedListId) {
+        // get original card's list controller
+        CardListViewCtrl originalCardListController = getCardListViewCtrl(originalCard.getListId());
+        // replace original card by edited version
+        originalCardListController.setCard(originalCard.getIdx(), editedCard);
+
+        // get edited card's list controller
+        CardListViewCtrl editedCardListController = getCardListViewCtrl(editedListId);
+        // check if card's list was changed
+        if (originalCardListController != editedCardListController) {
+            // move card to edited list
+            long indexForEditedCard = editedCardListController.getCardList().getCards().size();
+            moveCard(editedCard, editedCardListController.getCardList(),indexForEditedCard);
+        }
+    }
+
     /**
      * Opens a new window with "AddCard" scene
      */

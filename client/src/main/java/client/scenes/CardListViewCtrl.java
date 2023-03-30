@@ -249,4 +249,13 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         boardOverviewCtrl.setCardListForShowAddCard(cardList);
         boardOverviewCtrl.showAddCard();
     }
+
+    /**
+     * Replace a card by its edited version
+     * @param originalCardIdx The card's index in the list
+     * @param editedCard The new version of the card
+     */
+    public void setCard(long originalCardIdx, Card editedCard) {
+        cards.set((int) originalCardIdx, editedCard);
+    }
 }
