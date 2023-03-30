@@ -98,6 +98,14 @@ public class ServerUtils {
             .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * Sends HTTP request to move a card
+     *
+     * @param cardId   the id of the card to move
+     * @param newListId the id of the list to move the card to
+     * @param newIndex the index of the card in the new list
+     * @return list of all the cards in the database
+     */
     public boolean moveCard(long cardId, long newListId, long newIndex) {
 
         MoveCardMessage message = new MoveCardMessage(cardId, newListId, newIndex);
