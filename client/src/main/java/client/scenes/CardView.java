@@ -38,7 +38,6 @@ public class CardView extends ListCell<Card> {
             if (controller.getCard() == null) {
                 return;
             }
-            System.out.println("onDragDetected " + controller.getCard().getId());
 
             /* allow any transfer mode */
             Dragboard db = startDragAndDrop(TransferMode.ANY);

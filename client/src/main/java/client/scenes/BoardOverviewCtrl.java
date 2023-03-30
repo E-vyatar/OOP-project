@@ -119,7 +119,6 @@ public class BoardOverviewCtrl {
      */
     public void disconnect(ActionEvent actionEvent) {
         server.getSession().disconnect();
-        System.out.println("The client has been disconnected");
 
         mainCtrl.showConnect();
     }
@@ -282,8 +281,6 @@ public class BoardOverviewCtrl {
      * @param index    the new position index of the card in the CardList
      */
     public void moveCard(Card card, CardList cardList, long index) {
-        System.out.println("Moving card " + card.getId() +
-            " to list " + cardList.getId() + " at index " + index);
 
         var oldList = getCardListViewCtrl(card.getListId());
         var newList = getCardListViewCtrl(cardList.getId());
@@ -292,7 +289,6 @@ public class BoardOverviewCtrl {
 
         if (!server.moveCard(card.getId(), newList.getCardList().getId(),
             index)) {
-            System.out.println("move failed, aborting");
             return;
         }
 

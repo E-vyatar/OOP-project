@@ -213,7 +213,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      * @param index where to add the card
      */
     public void addCard(Card card, long index) {
-        System.out.println("Adding card " + card + " at index " + index);
         card.setListId(cardList.getId());
         cards.add((int) index, card);
         card.setIdx(index);

@@ -147,7 +147,6 @@ public class CardController {
 
 
                 } else {
-                    System.out.println("new index is lower");
                     // update all cards with index between new and old index
                     cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
 

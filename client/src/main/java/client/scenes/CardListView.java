@@ -47,7 +47,6 @@ public class CardListView extends TitledPane {
     @SuppressWarnings({"MethodLength", "CyclomaticComplexity"})
     private void setDragEvents() {
         setOnDragDetected(event -> {
-            System.out.println("onDragDetected" + controller.getCardList().getId());
 
             /* allow any transfer mode */
             Dragboard db = startDragAndDrop(TransferMode.ANY);
@@ -94,7 +93,6 @@ public class CardListView extends TitledPane {
             event.consume();
         });
         setOnDragExited(event -> {
-            System.out.println("onMouseDragExited" + event.getDragboard().getString());
             setBorder(null);
             event.consume();
         });

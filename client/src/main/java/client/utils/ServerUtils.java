@@ -49,7 +49,6 @@ public class ServerUtils {
      * @param hostname the hostname
      */
     public void setHostnameAndConnect(String hostname) {
-        System.out.println("Connecting to server: " + hostname);
         this.server = "http://" + hostname + ":8080";
         session = connect("ws://" + hostname + ":8080/websocket");
     }
@@ -109,8 +108,6 @@ public class ServerUtils {
     public boolean moveCard(long cardId, long newListId, long newIndex) {
 
         MoveCardMessage message = new MoveCardMessage(cardId, newListId, newIndex);
-
-        System.out.println("Sending move card message: " + message.toString());
 
         return ClientBuilder.newClient(new ClientConfig())
             .target(server).path("cards/move")

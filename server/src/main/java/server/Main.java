@@ -41,6 +41,5 @@ public class Main {
             throw new RuntimeException(e);
         }
         addressIP = myIp.getHostAddress();
-        System.out.println(addressIP);
     }
 }
