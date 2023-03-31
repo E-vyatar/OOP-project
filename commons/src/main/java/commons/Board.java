@@ -9,7 +9,7 @@ import java.util.Objects;
 @Entity
 public class Board {
     @Id
-    @GeneratedValue(generator = "board_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "board_id_seq")
     @SequenceGenerator(name = "board_id_seq", initialValue = 10, allocationSize = 1)
     private long id;
     private String title;

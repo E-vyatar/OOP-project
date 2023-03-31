@@ -85,10 +85,6 @@ public class BoardOverviewCtrl {
         this.renameListPopupCtrl = renameListPopup.getKey();
     }
 
-    private void getCardsFromServer() {
-
-    }
-
     /**
      * Adds a new list to the board
      *
@@ -228,10 +224,10 @@ public class BoardOverviewCtrl {
      * Shows a popup to edit the details (i.e. the title)
      * of a CardList. The popup has an option to rename it.
      *
-     * @param cardList the CardList that you can rename.
+     * @param controller the controller of the CardList that you can rename.
      */
-    public void showRenameList(CardList cardList) {
-        renameListPopupCtrl.setCardList(cardList);
+    public void showRenameList(CardListViewCtrl controller) {
+        renameListPopupCtrl.setCardListViewCtrl(controller);
         renameListPopupCtrl.show();
     }
 
@@ -333,5 +329,16 @@ public class BoardOverviewCtrl {
      */
     public ServerUtils getServer() {
         return server;
+    }
+
+    /**
+     * Deletes a list from the view using the lists Controller
+     *
+     * @param cardListViewCtrl the controller of the list to delete
+     */
+    public void deleteList(CardListViewCtrl cardListViewCtrl) {
+        cardListViewCtrlList.remove(cardListViewCtrl);
+        listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
+        board.getCardLists().remove(cardListViewCtrl.getCardList());
     }
 }

@@ -1,0 +1,9 @@
+Button {
+    -fx-background-color: none;
+    -fx-border-color: #dadada;
+    -fx-border-radius: 3;
+}
+
+Button:pressed {
+    -fx-background-color: #435f9c;
+}

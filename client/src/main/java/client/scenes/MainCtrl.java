@@ -86,6 +86,8 @@ public class MainCtrl {
     public void showOverview(long boardId) {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
+        primaryStage.setX(150);
+        primaryStage.setY(100);
         overviewCtrl.refresh(boardId);
     }
 
