@@ -1,5 +1,7 @@
 # Script
 
+<small>* Everything in () is where screen recording is planned to be.</small>
+
 ## Introduction
 
 Romir: We all struggle with organizing our day-to-day lives, and the unending barrage of deadlines and assignments 
@@ -52,4 +54,4 @@ as well as more detailed and descriptive cards.
 ## Conclusion
 
 Rares: With Talio, you can take your productivity to the next level and crush those tasks instead of being crushed by 
-them yourself.  
+them yourself.
