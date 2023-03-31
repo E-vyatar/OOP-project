@@ -63,14 +63,15 @@ public class ServerUtils {
      * Sends HTTP request to server to add a new card
      *
      * @param card the card to add to the database
+     * @return The Card that was added to the database
      */
-    public void addCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
-            .target(server)
-            .path("cards/new")
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    public Card addCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("cards/new")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
     /**
@@ -153,15 +154,16 @@ public class ServerUtils {
      * send the server Delete request to remove a card from the database
      *
      * @param card the card to remove from the database
+     * @return true if card was deleted from the database, false otherwise
      */
-    public void deleteCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
+    public boolean deleteCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig())
             .target(server)
             .path("cards/{id}")
             .resolveTemplate("id", card.getId())
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .delete();
+            .delete().readEntity(Boolean.class);
     }
 
     /**

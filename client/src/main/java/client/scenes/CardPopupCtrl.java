@@ -20,6 +20,7 @@ public class CardPopupCtrl {
     private final CardsUtils cardsUtils;
     private final ServerUtils server;
     private Stage cardPopup;
+    private BoardOverviewCtrl boardOverviewCtrl;
     @FXML
     private Parent root;
     @FXML
@@ -47,11 +48,14 @@ public class CardPopupCtrl {
      *
      * @param cardsUtils CardsUtils reference
      * @param server     ServerUtils reference
+     * @param boardOverviewCtrl BoardOverviewCtrl reference
      */
     @Inject
-    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils server) {
+    public CardPopupCtrl(CardsUtils cardsUtils, ServerUtils server,
+                         BoardOverviewCtrl boardOverviewCtrl) {
         this.cardsUtils = cardsUtils;
         this.server = server;
+        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
     /**
@@ -114,27 +118,22 @@ public class CardPopupCtrl {
      * It is called by pressing the close button in the popup.
      */
     @FXML
-    private void close() {
+    public void close() {
         this.cardPopup.hide();
     }
 
-    @FXML
-    private void save() {
-        // TODO: allow to save data when editing card
-//        throw new NotImplementedException("Saving changes hasn't been implemented yet.");
-        saveCardChanges();
-    }
-
     /**
-     * update card's fields
-     * send server request to change a card's details
+     * Update card's fields and send server request to change a card's details.
+     * The card's list index is updated in a different server request,
+     * triggered by a method in BoardOverviewCtrl
      */
+    @FXML
     public void saveCardChanges() {
         if (cardsUtils.fieldsNotEmpty(cardTitle, list)) {
             try {
-                card.setListId(list.getValue().getId());
                 card.setTitle(cardTitle.getText());
-                server.editCard(card);
+                Card editedCard = server.editCard(card);
+                boardOverviewCtrl.updateCard(card, editedCard, list.getValue().getId());
                 close();
             } catch (WebApplicationException e) {
 
@@ -163,5 +162,12 @@ public class CardPopupCtrl {
      */
     public void show() {
         this.cardPopup.show();
+    }
+
+    /**
+     * Initialize deletion confirmation window and set its scene
+     */
+    public void showDeleteConfirmation() {
+        boardOverviewCtrl.showDeleteCard(card);
     }
 }

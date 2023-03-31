@@ -36,6 +36,8 @@ public class CardController {
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");
+        long listSize = cardRepository.countByListId(card.getListId());
+        card.setIdx(listSize);
         return cardRepository.save(card);
     }
 
@@ -103,10 +105,12 @@ public class CardController {
      * Delete a card
      *
      * @param id the id of the card
+     * @return true if card doesn't exist in the database after deletion, false otherwise
      */
     @DeleteMapping("{id}")
-    public void deleteCard(@PathVariable("id") long id) {
+    public boolean deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);
+        return !cardRepository.existsById(id);
     }
 
     /**

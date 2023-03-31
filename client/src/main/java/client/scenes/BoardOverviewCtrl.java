@@ -48,6 +48,8 @@ public class BoardOverviewCtrl {
     private CardPopupCtrl cardPopupCtrl;
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
+    private DeleteCardCtrl deleteCardCtrl;
+    private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
     private Board board;
     @FXML
@@ -75,14 +77,18 @@ public class BoardOverviewCtrl {
      * @param cardPopup       a pair of the CardPopupCtrl and the root of the to-be scene
      * @param addCard         a pair of the AddCardCtrl and the root of the to-be scene
      * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
+     * @param deleteCard a pair of the DeleteCardCtrl and the root of the to-be scene
      */
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
-                           Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup,
+                           Pair<DeleteCardCtrl, Parent> deleteCard) {
         this.cardPopupCtrl = cardPopup.getKey();
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
         this.renameListPopupCtrl = renameListPopup.getKey();
+        this.deleteCardCtrl = deleteCard.getKey();
+        this.deleteCard = new Scene(deleteCard.getValue());
     }
 
     /**
@@ -199,25 +205,88 @@ public class BoardOverviewCtrl {
         cardPopupCtrl.show();
     }
 
+
+    /**
+     * Updates the edited card in the board overview, both title and list
+     * @param originalCard The old version of the card
+     * @param editedCard The new edited version of the card
+     * @param editedListId ID of the new list of the card
+     */
+    public void updateCard(Card originalCard, Card editedCard, long editedListId) {
+        // get original card's list controller
+        CardListViewCtrl originalCardListController = getCardListViewCtrl(originalCard.getListId());
+        // replace original card by edited version
+        originalCardListController.setCard(originalCard.getIdx(), editedCard);
+
+        // get edited card's list controller
+        CardListViewCtrl editedCardListController = getCardListViewCtrl(editedListId);
+        // check if card's list was changed
+        if (originalCardListController != editedCardListController) {
+            // move card to edited list
+            long indexForEditedCard = editedCardListController.getCardList().getCards().size();
+            moveCard(editedCard, editedCardListController.getCardList(),indexForEditedCard);
+        }
+    }
+
     /**
      * Opens a new window with "AddCard" scene
      */
     public void showAddCard() {
         Stage cardWindow = new Stage();
-        cardWindow.setTitle("Add new Task");
+        cardWindow.setTitle("Add new Task to " + addCardCtrl.getCardList().getTitle());
         cardWindow.setScene(addCard);
         addCard.setOnKeyPressed(event -> addCardCtrl.keyPressed(event));
         addCardCtrl.refresh();
+        cardWindow.initModality(Modality.APPLICATION_MODAL);
         cardWindow.show();
     }
 
     /**
-     * Sets the CardList for which you're adding a card
-     *
+     * Set the cardlist for which you're adding a card
+     * In a different method from `showAddCard` because it's easier to pass a parameter
      * @param cardList the cardlist
      */
     public void setCardListForShowAddCard(CardList cardList) {
         addCardCtrl.setCardList(cardList);
+    }
+
+    /**
+     * Add card to the list view. addCard is called with negative index
+     * to put the card at the end of the list
+     * @param cardList The list to add the card to
+     * @param card The card to add to the list
+     */
+    public void addCardToBoardOverview(CardList cardList, Card card) {
+        getCardListViewCtrl(cardList.getId()).addCard(card, -1);
+    }
+
+    /**
+     * Open a new window with "DeleteCard" scene
+     * @param card Card to delete
+     */
+    public void showDeleteCard(Card card) {
+        deleteCardCtrl.setCard(card);
+        Stage stage = new Stage();
+        stage.setTitle("Are you sure you want to delete this card?");
+        stage.setScene(deleteCard);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        deleteCardCtrl.setStage(stage);
+        deleteCardCtrl.getStage().show();
+    }
+
+    /**
+     * Remove card from the board overview
+     * @param card Card to remove from the board
+     */
+    public void removeDeletedCard(Card card) {
+        getCardListViewCtrl(card.getListId()).removeCard(card);
+    }
+
+    /**
+     * Close card pop-up window
+     */
+    public void closeCardPopUp() {
+        cardPopupCtrl.close();
     }
 
     /**
