@@ -17,7 +17,11 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.*;
+import client.utils.SocketsUtils;
+import commons.Card;
+import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -36,8 +40,10 @@ import java.util.stream.Collectors;
 
 public class BoardOverviewCtrl {
 
-    private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final SocketsUtils socketsUtils;
+
+    private final MainCtrl mainCtrl;
     private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     private CardPopupCtrl cardPopupCtrl;
     private AddCardCtrl addCardCtrl;
@@ -53,14 +59,16 @@ public class BoardOverviewCtrl {
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
      * linked to the overview of the board.
      * The constructor should not be called manually, since it uses injection.
-     *
+     * @param server  the ServerUtils of the app - used to load and send data from the server
+     * @param socketsUtils socket utils - used to receive changes from the server
      * @param mainCtrl the MainCtrl of the app
-     * @param server   the ServerUtils of the app
      */
     @Inject
-    public BoardOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
-        this.mainCtrl = mainCtrl;
+    public BoardOverviewCtrl(ServerUtils server, SocketsUtils socketsUtils, MainCtrl mainCtrl) {
         this.server = server;
+        this.mainCtrl = mainCtrl;
+        this.socketsUtils = socketsUtils;
+        socketsUtils.initialize(this);
     }
 
     /**
@@ -81,10 +89,6 @@ public class BoardOverviewCtrl {
         this.renameListPopupCtrl = renameListPopup.getKey();
         this.deleteCardCtrl = deleteCard.getKey();
         this.deleteCard = new Scene(deleteCard.getValue());
-    }
-
-    private void getCardsFromServer() {
-
     }
 
     /**
@@ -118,15 +122,13 @@ public class BoardOverviewCtrl {
     }
 
     /**
-     * When clicking Disconnect from Server, the StompSession is ended
-     * and scene is set up back to ConnectServerCtrl
+     * when clicking Return to list of boards,
+     * you see the list of boards again
      *
      * @param actionEvent unused
      */
-    public void disconnect(ActionEvent actionEvent) {
-        server.getSession().disconnect();
-
-        mainCtrl.showConnect();
+    public void returnToBoardList(ActionEvent actionEvent) {
+        mainCtrl.showListOfBoards();
     }
 
 
@@ -139,7 +141,6 @@ public class BoardOverviewCtrl {
      */
     public void refresh(long boardId) {
 
-        // Get board with ID = 0
         board = server.getBoard(boardId);
 
         generateView();
@@ -292,10 +293,10 @@ public class BoardOverviewCtrl {
      * Shows a popup to edit the details (i.e. the title)
      * of a CardList. The popup has an option to rename it.
      *
-     * @param cardList the CardList that you can rename.
+     * @param controller the controller of the CardList that you can rename.
      */
-    public void showRenameList(CardList cardList) {
-        renameListPopupCtrl.setCardList(cardList);
+    public void showRenameList(CardListViewCtrl controller) {
+        renameListPopupCtrl.setCardListViewCtrl(controller);
         renameListPopupCtrl.show();
     }
 
@@ -397,5 +398,16 @@ public class BoardOverviewCtrl {
      */
     public ServerUtils getServer() {
         return server;
+    }
+
+    /**
+     * Deletes a list from the view using the lists Controller
+     *
+     * @param cardListViewCtrl the controller of the list to delete
+     */
+    public void deleteList(CardListViewCtrl cardListViewCtrl) {
+        cardListViewCtrlList.remove(cardListViewCtrl);
+        listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
+        board.getCardLists().remove(cardListViewCtrl.getCardList());
     }
 }

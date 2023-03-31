@@ -15,8 +15,6 @@
  */
 package client.scenes;
 
-import client.utils.ServerUtils;
-import com.google.inject.Inject;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -24,7 +22,6 @@ import javafx.util.Pair;
 
 public class MainCtrl {
 
-    private final ServerUtils server;
     private Stage primaryStage;
     private BoardOverviewCtrl overviewCtrl;
     private Scene overview;
@@ -33,15 +30,10 @@ public class MainCtrl {
     private ListOfBoardsCtrl listOfBoardsCtrl;
     private Scene listOfBoards;
 
-    /**
-     * This is and @Inject contractor and should not be called.
-     *
-     * @param server the ServerUtils for this app
-     */
-    @Inject
-    public MainCtrl(ServerUtils server) {
-        this.server = server;
-    }
+    private CreateBoardCtrl createBoardCtrl;
+    private Scene createBoard;
+
+    //=========================================================
 
     /**
      * This method initializes MainCtrl. The roots of the views are used to create scenes.
@@ -50,12 +42,14 @@ public class MainCtrl {
      * @param primaryStage      the main window, this is used for ConnectServer and BoardOverview
      * @param overview          a pair of the BoardOverviewCtrl and the root of the to-be scene
      * @param connectServerCtrl a pair of the connectServerCtrl and the root of the to-be scene.
-     * @param listOfBoards      a pair of the ListOfBoardsCtrl and the root of the to-be scene.
+     * @param listOfBoards a pair of the ListOfBoardsCtrl and the root of the to-be scene.
+     * @param createBoard a pair of the CreateBoardCtrl and the root of the to-be scene.
      */
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<ConnectServerCtrl, Parent> connectServerCtrl,
-                           Pair<ListOfBoardsCtrl, Parent> listOfBoards) {
+                           Pair<ListOfBoardsCtrl, Parent> listOfBoards,
+                           Pair<CreateBoardCtrl, Parent> createBoard) {
 
         this.primaryStage = primaryStage;
 
@@ -67,6 +61,9 @@ public class MainCtrl {
 
         this.listOfBoards = new Scene(listOfBoards.getValue());
         this.listOfBoardsCtrl = listOfBoards.getKey();
+
+        this.createBoard = new Scene(createBoard.getValue());
+        this.createBoardCtrl = createBoard.getKey();
 
         showConnect();
         this.primaryStage.show();
@@ -89,6 +86,8 @@ public class MainCtrl {
     public void showOverview(long boardId) {
         primaryStage.setTitle("Talio");
         primaryStage.setScene(overview);
+        primaryStage.setX(150);
+        primaryStage.setY(100);
         overviewCtrl.refresh(boardId);
     }
 
@@ -109,12 +108,12 @@ public class MainCtrl {
     }
 
     /**
-     * Getter for the ServerUtil of this client
-     *
-     * @return The SeverUtils of this client
-     */
-    public ServerUtils getServer() {
-        return server;
-    }
 
+     * Shows the UI to create a new board
+     */
+    public void showCreateBoard() {
+        createBoardCtrl.clear();
+        primaryStage.setTitle("Create board");
+        primaryStage.setScene(createBoard);
+    }
 }
