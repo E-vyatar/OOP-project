@@ -45,12 +45,12 @@ public class CardController {
      * @param card the card to create
      * @return the created card
      */
-//    @MessageMapping("/cards/new") // app/cards/new
-//    @SendTo("/topic/cards/new")
-//    public Card addMessage(Card card){
-//        cardRepository.save(card);
-//        return card;
-//    }
+    @MessageMapping("/cards/new") // app/cards/new
+    @SendTo("/topic/cards/new")
+    public Card addMessage(Card card){
+        cardRepository.save(card);
+        return card;
+    }
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");
@@ -61,16 +61,17 @@ public class CardController {
         return newCard;
 
     }
-//    @MessageMapping("/cards/new")
-//    @SendTo("/topic/cards/new")
-//    public Card updateMessage(Card card, long id){
-//        if(cardRepository.findById(id).isPresent()){
-//            card.setId(id);
-//            cardRepository.save(card);
-//            return card;
-//        }
-//        return null;
-//    }
+    @MessageMapping("/cards")
+    @SendTo("/topic/cards")
+    public Card updateMessage(Card card){
+        long id = card.getId();
+        if(cardRepository.findById(id).isPresent()){
+            card.setIdx(cardRepository.countByListId(card.getListId()));
+            cardRepository.save(card);
+            return card;
+        }
+        return null;
+    }
 
     /**
      * Get all cards
