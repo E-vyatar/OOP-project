@@ -8,33 +8,44 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="cardListNode" style="-fx-background-color: none;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardListViewCtrl">
-   <children>
-      <BorderPane minWidth="-Infinity" prefHeight="200.0" prefWidth="250.0" style="-fx-background-color: #333333; -fx-border-radius: 5; -fx-background-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
-         <top>
-            <AnchorPane maxHeight="35.0" prefWidth="250.0" style="-fx-background-color: #333333; -fx-background-radius: 5 5 5 5;" BorderPane.alignment="CENTER">
-               <children>
-                  <Text id="cardListTitle" fill="#dadada" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New List" wrappingWidth="69.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Text>
-                  <Button id="addCardButton" fx:id="addCardButton" layoutX="139.0" layoutY="-3.0" mnemonicParsing="false" style="-fx-background-color: none; -fx-border-color: #dadada; -fx-border-radius: 3;" text="+" textFill="#dadada" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="3.0">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button id="editCardButton" fx:id="editButton" layoutX="174.0" layoutY="4.0" mnemonicParsing="false" style="-fx-background-color: none; -fx-border-color: #dadada; -fx-border-radius: 3;" text="E" textFill="#dadada" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="3.0" />
-               </children>
-            </AnchorPane>
-         </top>
-         <center>
-            <ListView fx:id="cardListView" prefWidth="250.0" style="-fx-background-color: #333333;" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets bottom="5.0" left="2.0" right="2.0" top="2.0" />
-               </BorderPane.margin>
-            </ListView>
-         </center>
-      </BorderPane>
-   </children>
+<AnchorPane fx:id="cardListNode" style="-fx-background-color: none;" xmlns="http://javafx.com/javafx/19"
+            stylesheets="@../styles/cardList.css" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="client.scenes.CardListViewCtrl">
+   <BorderPane minWidth="-Infinity" prefHeight="200.0" prefWidth="250.0"
+               style="-fx-background-color: #333333; -fx-border-radius: 5; -fx-background-radius: 5;"
+               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0"
+               AnchorPane.topAnchor="0.0">
+      <top>
+         <AnchorPane maxHeight="35.0" prefWidth="250.0"
+                     style="-fx-background-color: #333333; -fx-background-radius: 5 5 5 5;"
+                     BorderPane.alignment="CENTER">
+            <Text fx:id="cardListTitle" fill="#dadada" layoutY="15.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                  text="New List" wrappingWidth="69.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="5.0"
+                  AnchorPane.topAnchor="5.0">
+               <font>
+                  <Font name="System Bold" size="14.0"/>
+               </font>
+            </Text>
+            <Button id="addCardButton" fx:id="addCardButton" layoutX="139.0" layoutY="-3.0" mnemonicParsing="false"
+                    text="+" textFill="#dadada" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="40.0"
+                    AnchorPane.topAnchor="3.0">
+               <font>
+                  <Font name="System Bold" size="12.0"/>
+               </font>
+            </Button>
+            <Button id="editButton" fx:id="editButton" layoutX="174.0" layoutY="4.0" mnemonicParsing="false"
+                    text="E"
+                    textFill="#dadada" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="5.0"
+                    AnchorPane.topAnchor="3.0"  onMouseClicked="#showRenameList"/>
+         </AnchorPane>
+      </top>
+      <center>
+         <ListView fx:id="cardListView" prefWidth="250.0" style="-fx-background-color: #333333;"
+                   BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+               <Insets bottom="5.0" left="2.0" right="2.0" top="2.0"/>
+            </BorderPane.margin>
+         </ListView>
+      </center>
+   </BorderPane>
 </AnchorPane>

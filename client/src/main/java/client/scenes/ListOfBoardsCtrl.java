@@ -1,9 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import commons.Board;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,7 +10,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.inject.Inject;
@@ -25,9 +23,9 @@ import javax.inject.Inject;
  */
 public class ListOfBoardsCtrl {
 
-    private MainCtrl mainCtrl;
-    private ServerUtils serverUtils;
-
+    private final MainCtrl mainCtrl;
+    private final ServerUtils server;
+    private final SocketsUtils sockets;
     @FXML
     private ListView<Board> boards;
 
@@ -35,12 +33,14 @@ public class ListOfBoardsCtrl {
      * This constructs an instance of ListOfBoards.
      *
      * @param mainCtrl    the main controller
-     * @param serverUtils the server utils
+     * @param server the server utils - used to load list of boards
+     * @param sockets the socket utils - used to disconnect connection
      */
     @Inject
-    public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils serverUtils) {
+    public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils server, SocketsUtils sockets) {
         this.mainCtrl = mainCtrl;
-        this.serverUtils = serverUtils;
+        this.server = server;
+        this.sockets = sockets;
     }
 
     /**
@@ -48,36 +48,38 @@ public class ListOfBoardsCtrl {
      * This loads data from the backend and sets the listView.
      */
     public void refresh() {
-        ObservableList<Board> data = FXCollections.observableList(serverUtils.getBoards());
+        ObservableList<Board> data = FXCollections.observableList(server.getBoards());
         this.boards.setItems(data);
-        this.boards.setCellFactory(new Callback<ListView<Board>, ListCell<Board>>() {
-            @Override
-            public ListCell<Board> call(ListView<Board> param) {
-                /*BoardCellCtrl boardCellCtrl = new BoardCellCtrl();
-                return boardCellCtrl.getCell();*/
-                return new BoardCell();
-            }
+        this.boards.setCellFactory(param -> {
+            /*BoardCellCtrl boardCellCtrl = new BoardCellCtrl();
+            return boardCellCtrl.getCell();*/
+            return new BoardCell();
         });
         // When you select (i.e.) click a board, open that board.
         this.boards.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<Board>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Board> observable,
-                                        Board oldValue, Board newValue) {
-                        if (newValue != null) {
-                            mainCtrl.showOverview(0);
-                        }
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        long boardId = newValue.getId();
+                        mainCtrl.showOverview(boardId);
+                        sockets.listenForBoard(boardId);
+                        // Make sure it's unselected, so when you return to this view
+                        // it looks the same as before.
+                        this.boards.getSelectionModel().clearSelection();
                     }
                 });
     }
 
     /**
-     * Disconnect from server
+     * Disconnect from server. When called, the Stompsession is ended
+     * and scene is set up back to ConnectServerCtrl
      *
-     * @param mouseEvent the mouse event
+     * @param mouseEvent the mouse event - unused
      */
     public void disconnect(MouseEvent mouseEvent) {
-        throw new NotImplementedException();
+        sockets.getSession().disconnect();
+        System.out.println("The client has been disconnected");
+
+        mainCtrl.showConnect();
     }
 
     /**
@@ -90,12 +92,12 @@ public class ListOfBoardsCtrl {
     }
 
     /**
-     * Create a new board
+     * Go to the interface to create a new board
      *
      * @param mouseEvent the mouse event
      */
     public void newBoard(MouseEvent mouseEvent) {
-        throw new NotImplementedException();
+        mainCtrl.showCreateBoard();
     }
 
     static class BoardCell extends ListCell<Board> {
@@ -106,7 +108,7 @@ public class ListOfBoardsCtrl {
             if (empty || item == null) {
                 this.setGraphic(null);
             } else {
-                Label label = new Label(item.getName());
+                Label label = new Label(item.getTitle());
                 this.setGraphic(label);
                 this.getStyleClass().add("board");
             }

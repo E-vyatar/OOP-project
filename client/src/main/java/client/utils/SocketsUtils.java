@@ -84,4 +84,20 @@ public class SocketsUtils {
     }
 
 
+    /**
+     * This method makes it so that the sockets listen only for changes to
+     * this board.
+     * Yet to be implemented.
+     * @param boardId the id of the board for which to listen
+     */
+    public void listenForBoard(long boardId) {
+        // TODO: implement
+    }
+
+    /**
+     * Stop listening for changes
+     */
+    public void unsubscribeAll() {
+        //TODO: implement
+    }
 }

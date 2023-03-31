@@ -2,24 +2,21 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.CardList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.NotImplementedException;
 
 import javax.inject.Inject;
 
 public class RenameListPopupCtrl {
 
+    private final ServerUtils server;
     private final BoardOverviewCtrl boardOverviewCtrl;
     private Stage renameListPopup;
-    private CardList cardList;
-
-
+    private CardListViewCtrl controller;
     @FXML
     private Parent root;
     @FXML
@@ -27,11 +24,13 @@ public class RenameListPopupCtrl {
 
     /**
      * This constructs the controller for the pop-up to rename a list.
-     * @param utils the server utils
-     * @param boardOverviewCtrl the main controller
+     *
+     * @param server the SeverUtils
+     * @param boardOverviewCtrl the BoardOverview
      */
     @Inject
-    public RenameListPopupCtrl(ServerUtils utils, BoardOverviewCtrl boardOverviewCtrl) {
+    public RenameListPopupCtrl(ServerUtils server, BoardOverviewCtrl boardOverviewCtrl) {
+        this.server = server;
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
@@ -43,7 +42,7 @@ public class RenameListPopupCtrl {
      */
     public void initialize() {
         this.renameListPopup = new Stage();
-        this.renameListPopup.setX(this.renameListPopup.getX() + 100);
+        this.renameListPopup.setTitle("Edit List");
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(root, 300, 200));
     }
@@ -53,34 +52,55 @@ public class RenameListPopupCtrl {
      * Before calling it, setCardList() should be called.
      */
     public void show() {
+        listTitle.setText(controller.getCardList().getTitle());
         this.renameListPopup.show();
     }
 
     /**
      * This closes the popup.
      * Currently, the popup is closed irrespective of the parameter passed.
-     *
-     * @param actionEvent the event that triggers the call of this function
      */
-    public void close(ActionEvent actionEvent) {
+    public void close() {
         this.renameListPopup.hide();
     }
 
     /**
      * This saves the result of the renaming.
      * Currently, doesn't work yet.
-     * @param actionEvent not sure what this is
+     *
      */
-    public void save(ActionEvent actionEvent) {
-        // TODO
-        throw new NotImplementedException("This must be implemented later");
+    public void save() {
+        String title = listTitle.getText();
+        listTitle.setStyle("-fx-border-color: inherit");
+        if (title.isEmpty()) {
+            listTitle.setStyle("-fx-border-color: red");
+        } else {
+            CardList temp = controller.getCardList();
+            temp.setTitle(title);
+            temp = server.editCardList(temp);
+            controller.setCardList(temp);
+            controller.resetTitle();
+            close();
+        }
+
     }
 
     /**
-     * Sets the {@link CardList} that you want to rename
-     * @param cardList the {@link CardList} to rename
+     * Deletes card
+     * TODO
      */
-    public void setCardList(CardList cardList) {
-        this.cardList = cardList;
+    public void delete() {
+        server.deleteCardList(controller.getCardList());
+        boardOverviewCtrl.deleteList(controller);
+        close();
+    }
+
+    /**
+     * Sets the {@link CardListViewCtrl} of the CardList that you want to rename.
+     *
+     * @param controller the {@link CardListViewCtrl} of the CardList to rename
+     */
+    public void setCardListViewCtrl(CardListViewCtrl controller) {
+        this.controller = controller;
     }
 }

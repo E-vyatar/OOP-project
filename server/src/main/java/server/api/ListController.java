@@ -17,11 +17,12 @@ import server.database.ListRepository;
 public class ListController {
 
     private final ListRepository listRepository;
-    private Logger logger = LoggerFactory.getLogger(ListController.class);
+    private final Logger logger = LoggerFactory.getLogger(ListController.class);
 
     /**
-     * Constructs an instance of ListController
-     * @param listRepository a list repository
+     * Constructor
+     *
+     * @param listRepository the repository (used for querying the DB)
      */
     public ListController(ListRepository listRepository) {
         this.listRepository = listRepository;
@@ -80,7 +81,7 @@ public class ListController {
     /**
      * Updates an existing list
      *
-     * @param id the id of the list
+     * @param id       the id of the list
      * @param cardList the list to update
      * @return the updated list
      */
@@ -97,10 +98,13 @@ public class ListController {
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public CardList updateList(@PathVariable("id") long id, @RequestBody CardList cardList) {
         logger.info("updateList() called with: id = [" + id + "], cardList = [" + cardList + "]");
-        if (listRepository.findById(id).isPresent()) {
-            cardList.setId(id);
-            return listRepository.save(cardList);
+        var cardList1Opt = listRepository.findById(id);
+        if (cardList1Opt.isPresent()) {
+            var list = cardList1Opt.get();
+            list.setTitle(cardList.getTitle());
+            return listRepository.save(list);
         }
+
         return null;
     }
 

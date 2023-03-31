@@ -24,9 +24,7 @@ import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +35,7 @@ public class AddCardCtrl {
     private final SocketsUtils socketsUtils;
     private final CardsUtils cardsUtils;
     private final MainCtrl mainCtrl;
+    private final BoardOverviewCtrl boardOverviewCtrl;
 
     @FXML
     private TextField title;
@@ -49,16 +48,19 @@ public class AddCardCtrl {
     /**
      * constructor
      *
-     * @param server     server utilities reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
+     * @param server     the ServerUtils reference
+     * @param boardOverviewCtrl board overview reference
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, SocketsUtils socketUtils, CardsUtils cardsUtils, MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, SocketsUtils socketUtils, CardsUtils cardsUtils,
+                       MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;
         this.socketsUtils = socketUtils;
+        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
     /**
@@ -77,9 +79,8 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-                socketsUtils.send("/app/cards/new", getCard());
-//                server.addCard(getCard());
-                System.out.println("add a card");
+                Card returnedCard = server.addCard(getCard());
+                boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
                 closeWindow();
             } catch (WebApplicationException e) {
 
@@ -99,13 +100,13 @@ public class AddCardCtrl {
 
     /**
      * Create new card object
+     * List index is -1 because the actual index is
+     * generated when sending the request to the database
      *
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        long listSize = server.getCardsByList(cardList.getId()).size();
-        return new Card(
-                -1, cardList.getId(), title.getText(), listSize + 1, cardList.getBoardId());
+        return new Card(cardList.getId(), cardList.getBoardId(), title.getText(), -1);
     }
 
     /**
@@ -113,7 +114,6 @@ public class AddCardCtrl {
      */
     private void clearFields() {
         title.clear();
-//        list.getItems().clear();
     }
 
     /**
@@ -123,14 +123,10 @@ public class AddCardCtrl {
      */
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
-            case ENTER:
-                ok();
-                break;
-            case ESCAPE:
-                closeWindow();
-                break;
-            default:
-                break;
+            case ENTER -> ok();
+            case ESCAPE -> closeWindow();
+            default -> {
+            }
         }
     }
 
@@ -143,6 +139,7 @@ public class AddCardCtrl {
 
     /**
      * Get the CardList for which you're adding a card
+     *
      * @return the CardList
      */
     public CardList getCardList() {
@@ -151,6 +148,7 @@ public class AddCardCtrl {
 
     /**
      * Set the CardList for which you're adding a card
+     *
      * @param cardList the cardlist
      */
     public void setCardList(CardList cardList) {
