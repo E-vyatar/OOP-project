@@ -1,16 +1,14 @@
 package commons;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "card_id_seq")
+    @SequenceGenerator(name = "card_id_seq", initialValue = 10, allocationSize = 1)
     private long id;
     private long listId;
     private long boardId;

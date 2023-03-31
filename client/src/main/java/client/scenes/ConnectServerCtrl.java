@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ public class ConnectServerCtrl implements Initializable {
 
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final SocketsUtils sockets;
     @FXML
     private TextField hostnameField;
 
@@ -20,13 +22,15 @@ public class ConnectServerCtrl implements Initializable {
      * Creates a ConnectServerCtrl with the given server utils and main controller.
      * This class relies on injection so the constructor should not be called manually.
      *
+     * @param server the ServerUtils of the app
+     * @param sockets utils class for sockets so we can start connection
      * @param mainCtrl the MainCtrl of the app
-     * @param server   the ServerUtils of the app
      */
     @Inject
-    public ConnectServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public ConnectServerCtrl(ServerUtils server, SocketsUtils sockets, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.sockets = sockets;
     }
 
     /**
@@ -49,7 +53,8 @@ public class ConnectServerCtrl implements Initializable {
      */
     public void connect() {
         server.setHostnameAndConnect(hostnameField.getText());
-        mainCtrl.showOverview(0);
+        sockets.setHostnameAndConnect(hostnameField.getText());
+        mainCtrl.showListOfBoards();
     }
 
 }
