@@ -21,6 +21,7 @@ public class ConnectServerCtrl implements Initializable {
     /**
      * Creates a ConnectServerCtrl with the given server utils and main controller.
      * This class relies on injection so the constructor should not be called manually.
+     *
      * @param server the ServerUtils of the app
      * @param sockets utils class for sockets so we can start connection
      * @param mainCtrl the MainCtrl of the app

@@ -38,8 +38,9 @@ public class MainCtrl {
     /**
      * This method initializes MainCtrl. The roots of the views are used to create scenes.
      * It also starts showing the primary stage / the main window.
-     * @param primaryStage the main window, this is used for ConnectServer and BoardOverview
-     * @param overview a pair of the BoardOverviewCtrl and the root of the to-be scene
+     *
+     * @param primaryStage      the main window, this is used for ConnectServer and BoardOverview
+     * @param overview          a pair of the BoardOverviewCtrl and the root of the to-be scene
      * @param connectServerCtrl a pair of the connectServerCtrl and the root of the to-be scene.
      * @param listOfBoards a pair of the ListOfBoardsCtrl and the root of the to-be scene.
      * @param createBoard a pair of the CreateBoardCtrl and the root of the to-be scene.

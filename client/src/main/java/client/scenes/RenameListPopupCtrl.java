@@ -76,6 +76,7 @@ public class RenameListPopupCtrl {
 
     /**
      * Sets the {@link CardList} that you want to rename
+     *
      * @param cardList the {@link CardList} to rename
      */
     public void setCardList(CardList cardList) {

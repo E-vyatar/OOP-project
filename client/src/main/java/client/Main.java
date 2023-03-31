@@ -29,6 +29,7 @@ public class Main extends Application {
 
     /**
      * The main method. This starts the client.
+     *
      * @param args the arguments passed to the program.
      */
     public static void main(String[] args) {
@@ -37,6 +38,7 @@ public class Main extends Application {
 
     /**
      * This method is called by JavaFX and starts the program.
+     *
      * @param primaryStage the primary stage for this application, onto which
      *                     the application scene can be set.
      *                     Applications may create other stages, if needed, but they will not be

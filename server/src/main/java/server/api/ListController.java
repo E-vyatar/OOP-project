@@ -72,7 +72,7 @@ public class ListController {
     /**
      * Updates an existing list
      *
-     * @param id the id of the list
+     * @param id       the id of the list
      * @param cardList the list to update
      * @return the updated list
      */

@@ -26,6 +26,7 @@ public class FXConfig implements Module {
 
     /**
      * Configure the bindings for the {@link com.google.inject.Injector}.
+     *
      * @param binder the Binder for which to configure.
      */
     @Override

@@ -47,7 +47,7 @@ public class AddCardCtrl {
      *
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
-     * @param server the ServerUtils reference
+     * @param server     the ServerUtils reference
      */
     @Inject
     public AddCardCtrl(CardsUtils cardsUtils, ServerUtils server, MainCtrl mainCtrl) {
@@ -98,7 +98,7 @@ public class AddCardCtrl {
     private Card getCard() {
         long listSize = server.getCardsByList(cardList.getId()).size();
         return new Card(
-            -1, cardList.getId(), cardList.getBoardId(), title.getText(), listSize+1);
+            -1, cardList.getId(), cardList.getBoardId(), title.getText(), listSize + 1);
     }
 
     /**
@@ -131,6 +131,7 @@ public class AddCardCtrl {
 
     /**
      * Get the CardList for which you're adding a card
+     *
      * @return the CardList
      */
     public CardList getCardList() {
@@ -139,6 +140,7 @@ public class AddCardCtrl {
 
     /**
      * Set the CardList for which you're adding a card
+     *
      * @param cardList the cardlist
      */
     public void setCardList(CardList cardList) {
