@@ -89,7 +89,7 @@ public class AddCardCtrl {
             }
 
             clearFields();
-            mainCtrl.showOverview(0);
+            mainCtrl.showOverview(cardList.getBoardId());
         } else {
             cardsUtils.markFields(title, null);
         }
