@@ -5,13 +5,14 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane fx:id="root" maxHeight="1.7976931348623157E308" xmlns="http://javafx.com/javafx/17.0.2-ea"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.RenameListPopupCtrl">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.RenameListPopupCtrl"
+            stylesheets="@../styles/RenameListPopup.css">
     <bottom>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <buttons>
-            <Button mnemonicParsing="false" onAction="#delete" text="Delete" />
-                <Button mnemonicParsing="false" onAction="#close" text="Cancel" />
-                <Button mnemonicParsing="false" onAction="#save" text="Save" />
+                <Button id="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" />
+                <Button id="cancelButton" mnemonicParsing="false" onAction="#close" text="Cancel" />
+                <Button id="saveButton" mnemonicParsing="false" onAction="#save" text="Save" />
             </buttons>
             <BorderPane.margin>
                 <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -19,7 +20,7 @@
         </ButtonBar>
     </bottom>
     <center>
-        <ScrollPane fitToHeight="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
+        <Pane maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
             <VBox maxHeight="1.7976931348623157E308">
                 <padding>
                     <Insets bottom="8.0" left="8.0" right="20.0" top="8.0" />
@@ -30,6 +31,6 @@
                     </VBox.margin>
                 </TextField>
             </VBox>
-        </ScrollPane>
+        </Pane>
     </center>
 </BorderPane>

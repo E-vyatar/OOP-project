@@ -42,7 +42,7 @@ public class RenameListPopupCtrl {
      */
     public void initialize() {
         this.renameListPopup = new Stage();
-        this.renameListPopup.setX(this.renameListPopup.getX() + 100);
+        this.renameListPopup.setTitle("Edit List");
         this.renameListPopup.initModality(Modality.APPLICATION_MODAL);
         this.renameListPopup.setScene(new Scene(root, 300, 200));
     }
@@ -52,6 +52,7 @@ public class RenameListPopupCtrl {
      * Before calling it, setCardList() should be called.
      */
     public void show() {
+        listTitle.setText(controller.getCardList().getTitle());
         this.renameListPopup.show();
     }
 
