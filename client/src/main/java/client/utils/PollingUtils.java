@@ -71,7 +71,9 @@ public class PollingUtils {
      * 2. the client can shutdown (it can't shutdown when there are running background tasks)
      */
     public void disconnect() {
-        executor.shutdownNow();
+        if (!executor.isShutdown()){
+            executor.shutdownNow();
+        }
     }
 
 }
