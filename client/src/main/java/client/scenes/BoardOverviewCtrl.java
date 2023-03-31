@@ -80,22 +80,31 @@ public class BoardOverviewCtrl implements EventHandler {
         this.addCard = new Scene(addCard.getValue());
 
         this.renameListPopupCtrl = renameListPopup.getKey();
-
+//        socketsUtils.registerMessages("/topic/lists/new", CardList.class, cardList -> {
+//
+//        });
         createCards();
-    }
-
-    /**
-     * Refresh the board. Right now it doesn't do anything,
-     * but when we have the multi-board feature this is necessary.
-     */
-    public void refresh() {
-
     }
     public ServerUtils getServerUtils(){
         return utils;
     }
     public SocketsUtils getSocketsUtils(){
         return socketsUtils;
+    }
+    /**
+     * Refresh the board. Right now it doesn't do anything,
+     * but when we have the multi-board feature this is necessary.
+     */
+    public void refresh() {
+        socketsUtils.registerMessages("/topic/cards/new", Card.class, this::addCard);
+    }
+    public void addCard(Card newCard) {
+        for (CardListViewCtrl cardListViewCtrl : this.cardListViewCtrlList) {
+            if (cardListViewCtrl.getCardList().getId() == newCard.getListId()) {
+                //TODO add card
+                
+            }
+        }
     }
     /**
      * This method creates the hardcoded cards.

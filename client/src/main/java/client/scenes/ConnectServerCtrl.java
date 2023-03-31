@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import client.utils.SocketsUtils;
 import com.google.inject.Inject;
-import commons.Card;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -40,12 +39,17 @@ public class ConnectServerCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         hostnameField.setText("localhost");
     }
-
     /**
      * This method is called when the user clicks on the connect button.
      * It should connect to the server (currently not implemented),
      * and it then shows the board overview.
      */
+    public ServerUtils getServerUtils(){
+        return server;
+    }
+    public SocketsUtils getSocketsUtils(){
+        return sockets;
+    }
     public void connect() {
         server.setHostnameAndConnect(hostnameField.getText());
         sockets.setHostnameAndConnect(hostnameField.getText());

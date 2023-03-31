@@ -79,6 +79,7 @@ public class AddCardCtrl {
             try {
                 socketsUtils.send("/app/cards/new", getCard());
 //                server.addCard(getCard());
+                System.out.println("add a card");
                 closeWindow();
             } catch (WebApplicationException e) {
 

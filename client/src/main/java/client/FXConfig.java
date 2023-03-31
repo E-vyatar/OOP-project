@@ -21,6 +21,7 @@ import client.utils.SocketsUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 public class FXConfig implements Module {
 

@@ -14,6 +14,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -56,7 +57,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
         return viewCtrl.getKey();
     }
-
     /**
      * Initalize the controller.
      * This includes creating the view.
@@ -73,9 +73,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         this.cards = cards;
 
         this.view = new CardListView(boardOverviewCtrl, this, cards);
-        boardOverviewCtrl.getSocketsUtils().registerMessages("/topic/cards/new", Card.class, card ->{
-            cards.add(card);
-        });
 
         createView();
     }
