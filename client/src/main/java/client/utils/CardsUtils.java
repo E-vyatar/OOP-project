@@ -52,7 +52,7 @@ public class CardsUtils {
 
         list.getItems().clear();
         list.getItems().addAll(
-                FXCollections.observableList(boardOverviewCtrl.getAllLists())
+            FXCollections.observableList(boardOverviewCtrl.getAllLists())
         );
     }
 

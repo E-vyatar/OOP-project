@@ -29,6 +29,7 @@ public class Main extends Application {
 
     /**
      * The main method. This starts the client.
+     *
      * @param args the arguments passed to the program.
      */
     public static void main(String[] args) {
@@ -37,6 +38,7 @@ public class Main extends Application {
 
     /**
      * This method is called by JavaFX and starts the program.
+     *
      * @param primaryStage the primary stage for this application, onto which
      *                     the application scene can be set.
      *                     Applications may create other stages, if needed, but they will not be
@@ -44,25 +46,14 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-
-        var connectServerCtrl = FXML.load(
-            ConnectServerCtrl.class,
-            "client", "scenes", "ConnectServer.fxml");
-
-        var listOfBoardsCtrl = FXML.load(
-            ListOfBoardsCtrl.class,
-            "client", "scenes", "ListOfBoards.fxml");
 
         var overview = FXML.load(
             BoardOverviewCtrl.class,
             "client", "scenes", "boardOverview.fxml");
 
-        mainCtrl.initialize(primaryStage, overview, connectServerCtrl, listOfBoardsCtrl);
-
         var cardPopup = FXML.load(
-            CardPopupCtrl.class,
-            "client", "scenes", "CardPopup.fxml");
+                CardPopupCtrl.class,
+                "client", "scenes", "CardPopup.fxml");
 
         var renameListPopup = FXML.load(
             RenameListPopupCtrl.class,
@@ -73,5 +64,25 @@ public class Main extends Application {
             "client", "scenes", "AddCard.fxml");
 
         overview.getKey().initialize(cardPopup, addCard, renameListPopup);
+
+
+        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+
+        var connectServerCtrl = FXML.load(
+                ConnectServerCtrl.class,
+                "client", "scenes", "ConnectServer.fxml");
+
+        var listOfBoardsCtrl = FXML.load(
+                ListOfBoardsCtrl.class,
+                "client", "scenes", "ListOfBoards.fxml");
+        var createBoard = FXML.load(
+                CreateBoardCtrl.class,
+                "client", "scenes", "CreateBoard.fxml");
+
+        mainCtrl.initialize(primaryStage,
+                overview,
+                connectServerCtrl,
+                listOfBoardsCtrl,
+                createBoard);
     }
 }

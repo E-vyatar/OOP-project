@@ -7,7 +7,8 @@ import java.util.Objects;
 public class Card {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "card_id_seq")
+    @SequenceGenerator(name = "card_id_seq", initialValue = 10, allocationSize = 1)
     private long id;
     private long listId;
     private long boardId;
@@ -164,8 +165,13 @@ public class Card {
      */
     @Override
     public String toString() {
-        return "Card{" + "id=" + id + ", listId=" + listId + ", title='" + title + '\'' + ", idx=" +
-            idx + ", boardId=" + boardId + '}';
+        return "Card{" +
+            "id=" + id +
+            ", listId=" + listId +
+            ", title='" + title + '\'' +
+            ", idx=" + idx +
+            ", boardId=" + boardId +
+            '}';
     }
 
     /**

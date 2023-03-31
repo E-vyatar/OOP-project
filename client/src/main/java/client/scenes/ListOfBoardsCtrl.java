@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import commons.Board;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +25,7 @@ public class ListOfBoardsCtrl {
 
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final SocketsUtils sockets;
     @FXML
     private ListView<Board> boards;
 
@@ -31,12 +33,14 @@ public class ListOfBoardsCtrl {
      * This constructs an instance of ListOfBoards.
      *
      * @param mainCtrl    the main controller
-     * @param server the server utils
+     * @param server the server utils - used to load list of boards
+     * @param sockets the socket utils - used to disconnect connection
      */
     @Inject
-    public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils server, SocketsUtils sockets) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.sockets = sockets;
     }
 
     /**
@@ -55,18 +59,27 @@ public class ListOfBoardsCtrl {
         this.boards.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
-                        mainCtrl.showOverview(0);
+                        long boardId = newValue.getId();
+                        mainCtrl.showOverview(boardId);
+                        sockets.listenForBoard(boardId);
+                        // Make sure it's unselected, so when you return to this view
+                        // it looks the same as before.
+                        this.boards.getSelectionModel().clearSelection();
                     }
                 });
     }
 
     /**
-     * Disconnect from server
+     * Disconnect from server. When called, the Stompsession is ended
+     * and scene is set up back to ConnectServerCtrl
      *
-     * @param mouseEvent the mouse event
+     * @param mouseEvent the mouse event - unused
      */
     public void disconnect(MouseEvent mouseEvent) {
-        throw new NotImplementedException();
+        sockets.getSession().disconnect();
+        System.out.println("The client has been disconnected");
+
+        mainCtrl.showConnect();
     }
 
     /**
@@ -79,12 +92,12 @@ public class ListOfBoardsCtrl {
     }
 
     /**
-     * Create a new board
+     * Go to the interface to create a new board
      *
      * @param mouseEvent the mouse event
      */
     public void newBoard(MouseEvent mouseEvent) {
-        throw new NotImplementedException();
+        mainCtrl.showCreateBoard();
     }
 
     static class BoardCell extends ListCell<Board> {

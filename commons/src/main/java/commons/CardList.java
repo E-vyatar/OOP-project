@@ -8,13 +8,14 @@ import java.util.Objects;
 @Entity
 public class CardList {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "list_id_seq")
+    @SequenceGenerator(name = "list_id_seq", initialValue = 10, allocationSize = 1)
     private long id;
     private long boardId;
     private String title;
     private long idx;
 
-    @OneToMany(mappedBy = "listId", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "listId", cascade = CascadeType.ALL)
     @OrderColumn(name = "idx")
     private List<Card> cards = new ArrayList<>();
 

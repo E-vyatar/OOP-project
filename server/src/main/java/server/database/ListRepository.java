@@ -9,6 +9,7 @@ public interface ListRepository extends CrudRepository<CardList, Long> {
 
     /**
      * Get all CardLists in a certain board
+     *
      * @param boardId the id of the board
      * @return an iterator that iterates over all the CardLists
      */
@@ -16,6 +17,7 @@ public interface ListRepository extends CrudRepository<CardList, Long> {
 
     /**
      * Find a specific CardList by id
+     *
      * @param listId the list's id
      * @return an optional of the cardlist if it found one, otherwise an empty optional
      */
