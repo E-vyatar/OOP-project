@@ -16,8 +16,7 @@
 package client;
 
 import client.scenes.*;
-import client.utils.ServerUtils;
-import client.utils.SocketsUtils;
+import client.utils.*;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -33,12 +32,12 @@ public class FXConfig implements Module {
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(PollingUtils.class).in(Scopes.SINGLETON);
         binder.bind(SocketsUtils.class).in(Scopes.SINGLETON);
         binder.bind(BoardOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CardPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(RenameListPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ConnectServerCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
         binder.bind(DeleteCardCtrl.class).in(Scopes.SINGLETON);
     }
 }

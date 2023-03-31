@@ -4,9 +4,16 @@ import commons.Card;
 import commons.messages.MoveCardMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.CardRepositroy;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  *
@@ -94,9 +101,15 @@ public class CardController {
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public Card updateCard(@PathVariable("id") long id, @RequestBody Card card) {
         logger.info("updateCard() called with: id = [" + id + "], card = [" + card + "]");
-        if (cardRepository.findById(id).isPresent()) {
-            card.setId(id);
-            return cardRepository.save(card);
+        var optCard = cardRepository.findById(id);
+        if (optCard.isPresent()) {
+            Card storedCard = optCard.get();
+            storedCard.setTitle(card.getTitle());
+            Card result = cardRepository.save(storedCard);
+            for (Consumer<Card> listener : this.listeners.values()) {
+                listener.accept(result);
+            }
+            return result;
         }
         return null;
     }
@@ -171,5 +184,40 @@ public class CardController {
             return true;
         }
         return false;
+    }
+    // We use a Concurrent HashMap to prevent race conditions.
+    private Map<Object, Consumer<Card>> listeners = new ConcurrentHashMap<>();
+
+    /**
+     * Long poll for updates to a card.
+     *
+     * @param boardId the board for which to poll for updates
+     *
+     * @return the deferred result. This will wait for 5s
+     *      to return a card and otherwise not return anything.
+     */
+    @GetMapping(value = "updates/{id}", produces = "application/json")
+    public DeferredResult<Card> longPollForUpdates(@PathVariable("id") long boardId) {
+
+        logger.info("Received polling request");
+
+        var timeout = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+
+        DeferredResult<Card> defResult = new DeferredResult<>(5000L, timeout);
+
+        Object key = new Object();
+        listeners.put(key, c -> {
+            if (c.getBoardId() == boardId) {
+                defResult.setResult(c);
+            }
+        });
+
+        // Make sure we always clean up.
+        defResult.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+        return defResult;
     }
 }

@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.*;
+import client.utils.PollingUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -26,6 +27,7 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new FXConfig());
     private static final FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
+    private MainCtrl mainCtrl;
 
     /**
      * The main method. This starts the client.
@@ -89,4 +91,15 @@ public class Main extends Application {
                 listOfBoardsCtrl,
                 createBoard);
     }
+
+    /**
+     * Clean up resources when application is stopped.
+     * Make sure we stop polling.
+     */
+    @Override
+    public void stop() {
+        PollingUtils pollingUtils = INJECTOR.getInstance(PollingUtils.class);
+        pollingUtils.disconnect();
+    }
+
 }

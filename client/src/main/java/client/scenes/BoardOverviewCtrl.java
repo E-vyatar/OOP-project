@@ -15,12 +15,14 @@
  */
 package client.scenes;
 
+import client.utils.PollingUtils;
 import client.utils.ServerUtils;
 import commons.*;
 import client.utils.SocketsUtils;
 import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.collections.ObservableList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,6 +43,7 @@ import java.util.stream.Collectors;
 public class BoardOverviewCtrl {
 
     private final ServerUtils server;
+    private final PollingUtils polling;
     private final SocketsUtils socketsUtils;
 
     private final MainCtrl mainCtrl;
@@ -60,13 +63,18 @@ public class BoardOverviewCtrl {
      * linked to the overview of the board.
      * The constructor should not be called manually, since it uses injection.
      * @param server  the ServerUtils of the app - used to load and send data from the server
+     * @param polling  the PollingUtils of the app
      * @param socketsUtils socket utils - used to receive changes from the server
      * @param mainCtrl the MainCtrl of the app
      */
     @Inject
-    public BoardOverviewCtrl(ServerUtils server, SocketsUtils socketsUtils, MainCtrl mainCtrl) {
-        this.server = server;
+    public BoardOverviewCtrl(MainCtrl mainCtrl,
+                             ServerUtils server,
+                             PollingUtils polling,
+                             SocketsUtils socketsUtils) {
         this.mainCtrl = mainCtrl;
+        this.server = server;
+        this.polling = polling;
         this.socketsUtils = socketsUtils;
         socketsUtils.initialize(this);
     }
@@ -87,8 +95,29 @@ public class BoardOverviewCtrl {
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
         this.renameListPopupCtrl = renameListPopup.getKey();
+
         this.deleteCardCtrl = deleteCard.getKey();
         this.deleteCard = new Scene(deleteCard.getValue());
+    }
+
+    /**
+     * This method should be called when a card has been updated.
+     * It will find the card by id and then update it.
+     * @param updatedCard the new version of the card
+     */
+    public void updateCard(Card updatedCard) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            ObservableList<Card> cards = cardListViewCtrl.getObservableCards();
+            for (int i = 0; i < cards.size(); i++) {
+                // Check if the card has the same id,
+                // i.e. if this card is being updated
+                if (cards.get(i).getId() == updatedCard.getId()) {
+                    // Replace the card
+                    cards.set(i, updatedCard);
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -123,25 +152,33 @@ public class BoardOverviewCtrl {
 
     /**
      * when clicking Return to list of boards,
-     * you see the list of boards again
+     * you see the list of boards again.
+     * It will stop the polling and unsubscribe from the sockets,
+     * but it won't stop the connection of the sockets
+     * so the connection won't have to be re-instated when you view another board.
      *
      * @param actionEvent unused
      */
     public void returnToBoardList(ActionEvent actionEvent) {
+
+        polling.disconnect();
+        socketsUtils.stopListening();
+
         mainCtrl.showListOfBoards();
     }
 
 
     /**
      * Meant to refresh the board.
-     * Currently, it completely resets the board (deleting all the lists)
-     * & rebuilds it (using the board fetched from the server).
+     * Currently, it loads the board from the server
+     * and builds the UI for it.
      *
      * @param boardId the id of the board to be fetched
      */
     public void refresh(long boardId) {
-
         board = server.getBoard(boardId);
+
+        this.polling.pollForCardUpdates(this);
 
         generateView();
     }
@@ -398,6 +435,14 @@ public class BoardOverviewCtrl {
      */
     public ServerUtils getServer() {
         return server;
+    }
+    /**
+     * Getter for the board
+     *
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
     }
 
     /**

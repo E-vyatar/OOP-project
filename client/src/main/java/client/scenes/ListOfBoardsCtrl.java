@@ -55,6 +55,10 @@ public class ListOfBoardsCtrl {
             return boardCellCtrl.getCell();*/
             return new BoardCell();
         });
+        // Make sure it's unselected, so when you return to this view
+        // it looks the same as before.
+        this.boards.getSelectionModel().clearSelection();
+        
         // When you select (i.e.) click a board, open that board.
         this.boards.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -62,9 +66,6 @@ public class ListOfBoardsCtrl {
                         long boardId = newValue.getId();
                         mainCtrl.showOverview(boardId);
                         sockets.listenForBoard(boardId);
-                        // Make sure it's unselected, so when you return to this view
-                        // it looks the same as before.
-                        this.boards.getSelectionModel().clearSelection();
                     }
                 });
     }

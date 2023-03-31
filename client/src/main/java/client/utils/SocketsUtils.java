@@ -89,4 +89,12 @@ public class SocketsUtils {
     public void listenForBoard(long boardId) {
         // TODO: implement
     }
+
+    /**
+     * Stop listening, but keep connection
+     * TODO: write code
+     */
+    public void stopListening() {
+
+    }
 }
