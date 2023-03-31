@@ -23,24 +23,15 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
 
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
+
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-    private StompSession session;
+
     private String server;
 
     /**
@@ -50,7 +41,7 @@ public class ServerUtils {
      */
     public void setHostnameAndConnect(String hostname) {
         this.server = "http://" + hostname + ":8080";
-        session = connect("ws://" + hostname + ":8080/websocket");
+
     }
 
     /**
@@ -72,16 +63,30 @@ public class ServerUtils {
      * Sends HTTP request to server to add a new card
      *
      * @param card the card to add to the database
+     * @return The Card that was added to the database
      */
-    public void addCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
-            .target(server)
-            .path("cards/new")
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    public Card addCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("cards/new")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * send the server Put request to add a new board to the database
+     *
+     * @param board the board to add to the database
+     */
+    public void addBoard(Board board) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("boards/new")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
     /**
      * Sends HTTP request to change card's details
      *
@@ -149,12 +154,28 @@ public class ServerUtils {
      * send the server Delete request to remove a card from the database
      *
      * @param card the card to remove from the database
+     * @return true if card was deleted from the database, false otherwise
      */
-    public void deleteCard(Card card) {
-        ClientBuilder.newClient(new ClientConfig())
+    public boolean deleteCard(Card card) {
+        return ClientBuilder.newClient(new ClientConfig())
             .target(server)
             .path("cards/{id}")
             .resolveTemplate("id", card.getId())
+            .request(APPLICATION_JSON)
+            .accept(APPLICATION_JSON)
+            .delete().readEntity(Boolean.class);
+    }
+
+    /**
+     * Deletes cardList from server
+     *
+     * @param cardList cardList to delete
+     */
+    public void deleteCardList(CardList cardList) {
+        ClientBuilder.newClient(new ClientConfig())
+            .target(server)
+            .path("lists/{id}")
+            .resolveTemplate("id", cardList.getId())
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .delete();
@@ -191,61 +212,6 @@ public class ServerUtils {
             .accept(APPLICATION_JSON)
             .get(new GenericType<>() {
             });
-    }
-
-//    private final StompSession session = connect("ws://localhost:8080/websocket");
-
-    /**
-     * @return returns the session, used it in disconnect method in board overview
-     */
-    public StompSession getSession() {
-        return session;
-    }
-
-
-    /**
-     * @param url address
-     * @return StompSession
-     */
-    private StompSession connect(String url) {
-        var client = new StandardWebSocketClient();
-        var stomp = new WebSocketStompClient(client);
-        stomp.setMessageConverter(new MappingJackson2MessageConverter());
-        try {
-            return stomp.connect(url, new StompSessionHandlerAdapter() {
-            }).get();
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * @param destination destination for the upcoming messages
-     * @param type        class type
-     * @param consumer    the subscriber
-     * @param <T>         generic class
-     */
-    public <T> void registerMessages(String destination, Class<T> type, Consumer<T> consumer) {
-        session.subscribe(server, new StompFrameHandler() {
-            @Override
-            public Type getPayloadType(StompHeaders headers) {
-                return type;
-            }
-
-            @Override
-            public void handleFrame(StompHeaders headers, Object payload) {
-                consumer.accept((T) payload);
-            }
-        });
-    }
-
-    /**
-     * Check if the connection is alive
-     *
-     * @return whether the connection is alive
-     */
-    public boolean isConnectionAlive() {
-        return session != null && session.isConnected();
     }
 
 }

@@ -1,0 +1,28 @@
+#root {
+    -fx-background-color: #555555;
+}
+
+#deleteButton {
+    -fx-background-color: #ce5858;
+}
+
+#deleteButton:pressed {
+    -fx-background-color: #9b4747;
+}
+
+#saveButton {
+    -fx-background-color:#419841;
+}
+
+#saveButton:pressed {
+    -fx-background-color: #317031;
+}
+
+#cancelButton {
+    -fx-background-color: grey;
+}
+
+#cancelButton:pressed {
+    -fx-background-color: #646363;
+}
+

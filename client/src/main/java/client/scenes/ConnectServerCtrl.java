@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.PollingUtils;
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +16,8 @@ public class ConnectServerCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final PollingUtils polling;
+    private final SocketsUtils sockets;
+
     @FXML
     private TextField hostnameField;
 
@@ -22,15 +25,20 @@ public class ConnectServerCtrl implements Initializable {
      * Creates a ConnectServerCtrl with the given server utils and main controller.
      * This class relies on injection so the constructor should not be called manually.
      *
+     * @param server the ServerUtils of the app
+     * @param sockets utils class for sockets so we can start connection
      * @param mainCtrl the MainCtrl of the app
-     * @param server   the ServerUtils of the app
      * @param polling  the PollingUtils of the app
      */
     @Inject
-    public ConnectServerCtrl(MainCtrl mainCtrl, ServerUtils server, PollingUtils polling) {
+    public ConnectServerCtrl(MainCtrl mainCtrl,
+                             ServerUtils server,
+                             PollingUtils polling,
+                             SocketsUtils sockets) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.polling = polling;
+        this.sockets = sockets;
     }
 
     /**
@@ -48,14 +56,15 @@ public class ConnectServerCtrl implements Initializable {
 
     /**
      * This method is called when the user clicks on the connect button.
-     * It should connect to the server (currently not implemented),
-     * and it then shows the board overview.
+     * It should connect to the server,
+     * and it then shows the list of boards.
      */
     public void connect() {
         String hostname = hostnameField.getText();
         server.setHostnameAndConnect(hostname);
         polling.setHostname(hostname);
-        mainCtrl.showOverview(0);
+        sockets.setHostnameAndConnect(hostname);
+        mainCtrl.showListOfBoards();
     }
 
 }

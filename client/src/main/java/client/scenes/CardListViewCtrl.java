@@ -34,7 +34,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private CardListView view;
 
     /**
-     * This constructs an instance of CardListViewCtrl
+     * This constructs an instance of CardListViewCtrl.
      * CardListViewCtrl is the controller for viewing a CardList
      * and its cards. To get the CardListView, call {@link this.getView}
      *
@@ -75,6 +75,8 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         this.view = new CardListView(boardOverviewCtrl, this, cards);
 
         createView();
+
+        addCardButton.setOnAction(event -> showAddCard());
     }
 
     /**
@@ -99,15 +101,9 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
             return cardViewCtrl.getView();
         });
         cardListView.setItems(this.cards);
-        cardListTitle.setText(cardList.getTitle());
+        resetTitle();
 
         cardListView.getSelectionModel().getSelectedItems().addListener(controller);
-
-        cardListView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                boardOverviewCtrl.showRenameList(cardList);
-            }
-        });
     }
 
     /**
@@ -219,8 +215,13 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      *
      * @param card  the card to add
      * @param index where to add the card
+     *              If index is negative the card will be added at the end of the list
      */
     public void addCard(Card card, long index) {
+        if (index < 0) {
+            index = cards.size();
+        }
+        System.out.println("Adding card " + card + " at index " + index);
         card.setListId(cardList.getId());
         cards.add((int) index, card);
         card.setIdx(index);
@@ -244,9 +245,44 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
 
     /**
-     * TODO
+     * Set the CardList of the AddCard window and open the window
      */
     public void showAddCard() {
         boardOverviewCtrl.setCardListForShowAddCard(cardList);
+        boardOverviewCtrl.showAddCard();
+    }
+
+    /**
+     * Replace a card by its edited version
+     * @param originalCardIdx The card's index in the list
+     * @param editedCard The new version of the card
+     */
+    public void setCard(long originalCardIdx, Card editedCard) {
+        cards.set((int) originalCardIdx, editedCard);
+    }
+
+    /**
+     * Tells {@link BoardOverviewCtrl} to show RenameList Popup.
+     * (It's used in {@link RenameListPopupCtrl})
+     *
+     */
+    public void showRenameList() {
+        boardOverviewCtrl.showRenameList(this);
+    }
+
+    /**
+     * Sets the displayed title in the CardList view
+     */
+    public void resetTitle() {
+        cardListTitle.setText(cardList.getTitle());
+    }
+
+    /**
+     * Sets the CardList for this controller
+     *
+     * @param cardList the new CardList for this controller
+     */
+    public void setCardList(CardList cardList) {
+        this.cardList = cardList;
     }
 }

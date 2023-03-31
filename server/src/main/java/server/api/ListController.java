@@ -79,10 +79,13 @@ public class ListController {
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public CardList updateList(@PathVariable("id") long id, @RequestBody CardList cardList) {
         logger.info("updateList() called with: id = [" + id + "], cardList = [" + cardList + "]");
-        if (listRepository.findById(id).isPresent()) {
-            cardList.setId(id);
-            return listRepository.save(cardList);
+        var cardList1Opt = listRepository.findById(id);
+        if (cardList1Opt.isPresent()) {
+            var list = cardList1Opt.get();
+            list.setTitle(cardList.getTitle());
+            return listRepository.save(list);
         }
+
         return null;
     }
 

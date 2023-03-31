@@ -33,6 +33,7 @@ public class AddCardCtrl {
     private final ServerUtils server;
     private final CardsUtils cardsUtils;
     private final MainCtrl mainCtrl;
+    private final BoardOverviewCtrl boardOverviewCtrl;
 
     @FXML
     private TextField title;
@@ -48,12 +49,15 @@ public class AddCardCtrl {
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
      * @param server     the ServerUtils reference
+     * @param boardOverviewCtrl board overview reference
      */
     @Inject
-    public AddCardCtrl(CardsUtils cardsUtils, ServerUtils server, MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils,
+                       MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;
+        this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
     /**
@@ -72,7 +76,8 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-                server.addCard(getCard());
+                Card returnedCard = server.addCard(getCard());
+                boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
                 closeWindow();
             } catch (WebApplicationException e) {
 
@@ -92,13 +97,13 @@ public class AddCardCtrl {
 
     /**
      * Create new card object
+     * List index is -1 because the actual index is
+     * generated when sending the request to the database
      *
      * @return new Card, temporarily with dummy data
      */
     private Card getCard() {
-        long listSize = server.getCardsByList(cardList.getId()).size();
-        return new Card(
-            -1, cardList.getId(), cardList.getBoardId(), title.getText(), listSize + 1);
+        return new Card(cardList.getId(), cardList.getBoardId(), title.getText(), -1);
     }
 
     /**

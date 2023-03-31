@@ -46,25 +46,14 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-
-        var connectServerCtrl = FXML.load(
-            ConnectServerCtrl.class,
-            "client", "scenes", "ConnectServer.fxml");
-
-        var listOfBoardsCtrl = FXML.load(
-            ListOfBoardsCtrl.class,
-            "client", "scenes", "ListOfBoards.fxml");
 
         var overview = FXML.load(
             BoardOverviewCtrl.class,
             "client", "scenes", "boardOverview.fxml");
 
-        mainCtrl.initialize(primaryStage, overview, connectServerCtrl, listOfBoardsCtrl);
-
         var cardPopup = FXML.load(
-            CardPopupCtrl.class,
-            "client", "scenes", "CardPopup.fxml");
+                CardPopupCtrl.class,
+                "client", "scenes", "CardPopup.fxml");
 
         var renameListPopup = FXML.load(
             RenameListPopupCtrl.class,
@@ -74,6 +63,30 @@ public class Main extends Application {
             AddCardCtrl.class,
             "client", "scenes", "AddCard.fxml");
 
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup);
+        var deleteCtrl = FXML.load(
+                DeleteCardCtrl.class,
+                "client", "scenes", "DeleteCard.fxml");
+
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl);
+
+
+        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+
+        var connectServerCtrl = FXML.load(
+                ConnectServerCtrl.class,
+                "client", "scenes", "ConnectServer.fxml");
+
+        var listOfBoardsCtrl = FXML.load(
+                ListOfBoardsCtrl.class,
+                "client", "scenes", "ListOfBoards.fxml");
+        var createBoard = FXML.load(
+                CreateBoardCtrl.class,
+                "client", "scenes", "CreateBoard.fxml");
+
+        mainCtrl.initialize(primaryStage,
+                overview,
+                connectServerCtrl,
+                listOfBoardsCtrl,
+                createBoard);
     }
 }
