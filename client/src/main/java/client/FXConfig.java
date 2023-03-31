@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.*;
+import client.utils.PollingUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -36,5 +37,6 @@ public class FXConfig implements Module {
         binder.bind(RenameListPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ConnectServerCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
+        binder.bind(PollingUtils.class).in(Scopes.SINGLETON);
     }
 }

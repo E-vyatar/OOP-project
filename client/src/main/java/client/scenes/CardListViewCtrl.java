@@ -197,6 +197,14 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     }
 
     /**
+     * Get the observable list of cards
+     * @return the observable list of cards, updates are automatically propagated
+     */
+    public ObservableList<Card> getObservableCards() {
+        return cards;
+    }
+
+    /**
      * Remove a card from the view
      *
      * @param card the card to remove

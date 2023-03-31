@@ -132,9 +132,17 @@ public class CardPopupCtrl {
     public void saveCardChanges() {
         if (cardsUtils.fieldsNotEmpty(cardTitle, list)) {
             try {
-                card.setListId(list.getValue().getId());
-                card.setTitle(cardTitle.getText());
-                server.editCard(card);
+                // We create a new card with the updated information
+                // we send this to the server
+                // Then we will receive this card via sockets/long-polling and update it
+                // in the UI.
+                long cardId = card.getId();
+                long listId = list.getValue().getId();
+                long boardId = card.getBoardId();
+                long idx = card.getIdx();
+                String title = cardTitle.getText();
+                Card updatedCard = new Card(cardId, listId, boardId, title, idx);
+                server.editCard(updatedCard);
                 close();
             } catch (WebApplicationException e) {
 

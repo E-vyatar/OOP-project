@@ -15,9 +15,11 @@
  */
 package client.scenes;
 
+import client.utils.PollingUtils;
 import client.utils.ServerUtils;
 import commons.*;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -38,6 +40,7 @@ public class BoardOverviewCtrl {
 
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final PollingUtils polling;
     private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     private CardPopupCtrl cardPopupCtrl;
     private AddCardCtrl addCardCtrl;
@@ -54,11 +57,13 @@ public class BoardOverviewCtrl {
      *
      * @param mainCtrl the MainCtrl of the app
      * @param server   the ServerUtils of the app
+     * @param polling  the PollingUtils of the app
      */
     @Inject
-    public BoardOverviewCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public BoardOverviewCtrl(MainCtrl mainCtrl, ServerUtils server, PollingUtils polling) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.polling = polling;
     }
 
     /**
@@ -77,8 +82,24 @@ public class BoardOverviewCtrl {
         this.renameListPopupCtrl = renameListPopup.getKey();
     }
 
-    private void getCardsFromServer() {
-
+    /**
+     * This method should be called when a card has been updated.
+     * It will find the card by id and then update it.
+     * @param updatedCard the new version of the card
+     */
+    public void updateCard(Card updatedCard) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            ObservableList<Card> cards = cardListViewCtrl.getObservableCards();
+            for (int i = 0; i < cards.size(); i++) {
+                // Check if the card has the same id,
+                // i.e. if this card is being updated
+                if (cards.get(i).getId() == updatedCard.getId()) {
+                    // Replace the card
+                    cards.set(i, updatedCard);
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -119,6 +140,7 @@ public class BoardOverviewCtrl {
      */
     public void disconnect(ActionEvent actionEvent) {
         server.getSession().disconnect();
+        polling.disconnect();
 
         mainCtrl.showConnect();
     }
@@ -126,15 +148,16 @@ public class BoardOverviewCtrl {
 
     /**
      * Meant to refresh the board.
-     * Currently, it completely resets the board (deleting all the lists)
-     * & rebuilds it (using the board fetched from the server).
+     * Currently, it loads the board from the server
+     * and builds the UI for it.
      *
      * @param boardId the id of the board to be fetched
      */
     public void refresh(long boardId) {
-
         // Get board with ID = 0
         board = server.getBoard(boardId);
+
+        this.polling.pollForCardUpdates(this);
 
         generateView();
     }
@@ -328,5 +351,13 @@ public class BoardOverviewCtrl {
      */
     public ServerUtils getServer() {
         return server;
+    }
+    /**
+     * Getter for the board
+     *
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
     }
 }
