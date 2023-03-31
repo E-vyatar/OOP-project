@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.PollingUtils;
 import client.utils.ServerUtils;
 import client.utils.SocketsUtils;
 import com.google.inject.Inject;
@@ -14,7 +15,9 @@ public class ConnectServerCtrl implements Initializable {
 
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final PollingUtils polling;
     private final SocketsUtils sockets;
+
     @FXML
     private TextField hostnameField;
 
@@ -23,13 +26,15 @@ public class ConnectServerCtrl implements Initializable {
      * This class relies on injection so the constructor should not be called manually.
      *
      * @param server the ServerUtils of the app
+     * @param polling  the PollingUtils of the app
      * @param sockets utils class for sockets so we can start connection
      * @param mainCtrl the MainCtrl of the app
      */
     @Inject
-    public ConnectServerCtrl(ServerUtils server, SocketsUtils sockets, MainCtrl mainCtrl) {
+    public ConnectServerCtrl(ServerUtils server, PollingUtils polling, SocketsUtils sockets, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.polling = polling;
         this.sockets = sockets;
     }
 
@@ -57,8 +62,10 @@ public class ConnectServerCtrl implements Initializable {
         return sockets;
     }
     public void connect() {
-        server.setHostnameAndConnect(hostnameField.getText());
-        sockets.setHostnameAndConnect(hostnameField.getText());
+        String hostname = hostnameField.getText();
+        server.setHostnameAndConnect(hostname);
+        polling.setHostname(hostname);
+        sockets.setHostnameAndConnect(hostname);
         mainCtrl.showListOfBoards();
     }
 

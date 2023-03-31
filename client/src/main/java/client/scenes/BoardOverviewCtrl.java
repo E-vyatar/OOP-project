@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.utils.PollingUtils;
 import client.utils.ServerUtils;
 import commons.*;
 import client.utils.SocketsUtils;
@@ -22,6 +23,8 @@ import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -42,6 +45,7 @@ public class BoardOverviewCtrl {
 
     private final ServerUtils server;
     private final SocketsUtils socketsUtils;
+    private final PollingUtils polling;
 
     private final MainCtrl mainCtrl;
     private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
@@ -60,15 +64,16 @@ public class BoardOverviewCtrl {
      * linked to the overview of the board.
      * The constructor should not be called manually, since it uses injection.
      * @param server  the ServerUtils of the app - used to load and send data from the server
-     * @param socketsUtils socket utils - used to receive changes from the server
+     * @param sockets socket utils - used to receive changes from the server
      * @param mainCtrl the MainCtrl of the app
-     */
+     * @param polling  the PollingUtils of the app
+    */
     @Inject
-    public BoardOverviewCtrl(ServerUtils server, SocketsUtils socketsUtils, MainCtrl mainCtrl) {
-        this.server = server;
+    public BoardOverviewCtrl(MainCtrl mainCtrl, ServerUtils server, PollingUtils polling, SocketsUtils sockets) {
         this.mainCtrl = mainCtrl;
-        this.socketsUtils = socketsUtils;
-        socketsUtils.initialize(this);
+        this.server = server;
+        this.polling = polling;
+        this.socketsUtils = sockets;
     }
 
     /**
@@ -100,24 +105,35 @@ public class BoardOverviewCtrl {
     public SocketsUtils getSocketsUtils(){
         return socketsUtils;
     }
-    /**
-     * Refresh the board. Right now it doesn't do anything,
-     * but when we have the multi-board feature this is necessary.
-     */
-    public void refresh() {
-        socketsUtils.registerMessages("/topic/cards/new", Card.class, this::addCard);
-    }
     public void addCard(Card newCard) {
+        System.out.println("added new card " + newCard);
         for (CardListViewCtrl cardListViewCtrl : this.cardListViewCtrlList) {
             if (cardListViewCtrl.getCardList().getId() == newCard.getListId()) {
-                cardListViewCtrl.get
+                // Append new card to the end.
+                cardListViewCtrl.getObservableCards().add(newCard);
                 
             }
         }
     }
 
-    private void getCardsFromServer() {
-
+    /**
+     * This method should be called when a card has been updated.
+     * It will find the card by id and then update it.
+     * @param updatedCard the new version of the card
+     */
+    public void updateCard(Card updatedCard) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            ObservableList<Card> cards = cardListViewCtrl.getObservableCards();
+            for (int i = 0; i < cards.size(); i++) {
+                // Check if the card has the same id,
+                // i.e. if this card is being updated
+                if (cards.get(i).getId() == updatedCard.getId()) {
+                    // Replace the card
+                    cards.set(i, updatedCard);
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -158,20 +174,31 @@ public class BoardOverviewCtrl {
      */
     public void returnToBoardList(ActionEvent actionEvent) {
         socketsUtils.unsubscribeAll();
+        polling.disconnect();
+
         mainCtrl.showListOfBoards();
     }
 
 
     /**
      * Meant to refresh the board.
-     * Currently, it completely resets the board (deleting all the lists)
-     * & rebuilds it (using the board fetched from the server).
+     * Currently, it loads the board from the server
+     * and builds the UI for it.
+     * It also starts the sockets and such.
      *
      * @param boardId the id of the board to be fetched
      */
     public void refresh(long boardId) {
 
+        // Get board with ID = 0
         board = server.getBoard(boardId);
+
+        this.polling.pollForCardUpdates(this);
+        socketsUtils.registerMessages("/topic/cards/new", Card.class, card -> {
+            Platform.runLater(() -> {
+                this.addCard(card);
+            });
+        });
 
         generateView();
     }
@@ -278,16 +305,6 @@ public class BoardOverviewCtrl {
      */
     public void setCardListForShowAddCard(CardList cardList) {
         addCardCtrl.setCardList(cardList);
-    }
-
-    /**
-     * Add card to the list view. addCard is called with negative index
-     * to put the card at the end of the list
-     * @param cardList The list to add the card to
-     * @param card The card to add to the list
-     */
-    public void addCardToBoardOverview(CardList cardList, Card card) {
-        getCardListViewCtrl(cardList.getId()).addCard(card, -1);
     }
 
     /**
@@ -439,5 +456,13 @@ public class BoardOverviewCtrl {
         cardListViewCtrlList.remove(cardListViewCtrl);
         listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
         board.getCardLists().remove(cardListViewCtrl.getCardList());
+    }
+    /**
+     * Getter for the board
+     *
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
     }
 }

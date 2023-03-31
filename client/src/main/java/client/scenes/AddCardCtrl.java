@@ -79,8 +79,12 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-                Card returnedCard = server.addCard(getCard());
-                boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
+
+                Card returnedCard = getCard();
+                server.addCard(returnedCard);
+                socketsUtils.send("/app/cards", returnedCard);
+                //boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
+
                 closeWindow();
             } catch (WebApplicationException e) {
 
@@ -92,7 +96,6 @@ public class AddCardCtrl {
             }
 
             clearFields();
-            mainCtrl.showOverview(0);
         } else {
             cardsUtils.markFields(title, null);
         }

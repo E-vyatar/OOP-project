@@ -16,12 +16,12 @@
 package client;
 
 import client.scenes.*;
+import client.utils.PollingUtils;
 import client.utils.ServerUtils;
 import client.utils.SocketsUtils;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-import org.springframework.messaging.simp.stomp.StompSession;
 
 public class FXConfig implements Module {
 
@@ -41,5 +41,6 @@ public class FXConfig implements Module {
         binder.bind(ConnectServerCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
         binder.bind(DeleteCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(PollingUtils.class).in(Scopes.SINGLETON);
     }
 }
