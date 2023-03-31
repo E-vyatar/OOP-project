@@ -58,12 +58,20 @@ public class SocketsUtils {
      * @param <T>         generic class
      */
     public <T> void registerMessages(String destination, Class<T> type, Consumer<T> consumer) {
-        session.subscribe(server, new StompFrameHandler() {
+        session.subscribe(destination, new StompFrameHandler() {
+            /**
+             * @param headers the headers of a message
+             * @return the type that is requested in the register message method above
+             */
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
             }
 
+            /**
+             * @param headers the headers of the frame
+             * @param payload the payload, or {@code null} if there was no payload
+             */
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 consumer.accept((T) payload);
@@ -71,6 +79,10 @@ public class SocketsUtils {
         });
     }
 
+    /**
+     * @param destination server address
+     * @param o object that will be handled by server
+     */
     public void send(String destination, Object o){
         session.send(destination, o);
     }

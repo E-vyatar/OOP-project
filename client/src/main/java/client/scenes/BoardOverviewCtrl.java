@@ -199,7 +199,6 @@ public class BoardOverviewCtrl {
                 this.addCard(card);
             });
         });
-
         generateView();
     }
 
