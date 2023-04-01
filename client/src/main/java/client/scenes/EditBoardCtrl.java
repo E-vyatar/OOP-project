@@ -82,7 +82,15 @@ public class EditBoardCtrl {
      */
     @FXML
     private void save() {
+        // We create a new board without cardlist to send to server
+        long id = this.board.getId();
+        String title = this.boardTitle.getText();
+        Board updatedBoard = new Board(id, title);
+        serverUtils.updateBoard(updatedBoard);
 
+        // The UI will be updated when we get the info back via long-polling/websockets
+
+        popup.hide();
     }
 
 }

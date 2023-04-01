@@ -125,6 +125,7 @@ public class Board {
     public String toString() {
         return "Board{" +
             "id=" + id +
+            ", title=" + title +
             ", cardLists=" + cardLists +
             '}';
     }

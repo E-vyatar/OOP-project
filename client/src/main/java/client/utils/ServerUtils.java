@@ -214,4 +214,16 @@ public class ServerUtils {
             });
     }
 
+    /**
+     * Update the board details.
+     * @param updatedBoard board with changed details,
+     *                     shouldn't contain cardlists for performance reasons
+     */
+    public void updateBoard(Board updatedBoard) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("boards/update")
+                .request()
+                .post(Entity.entity(updatedBoard, APPLICATION_JSON));
+    }
+
 }

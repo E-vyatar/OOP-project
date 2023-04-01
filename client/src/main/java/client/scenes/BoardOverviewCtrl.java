@@ -131,6 +131,20 @@ public class BoardOverviewCtrl {
     }
 
     /**
+     * Update board details (i.e. the board title)
+     * @param updatedBoard the board with the new details - only the title is checked
+     */
+    public void updateBoard(Board updatedBoard) {
+        // Stopping long polling might have a delay,
+        // so let's check the board id just to be sure.
+        if (board.getId() != updatedBoard.getId()) {
+            return;
+        }
+        this.boardTitle.setText(updatedBoard.getTitle());
+        this.board.setTitle(updatedBoard.getTitle());
+    }
+
+    /**
      * Adds a new list to the board
      *
      * @param actionEvent -
@@ -188,7 +202,8 @@ public class BoardOverviewCtrl {
     public void refresh(long boardId) {
         board = server.getBoard(boardId);
 
-        this.polling.pollForCardUpdates(this);
+        this.polling.pollForUpdates("cards/updates/" + boardId, this::updateCard, Card.class);
+        this.polling.pollForUpdates("boards/updates/" + boardId, this::updateBoard, Board.class);
 
         generateView();
     }

@@ -104,7 +104,7 @@ public class Main extends Application {
     @Override
     public void stop() {
         PollingUtils pollingUtils = INJECTOR.getInstance(PollingUtils.class);
-        pollingUtils.disconnect();
+        pollingUtils.shutdown();
     }
 
 }
