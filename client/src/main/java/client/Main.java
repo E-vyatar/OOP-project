@@ -69,7 +69,12 @@ public class Main extends Application {
                 DeleteCardCtrl.class,
                 "client", "scenes", "DeleteCard.fxml");
 
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl);
+        var editBoard = FXML.load(
+                EditBoardCtrl.class,
+                "client", "scenes", "EditBoard.fxml"
+        );
+
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl, editBoard);
 
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);

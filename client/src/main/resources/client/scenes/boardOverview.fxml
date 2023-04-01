@@ -9,10 +9,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Region?>
 <AnchorPane id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1200.0"
             prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: BLACK;"
             xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="client.scenes.BoardOverviewCtrl">
+            fx:controller="client.scenes.BoardOverviewCtrl"
+            stylesheets="@../styles/GeneralStyle.css">
     <children>
         <BorderPane id="mainContentPane" prefHeight="720.0" prefWidth="1243.0" style="-fx-background-color: #555555;"
                     AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
@@ -30,31 +33,45 @@
                 </ScrollPane>
             </center>
             <top>
-                <AnchorPane id="utilBar" prefHeight="50.0" prefWidth="1180.0"
+                <HBox id="utilBar" prefHeight="50.0" prefWidth="1180.0"
                             style="-fx-background-color: #333333; -fx-border-color: #333333; -fx-border-width: 0; -fx-background-radius: 10;"
-                            BorderPane.alignment="CENTER">
+                            BorderPane.alignment="CENTER"
+                            alignment="CENTER">
                     <BorderPane.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
                     </BorderPane.margin>
+                    <padding>
+                        <Insets left="16.0" right="16.0" />
+                    </padding>
                     <children>
-                        <Pane prefHeight="40.0" prefWidth="200.0" style="-fx-background-image: url('TALIO_logo.png');"
-                              AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0"/>
-                        <Button id="newListButton" layoutX="1085.0" layoutY="13.0" mnemonicParsing="false"
-                                onAction="#addList" style="-fx-background-color: #22d15c;" text="New List"
-                                AnchorPane.rightAnchor="15.0">
-                            <font>
-                                <Font name="System Bold" size="12.0"/>
-                            </font>
-                        </Button>
+                        <Pane prefHeight="40.0" prefWidth="80.0" style="-fx-background-image: url('TALIO_logo.png');"/>
                         <Button id="returnButton" layoutX="24.0" layoutY="13.0" mnemonicParsing="false"
-                                onAction="#returnToBoardList" prefHeight="25.0" prefWidth="212.0"
+                                onAction="#returnToBoardList" prefHeight="25.0" prefWidth="160.0"
                                 style="-fx-background-color: #22d15c;" text="return to boardlist">
                             <font>
                                 <Font name="System Bold" size="12.0"/>
                             </font>
                         </Button>
+                        <Region prefWidth="16.0" maxWidth="16.0" minWidth="0.0"/> <!-- Let's add some breathing space -->
+                        <Label fx:id="boardTitle" prefHeight="25.0" minWidth="10.0" style="-fx-text-fill: white;">
+                            <font>
+                                <Font name="System Bold" size="16.0"/>
+                            </font>
+                        </Label>
+                        <!-- Everything before this is on the left, everything after on the right -->
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button styleClass="editButton" layoutX="24.0" layoutY="13.0" mnemonicParsing="false"
+                        onMouseClicked="#editBoard" prefHeight="25.0" prefWidth="25.0" text="E"
+                                textFill="#dadada"/>
+                        <Region prefWidth="16.0" maxWidth="16.0" minWidth="0.0"/> <!-- Let's add some breathing space -->
+                        <Button id="newListButton" layoutX="1085.0" layoutY="13.0" mnemonicParsing="false"
+                                onAction="#addList" style="-fx-background-color: #22d15c;" text="New List">
+                            <font>
+                                <Font name="System Bold" size="12.0"/>
+                            </font>
+                        </Button>
                     </children>
-                </AnchorPane>
+                </HBox>
             </top>
         </BorderPane>
     </children>

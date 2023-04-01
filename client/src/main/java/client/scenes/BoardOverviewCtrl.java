@@ -29,6 +29,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -54,9 +55,14 @@ public class BoardOverviewCtrl {
     private DeleteCardCtrl deleteCardCtrl;
     private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
+    private EditBoardCtrl editBoardCtrl;
+
     private Board board;
+
     @FXML
     private HBox listOfLists;
+    @FXML
+    private Label boardTitle;
 
     /**
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
@@ -85,12 +91,14 @@ public class BoardOverviewCtrl {
      * @param cardPopup       a pair of the CardPopupCtrl and the root of the to-be scene
      * @param addCard         a pair of the AddCardCtrl and the root of the to-be scene
      * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
-     * @param deleteCard a pair of the DeleteCardCtrl and the root of the to-be scene
+     * @param deleteCard      a pair of the DeleteCardCtrl and the root of the to-be scene
+     * @param editBoard       a pair of the EditboardCtrl and the root of the to-be scene
      */
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup,
-                           Pair<DeleteCardCtrl, Parent> deleteCard) {
+                           Pair<DeleteCardCtrl, Parent> deleteCard,
+                           Pair<EditBoardCtrl, Parent> editBoard) {
         this.cardPopupCtrl = cardPopup.getKey();
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
@@ -98,6 +106,8 @@ public class BoardOverviewCtrl {
 
         this.deleteCardCtrl = deleteCard.getKey();
         this.deleteCard = new Scene(deleteCard.getValue());
+
+        this.editBoardCtrl = editBoard.getKey();
     }
 
     /**
@@ -214,6 +224,9 @@ public class BoardOverviewCtrl {
                 cardListViewCtrl.getCardListNode()
             );
         }
+
+        boardTitle.setText(board.getTitle());
+        System.out.println("board title: " + board.getTitle());
     }
 
     /**
@@ -454,5 +467,13 @@ public class BoardOverviewCtrl {
         cardListViewCtrlList.remove(cardListViewCtrl);
         listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
         board.getCardLists().remove(cardListViewCtrl.getCardList());
+    }
+
+    /**
+     * Show the popup that allows you to edit board details (and view the board id)
+     */
+    @FXML
+    public void editBoard() {
+        editBoardCtrl.show(board);
     }
 }
