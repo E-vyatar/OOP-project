@@ -10,12 +10,14 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 public class SocketsUtils {
     private BoardOverviewCtrl boardOverviewCtrl;
     private StompSession session;
+    private List<StompSession.Subscription> subscriptionList;
     private String server;
 
     /**
@@ -84,6 +86,7 @@ public class SocketsUtils {
      * @param o object that will be handled by server
      */
     public void send(String destination, Object o){
+        System.out.println("object being sent " + o.toString());
         session.send(destination, o);
     }
 

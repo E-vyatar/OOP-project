@@ -81,7 +81,7 @@ public class AddCardCtrl {
             try {
 
                 Card returnedCard = getCard();
-                server.addCard(returnedCard);
+                //server.addCard(returnedCard);
                 socketsUtils.send("/app/cards", returnedCard);
                 //boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
 

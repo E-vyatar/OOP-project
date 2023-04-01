@@ -1,11 +1,11 @@
 package server.api;
 
-import commons.Card;
 import commons.CardList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.ListRepository;
 
@@ -17,6 +17,7 @@ import server.database.ListRepository;
 public class ListController {
 
     private final ListRepository listRepository;
+    private final SimpMessagingTemplate msgs;
     private final Logger logger = LoggerFactory.getLogger(ListController.class);
 
     /**
@@ -24,8 +25,9 @@ public class ListController {
      *
      * @param listRepository the repository (used for querying the DB)
      */
-    public ListController(ListRepository listRepository) {
+    public ListController(ListRepository listRepository, SimpMessagingTemplate msgs) {
         this.listRepository = listRepository;
+        this.msgs = msgs;
     }
 
     /**
@@ -44,15 +46,17 @@ public class ListController {
      * @param cardList list to be created
      * @return the created list
      */
-    @MessageMapping("/lists")
-    @SendTo("/topic/lists")
+    @MessageMapping("/lists/new") //app/lists/new
+    @SendTo("/topic/lists/new")
     public CardList addListMessage(CardList cardList){
-        listRepository.save(cardList);
-        return cardList;
+        logger.info("addMessage called with cardList = [" + cardList + "]");
+        cardList.setIdx(listRepository.count());
+        return listRepository.save(cardList);
     }
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public CardList createList(@RequestBody CardList cardList) {
         logger.info("createList() called with: cardList = [" + cardList + "]");
+        msgs.convertAndSend("/topic/lists/new", cardList);
         return listRepository.save(cardList);
     }
 

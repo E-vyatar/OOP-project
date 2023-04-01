@@ -23,7 +23,6 @@ import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -95,9 +94,6 @@ public class BoardOverviewCtrl {
         this.deleteCardCtrl = deleteCard.getKey();
         this.deleteCard = new Scene(deleteCard.getValue());
 
-//        socketsUtils.registerMessages("/topic/lists/new", CardList.class, cardList -> {
-//
-//        });
     }
     public ServerUtils getServerUtils(){
         return server;
@@ -148,15 +144,17 @@ public class BoardOverviewCtrl {
 
         try {
             // Add cardList to server and retrieve object with ID
-            cardList = server.addCardList(cardList);
+            socketsUtils.send("/app/lists/new", cardList);
+            System.out.println("sending the card list" + cardList.toString() + "");
+            //cardList = server.addCardList(cardList);
 
             board.getCardLists().add(cardList);
 
-            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
-                this, cardList);
-            cardListViewCtrlList.add(cardListViewCtrl);
-
-            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+//            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
+//                this, cardList);
+//            cardListViewCtrlList.add(cardListViewCtrl);
+//
+//            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
 
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -194,10 +192,13 @@ public class BoardOverviewCtrl {
         board = server.getBoard(boardId);
 
         this.polling.pollForCardUpdates(this);
-        socketsUtils.registerMessages("/topic/cards/new", Card.class, card -> {
-            Platform.runLater(() -> {
-                this.addCard(card);
-            });
+        socketsUtils.registerMessages("/topic/cards", Card.class, card -> {
+            this.addCard(card);
+        });
+        socketsUtils.registerMessages("/topic/lists", CardList.class, consumer ->{
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, consumer);
+            cardListViewCtrlList.add(cardListViewCtrl);
+            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
         });
         generateView();
     }

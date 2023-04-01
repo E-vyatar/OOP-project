@@ -48,8 +48,9 @@ public class CardController {
     @MessageMapping("/cards/new") // app/cards/new
     @SendTo("/topic/cards/new")
     public Card addMessage(Card card){
-        cardRepository.save(card);
-        return card;
+        long listSize = cardRepository.countByListId(card.getListId());
+        card.setIdx(listSize);
+        return cardRepository.save(card);
     }
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
@@ -57,7 +58,7 @@ public class CardController {
         long listSize = cardRepository.countByListId(card.getListId());
         card.setIdx(listSize);
         Card newCard = cardRepository.save(card);
-        msgs.convertAndSend("/topic/cards/new", newCard);
+        //msgs.convertAndSend("/topic/cards/new", newCard);
         return newCard;
 
     }
