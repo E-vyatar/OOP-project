@@ -30,13 +30,17 @@ public class PollingUtils {
 
     // We're using an ExecutorService over a thread since it can run multiple tasks at once.
     // This is ideal for tasks like long polling, where most of the time, nothing is done.
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     /**
      * Start polling for changes to a card.
      * @param boardOverviewCtrl the boardOverviewCtrl. This is used to update the card in the UI
      */
     public void pollForCardUpdates(BoardOverviewCtrl boardOverviewCtrl) {
+        // Whenever it is shutdown, we can't re-use it so we need to create a new instance
+        if (executor.isShutdown()) {
+            executor = Executors.newSingleThreadExecutor();
+        }
         executor.submit(() -> {
             while (!Thread.interrupted()) {
                 long boardId = boardOverviewCtrl.getBoard().getId();
@@ -67,7 +71,9 @@ public class PollingUtils {
      * 2. the client can shutdown (it can't shutdown when there are running background tasks)
      */
     public void disconnect() {
-        executor.shutdownNow();
+        if (!executor.isShutdown()){
+            executor.shutdownNow();
+        }
     }
 
 }

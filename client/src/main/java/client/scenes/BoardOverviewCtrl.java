@@ -142,11 +142,17 @@ public class BoardOverviewCtrl {
 
     /**
      * when clicking Return to list of boards,
-     * you see the list of boards again
+     * you see the list of boards again.
+     * It will stop the polling and unsubscribe from the sockets,
+     * but it won't stop the connection of the sockets
+     * so the connection won't have to be re-instated when you view another board.
+     *
+     * @param actionEvent unused
      */
-    public void returnToBoardList() {
-        socketsUtils.unsubscribeAll();
+    public void returnToBoardList(ActionEvent actionEvent) {
+
         polling.disconnect();
+        socketsUtils.stopListening();
 
         mainCtrl.showListOfBoards();
     }
@@ -454,6 +460,14 @@ public class BoardOverviewCtrl {
      */
     public ServerUtils getServer() {
         return server;
+    }
+    /**
+     * Getter for the board
+     *
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
     }
 
     /**
