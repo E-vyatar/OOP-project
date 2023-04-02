@@ -150,11 +150,11 @@ public class BoardOverviewCtrl {
 
             board.getCardLists().add(cardList);
 
-//            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
-//                this, cardList);
-//            cardListViewCtrlList.add(cardListViewCtrl);
-//
-//            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
+                this, cardList);
+            cardListViewCtrlList.add(cardListViewCtrl);
+
+            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
 
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
