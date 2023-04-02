@@ -31,7 +31,10 @@ public class ConnectServerCtrl implements Initializable {
      * @param mainCtrl the MainCtrl of the app
      */
     @Inject
-    public ConnectServerCtrl(ServerUtils server, PollingUtils polling, SocketsUtils sockets, MainCtrl mainCtrl) {
+    public ConnectServerCtrl(ServerUtils server,
+                             PollingUtils polling,
+                             SocketsUtils sockets,
+                             MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.polling = polling;
@@ -50,17 +53,7 @@ public class ConnectServerCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         hostnameField.setText("localhost");
     }
-    /**
-     * This method is called when the user clicks on the connect button.
-     * It should connect to the server (currently not implemented),
-     * and it then shows the board overview.
-     */
-    public ServerUtils getServerUtils(){
-        return server;
-    }
-    public SocketsUtils getSocketsUtils(){
-        return sockets;
-    }
+
     public void connect() {
         String hostname = hostnameField.getText();
         server.setHostnameAndConnect(hostname);

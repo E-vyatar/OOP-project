@@ -33,6 +33,7 @@ public class CardController {
      * Constructor
      *
      * @param cardRepository the repository (used for querying the DB)
+     * @param msgs not used TODO
      */
     public CardController(CardRepositroy cardRepository, SimpMessagingTemplate msgs) {
         this.cardRepository = cardRepository;
@@ -53,6 +54,7 @@ public class CardController {
         card.setIdx(listSize);
         return cardRepository.save(card);
     }
+
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");

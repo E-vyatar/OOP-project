@@ -48,9 +48,10 @@ public class AddCardCtrl {
     /**
      * constructor
      *
+     * @param server     the ServerUtils reference
+     * @param socketUtils the SocketUtils reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
-     * @param server     the ServerUtils reference
      * @param boardOverviewCtrl board overview reference
      */
     @Inject
