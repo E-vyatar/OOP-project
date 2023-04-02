@@ -119,4 +119,11 @@ public class SocketsUtils {
     public void unsubscribeAll() {
         //TODO: implement
     }
+
+    /**
+     * To changes to this board
+     */
+    public void stopListening() {
+        // TODO: implement
+    }
 }

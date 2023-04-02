@@ -147,9 +147,8 @@ public class BoardOverviewCtrl {
      * but it won't stop the connection of the sockets
      * so the connection won't have to be re-instated when you view another board.
      *
-     * @param actionEvent unused
      */
-    public void returnToBoardList(ActionEvent actionEvent) {
+    public void returnToBoardList() {
 
         polling.disconnect();
         socketsUtils.stopListening();
@@ -310,9 +309,9 @@ public class BoardOverviewCtrl {
     }
 
     /**
-     * Set the cardlist for which you're adding a card
+     * Set the cardList for which you're adding a card
      * In a different method from `showAddCard` because it's easier to pass a parameter
-     * @param cardList the cardlist
+     * @param cardList the cardList
      */
     public void setCardListForShowAddCard(CardList cardList) {
         addCardCtrl.setCardList(cardList);
@@ -479,13 +478,5 @@ public class BoardOverviewCtrl {
         cardListViewCtrlList.remove(cardListViewCtrl);
         listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
         board.getCardLists().remove(cardListViewCtrl.getCardList());
-    }
-    /**
-     * Getter for the board
-     *
-     * @return the board
-     */
-    public Board getBoard() {
-        return board;
     }
 }
