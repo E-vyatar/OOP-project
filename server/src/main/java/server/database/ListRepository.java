@@ -22,6 +22,7 @@ public interface ListRepository extends CrudRepository<CardList, Long> {
      * @return an optional of the cardlist if it found one, otherwise an empty optional
      */
     Optional<CardList> findById(long listId);
+
     /**
      * Count the cards in a list
      * @param boardId The id of the list
