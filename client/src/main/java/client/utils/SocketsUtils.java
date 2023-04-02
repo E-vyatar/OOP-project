@@ -1,6 +1,7 @@
 package client.utils;
 
 import client.scenes.BoardOverviewCtrl;
+import javafx.application.Platform;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -77,7 +78,9 @@ public class SocketsUtils {
              */
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                consumer.accept((T) payload);
+                Platform.runLater(() -> {
+                    consumer.accept((T) payload);
+                });
             }
         })) ;
     }

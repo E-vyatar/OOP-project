@@ -197,16 +197,10 @@ public class BoardOverviewCtrl {
             this.addCard(card);
         });
         socketsUtils.registerMessages("/topic/lists/new", CardList.class, consumer ->{
-            System.out.println("we are receiving the message");
-            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, consumer);
-            System.out.println("step 1 done");
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl
+                .createNewCardListViewCtrl(this, consumer);
             cardListViewCtrlList.add(cardListViewCtrl);
-            System.out.println("step 2 done");
             listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
-            System.out.println("we are working on adding the list");
-            generateView();
-            System.out.println("this ain't working");
-            // Adds the CardList to the HBox
         });
         generateView();
     }
