@@ -44,6 +44,7 @@ public class DeleteCardCtrl {
     public void deleteCard() {
         try {
             boolean wasDeleted = serverUtils.deleteCard(card);
+
             if (wasDeleted) {
                 boardOverviewCtrl.removeDeletedCard(card);
                 closeConfirmation();
