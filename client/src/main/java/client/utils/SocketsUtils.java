@@ -1,6 +1,7 @@
 package client.utils;
 
 import client.scenes.BoardOverviewCtrl;
+import javafx.application.Platform;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -10,12 +11,15 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 public class SocketsUtils {
     private BoardOverviewCtrl boardOverviewCtrl;
     private StompSession session;
+    private List<StompSession.Subscription> subscriptionList = new ArrayList<>();
     private String server;
 
     /**
@@ -58,17 +62,36 @@ public class SocketsUtils {
      * @param <T>         generic class
      */
     public <T> void registerMessages(String destination, Class<T> type, Consumer<T> consumer) {
-        session.subscribe(server, new StompFrameHandler() {
+        subscriptionList.add(session.subscribe(destination, new StompFrameHandler() {
+            /**
+             * @param headers the headers of a message
+             * @return the type that is requested in the register message method above
+             */
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return type;
             }
 
+            /**
+             * @param headers the headers of the frame
+             * @param payload the payload, or {@code null} if there was no payload
+             */
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                consumer.accept((T) payload);
+                Platform.runLater(() -> {
+                    consumer.accept((T) payload);
+                });
             }
-        });
+        })) ;
+    }
+
+    /**
+     * @param destination server address
+     * @param o object that will be handled by server
+     */
+    public void send(String destination, Object o){
+        System.out.println("object being sent " + o.toString());
+        session.send(destination, o);
     }
 
     /**
@@ -91,10 +114,16 @@ public class SocketsUtils {
     }
 
     /**
-     * Stop listening, but keep connection
-     * TODO: write code
+     * Stop listening for changes
+     */
+    public void unsubscribeAll() {
+        //TODO: implement
+    }
+
+    /**
+     * To changes to this board
      */
     public void stopListening() {
-
+        // TODO: implement
     }
 }

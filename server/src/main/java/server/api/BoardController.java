@@ -34,6 +34,7 @@ public class BoardController {
      *
      * @return all boards
      */
+
     @GetMapping("all")
     public Iterable<Board> getAllBoards() {
         return boardRepository.findAll();

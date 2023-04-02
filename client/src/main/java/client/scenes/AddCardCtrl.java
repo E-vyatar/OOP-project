@@ -18,6 +18,7 @@ package client.scenes;
 
 import client.utils.CardsUtils;
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import com.google.inject.Inject;
 import commons.Card;
 import commons.CardList;
@@ -31,6 +32,7 @@ import javafx.stage.Stage;
 public class AddCardCtrl {
 
     private final ServerUtils server;
+    private final SocketsUtils socketsUtils;
     private final CardsUtils cardsUtils;
     private final MainCtrl mainCtrl;
     private final BoardOverviewCtrl boardOverviewCtrl;
@@ -46,17 +48,19 @@ public class AddCardCtrl {
     /**
      * constructor
      *
+     * @param server     the ServerUtils reference
+     * @param socketUtils the SocketUtils reference
      * @param cardsUtils card utilities reference
      * @param mainCtrl   main controller reference
-     * @param server     the ServerUtils reference
      * @param boardOverviewCtrl board overview reference
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, CardsUtils cardsUtils,
+    public AddCardCtrl(ServerUtils server, SocketsUtils socketUtils, CardsUtils cardsUtils,
                        MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardsUtils = cardsUtils;
+        this.socketsUtils = socketUtils;
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
@@ -76,8 +80,12 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-                Card returnedCard = server.addCard(getCard());
-                boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
+
+                Card returnedCard = getCard();
+                //server.addCard(returnedCard);
+                socketsUtils.send("/app/cards/new", returnedCard);
+                //boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
+
                 closeWindow();
             } catch (WebApplicationException e) {
 
