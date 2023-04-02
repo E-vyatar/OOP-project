@@ -226,4 +226,15 @@ public class ServerUtils {
                 .post(Entity.entity(updatedBoard, APPLICATION_JSON));
     }
 
+    /**
+     * Delete a board
+     * @param boardId the id of the board that should be deleted
+     */
+    public void deleteBoard(long boardId) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("boards/" + boardId)
+                .request()
+                .delete();
+    }
+
 }

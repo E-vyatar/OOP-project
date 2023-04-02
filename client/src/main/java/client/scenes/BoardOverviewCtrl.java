@@ -56,6 +56,9 @@ public class BoardOverviewCtrl {
     private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
     private EditBoardCtrl editBoardCtrl;
+    private Scene editBoard;
+
+    private Stage popup;
 
     private Board board;
 
@@ -108,6 +111,12 @@ public class BoardOverviewCtrl {
         this.deleteCard = new Scene(deleteCard.getValue());
 
         this.editBoardCtrl = editBoard.getKey();
+        this.editBoard = new Scene(editBoard.getValue());
+
+        this.popup = new Stage();
+        this.popup.initModality(Modality.APPLICATION_MODAL);
+        this.popup.setMinWidth(240.0);
+        this.popup.setMinHeight(200.0);
     }
 
     /**
@@ -241,7 +250,6 @@ public class BoardOverviewCtrl {
         }
 
         boardTitle.setText(board.getTitle());
-        System.out.println("board title: " + board.getTitle());
     }
 
     /**
@@ -489,6 +497,19 @@ public class BoardOverviewCtrl {
      */
     @FXML
     public void editBoard() {
-        editBoardCtrl.show(board);
+        editBoardCtrl.setBoard(board);
+        editBoardCtrl.refresh();
+
+        popup.setTitle("Editing board details");
+        popup.setScene(editBoard);
+
+        popup.show();
+    }
+
+    /**
+     * Hide the popup if it's currently visible
+     */
+    public void hidePopup() {
+        this.popup.hide();
     }
 }
