@@ -49,16 +49,18 @@ public class ListController {
     @MessageMapping("/lists/new") //app/lists/new
     @SendTo("/topic/lists/new")
     public CardList addListMessage(CardList cardList){
-        logger.info("addMessage called with cardList = [" + cardList + "]");
+
         cardList.setIdx(listRepository.count());
-        return listRepository.save(cardList);
+        CardList temp = listRepository.save(cardList);
+        logger.info("addMessage called with cardList = [" + temp + "]");
+        return temp;
     }
-    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
-    public CardList createList(@RequestBody CardList cardList) {
-        logger.info("createList() called with: cardList = [" + cardList + "]");
-        msgs.convertAndSend("/topic/lists/new", cardList);
-        return listRepository.save(cardList);
-    }
+//    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
+//    public CardList createList(@RequestBody CardList cardList) {
+//        logger.info("createList() called with: cardList = [" + cardList + "]");
+//        msgs.convertAndSend("/topic/lists/new", cardList);
+//        return listRepository.save(cardList);
+//    }
 
     /**
      * Gets a list by id

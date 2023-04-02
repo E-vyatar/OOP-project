@@ -146,15 +146,15 @@ public class BoardOverviewCtrl {
             // Add cardList to server and retrieve object with ID
             socketsUtils.send("/app/lists/new", cardList);
             System.out.println("sending the card list" + cardList.toString() + "");
-            //cardList = server.addCardList(cardList);
-
-            board.getCardLists().add(cardList);
-
-            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
-                this, cardList);
-            cardListViewCtrlList.add(cardListViewCtrl);
-
-            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+//            cardList = server.addCardList(cardList);
+//
+//            board.getCardLists().add(cardList);
+//
+//            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(
+//                this, cardList);
+//            cardListViewCtrlList.add(cardListViewCtrl);
+//
+//            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
 
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -196,9 +196,15 @@ public class BoardOverviewCtrl {
             this.addCard(card);
         });
         socketsUtils.registerMessages("/topic/lists", CardList.class, consumer ->{
-            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, consumer);
-            cardListViewCtrlList.add(cardListViewCtrl);
-            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+            if(consumer.getBoardId() == board.getId()){
+                CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, consumer);
+                cardListViewCtrlList.add(cardListViewCtrl);
+                listOfLists.getChildren().add(
+                        cardListViewCtrl.getCardListNode()
+                );
+            }
+            // Adds the CardList to the HBox
+
         });
         generateView();
     }

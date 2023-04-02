@@ -146,12 +146,13 @@ public class CardController {
      * @param id the id of the card
      * @return true if card doesn't exist in the database after deletion, false otherwise
      */
-    @MessageMapping("/cards")
-    @SendTo("/topic/cards")
-    public boolean deleteMessage(long id){
-        cardRepository.deleteById(id);
-        return !cardRepository.existsById(id);
-    }
+//    @MessageMapping("/cards")
+//    @SendTo("/topic/cards")
+//    public boolean deleteMessage(long id){
+//        cardRepository.deleteById(id);
+//        logger.info("card has been deleted from db");
+//        return !cardRepository.existsById(id);
+//    }
     @DeleteMapping("{id}")
     public boolean deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);
