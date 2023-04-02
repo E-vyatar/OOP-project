@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketsUtils;
 import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -15,6 +16,7 @@ public class RenameListPopupCtrl {
 
     private final ServerUtils server;
     private final BoardOverviewCtrl boardOverviewCtrl;
+    private final SocketsUtils socket;
     private Stage renameListPopup;
     private CardListViewCtrl controller;
     @FXML
@@ -29,8 +31,11 @@ public class RenameListPopupCtrl {
      * @param boardOverviewCtrl the BoardOverview
      */
     @Inject
-    public RenameListPopupCtrl(ServerUtils server, BoardOverviewCtrl boardOverviewCtrl) {
+    public RenameListPopupCtrl(ServerUtils server,
+                               SocketsUtils socketsUtils,
+                               BoardOverviewCtrl boardOverviewCtrl) {
         this.server = server;
+        this.socket = socketsUtils;
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
 
@@ -77,9 +82,9 @@ public class RenameListPopupCtrl {
         } else {
             CardList temp = controller.getCardList();
             temp.setTitle(title);
-            temp = server.editCardList(temp);
-            controller.setCardList(temp);
-            controller.resetTitle();
+//            temp = server.editCardList(temp);
+//            controller.setCardList(temp);
+            socket.send("/app/lists/edit", temp);
             close();
         }
 

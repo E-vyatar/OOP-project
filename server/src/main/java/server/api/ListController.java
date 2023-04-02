@@ -89,15 +89,14 @@ public class ListController {
     /**
      * Updates an existing list
      *
-     * @param id       the id of the list
      * @param cardList the list to update
      * @return the updated list
      */
-    @MessageMapping("/lists/{id}")
-    @SendTo("/topic/lists/{id}")
-    public CardList editMessage(CardList cardList, long id){
+    @MessageMapping("/lists/edit") // app/lists/edit
+    @SendTo("/topic/lists/edit")
+    public CardList editListMessage(CardList cardList){
+        long id = cardList.getId();
         if(listRepository.findById(id).isPresent()){
-            cardList.setId(id);
             listRepository.save(cardList);
             return cardList;
         }

@@ -185,6 +185,9 @@ public class BoardOverviewCtrl {
             cardListViewCtrlList.add(cardListViewCtrl);
             listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
         });
+        socketsUtils.registerMessages("/topic/lists/edit", CardList.class, updatedCardList -> {
+            getCardListViewCtrl(updatedCardList.getId()).setTitle(updatedCardList.getTitle());
+        });
         generateView();
     }
 
