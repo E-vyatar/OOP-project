@@ -102,6 +102,15 @@ public class ListController {
         }
         return null;
     }
+
+    /**
+     * Updates an existing list
+     *
+     * @param id the id of the list
+     * @param cardList the list to update
+     * @return the updated list
+     */
+    // TODO Clean up (delete this)
     @PostMapping(value = "{id}", consumes = "application/json", produces = "application/json")
     public CardList updateList(@PathVariable("id") long id, @RequestBody CardList cardList) {
         logger.info("updateList() called with: id = [" + id + "], cardList = [" + cardList + "]");
@@ -119,6 +128,7 @@ public class ListController {
      * Deletes a list
      *
      * @param id the id of the list
+     * @return Long for the id of the list that was deleted
      */
     @MessageMapping("/lists/delete") // app/lists/delete
     @SendTo("/topic/lists/delete")
@@ -127,6 +137,13 @@ public class ListController {
         logger.info("cardlist has been deleted from db");
         return id;
     }
+
+    /**
+     * Deletes a list
+     *
+     * @param id the id of the list
+     */
+    // TODO clean up
     @DeleteMapping("{id}")
     public void deleteList(@PathVariable("id") long id) {
         listRepository.deleteById(id);

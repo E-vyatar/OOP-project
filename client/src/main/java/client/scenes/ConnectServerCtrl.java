@@ -54,6 +54,9 @@ public class ConnectServerCtrl implements Initializable {
         hostnameField.setText("localhost");
     }
 
+    /**
+     * Connects to server
+     */
     public void connect() {
         String hostname = hostnameField.getText();
         server.setHostnameAndConnect(hostname);

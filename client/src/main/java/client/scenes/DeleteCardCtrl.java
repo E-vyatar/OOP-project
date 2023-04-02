@@ -23,10 +23,13 @@ public class DeleteCardCtrl {
      * Constructor
      *
      * @param serverUtils       Reference to ServerUtils
+     * @param socketsUtils      Reference to ServerSockets
      * @param boardOverviewCtrl Reference to BoardOverviewCtrl
      */
     @Inject
-    public DeleteCardCtrl(ServerUtils serverUtils, SocketsUtils socketsUtils, BoardOverviewCtrl boardOverviewCtrl) {
+    public DeleteCardCtrl(ServerUtils serverUtils,
+                          SocketsUtils socketsUtils,
+                          BoardOverviewCtrl boardOverviewCtrl) {
         this.serverUtils = serverUtils;
         this.socketUtils = socketsUtils;
         this.boardOverviewCtrl = boardOverviewCtrl;

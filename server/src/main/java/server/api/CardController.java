@@ -55,6 +55,13 @@ public class CardController {
         return cardRepository.save(card);
     }
 
+    /**
+     * Create a new card
+     *
+     * @param card the card to create
+     * @return the created card
+     */
+    @Deprecated
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");
@@ -65,18 +72,20 @@ public class CardController {
         return newCard;
 
     }
-    @MessageMapping("/cards")
-    @SendTo("/topic/cards")
-    public Card updateMessage(Card card){
-        long id = card.getId();
-        if(cardRepository.findById(id).isPresent()){
-            System.out.println("poop");
-            card.setIdx(cardRepository.countByListId(card.getListId()));
-            cardRepository.save(card);
-            return card;
-        }
-        return null;
-    }
+
+    // TODO Clean up
+//    @MessageMapping("/cards")
+//    @SendTo("/topic/cards")
+//    public Card updateCardMessage(Card card){
+//        long id = card.getId();
+//        if(cardRepository.findById(id).isPresent()){
+//            System.out.println("poop");
+//            card.setIdx(cardRepository.countByListId(card.getListId()));
+//            cardRepository.save(card);
+//            return card;
+//        }
+//        return null;
+//    }
 
     /**
      * Get all cards
@@ -157,6 +166,14 @@ public class CardController {
         logger.info("card has been deleted from db");
         return id;
     }
+
+    /**
+     * Delete a card
+     *
+     * @param id the id of the card
+     * @return true if card doesn't exist in the database after deletion, false otherwise
+     */
+    // TODO Clean up
     @DeleteMapping("{id}")
     public boolean deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);
