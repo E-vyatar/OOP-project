@@ -10,7 +10,6 @@ public class MoveCardMessageTest {
 
     private MoveCardMessage moveCardMessage1;
     private MoveCardMessage moveCardMessage2;
-    private MoveCardMessage moveCardMessage3;
 
     /**
      * Setup for the tests
@@ -19,7 +18,6 @@ public class MoveCardMessageTest {
     void setUp() {
         moveCardMessage1 = new MoveCardMessage(1, 2, 8, 4);
         moveCardMessage2 = new MoveCardMessage(2, 3, 9, 5);
-        moveCardMessage3 = new MoveCardMessage(3, 4, 10, 6);
     }
 
     /**
@@ -99,6 +97,23 @@ public class MoveCardMessageTest {
         assertEquals(moveCardMessage1,
             new MoveCardMessage(1, 2, 8, 4));
         assertNotEquals(moveCardMessage1, moveCardMessage2);
+    }
+
+    /**
+     * Test for setMoved()
+     */
+    @Test
+    void setMoved() {
+        moveCardMessage1.setMoved(true);
+        assertTrue(moveCardMessage1.isMoved());
+    }
+
+    /**
+     * Test for isMoved()
+     */
+    @Test
+    void isMoved() {
+        assertFalse(moveCardMessage1.isMoved());
     }
 
 

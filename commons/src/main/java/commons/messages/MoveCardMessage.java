@@ -8,12 +8,7 @@ public class MoveCardMessage implements Serializable {
     private long newListId;
     private long oldListId;
     private long newIndex;
-
-    /**
-     * Constructor
-     */
-    public MoveCardMessage() {
-    }
+    private boolean moved = false;
 
 
     /**
@@ -145,5 +140,23 @@ public class MoveCardMessage implements Serializable {
                 ", newListId=" + newListId +
                 ", newIndex=" + newIndex +
                 '}';
+    }
+
+    /**
+     * Getter for moved
+     *
+     * @return checks the return value of movement from server
+     */
+    public boolean isMoved() {
+        return moved;
+    }
+
+    /**
+     * Setter for moved
+     *
+     * @param b the new value of server confirmation
+     */
+    public void setMoved(boolean b) {
+        moved = b;
     }
 }

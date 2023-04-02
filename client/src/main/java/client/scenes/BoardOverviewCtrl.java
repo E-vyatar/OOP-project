@@ -21,6 +21,7 @@ import commons.*;
 import client.utils.SocketsUtils;
 import commons.Card;
 import commons.CardList;
+import commons.messages.MoveCardMessage;
 import jakarta.ws.rs.WebApplicationException;
 
 import javafx.collections.ObservableList;
@@ -179,6 +180,17 @@ public class BoardOverviewCtrl {
             Card card = getCard(id);
             getCardListViewCtrl(card.getListId()).removeCard(card);
         });
+        socketsUtils.registerMessages( "/topic/cards/move", MoveCardMessage.class,
+            message -> {
+                var oldList = getCardListViewCtrl(message.getOldListId());
+                var newList = getCardListViewCtrl(message.getNewListId());
+                Card card = getCard(message.getCardId());
+                oldList.removeCard(card);
+                card.setIdx(message.getNewIndex());
+                card.setListId(message.getNewListId());
+                newList.addCard(card, message.getNewIndex());
+            }
+        );
         socketsUtils.registerMessages("/topic/lists/new", CardList.class, newCardList ->{
             CardListViewCtrl cardListViewCtrl = CardListViewCtrl
                 .createNewCardListViewCtrl(this, newCardList);
@@ -392,24 +404,26 @@ public class BoardOverviewCtrl {
      */
     public void moveCard(Card card, CardList cardList, long index) {
 
-        var oldList = getCardListViewCtrl(card.getListId());
-        var newList = getCardListViewCtrl(cardList.getId());
+//        var oldList = getCardListViewCtrl(card.getListId());
+//        var newList = getCardListViewCtrl(cardList.getId());
+//
+//        // TODO: wait for server to confirm move
 
-        // TODO: wait for server to confirm move
+        MoveCardMessage message = new MoveCardMessage(
+            card.getId(),
+            cardList.getId(),
+            card.getListId(),
+            index
+        );
 
-        if (!server.moveCard(card.getId(),
-            newList.getCardList().getId(),
-            oldList.getCardList().getId(),
-            index)) {
-            return;
-        }
+        socketsUtils.send("/app/cards/move", message);
 
-
-        oldList.removeCard(card);
-        newList.addCard(card, index);
-
-        // highlight the card
-        newList.highlightCard(card);
+//
+//        oldList.removeCard(card);
+//        newList.addCard(card, index);
+//
+//        // highlight the card
+//        newList.highlightCard(card);
 
     }
 
