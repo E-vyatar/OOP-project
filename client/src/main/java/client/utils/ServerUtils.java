@@ -108,7 +108,7 @@ public class ServerUtils {
      * @param cardId   the id of the card to move
      * @param newListId the id of the list to move the card to
      * @param newIndex the index of the card in the new list
-     * @return list of all the cards in the database
+     * @return true if the card was moved successfully, false otherwise
      */
     public boolean moveCard(long cardId, long newListId, long newIndex) {
 
