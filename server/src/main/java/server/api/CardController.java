@@ -49,6 +49,7 @@ public class CardController {
     @SendTo("/topic/cards/new")
     public Card addMessage(Card card){
         long listSize = cardRepository.countByListId(card.getListId());
+        System.out.println("addmessage called");
         card.setIdx(listSize);
         return cardRepository.save(card);
     }
@@ -67,6 +68,7 @@ public class CardController {
     public Card updateMessage(Card card){
         long id = card.getId();
         if(cardRepository.findById(id).isPresent()){
+            System.out.println("poop");
             card.setIdx(cardRepository.countByListId(card.getListId()));
             cardRepository.save(card);
             return card;

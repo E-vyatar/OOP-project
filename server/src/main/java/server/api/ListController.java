@@ -49,10 +49,10 @@ public class ListController {
     @MessageMapping("/lists/new") //app/lists/new
     @SendTo("/topic/lists/new")
     public CardList addListMessage(CardList cardList){
-
-        cardList.setIdx(listRepository.count());
+        logger.info("addlistmessage called ");
+        cardList.setIdx(listRepository.countByBoardId(cardList.getBoardId()));
         CardList temp = listRepository.save(cardList);
-        logger.info("addMessage called with cardList = [" + temp + "]");
+        logger.info("addMessage called back with cardList = [" + temp + "]");
         return temp;
     }
 //    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")

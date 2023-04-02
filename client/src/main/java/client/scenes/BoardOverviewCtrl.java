@@ -145,7 +145,7 @@ public class BoardOverviewCtrl {
         try {
             // Add cardList to server and retrieve object with ID
             socketsUtils.send("/app/lists/new", cardList);
-            System.out.println("sending the card list" + cardList.toString() + "");
+            System.out.println("sending the card list message to server" + cardList.toString() + "");
 //            cardList = server.addCardList(cardList);
 //
 //            board.getCardLists().add(cardList);
@@ -192,19 +192,21 @@ public class BoardOverviewCtrl {
         board = server.getBoard(boardId);
 
         this.polling.pollForCardUpdates(this);
-        socketsUtils.registerMessages("/topic/cards", Card.class, card -> {
+        socketsUtils.registerMessages("/topic/cards/new", Card.class, card -> {
+            System.out.println("we are working for the card");
             this.addCard(card);
         });
-        socketsUtils.registerMessages("/topic/lists", CardList.class, consumer ->{
-            if(consumer.getBoardId() == board.getId()){
-                CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, consumer);
-                cardListViewCtrlList.add(cardListViewCtrl);
-                listOfLists.getChildren().add(
-                        cardListViewCtrl.getCardListNode()
-                );
-            }
+        socketsUtils.registerMessages("/topic/lists/new", CardList.class, consumer ->{
+            System.out.println("we are receiving the message");
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, consumer);
+            System.out.println("step 1 done");
+            cardListViewCtrlList.add(cardListViewCtrl);
+            System.out.println("step 2 done");
+            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+            System.out.println("we are working on adding the list");
+            generateView();
+            System.out.println("this ain't working");
             // Adds the CardList to the HBox
-
         });
         generateView();
     }

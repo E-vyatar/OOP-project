@@ -10,6 +10,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -17,7 +18,7 @@ import java.util.function.Consumer;
 public class SocketsUtils {
     private BoardOverviewCtrl boardOverviewCtrl;
     private StompSession session;
-    private List<StompSession.Subscription> subscriptionList;
+    private List<StompSession.Subscription> subscriptionList = new ArrayList<>();
     private String server;
 
     /**
@@ -60,7 +61,7 @@ public class SocketsUtils {
      * @param <T>         generic class
      */
     public <T> void registerMessages(String destination, Class<T> type, Consumer<T> consumer) {
-        session.subscribe(destination, new StompFrameHandler() {
+        subscriptionList.add(session.subscribe(destination, new StompFrameHandler() {
             /**
              * @param headers the headers of a message
              * @return the type that is requested in the register message method above
@@ -78,7 +79,7 @@ public class SocketsUtils {
             public void handleFrame(StompHeaders headers, Object payload) {
                 consumer.accept((T) payload);
             }
-        });
+        })) ;
     }
 
     /**
