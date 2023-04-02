@@ -16,6 +16,7 @@
 package client;
 
 import client.scenes.*;
+import client.utils.PollingUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -26,28 +27,79 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new FXConfig());
     private static final FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
+    private MainCtrl mainCtrl;
 
+    /**
+     * The main method. This starts the client.
+     *
+     * @param args the arguments passed to the program.
+     */
     public static void main(String[] args) {
         launch();
     }
 
+    /**
+     * This method is called by JavaFX and starts the program.
+     *
+     * @param primaryStage the primary stage for this application, onto which
+     *                     the application scene can be set.
+     *                     Applications may create other stages, if needed, but they will not be
+     *                     primary stages.
+     */
     @Override
     public void start(Stage primaryStage) {
 
-        var cardPopup = FXML.load(CardPopupCtrl.class, "client", "scenes", "CardPopup.fxml");
-        var renameListPopup = FXML.load(RenameListPopupCtrl.class, "client", "scenes", "RenameListPopup.fxml");
-        var addCard = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
+        var overview = FXML.load(
+            BoardOverviewCtrl.class,
+            "client", "scenes", "boardOverview.fxml");
 
-        var overview = FXML.load(BoardOverviewCtrl.class, "client", "scenes", "boardOverview.fxml");
+        var cardPopup = FXML.load(
+                CardPopupCtrl.class,
+                "client", "scenes", "CardPopup.fxml");
+
+        var renameListPopup = FXML.load(
+            RenameListPopupCtrl.class,
+            "client", "scenes", "RenameListPopup.fxml");
+
+        var addCard = FXML.load(
+            AddCardCtrl.class,
+            "client", "scenes", "AddCard.fxml");
+
+        var deleteCtrl = FXML.load(
+                DeleteCardCtrl.class,
+                "client", "scenes", "DeleteCard.fxml");
+
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl);
 
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup);
+        var connectServerCtrl = FXML.load(
+                ConnectServerCtrl.class,
+                "client", "scenes", "ConnectServer.fxml");
 
-        var connectServerCtrl = FXML.load(ConnectServerCtrl.class, "client", "scenes", "ConnectServer.fxml");
-        var listOfBoardsCtrl = FXML.load(ListOfBoardsCtrl.class, "client", "scenes", "ListOfBoards.fxml");
+        var listOfBoardsCtrl = FXML.load(
+                ListOfBoardsCtrl.class,
+                "client", "scenes", "ListOfBoards.fxml");
+        var createBoard = FXML.load(
+                CreateBoardCtrl.class,
+                "client", "scenes", "CreateBoard.fxml");
 
-        mainCtrl.initialize(primaryStage, overview, connectServerCtrl, listOfBoardsCtrl);
+        mainCtrl.initialize(primaryStage,
+                overview,
+                connectServerCtrl,
+                listOfBoardsCtrl,
+                createBoard);
     }
+
+    /**
+     * Clean up resources when application is stopped.
+     * Make sure we stop polling.
+     */
+    @Override
+    public void stop() {
+        PollingUtils pollingUtils = INJECTOR.getInstance(PollingUtils.class);
+        pollingUtils.disconnect();
+    }
+
 }
