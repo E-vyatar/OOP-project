@@ -397,7 +397,9 @@ public class BoardOverviewCtrl {
 
         // TODO: wait for server to confirm move
 
-        if (!server.moveCard(card.getId(), newList.getCardList().getId(),
+        if (!server.moveCard(card.getId(),
+            newList.getCardList().getId(),
+            oldList.getCardList().getId(),
             index)) {
             return;
         }
