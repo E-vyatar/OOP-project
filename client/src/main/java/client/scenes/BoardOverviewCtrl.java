@@ -185,6 +185,11 @@ public class BoardOverviewCtrl {
             cardListViewCtrlList.add(cardListViewCtrl);
             listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
         });
+        socketsUtils.registerMessages("/topic/lists/delete", Long.class, id ->{
+            CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(id);
+            deleteList(cardListViewCtrl);
+
+        });
         generateView();
     }
 
