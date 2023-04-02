@@ -346,8 +346,8 @@ public class BoardOverviewCtrl {
      * @return the Card with that ID (or null)
      */
     public Card getCard(long id) {
-        for (CardList cardList : board.getCardLists()) {
-            for (Card card : cardList.getCards()) {
+        for (CardListViewCtrl controller : cardListViewCtrlList) {
+            for (Card card : controller.getCards()) {
                 if (card.getId() == id) {
                     return card;
                 }
