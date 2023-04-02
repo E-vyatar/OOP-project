@@ -175,6 +175,10 @@ public class BoardOverviewCtrl {
                 }
             }
         });
+        socketsUtils.registerMessages("/topic/cards/delete", Long.class, id ->{
+            Card card = getCard(id);
+            getCardListViewCtrl(card.getListId()).removeCard(card);
+        });
         socketsUtils.registerMessages("/topic/lists/new", CardList.class, newCardList ->{
             CardListViewCtrl cardListViewCtrl = CardListViewCtrl
                 .createNewCardListViewCtrl(this, newCardList);

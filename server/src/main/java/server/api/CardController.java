@@ -4,6 +4,7 @@ import commons.Card;
 import commons.messages.MoveCardMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.http.HttpStatus;
@@ -150,13 +151,13 @@ public class CardController {
      * @param id the id of the card
      * @return true if card doesn't exist in the database after deletion, false otherwise
      */
-//    @MessageMapping("/cards")
-//    @SendTo("/topic/cards")
-//    public boolean deleteMessage(long id){
-//        cardRepository.deleteById(id);
-//        logger.info("card has been deleted from db");
-//        return !cardRepository.existsById(id);
-//    }
+    @MessageMapping("/cards/delete") //app/cards/{id}
+    @SendTo("/topic/cards/delete")
+    public Long deleteMessage(long id){
+        cardRepository.deleteById(id);
+        logger.info("card has been deleted from db");
+        return id;
+    }
     @DeleteMapping("{id}")
     public boolean deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);

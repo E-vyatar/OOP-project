@@ -121,6 +121,13 @@ public class ListController {
      *
      * @param id the id of the list
      */
+    @MessageMapping("/lists/delete") // app/lists/delete
+    @SendTo("/topic/lists/delete")
+    public Long deleteListMessage(long id){
+        listRepository.deleteById(id);
+        System.out.println("cardlist will be deleted");
+        return id;
+    }
     @DeleteMapping("{id}")
     public void deleteList(@PathVariable("id") long id) {
         listRepository.deleteById(id);
