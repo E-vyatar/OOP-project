@@ -124,7 +124,7 @@ public class ListController {
     @SendTo("/topic/lists/delete")
     public Long deleteListMessage(long id){
         listRepository.deleteById(id);
-        System.out.println("cardlist will be deleted");
+        logger.info("cardlist has been deleted from db");
         return id;
     }
     @DeleteMapping("{id}")

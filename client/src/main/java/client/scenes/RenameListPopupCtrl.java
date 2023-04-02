@@ -27,7 +27,8 @@ public class RenameListPopupCtrl {
     /**
      * This constructs the controller for the pop-up to rename a list.
      *
-     * @param server the SeverUtils
+     * @param server            the SeverUtils
+     * @param socketsUtils      the SocketUtils
      * @param boardOverviewCtrl the BoardOverview
      */
     @Inject
@@ -95,8 +96,9 @@ public class RenameListPopupCtrl {
      * TODO
      */
     public void delete() {
-        server.deleteCardList(controller.getCardList());
-        boardOverviewCtrl.deleteList(controller);
+//        server.deleteCardList(controller.getCardList());
+//        boardOverviewCtrl.deleteList(controller);
+        socket.send("/app/lists/delete", controller.getCardList().getId());
         close();
     }
 
