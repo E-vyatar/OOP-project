@@ -97,7 +97,7 @@ public class MoveCardMessageTest {
     void equals() {
         assertEquals(moveCardMessage1, moveCardMessage1);
         assertEquals(moveCardMessage1,
-            new MoveCardMessage(1, 2, 11, 4));
+            new MoveCardMessage(1, 2, 8, 4));
         assertNotEquals(moveCardMessage1, moveCardMessage2);
     }
 
