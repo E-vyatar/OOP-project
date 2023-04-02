@@ -33,6 +33,9 @@ public class MainCtrl {
     private CreateBoardCtrl createBoardCtrl;
     private Scene createBoard;
 
+    private AddBoardCtrl addBoardCtrl;
+    private Scene addBoard;
+
     //=========================================================
 
     /**
@@ -44,12 +47,14 @@ public class MainCtrl {
      * @param connectServerCtrl a pair of the connectServerCtrl and the root of the to-be scene.
      * @param listOfBoards a pair of the ListOfBoardsCtrl and the root of the to-be scene.
      * @param createBoard a pair of the CreateBoardCtrl and the root of the to-be scene.
+     * @param addBoard a pair of the AddBoardCtrl and the root of the to-be scene.
      */
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<ConnectServerCtrl, Parent> connectServerCtrl,
                            Pair<ListOfBoardsCtrl, Parent> listOfBoards,
-                           Pair<CreateBoardCtrl, Parent> createBoard) {
+                           Pair<CreateBoardCtrl, Parent> createBoard,
+                           Pair<AddBoardCtrl, Parent> addBoard) {
 
         this.primaryStage = primaryStage;
 
@@ -64,6 +69,9 @@ public class MainCtrl {
 
         this.createBoard = new Scene(createBoard.getValue());
         this.createBoardCtrl = createBoard.getKey();
+
+        this.addBoard = new Scene(addBoard.getValue());
+        this.addBoardCtrl = addBoard.getKey();
 
         showConnect();
         this.primaryStage.show();
@@ -115,5 +123,15 @@ public class MainCtrl {
         createBoardCtrl.clear();
         primaryStage.setTitle("Create board");
         primaryStage.setScene(createBoard);
+    }
+
+    /**
+
+     * Shows the UI to add a board, so it's visible in your list.
+     */
+    public void showAddBoard() {
+        addBoardCtrl.clear();
+        primaryStage.setTitle("Add board");
+        primaryStage.setScene(addBoard);
     }
 }

@@ -19,7 +19,9 @@ import client.scenes.*;
 import client.utils.PollingUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -39,31 +41,25 @@ public class Main extends Application {
     }
 
     /**
-     * This method is called by JavaFX and starts the program.
-     *
-     * @param primaryStage the primary stage for this application, onto which
-     *                     the application scene can be set.
-     *                     Applications may create other stages, if needed, but they will not be
-     *                     primary stages.
+     * This method initializes everything related to the board overview.
+     * @return a pair of the board overview ctrl and the root node of the scene.
      */
-    @Override
-    public void start(Stage primaryStage) {
-
+    private Pair<BoardOverviewCtrl, Parent> initializeOverview() {
         var overview = FXML.load(
-            BoardOverviewCtrl.class,
-            "client", "scenes", "boardOverview.fxml");
+                BoardOverviewCtrl.class,
+                "client", "scenes", "boardOverview.fxml");
 
         var cardPopup = FXML.load(
                 CardPopupCtrl.class,
                 "client", "scenes", "CardPopup.fxml");
 
         var renameListPopup = FXML.load(
-            RenameListPopupCtrl.class,
-            "client", "scenes", "RenameListPopup.fxml");
+                RenameListPopupCtrl.class,
+                "client", "scenes", "RenameListPopup.fxml");
 
         var addCard = FXML.load(
-            AddCardCtrl.class,
-            "client", "scenes", "AddCard.fxml");
+                AddCardCtrl.class,
+                "client", "scenes", "AddCard.fxml");
 
         var deleteCtrl = FXML.load(
                 DeleteCardCtrl.class,
@@ -76,6 +72,21 @@ public class Main extends Application {
 
         overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl, editBoard);
 
+        return overview;
+    }
+
+    /**
+     * This method is called by JavaFX and starts the program.
+     *
+     * @param primaryStage the primary stage for this application, onto which
+     *                     the application scene can be set.
+     *                     Applications may create other stages, if needed, but they will not be
+     *                     primary stages.
+     */
+    @Override
+    public void start(Stage primaryStage) {
+
+        var overview = initializeOverview();
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
@@ -89,12 +100,17 @@ public class Main extends Application {
         var createBoard = FXML.load(
                 CreateBoardCtrl.class,
                 "client", "scenes", "CreateBoard.fxml");
+        var addBoard = FXML.load(
+                AddBoardCtrl.class,
+                "client", "scenes", "AddBoard.fxml"
+        );
 
         mainCtrl.initialize(primaryStage,
                 overview,
                 connectServerCtrl,
                 listOfBoardsCtrl,
-                createBoard);
+                createBoard,
+                addBoard);
     }
 
     /**

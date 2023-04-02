@@ -34,6 +34,7 @@ public class FXConfig implements Module {
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
         binder.bind(PollingUtils.class).in(Scopes.SINGLETON);
         binder.bind(SocketsUtils.class).in(Scopes.SINGLETON);
+        binder.bind(ClientConfig.class).in(Scopes.SINGLETON);
         binder.bind(BoardOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CardPopupCtrl.class).in(Scopes.SINGLETON);
         binder.bind(RenameListPopupCtrl.class).in(Scopes.SINGLETON);

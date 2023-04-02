@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 public class BoardController {
     private final BoardRepository boardRepository;
     private final ListRepository listRepository;
-    private Logger logger = LoggerFactory.getLogger(CardController.class);
+    private Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     /**
      * Constructor
@@ -146,5 +146,16 @@ public class BoardController {
     @DeleteMapping("{id}")
     public void deleteBoard(@PathVariable("id") long id) {
         boardRepository.deleteById(id);
+    }
+
+    /**
+     * Find all boards with the id given by the client
+     *
+     * @param ids the boards to find in the DB
+     * @return the boards
+     */
+    @PostMapping("find")
+    public Iterable<Board> findBoards(@RequestBody List<Long> ids) {
+        return boardRepository.findAllById(ids);
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="client.scenes.AddBoardCtrl"
+      prefHeight="400.0" prefWidth="600.0"
+      stylesheets="@../styles/GeneralStyle.css">
+
+    <top>
+        <HBox alignment="CENTER">
+            <Label styleClass="instruction">Add a board</Label>
+        </HBox>
+    </top>
+    <center>
+        <VBox maxWidth="400">
+            <Region VBox.vgrow="ALWAYS"/>
+            <Label>board id:</Label>
+            <TextField fx:id="boardId"/>
+            <Region VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="buttons">
+            <Button onMouseClicked="#cancel">cancel</Button>
+            <Button onMouseClicked="#add">add board</Button>
+        </HBox>
+    </bottom>
+</BorderPane>

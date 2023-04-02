@@ -19,9 +19,11 @@ import commons.Board;
 import commons.Card;
 import commons.CardList;
 import commons.messages.MoveCardMessage;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
@@ -33,15 +35,29 @@ public class ServerUtils {
 
 
     private String server;
+    private String password;
 
     /**
-     * Set the hostname of the server and then connect to it
+     * Set the hostname of the server.
+     * Use this method when the user is not an admin
      *
      * @param hostname the hostname
      */
-    public void setHostnameAndConnect(String hostname) {
+    public void setHostname(String hostname) {
         this.server = "http://" + hostname + ":8080";
+        this.password = null;
+    }
 
+    /**
+     * Set the hostname of the server and the password of the admin.
+     * Use this method only when the user is an admin.
+     *
+     * @param hostname the hostname
+     * @param password the admin password
+     */
+    public void setHostnameAndPassword(String hostname, String password) {
+        this.server = "http://" + hostname + ":8080";
+        this.password = password;
     }
 
     /**
@@ -78,9 +94,10 @@ public class ServerUtils {
      * send the server Put request to add a new board to the database
      *
      * @param board the board to add to the database
+     * @return the board that was added
      */
-    public void addBoard(Board board) {
-        ClientBuilder.newClient(new ClientConfig())
+    public Board addBoard(Board board) {
+        return ClientBuilder.newClient(new ClientConfig())
                 .target(server)
                 .path("boards/new")
                 .request(APPLICATION_JSON)
@@ -205,13 +222,30 @@ public class ServerUtils {
      *
      * @return a list of all existing boards
      */
-    public List<Board> getBoards() {
+    public List<Board> getAllBoards() {
         return ClientBuilder.newClient(new ClientConfig()) //
             .target(server).path("boards/all")
             .request(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
             .get(new GenericType<>() {
             });
+    }
+    /**
+     * Get all the board with the given ids
+     * (note that this also sends all lists and cards,
+     * this should probably be changed in the future)
+     *
+     * @param ids the ids of the boards
+     * @return a list of all found boards
+     */
+    public List<Board> getAllBoards(List<Long> ids) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("boards/find")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(ids, APPLICATION_JSON))
+                .readEntity(new GenericType<>() {
+                });
     }
 
     /**
@@ -237,4 +271,37 @@ public class ServerUtils {
                 .delete();
     }
 
+    /**
+     * Check whether the password gives a valid admin authentication
+     * @param hostname the server for which to check if it is authorized
+     * @param password the password
+     * @return whether it's a valid password
+     */
+    public boolean isAuthenticated(String hostname, String password) throws ProcessingException {
+        String server = "http://" + hostname + ":8080";
+        var res = ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("authenticate")
+                .request()
+                .header("password", password)
+                .post(null);
+
+        return res.getStatusInfo().getFamily().equals(Response.Status.Family.SUCCESSFUL);
+    }
+
+    /**
+     * Check whether there is a password,
+     * i.e. check whether it's in admin mode.
+     * @return whether there is a password set.
+     */
+    public boolean hasPassword() {
+        return this.password != null;
+    }
+
+    /**
+     * Get the hostname of the server
+     * @return the hostname
+     */
+    public String getHostname() {
+        return this.server;
+    }
 }

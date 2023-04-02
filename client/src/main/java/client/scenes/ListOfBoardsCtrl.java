@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.ClientConfig;
 import client.utils.ServerUtils;
 import client.utils.SocketsUtils;
 import commons.Board;
@@ -10,9 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import org.apache.commons.lang3.NotImplementedException;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * The controller for the list of boards.
@@ -26,8 +27,11 @@ public class ListOfBoardsCtrl {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final SocketsUtils sockets;
+    private final ClientConfig config;
     @FXML
     private ListView<Board> boards;
+
+    private boolean isAdmin;
 
     /**
      * This constructs an instance of ListOfBoards.
@@ -35,12 +39,17 @@ public class ListOfBoardsCtrl {
      * @param mainCtrl    the main controller
      * @param server the server utils - used to load list of boards
      * @param sockets the socket utils - used to disconnect connection
+     * @param clientConfig the client configuration - used to get list of boards to retrieve
      */
     @Inject
-    public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils server, SocketsUtils sockets) {
+    public ListOfBoardsCtrl(MainCtrl mainCtrl,
+                            ServerUtils server,
+                            SocketsUtils sockets,
+                            ClientConfig clientConfig) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.sockets = sockets;
+        this.config = clientConfig;
     }
 
     /**
@@ -48,7 +57,14 @@ public class ListOfBoardsCtrl {
      * This loads data from the backend and sets the listView.
      */
     public void refresh() {
-        ObservableList<Board> data = FXCollections.observableList(server.getBoards());
+        List<Board> boards;
+        if (server.hasPassword()) {
+            boards = server.getAllBoards();
+        } else {
+            boards = server.getAllBoards(config.getIds(server.getHostname()));
+        }
+
+        ObservableList<Board> data = FXCollections.observableList(boards);
         this.boards.setItems(data);
         this.boards.setCellFactory(param -> {
             /*BoardCellCtrl boardCellCtrl = new BoardCellCtrl();
@@ -89,7 +105,7 @@ public class ListOfBoardsCtrl {
      * @param mouseEvent the mouse event
      */
     public void addBoard(MouseEvent mouseEvent) {
-        throw new NotImplementedException();
+        mainCtrl.showAddBoard();
     }
 
     /**
@@ -114,5 +130,13 @@ public class ListOfBoardsCtrl {
                 this.getStyleClass().add("board");
             }
         }
+    }
+
+    /**
+     * Setter for admin
+     * @param admin
+     */
+    public void setAdmin(boolean admin) {
+        this.isAdmin = isAdmin;
     }
 }
