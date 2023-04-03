@@ -57,7 +57,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
         return viewCtrl.getKey();
     }
-
     /**
      * Initialise the controller.
      * This includes creating the view.
@@ -92,8 +91,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      * This creates the view.
      */
     private void createView() {
-        CardList cardList = this.getCardList();
-
         CardListViewCtrl controller = this;
 
         cardListView.setCellFactory(param -> {
@@ -101,7 +98,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
             return cardViewCtrl.getView();
         });
         cardListView.setItems(this.cards);
-        resetTitle();
+        cardListTitle.setText(cardList.getTitle());
 
         cardListView.getSelectionModel().getSelectedItems().addListener(controller);
     }
@@ -272,9 +269,12 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
 
     /**
      * Sets the displayed title in the CardList view
+     *
+     * @param title the new title to be set
      */
-    public void resetTitle() {
-        cardListTitle.setText(cardList.getTitle());
+    public void setTitle(String title) {
+        cardList.setTitle(title);
+        cardListTitle.setText(title);
     }
 
     /**

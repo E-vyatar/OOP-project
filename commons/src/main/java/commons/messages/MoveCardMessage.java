@@ -6,24 +6,22 @@ import java.util.Objects;
 public class MoveCardMessage implements Serializable {
     private long cardId;
     private long newListId;
+    private long oldListId;
     private long newIndex;
-
-    /**
-     * Constructor
-     */
-    public MoveCardMessage() {
-    }
+    private boolean moved = false;
 
 
     /**
      * Constructor
      * @param cardId the id of the card
      * @param newListId the id of the new list
+     * @param oldListId the id of the old list
      * @param newIndex the new index of the card
      */
-    public MoveCardMessage(long cardId, long newListId, long newIndex) {
+    public MoveCardMessage(long cardId, long newListId, long oldListId, long newIndex) {
         this.cardId = cardId;
         this.newListId = newListId;
+        this.oldListId = oldListId;
         this.newIndex = newIndex;
     }
 
@@ -41,6 +39,15 @@ public class MoveCardMessage implements Serializable {
      */
     public long getNewListId() {
         return newListId;
+    }
+
+    /**
+     * Getter for the old list id
+     *
+     * @return id of the old list
+     */
+    public long getOldListId() {
+        return oldListId;
     }
 
     /**
@@ -68,6 +75,15 @@ public class MoveCardMessage implements Serializable {
     }
 
     /**
+     * Setter for the old list id
+     *
+     * @param oldListId the old list id
+     */
+    public void setOldListId(long oldListId) {
+        this.oldListId = oldListId;
+    }
+
+    /**
      * Sets the new index of the card
      * @param newIndex the new index of the card
      */
@@ -86,7 +102,20 @@ public class MoveCardMessage implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MoveCardMessage that = (MoveCardMessage) o;
-        return cardId == that.cardId && newListId == that.newListId && newIndex == that.newIndex;
+        return sameValues(that);
+    }
+
+    /**
+     * Used to reduce cyclomatic complexity of equals method
+     *
+     * @param that object to compare to
+     * @return true if same values of properties
+     */
+    private boolean sameValues(MoveCardMessage that) {
+        return cardId == that.cardId
+            && newListId == that.newListId
+            && oldListId == that.oldListId
+            && newIndex == that.newIndex;
     }
 
     /**
@@ -111,5 +140,23 @@ public class MoveCardMessage implements Serializable {
                 ", newListId=" + newListId +
                 ", newIndex=" + newIndex +
                 '}';
+    }
+
+    /**
+     * Getter for moved
+     *
+     * @return checks the return value of movement from server
+     */
+    public boolean isMoved() {
+        return moved;
+    }
+
+    /**
+     * Setter for moved
+     *
+     * @param b the new value of server confirmation
+     */
+    public void setMoved(boolean b) {
+        moved = b;
     }
 }

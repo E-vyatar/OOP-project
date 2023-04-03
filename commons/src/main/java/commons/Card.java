@@ -16,7 +16,7 @@ public class Card {
     private long idx;
 
     @ManyToOne(cascade = {CascadeType.ALL})
-    private CardList cardList;
+    transient private CardList cardList;
 
     /**
      * Empty constructor
