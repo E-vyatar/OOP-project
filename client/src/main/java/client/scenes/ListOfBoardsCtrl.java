@@ -43,22 +43,17 @@ public class ListOfBoardsCtrl {
         this.sockets = sockets;
     }
 
+
     /**
-     * Refresh the controller.
-     * This loads data from the backend and sets the listView.
+     * This method initializes the ListView.
      */
-    public void refresh() {
-        ObservableList<Board> data = FXCollections.observableList(server.getBoards());
-        this.boards.setItems(data);
+    public void initialize() {
         this.boards.setCellFactory(param -> {
             /*BoardCellCtrl boardCellCtrl = new BoardCellCtrl();
             return boardCellCtrl.getCell();*/
             return new BoardCell();
         });
-        // Make sure it's unselected, so when you return to this view
-        // it looks the same as before.
-        this.boards.getSelectionModel().clearSelection();
-        
+
         // When you select (i.e.) click a board, open that board.
         this.boards.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -67,6 +62,18 @@ public class ListOfBoardsCtrl {
                         mainCtrl.showOverview(boardId);
                     }
                 });
+    }
+    /**
+     * Refresh the controller.
+     * This loads data from the backend and sets the listView.
+     */
+    public void refresh() {
+        ObservableList<Board> data = FXCollections.observableList(server.getBoards());
+        this.boards.setItems(data);
+
+        // Make sure it's unselected, so when you return to this view
+        // it looks the same as before.
+        this.boards.getSelectionModel().clearSelection();
     }
 
     /**
