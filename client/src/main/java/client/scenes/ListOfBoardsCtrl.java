@@ -68,12 +68,12 @@ public class ListOfBoardsCtrl {
      * This loads data from the backend and sets the listView.
      */
     public void refresh() {
-        ObservableList<Board> data = FXCollections.observableList(server.getBoards());
-        this.boards.setItems(data);
-
         // Make sure it's unselected, so when you return to this view
         // it looks the same as before.
         this.boards.getSelectionModel().clearSelection();
+
+        ObservableList<Board> data = FXCollections.observableList(server.getBoards());
+        this.boards.setItems(data);
     }
 
     /**
