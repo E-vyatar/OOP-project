@@ -4,7 +4,6 @@ import commons.CardList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.ListRepository;
@@ -48,13 +47,14 @@ public class ListController {
      * @return the created list
      */
     @MessageMapping("/lists/new") //app/lists/new
-    @SendTo("/topic/lists/new")
     public CardList addListMessage(CardList cardList){
-        logger.info("addlistmessage called ");
+        logger.info("addMessage called back with cardList = [" + cardList + "]");
         cardList.setIdx(listRepository.countByBoardId(cardList.getBoardId()));
-        CardList temp = listRepository.save(cardList);
-        logger.info("addMessage called back with cardList = [" + temp + "]");
-        return temp;
+        CardList newCardList = listRepository.save(cardList);
+
+        long boardId = newCardList.getBoardId();
+        this.msgs.convertAndSend("/topic/lists/new/" + boardId, newCardList);
+        return newCardList;
     }
 
 //    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
@@ -89,15 +89,15 @@ public class ListController {
     /**
      * Updates an existing list
      *
-     * @param cardList the list to update
      * @return the updated list
      */
     @MessageMapping("/lists/edit") // app/lists/edit
-    @SendTo("/topic/lists/edit")
     public CardList editListMessage(CardList cardList){
         long id = cardList.getId();
         if(listRepository.findById(id).isPresent()){
             listRepository.save(cardList);
+            long boardId = cardList.getBoardId();
+            msgs.convertAndSend("/topic/lists/edit/" + boardId, cardList);
             return cardList;
         }
         return null;
@@ -131,11 +131,19 @@ public class ListController {
      * @return Long for the id of the list that was deleted
      */
     @MessageMapping("/lists/delete") // app/lists/delete
-    @SendTo("/topic/lists/delete")
     public Long deleteListMessage(long id){
-        listRepository.deleteById(id);
-        logger.info("cardlist has been deleted from db");
-        return id;
+        var optCardList = listRepository.findById(id);
+        if (optCardList.isPresent()) {
+            CardList cardList = optCardList.get();
+            long boardId = cardList.getBoardId();
+            listRepository.delete(cardList);
+            logger.info("cardlist has been deleted from db");
+
+            this.msgs.convertAndSend("/topic/lists/delete/" + boardId, id);
+
+            return id;
+        }
+        return -1L;
     }
 
     /**

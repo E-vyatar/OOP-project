@@ -5,7 +5,6 @@ import commons.messages.MoveCardMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -47,12 +46,14 @@ public class CardController {
      * @return the created card
      */
     @MessageMapping("/cards/new") // app/cards/new
-    @SendTo("/topic/cards/new")
     public Card addMessage(Card card){
         long listSize = cardRepository.countByListId(card.getListId());
         System.out.println("addmessage called");
         card.setIdx(listSize);
-        return cardRepository.save(card);
+        Card storedCard = cardRepository.save(card);
+        long boardId = storedCard.getBoardId();
+        this.msgs.convertAndSend("/topic/cards/new/" + boardId, storedCard);
+        return storedCard;
     }
 
     /**
@@ -160,11 +161,18 @@ public class CardController {
      * @return true if card doesn't exist in the database after deletion, false otherwise
      */
     @MessageMapping("/cards/delete") //app/cards/{id}
-    @SendTo("/topic/cards/delete")
     public Long deleteMessage(long id){
-        cardRepository.deleteById(id);
-        logger.info("card has been deleted from db");
-        return id;
+        var optCard = cardRepository.findById(id);
+        if (optCard.isPresent()) {
+            Card card = optCard.get();
+            cardRepository.deleteById(id);
+            logger.info("card has been deleted from db");
+            long boardId = card.getBoardId();
+            this.msgs.convertAndSend("/topic/cards/delete/" + boardId, id);
+            return id;
+        } else {
+            return -1L;
+        }
     }
 
     /**
@@ -189,7 +197,6 @@ public class CardController {
      * @return true if the card was moved successfully, false otherwise
      */
     @MessageMapping("/cards/move")
-    @SendTo("/topic/cards/move")
     @Transactional
     public MoveCardMessage moveCardMessage(@RequestBody MoveCardMessage message) {
 
@@ -237,8 +244,12 @@ public class CardController {
             card.setIdx(newIndex);
             cardRepository.save(card);
             message.setMoved(true);
+
+            long boardId = card.getBoardId();
+            this.msgs.convertAndSend("/topic/cards/move/" + boardId, message);
+        } else {
+            message.setMoved(false);
         }
-        message.setMoved(false);
         return message;
     }
 

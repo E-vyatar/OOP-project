@@ -17,7 +17,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 public class SocketsUtils {
-    private BoardOverviewCtrl boardOverviewCtrl;
     private StompSession session;
     private List<StompSession.Subscription> subscriptionList = new ArrayList<>();
     private String server;
@@ -82,7 +81,7 @@ public class SocketsUtils {
                     consumer.accept((T) payload);
                 });
             }
-        })) ;
+        }));
     }
 
     /**
@@ -95,35 +94,12 @@ public class SocketsUtils {
     }
 
     /**
-     * this initializes the utils class so it can use the controller
-     * @param boardOverviewCtrl board overview controller
-     */
-    public void initialize(BoardOverviewCtrl boardOverviewCtrl){
-        this.boardOverviewCtrl = boardOverviewCtrl;
-    }
-
-
-    /**
-     * This method makes it so that the sockets listen only for changes to
-     * this board.
-     * Yet to be implemented.
-     * @param boardId the id of the board for which to listen
-     */
-    public void listenForBoard(long boardId) {
-        // TODO: implement
-    }
-
-    /**
-     * Stop listening for changes
-     */
-    public void unsubscribeAll() {
-        //TODO: implement
-    }
-
-    /**
-     * To changes to this board
+     * Stop listening for changes to the board.
      */
     public void stopListening() {
-        // TODO: implement
+        for (StompSession.Subscription sub : subscriptionList){
+            sub.unsubscribe();
+        }
+        subscriptionList.clear();
     }
 }

@@ -65,7 +65,6 @@ public class ListOfBoardsCtrl {
                     if (newValue != null) {
                         long boardId = newValue.getId();
                         mainCtrl.showOverview(boardId);
-                        sockets.listenForBoard(boardId);
                     }
                 });
     }
