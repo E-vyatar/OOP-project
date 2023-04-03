@@ -476,5 +476,6 @@ public class BoardOverviewCtrl {
         CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(updatedCardList.getId());
         CardList cardList = cardListViewCtrl.getCardList();
         cardList.setTitle(updatedCardList.getTitle());
+        cardListViewCtrl.refresh();
     }
 }

@@ -74,19 +74,6 @@ public class CardController {
 
     }
 
-    // TODO Clean up
-//    @MessageMapping("/cards")
-//    @SendTo("/topic/cards")
-//    public Card updateCardMessage(Card card){
-//        long id = card.getId();
-//        if(cardRepository.findById(id).isPresent()){
-//            System.out.println("poop");
-//            card.setIdx(cardRepository.countByListId(card.getListId()));
-//            cardRepository.save(card);
-//            return card;
-//        }
-//        return null;
-//    }
 
     /**
      * Get all cards
@@ -172,9 +159,8 @@ public class CardController {
             long boardId = card.getBoardId();
             this.msgs.convertAndSend("/topic/cards/delete/" + boardId, id);
             return id;
-        } else {
-            return -1L;
         }
+        return -1L;
     }
 
     /**
@@ -210,44 +196,44 @@ public class CardController {
             "], newIndex = [" + newIndex + "]");
 
         // check if cardId is valid
-        if (cardRepository.findById(cardId).isPresent()) {
-            // get the card
-            Card card = cardRepository.findById(cardId).get();
-
-            //check if the card is being moved in the same list
-            if (newListId == card.getListId()) {
-                // check if the card is being moved to the same index
-                if (newIndex == card.getIdx()) {
-                    message.setMoved(true);
-                }
-
-                // check if the card is being moved to a higher index
-                if (newIndex > card.getIdx()) {
-                    // update all cards with index between old and new index
-                    cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
-                } else {
-                    // update all cards with index between new and old index
-                    cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
-                }
-            } else {
-                // move all cards in the old list down
-                cardRepository.moveAllCardsHigherThanIndexDown(card.getListId(), card.getIdx());
-                //move all cards in the new list up, to make room for the new card
-                cardRepository.moveAllCardsHigherEqualThanIndexUp(newListId, newIndex);
-
-                // update the list id of the card
-                card.setListId(newListId);
-            }
-            // update the index of the card
-            card.setIdx(newIndex);
-            cardRepository.save(card);
-            message.setMoved(true);
-
-            long boardId = card.getBoardId();
-            this.msgs.convertAndSend("/topic/cards/move/" + boardId, message);
-        } else {
+        var optCard = cardRepository.findById(cardId);
+        if (optCard.isEmpty()) {
             message.setMoved(false);
+            return message;
         }
+        // get the card
+        Card card = optCard.get();
+        //check if the card is being moved in the same list
+        if (newListId == card.getListId()) {
+            // check if the card is being moved to the same index
+            if (newIndex == card.getIdx()) {
+                message.setMoved(true);
+            }
+
+            // check if the card is being moved to a higher index
+            if (newIndex > card.getIdx()) {
+                // update all cards with index between old and new index
+                cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
+            } else {
+                // update all cards with index between new and old index
+                cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
+            }
+        } else {
+            // move all cards in the old list down
+            cardRepository.moveAllCardsHigherThanIndexDown(card.getListId(), card.getIdx());
+            //move all cards in the new list up, to make room for the new card
+            cardRepository.moveAllCardsHigherEqualThanIndexUp(newListId, newIndex);
+
+            // update the list id of the card
+            card.setListId(newListId);
+        }
+        // update the index of the card
+        card.setIdx(newIndex);
+        cardRepository.save(card);
+        message.setMoved(true);
+
+        long boardId = card.getBoardId();
+        this.msgs.convertAndSend("/topic/cards/move/" + boardId, message);
         return message;
     }
 

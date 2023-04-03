@@ -96,7 +96,7 @@ public class ListController {
     @MessageMapping("/lists/edit") // app/lists/edit
     public CardList editListMessage(CardList cardList){
         long id = cardList.getId();
-        if(listRepository.findById(id).isPresent()){
+        if(listRepository.existsById(id)){
             listRepository.save(cardList);
             long boardId = cardList.getBoardId();
             msgs.convertAndSend("/topic/lists/edit/" + boardId, cardList);
@@ -136,18 +136,19 @@ public class ListController {
     @Transactional
     public Long deleteListMessage(long id){
         var optCardList = listRepository.findById(id);
-        if (optCardList.isPresent()) {
-            CardList cardList = optCardList.get();
-            long boardId = cardList.getBoardId();
-            listRepository.deleteById(id);
-            //listRepository.moveAllCardsHigherThanIndexDown(boardId, cardList.getIdx());
-            logger.info("cardlist has been deleted from db");
-
-            this.msgs.convertAndSend("/topic/lists/delete/" + boardId, id);
-
-            return id;
+        if (optCardList.isEmpty()) {
+            return -1L;
         }
-        return -1L;
+        CardList cardList = optCardList.get();
+
+        long boardId = cardList.getBoardId();
+        listRepository.deleteById(id);
+        listRepository.moveAllCardsHigherThanIndexDown(boardId, cardList.getIdx());
+        logger.info("cardlist has been deleted from db");
+
+        this.msgs.convertAndSend("/topic/lists/delete/" + boardId, id);
+
+        return id;
     }
 
     /**
