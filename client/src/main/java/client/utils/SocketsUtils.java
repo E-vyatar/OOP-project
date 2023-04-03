@@ -1,6 +1,5 @@
 package client.utils;
 
-import client.scenes.BoardOverviewCtrl;
 import javafx.application.Platform;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;

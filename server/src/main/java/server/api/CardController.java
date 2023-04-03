@@ -161,11 +161,13 @@ public class CardController {
      * @return true if card doesn't exist in the database after deletion, false otherwise
      */
     @MessageMapping("/cards/delete") //app/cards/{id}
+    @Transactional
     public Long deleteMessage(long id){
         var optCard = cardRepository.findById(id);
         if (optCard.isPresent()) {
             Card card = optCard.get();
             cardRepository.deleteById(id);
+            cardRepository.moveAllCardsHigherThanIndexDown(card.getListId(), card.getIdx());
             logger.info("card has been deleted from db");
             long boardId = card.getBoardId();
             this.msgs.convertAndSend("/topic/cards/delete/" + boardId, id);
@@ -223,13 +225,9 @@ public class CardController {
                 if (newIndex > card.getIdx()) {
                     // update all cards with index between old and new index
                     cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
-
-
                 } else {
                     // update all cards with index between new and old index
                     cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
-
-
                 }
             } else {
                 // move all cards in the old list down
@@ -288,13 +286,9 @@ public class CardController {
                 if (newIndex > card.getIdx()) {
                     // update all cards with index between old and new index
                     cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
-
-
                 } else {
                     // update all cards with index between new and old index
                     cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
-
-
                 }
             } else {
                 // move all cards in the old list down
@@ -308,6 +302,7 @@ public class CardController {
             // update the index of the card
             card.setIdx(newIndex);
             cardRepository.save(card);
+
             return true;
         }
         return false;

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import server.database.ListRepository;
 
@@ -89,6 +90,7 @@ public class ListController {
     /**
      * Updates an existing list
      *
+     * @param cardList the list to edit
      * @return the updated list
      */
     @MessageMapping("/lists/edit") // app/lists/edit
@@ -131,12 +133,14 @@ public class ListController {
      * @return Long for the id of the list that was deleted
      */
     @MessageMapping("/lists/delete") // app/lists/delete
+    @Transactional
     public Long deleteListMessage(long id){
         var optCardList = listRepository.findById(id);
         if (optCardList.isPresent()) {
             CardList cardList = optCardList.get();
             long boardId = cardList.getBoardId();
-            listRepository.delete(cardList);
+            listRepository.deleteById(id);
+            //listRepository.moveAllCardsHigherThanIndexDown(boardId, cardList.getIdx());
             logger.info("cardlist has been deleted from db");
 
             this.msgs.convertAndSend("/topic/lists/delete/" + boardId, id);

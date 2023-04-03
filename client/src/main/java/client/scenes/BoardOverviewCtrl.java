@@ -207,9 +207,9 @@ public class BoardOverviewCtrl {
             deleteList(cardListViewCtrl);
 
         });
-        socketsUtils.registerMessages("/topic/lists/edit/" + boardId, CardList.class, updatedCardList -> {
-            getCardListViewCtrl(updatedCardList.getId()).setTitle(updatedCardList.getTitle());
-        });
+        socketsUtils.registerMessages(
+                "/topic/lists/edit/" + boardId, CardList.class, this::updateList
+        );
         generateView();
     }
 
@@ -409,11 +409,6 @@ public class BoardOverviewCtrl {
      */
     public void moveCard(Card card, CardList cardList, long index) {
 
-//        var oldList = getCardListViewCtrl(card.getListId());
-//        var newList = getCardListViewCtrl(cardList.getId());
-//
-//        // TODO: wait for server to confirm move
-
         MoveCardMessage message = new MoveCardMessage(
             card.getId(),
             cardList.getId(),
@@ -422,13 +417,6 @@ public class BoardOverviewCtrl {
         );
 
         socketsUtils.send("/app/cards/move", message);
-
-//
-//        oldList.removeCard(card);
-//        newList.addCard(card, index);
-//
-//        // highlight the card
-//        newList.highlightCard(card);
 
     }
 
@@ -478,5 +466,15 @@ public class BoardOverviewCtrl {
         cardListViewCtrlList.remove(cardListViewCtrl);
         listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
         board.getCardLists().remove(cardListViewCtrl.getCardList());
+    }
+
+    /**
+     * Update the details (i.e. the title0 of a list
+     * @param updatedCardList the updated list
+     */
+    public void updateList(CardList updatedCardList) {
+        CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(updatedCardList.getId());
+        CardList cardList = cardListViewCtrl.getCardList();
+        cardList.setTitle(updatedCardList.getTitle());
     }
 }
