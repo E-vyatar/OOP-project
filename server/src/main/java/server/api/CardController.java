@@ -15,6 +15,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import server.database.CardRepositroy;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -50,7 +51,7 @@ public class CardController {
     @SendTo("/topic/cards/new")
     public Card addMessage(Card card){
         long listSize = cardRepository.countByListId(card.getListId());
-        System.out.println("addmessage called");
+        System.out.println("addMessage called");
         card.setIdx(listSize);
         return cardRepository.save(card);
     }
@@ -73,19 +74,25 @@ public class CardController {
 
     }
 
-    // TODO Clean up
-//    @MessageMapping("/cards")
-//    @SendTo("/topic/cards")
-//    public Card updateCardMessage(Card card){
-//        long id = card.getId();
-//        if(cardRepository.findById(id).isPresent()){
-//            System.out.println("poop");
-//            card.setIdx(cardRepository.countByListId(card.getListId()));
-//            cardRepository.save(card);
-//            return card;
-//        }
-//        return null;
-//    }
+    /**
+     * Updates a method using Web Sockets
+     * (not used since Long Polling now updates cards)
+     *
+     * @param card the card with updated info
+     * @return the card returned from the database after update (aka updated card)
+     */
+    @MessageMapping("/cards/edit")
+    @SendTo("/topic/cards/edit")
+    public Card updateCardMessage(Card card){
+        logger.info("updateCardMessage called");
+        Optional<Card> cardOptional = cardRepository.findById(card.getId());
+        if(cardOptional.isPresent()){
+            Card cardTemp = cardOptional.get();
+            cardTemp.setTitle(card.getTitle());
+            return cardRepository.save(cardTemp);
+        }
+        return null;
+    }
 
     /**
      * Get all cards
