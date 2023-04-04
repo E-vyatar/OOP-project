@@ -171,7 +171,7 @@ public class BoardOverviewCtrl {
         board = server.getBoard(boardId);
 
         this.polling.pollForCardUpdates(this);
-        socketsUtils.registerMessages("/topic/cards/new", Card.class, newCard -> {
+        socketsUtils.registerMessages("/topic/cards/new/" + boardId, Card.class, newCard -> {
             System.out.println("added new card " + newCard);
             for (CardListViewCtrl cardListViewCtrl : this.cardListViewCtrlList) {
                 if (cardListViewCtrl.getCardList().getId() == newCard.getListId()) {
@@ -181,11 +181,11 @@ public class BoardOverviewCtrl {
                 }
             }
         });
-        socketsUtils.registerMessages("/topic/cards/delete", Long.class, id ->{
+        socketsUtils.registerMessages("/topic/cards/delete/" + boardId, Long.class, id ->{
             Card card = getCard(id);
             getCardListViewCtrl(card.getListId()).removeCard(card);
         });
-        socketsUtils.registerMessages( "/topic/cards/move", MoveCardMessage.class,
+        socketsUtils.registerMessages( "/topic/cards/move/" + boardId, MoveCardMessage.class,
             message -> {
                 var oldList = getCardListViewCtrl(message.getOldListId());
                 var newList = getCardListViewCtrl(message.getNewListId());
@@ -196,20 +196,20 @@ public class BoardOverviewCtrl {
                 newList.addCard(card, message.getNewIndex());
             }
         );
-        socketsUtils.registerMessages("/topic/lists/new", CardList.class, newCardList ->{
+        socketsUtils.registerMessages("/topic/lists/new/" + boardId, CardList.class, newCardList ->{
             CardListViewCtrl cardListViewCtrl = CardListViewCtrl
                 .createNewCardListViewCtrl(this, newCardList);
             cardListViewCtrlList.add(cardListViewCtrl);
             listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
         });
-        socketsUtils.registerMessages("/topic/lists/delete", Long.class, id ->{
+        socketsUtils.registerMessages("/topic/lists/delete/" + boardId, Long.class, id ->{
             CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(id);
             deleteList(cardListViewCtrl);
 
         });
-        socketsUtils.registerMessages("/topic/lists/edit", CardList.class, updatedCardList -> {
-            getCardListViewCtrl(updatedCardList.getId()).setTitle(updatedCardList.getTitle());
-        });
+        socketsUtils.registerMessages(
+                "/topic/lists/edit/" + boardId, CardList.class, this::updateList
+        );
         generateView();
     }
 
@@ -409,11 +409,6 @@ public class BoardOverviewCtrl {
      */
     public void moveCard(Card card, CardList cardList, long index) {
 
-//        var oldList = getCardListViewCtrl(card.getListId());
-//        var newList = getCardListViewCtrl(cardList.getId());
-//
-//        // TODO: wait for server to confirm move
-
         MoveCardMessage message = new MoveCardMessage(
             card.getId(),
             cardList.getId(),
@@ -422,13 +417,6 @@ public class BoardOverviewCtrl {
         );
 
         socketsUtils.send("/app/cards/move", message);
-
-//
-//        oldList.removeCard(card);
-//        newList.addCard(card, index);
-//
-//        // highlight the card
-//        newList.highlightCard(card);
 
     }
 
@@ -478,5 +466,16 @@ public class BoardOverviewCtrl {
         cardListViewCtrlList.remove(cardListViewCtrl);
         listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
         board.getCardLists().remove(cardListViewCtrl.getCardList());
+    }
+
+    /**
+     * Update the details (i.e. the title0 of a list
+     * @param updatedCardList the updated list
+     */
+    public void updateList(CardList updatedCardList) {
+        CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(updatedCardList.getId());
+        CardList cardList = cardListViewCtrl.getCardList();
+        cardList.setTitle(updatedCardList.getTitle());
+        cardListViewCtrl.refresh();
     }
 }

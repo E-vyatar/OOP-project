@@ -104,6 +104,13 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     }
 
     /**
+     * Update card title
+     */
+    public void refresh() {
+        cardListTitle.setText(cardList.getTitle());
+    }
+
+    /**
      * Returns the view for which the controller handles the logic
      *
      * @return the attached CardListView

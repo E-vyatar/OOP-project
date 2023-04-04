@@ -12,6 +12,13 @@ public class MoveCardMessage implements Serializable {
 
 
     /**
+     * Empty Constructor. Necessary for jackson.
+     */
+    public MoveCardMessage() {
+
+    }
+
+    /**
      * Constructor
      * @param cardId the id of the card
      * @param newListId the id of the new list
