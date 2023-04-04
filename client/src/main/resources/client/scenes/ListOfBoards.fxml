@@ -22,10 +22,20 @@
         <ListView fx:id="boards" maxWidth="400"/>
     </center>
     <bottom>
-        <HBox styleClass="buttons">
-            <Button onMouseClicked="#disconnect">disconnect</Button>
-            <Button onMouseClicked="#addBoard">add board</Button>
-            <Button onMouseClicked="#newBoard">create board</Button>
-        </HBox>
+        <Pane maxWidth="1.7976931348623157E308"> <!-- This is pane is necessary cause bottom can have only one child -->
+            <HBox styleClass="buttons" fx:id="userButtons">
+                <Button onMouseClicked="#disconnect">disconnect</Button>
+                <Button onMouseClicked="#removeBoard">remove board</Button>
+                <Button onMouseClicked="#addBoard">add board</Button>
+                <Button onMouseClicked="#newBoard">create board</Button>
+                <Button onMouseClicked="#openBoard">open board</Button>
+            </HBox>
+            <HBox styleClass="buttons" fx:id="adminButtons">
+                <Button onMouseClicked="#disconnect">disconnect</Button>
+                <Button onMouseClicked="#deleteBoard">delete board</Button>
+                <Button onMouseClicked="#newBoard">create board</Button>
+                <Button onMouseClicked="#openBoard">open board</Button>
+            </HBox>
+        </Pane>
     </bottom>
 </BorderPane>

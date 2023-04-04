@@ -62,7 +62,7 @@ public class EditBoardCtrl {
     public void delete() {
         serverUtils.deleteBoard(board.getId());
         boardOverviewCtrl.hidePopup();
-        mainCtrl.showListOfBoards();
+        boardOverviewCtrl.returnToBoardList();
     }
 
     /**

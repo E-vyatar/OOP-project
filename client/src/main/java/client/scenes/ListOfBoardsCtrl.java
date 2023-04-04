@@ -7,10 +7,9 @@ import commons.Board;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -31,7 +30,10 @@ public class ListOfBoardsCtrl {
     @FXML
     private ListView<Board> boards;
 
-    private boolean isAdmin;
+    @FXML
+    private HBox userButtons;
+    @FXML
+    private HBox adminButtons;
 
     /**
      * This constructs an instance of ListOfBoards.
@@ -60,27 +62,14 @@ public class ListOfBoardsCtrl {
         this.boards.setCellFactory(param -> {
             return new BoardCell();
         });
-
-        // When you select (i.e.) click a board, open that board.
-        this.boards.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    if (newValue != null) {
-                        long boardId = newValue.getId();
-                        mainCtrl.showOverview(boardId);
-                    }
-                });
     }
     /**
      * Refresh the controller.
      * This loads data from the backend and sets the listView.
      */
     public void refresh() {
-        // Make sure it's unselected, so when you return to this view
-        // it looks the same as before.
-        this.boards.getSelectionModel().clearSelection();
-
         List<Board> boards;
-        if (server.hasPassword()) {
+        if (isAdmin()) {
             boards = server.getAllBoards();
         } else {
             boards = server.getAllBoards(config.getIds(server.getHostname()));
@@ -88,6 +77,18 @@ public class ListOfBoardsCtrl {
 
         ObservableList<Board> data = FXCollections.observableList(boards);
         this.boards.setItems(data);
+
+        if (isAdmin()) {
+            adminButtons.setManaged(true);
+            adminButtons.setVisible(true);
+            userButtons.setManaged(false);
+            userButtons.setVisible(false);
+        } else {
+            adminButtons.setManaged(false);
+            adminButtons.setVisible(false);
+            userButtons.setManaged(true);
+            userButtons.setVisible(true);
+        }
     }
 
     /**
@@ -101,6 +102,38 @@ public class ListOfBoardsCtrl {
         System.out.println("The client has been disconnected");
 
         mainCtrl.showConnect();
+    }
+    /**
+     * Remove a board
+     *
+     */
+    public void removeBoard() {
+        Board board = this.boards.getSelectionModel().getSelectedItem();
+        if (board == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please select a board to remove from your list");
+            alert.show();
+        } else {
+            config.removeBoard(server.getHostname(), board.getId());
+            this.boards.getSelectionModel().clearSelection();
+            this.boards.getItems().remove(board);
+        }
+    }
+    /**
+     * Remove a board
+     *
+     */
+    public void deleteBoard() {
+        Board board = this.boards.getSelectionModel().getSelectedItem();
+        if (board == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please select a board to delete from your list");
+            alert.show();
+        } else {
+            server.deleteBoard(board.getId());
+            this.boards.getSelectionModel().clearSelection();
+            this.boards.getItems().remove(board);
+        }
     }
 
     /**
@@ -121,6 +154,22 @@ public class ListOfBoardsCtrl {
         mainCtrl.showCreateBoard();
     }
 
+    /**
+     * Open a board
+     * @param mouseEvent unused
+     */
+    public void openBoard(MouseEvent mouseEvent) {
+        Board board = this.boards.getSelectionModel().getSelectedItem();
+        if (board == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please select a board to open");
+            alert.show();
+        } else {
+            long boardId = board.getId();
+            mainCtrl.showOverview(boardId);
+        }
+    }
+
     static class BoardCell extends ListCell<Board> {
 
         @Override
@@ -137,10 +186,9 @@ public class ListOfBoardsCtrl {
     }
 
     /**
-     * Setter for admin
-     * @param admin
+     * Check if the user is admin
      */
-    public void setAdmin(boolean admin) {
-        this.isAdmin = isAdmin;
+    private boolean isAdmin() {
+        return server.hasPassword();
     }
 }

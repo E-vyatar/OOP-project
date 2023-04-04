@@ -36,6 +36,6 @@
 
 .buttons {
     -fx-padding: 1em 1em 1em 1em;
-    -fx-spacing: 5em;
+    -fx-spacing: 2em;
     -fx-alignment: center;
 }

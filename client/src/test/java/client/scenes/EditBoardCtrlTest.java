@@ -43,8 +43,8 @@ public class EditBoardCtrlTest {
         editBoardCtrl.setBoard(board);
         editBoardCtrl.delete();
         verify(serverUtils).deleteBoard(54L);
-        verify(mainCtrl).showListOfBoards();
         verify(boardOverviewCtrl).hidePopup();
+        verify(boardOverviewCtrl).returnToBoardList();
     }
 
     @AfterEach
