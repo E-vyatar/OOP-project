@@ -107,12 +107,13 @@ public class ServerUtils {
      *
      * @param cardId   the id of the card to move
      * @param newListId the id of the list to move the card to
+     * @param oldListId the id of the list it is moved from
      * @param newIndex the index of the card in the new list
      * @return list of all the cards in the database
      */
-    public boolean moveCard(long cardId, long newListId, long newIndex) {
+    public boolean moveCard(long cardId, long newListId, long oldListId, long newIndex) {
 
-        MoveCardMessage message = new MoveCardMessage(cardId, newListId, newIndex);
+        MoveCardMessage message = new MoveCardMessage(cardId, newListId, oldListId, newIndex);
 
         return ClientBuilder.newClient(new ClientConfig())
             .target(server).path("cards/move")

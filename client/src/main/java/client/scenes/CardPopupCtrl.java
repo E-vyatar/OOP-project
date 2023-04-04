@@ -142,7 +142,6 @@ public class CardPopupCtrl {
                 String title = cardTitle.getText();
                 Card updatedCard = new Card(cardId, listId, boardId, title, idx);
                 server.editCard(updatedCard);
-
                 close();
             } catch (WebApplicationException e) {
 
