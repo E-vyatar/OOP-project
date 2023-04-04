@@ -15,19 +15,22 @@
  */
 package client.scenes;
 
+import client.utils.PollingUtils;
 import client.utils.ServerUtils;
+import commons.*;
+import client.utils.SocketsUtils;
 import commons.Card;
 import commons.CardList;
-import javafx.collections.FXCollections;
+import commons.messages.MoveCardMessage;
+import jakarta.ws.rs.WebApplicationException;
+
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -37,105 +40,209 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class BoardOverviewCtrl implements EventHandler {
+public class BoardOverviewCtrl {
 
-    private final ServerUtils utils;
+    private final ServerUtils server;
+    private final SocketsUtils socketsUtils;
+    private final PollingUtils polling;
+
     private final MainCtrl mainCtrl;
     private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
     private CardPopupCtrl cardPopupCtrl;
     private AddCardCtrl addCardCtrl;
     private Scene addCard;
+    private DeleteCardCtrl deleteCardCtrl;
+    private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
+    private Board board;
     @FXML
     private HBox listOfLists;
 
+    /**
+     * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
+     * linked to the overview of the board.
+     * The constructor should not be called manually, since it uses injection.
+     * @param server  the ServerUtils of the app - used to load and send data from the server
+     * @param sockets socket utils - used to receive changes from the server
+     * @param mainCtrl the MainCtrl of the app
+     * @param polling  the PollingUtils of the app
+    */
     @Inject
-    public BoardOverviewCtrl(ServerUtils utils, MainCtrl mainCtrl) {
-        this.utils = utils;
+    public BoardOverviewCtrl(MainCtrl mainCtrl,
+                             ServerUtils server,
+                             PollingUtils polling,
+                             SocketsUtils sockets) {
         this.mainCtrl = mainCtrl;
-//        if (!this.utils.isConnectionAlive()) showConnect();
+        this.server = server;
+        this.polling = polling;
+        this.socketsUtils = sockets;
     }
 
-    public void initialize(Pair<CardPopupCtrl, Parent> cardPopup, Pair<AddCardCtrl, Parent> addCard, Pair<RenameListPopupCtrl, Parent> renameListPopup) {
+    /**
+     * Initialises the different popup controllers.
+     *
+     * @param cardPopup       a pair of the CardPopupCtrl and the root of the to-be scene
+     * @param addCard         a pair of the AddCardCtrl and the root of the to-be scene
+     * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
+     * @param deleteCard a pair of the DeleteCardCtrl and the root of the to-be scene
+     */
+    public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
+                           Pair<AddCardCtrl, Parent> addCard,
+                           Pair<RenameListPopupCtrl, Parent> renameListPopup,
+                           Pair<DeleteCardCtrl, Parent> deleteCard) {
         this.cardPopupCtrl = cardPopup.getKey();
-
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
-
         this.renameListPopupCtrl = renameListPopup.getKey();
+        this.deleteCardCtrl = deleteCard.getKey();
+        this.deleteCard = new Scene(deleteCard.getValue());
 
-        createCards();
     }
 
-    @Deprecated
-    private void createCards() {
-        /*
-            Currently, this method just creates arbitrary data.
-            This data doesn't properly use the format as it's stored in the DB.
-            When linking with the server side,
-            the cards in a list should be converted into an ObservableList.
-         */
-
-        ArrayList<AnchorPane> lists = new ArrayList<>();
-        // Create four lists
-        for (long i = 0; i < 4; i++) {
-            List<Card> cards = new ArrayList<>();
-            for (long j = 0; j < 4; j++) {
-                cards.add(new Card(i * 4 + j, i, "Card " + i + "." + j, j, -1));
+    /**
+     * This method should be called when a card has been updated.
+     * It will find the card by id and then update it.
+     * @param updatedCard the new version of the card
+     */
+    public void updateCard(Card updatedCard) {
+        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
+            ObservableList<Card> cards = cardListViewCtrl.getObservableCards();
+            for (int i = 0; i < cards.size(); i++) {
+                // Check if the card has the same id,
+                // i.e. if this card is being updated
+                if (cards.get(i).getId() == updatedCard.getId()) {
+                    // Replace the card
+                    cards.set(i, updatedCard);
+                    return;
+                }
             }
-            ObservableList<Card> observableList = FXCollections.observableList(cards);
-
-            CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, new CardList("List " + i, 0, -1), observableList);
-            cardListViewCtrlList.add(cardListViewCtrl);
-            lists.add(cardListViewCtrl.getCardListNode());
         }
-
-        listOfLists.getChildren().addAll(lists);
-    }
-
-    private void getCardsFromServer() {
-
     }
 
     /**
      * Adds a new list to the board
-     *
-     * @param actionEvent
      */
     @FXML
-    private void addList(ActionEvent actionEvent) {
-        // Create a new list where cards can be added to
-        ObservableList<Card> observableList = FXCollections.observableList(new ArrayList<>());
-        CardList cardList = new CardList("New List", 0, 0);
-        CardListViewCtrl cardListViewCtrl = CardListViewCtrl.createNewCardListViewCtrl(this, cardList, observableList);
-        cardListViewCtrlList.add(cardListViewCtrl);
-        // Add a new list to the list of lists. The firstcardId is -1 because it has no cards.
-        listOfLists.getChildren().add((listOfLists.getChildren().size()), cardListViewCtrl.getCardListNode());
+    private void addList() {
+        // Create cardList without specified ID
+        CardList cardList = new CardList("New List", board.getId(), board.getCardLists().size());
+
+        try {
+            // Add cardList to server and retrieve object with ID
+            socketsUtils.send("/app/lists/new", cardList);
+            System.out.println("sending the card list message to server" + cardList + "");
+
+        } catch (WebApplicationException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     /**
-     * when clicking Disconnect from Server, the Stompsession is ended and scene is set up back to ConnectServerCtrl
+     * when clicking Return to list of boards,
+     * you see the list of boards again.
+     * It will stop the polling and unsubscribe from the sockets,
+     * but it won't stop the connection of the sockets
+     * so the connection won't have to be re-instated when you view another board.
      *
-     * @param actionEvent
      */
-    public void disconnect(ActionEvent actionEvent) {
-        utils.getSession().disconnect();
-        System.out.println("The client has been disconnected");
+    public void returnToBoardList() {
 
-        mainCtrl.showConnect();
+        polling.disconnect();
+        socketsUtils.stopListening();
+
+        mainCtrl.showListOfBoards();
     }
 
 
-    public void refresh() {
+    /**
+     * Meant to refresh the board.
+     * Currently, it loads the board from the server
+     * and builds the UI for it.
+     * It also starts the sockets and such.
+     *
+     * @param boardId the id of the board to be fetched
+     */
+    public void refresh(long boardId) {
 
+        // Get board with ID = 0
+        board = server.getBoard(boardId);
+
+        this.polling.pollForCardUpdates(this);
+        socketsUtils.registerMessages("/topic/cards/new", Card.class, newCard -> {
+            System.out.println("added new card " + newCard);
+            for (CardListViewCtrl cardListViewCtrl : this.cardListViewCtrlList) {
+                if (cardListViewCtrl.getCardList().getId() == newCard.getListId()) {
+                    // Append new card to the end.
+                    cardListViewCtrl.getObservableCards().add(newCard);
+
+                }
+            }
+        });
+        socketsUtils.registerMessages("/topic/cards/delete", Long.class, id ->{
+            Card card = getCard(id);
+            getCardListViewCtrl(card.getListId()).removeCard(card);
+        });
+        socketsUtils.registerMessages( "/topic/cards/move", MoveCardMessage.class,
+            message -> {
+                var oldList = getCardListViewCtrl(message.getOldListId());
+                var newList = getCardListViewCtrl(message.getNewListId());
+                Card card = getCard(message.getCardId());
+                oldList.removeCard(card);
+                card.setIdx(message.getNewIndex());
+                card.setListId(message.getNewListId());
+                newList.addCard(card, message.getNewIndex());
+            }
+        );
+        socketsUtils.registerMessages("/topic/lists/new", CardList.class, newCardList ->{
+            CardListViewCtrl cardListViewCtrl = CardListViewCtrl
+                .createNewCardListViewCtrl(this, newCardList);
+            cardListViewCtrlList.add(cardListViewCtrl);
+            listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+        });
+        socketsUtils.registerMessages("/topic/lists/delete", Long.class, id ->{
+            CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(id);
+            deleteList(cardListViewCtrl);
+
+        });
+        socketsUtils.registerMessages("/topic/lists/edit", CardList.class, updatedCardList -> {
+            getCardListViewCtrl(updatedCardList.getId()).setTitle(updatedCardList.getTitle());
+        });
+        generateView();
     }
 
-    @Override
-    public void handle(Event event) {
-        Object source = event.getSource();
-        System.out.println("Source: " + source);
-        if (source instanceof CardPopupCtrl) {
-            CardPopupCtrl card = (CardPopupCtrl) source;
+    /**
+     * Clears & generates the Board view
+     * <p> TODO: Adapt so that listOfLists is ListView instead of HBox (for drag & drop) </p>
+     */
+    public void generateView() {
+        // Deletes all the ListCtrl
+        cardListViewCtrlList.clear();
+
+        // Deletes all lists in the View
+        listOfLists.getChildren().clear();
+
+        // Loops through the cardLists in the board:
+        //      (to add them to the overview)
+        for (CardList cardList : board.getCardLists()) {
+
+            // Creates new controller for this list (using creatNewCardListViewCtrl)
+            CardListViewCtrl cardListViewCtrl =
+                CardListViewCtrl.createNewCardListViewCtrl(
+                    this,
+                    cardList
+                );
+
+            // Adds the controller to the controller list
+            cardListViewCtrlList.add(cardListViewCtrl);
+
+            // Adds the CardList to the HBox
+            listOfLists.getChildren().add(
+                (int) cardList.getIdx(),
+                cardListViewCtrl.getCardListNode()
+            );
         }
     }
 
@@ -165,30 +272,88 @@ public class BoardOverviewCtrl implements EventHandler {
         cardPopupCtrl.show();
     }
 
+
     /**
-     * Open a new window with "AddCard" scene
+     * Updates the edited card in the board overview, both title and list
+     * @param originalCard The old version of the card
+     * @param editedCard The new edited version of the card
+     * @param editedListId ID of the new list of the card
+     */
+    public void updateCard(Card originalCard, Card editedCard, long editedListId) {
+        // get original card's list controller
+        CardListViewCtrl originalCardListController = getCardListViewCtrl(originalCard.getListId());
+        // replace original card by edited version
+        originalCardListController.setCard(originalCard.getIdx(), editedCard);
+
+        // get edited card's list controller
+        CardListViewCtrl editedCardListController = getCardListViewCtrl(editedListId);
+        // check if card's list was changed
+        if (originalCardListController != editedCardListController) {
+            // move card to edited list
+            long indexForEditedCard = editedCardListController.getCardList().getCards().size();
+            moveCard(editedCard, editedCardListController.getCardList(),indexForEditedCard);
+        }
+    }
+
+    /**
+     * Opens a new window with "AddCard" scene
      */
     public void showAddCard() {
         Stage cardWindow = new Stage();
-        cardWindow.setTitle("Add new Task");
+        cardWindow.setTitle("Add new Task to " + addCardCtrl.getCardList().getTitle());
         cardWindow.setScene(addCard);
         addCard.setOnKeyPressed(event -> addCardCtrl.keyPressed(event));
         addCardCtrl.refresh();
+        cardWindow.initModality(Modality.APPLICATION_MODAL);
         cardWindow.show();
     }
 
+    /**
+     * Set the cardList for which you're adding a card
+     * In a different method from `showAddCard` because it's easier to pass a parameter
+     * @param cardList the cardList
+     */
     public void setCardListForShowAddCard(CardList cardList) {
         addCardCtrl.setCardList(cardList);
+    }
+
+    /**
+     * Open a new window with "DeleteCard" scene
+     * @param card Card to delete
+     */
+    public void showDeleteCard(Card card) {
+        deleteCardCtrl.setCard(card);
+        Stage stage = new Stage();
+        stage.setTitle("Are you sure you want to delete this card?");
+        stage.setScene(deleteCard);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        deleteCardCtrl.setStage(stage);
+        deleteCardCtrl.getStage().show();
+    }
+
+    /**
+     * Remove card from the board overview
+     * @param card Card to remove from the board
+     */
+    public void removeDeletedCard(Card card) {
+        getCardListViewCtrl(card.getListId()).removeCard(card);
+    }
+
+    /**
+     * Close card pop-up window
+     */
+    public void closeCardPopUp() {
+        cardPopupCtrl.close();
     }
 
     /**
      * Shows a popup to edit the details (i.e. the title)
      * of a CardList. The popup has an option to rename it.
      *
-     * @param cardList the CardList that you can rename.
+     * @param controller the controller of the CardList that you can rename.
      */
-    public void showRenameList(CardList cardList) {
-        renameListPopupCtrl.setCardList(cardList);
+    public void showRenameList(CardListViewCtrl controller) {
+        renameListPopupCtrl.setCardListViewCtrl(controller);
         renameListPopupCtrl.show();
     }
 
@@ -198,12 +363,20 @@ public class BoardOverviewCtrl implements EventHandler {
      * @return a list of lists as CardList
      */
     public List<CardList> getAllLists() {
-        return cardListViewCtrlList.stream().map(CardListViewCtrl::getCardList).collect(Collectors.toList());
+        return cardListViewCtrlList.stream()
+            .map(CardListViewCtrl::getCardList)
+            .collect(Collectors.toList());
     }
 
+    /**
+     * Gets a Card from the board using the Card ID
+     *
+     * @param id the ID of the Card
+     * @return the Card with that ID (or null)
+     */
     public Card getCard(long id) {
-        for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
-            for (Card card : cardListViewCtrl.getCards()) {
+        for (CardListViewCtrl controller : cardListViewCtrlList) {
+            for (Card card : controller.getCards()) {
                 if (card.getId() == id) {
                     return card;
                 }
@@ -212,6 +385,12 @@ public class BoardOverviewCtrl implements EventHandler {
         return null;
     }
 
+    /**
+     * Gets the CardListViewController for the specific CardList ID
+     *
+     * @param id the id of the CardList
+     * @return the CardListViewCtrl for that CardList (or null)
+     */
     public CardListViewCtrl getCardListViewCtrl(long id) {
         for (CardListViewCtrl cardListViewCtrl : cardListViewCtrlList) {
             if (cardListViewCtrl.getCardList().getId() == id) {
@@ -221,21 +400,44 @@ public class BoardOverviewCtrl implements EventHandler {
         return null;
     }
 
+    /**
+     * Moves Card (for drag & drop).
+     *
+     * @param card     the Card to be moved
+     * @param cardList the CardList the card is moved to
+     * @param index    the new position index of the card in the CardList
+     */
     public void moveCard(Card card, CardList cardList, long index) {
-        System.out.println("Moving card " + card.getId() + " to list " + cardList.getId() + " at index " + index);
 
-        var oldList = getCardListViewCtrl(card.getListId());
-        var newList = getCardListViewCtrl(cardList.getId());
-        // TODO: wait for server to confirm move
-        oldList.removeCard(card);
-        newList.addCard(card, index);
+//        var oldList = getCardListViewCtrl(card.getListId());
+//        var newList = getCardListViewCtrl(cardList.getId());
+//
+//        // TODO: wait for server to confirm move
 
+        MoveCardMessage message = new MoveCardMessage(
+            card.getId(),
+            cardList.getId(),
+            card.getListId(),
+            index
+        );
 
-        // highlight the card
-        newList.highlightCard(card);
+        socketsUtils.send("/app/cards/move", message);
+
+//
+//        oldList.removeCard(card);
+//        newList.addCard(card, index);
+//
+//        // highlight the card
+//        newList.highlightCard(card);
 
     }
 
+    /**
+     * Move a list from a certain index to a new one.
+     *
+     * @param listId   the old index
+     * @param targetId the new index
+     */
     public void moveList(long listId, long targetId) {
         var list = getCardListViewCtrl(listId);
         var target = getCardListViewCtrl(targetId);
@@ -248,5 +450,33 @@ public class BoardOverviewCtrl implements EventHandler {
         cardListViewCtrlList.remove(list);
         cardListViewCtrlList.add(index, list);
 
+    }
+
+    /**
+     * Getter for ServerUtils of this app
+     *
+     * @return The ServerUtils for this app
+     */
+    public ServerUtils getServer() {
+        return server;
+    }
+    /**
+     * Getter for the board
+     *
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * Deletes a list from the view using the lists Controller
+     *
+     * @param cardListViewCtrl the controller of the list to delete
+     */
+    public void deleteList(CardListViewCtrl cardListViewCtrl) {
+        cardListViewCtrlList.remove(cardListViewCtrl);
+        listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
+        board.getCardLists().remove(cardListViewCtrl.getCardList());
     }
 }

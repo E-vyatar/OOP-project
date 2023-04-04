@@ -13,16 +13,24 @@ import javafx.scene.paint.Color;
 public class CardView extends ListCell<Card> {
 
     private final CardViewCtrl controller;
+    private HBox hbox;
     private Button buttonUp;
     private Button buttonDown;
     private Button editButton;
+    private Label cardTitle;
 
+    /**
+     * This constructs a CardView
+     *
+     * @param controller the controller of the CardView
+     */
     public CardView(CardViewCtrl controller) {
         this.controller = controller;
 
         setDragEvents();
     }
 
+    @SuppressWarnings({"MethodLength", "CyclomaticComplexity"})
     private void setDragEvents() {
 
         // such a drag
@@ -30,7 +38,6 @@ public class CardView extends ListCell<Card> {
             if (controller.getCard() == null) {
                 return;
             }
-            System.out.println("onDragDetected " + controller.getCard().getId());
 
             /* allow any transfer mode */
             Dragboard db = startDragAndDrop(TransferMode.ANY);
@@ -46,7 +53,7 @@ public class CardView extends ListCell<Card> {
             /* accept it only if it is  not dragged from the same node
              * and if it has a string data */
             if (event.getGestureSource() != this
-                    && event.getDragboard().hasString()
+                && event.getDragboard().hasString()
             ) {
                 /* allow for both copying and moving, whatever user chooses */
                 if (event.getDragboard().getString().startsWith("c")) {
@@ -59,10 +66,12 @@ public class CardView extends ListCell<Card> {
         });
         setOnDragEntered(event -> {
             if (event.getGestureSource() != this
-                    && event.getDragboard().hasString()
-                    && event.getDragboard().getString().startsWith("c")
+                && event.getDragboard().hasString()
+                && event.getDragboard().getString().startsWith("c")
             ) {
-                setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                setBorder(new Border(new BorderStroke(
+                    Color.RED, BorderStrokeStyle.SOLID,
+                    CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             }
             event.consume();
         });
@@ -77,11 +86,14 @@ public class CardView extends ListCell<Card> {
                 if (db.getString().startsWith("c")) {
                     long id = Long.parseLong(db.getString().substring(1));
                     Card card = controller.getBoardOverviewCtrl().getCard(id);
+
                     controller.addCardAt(card, getIndex());
                     success = true;
+
                 } else {
                     long id = Long.parseLong(db.getString());
-                    controller.getBoardOverviewCtrl().moveList(id, controller.getCardList().getId());
+                    controller.getBoardOverviewCtrl()
+                        .moveList(id, controller.getCardList().getId());
                     success = true;
                 }
             }
@@ -94,6 +106,7 @@ public class CardView extends ListCell<Card> {
 
 
     @Override
+    @SuppressWarnings("MethodLength")
     protected void updateItem(Card card, boolean empty) {
         super.updateItem(card, empty);
 
@@ -149,14 +162,29 @@ public class CardView extends ListCell<Card> {
         }
     }
 
+    /**
+     * Returns the button to move a card up
+     *
+     * @return the button to move a card up
+     */
     public Button getButtonUp() {
         return buttonUp;
     }
 
+    /**
+     * Returns the button to move a card down
+     *
+     * @return the button to move a card down
+     */
     public Button getButtonDown() {
         return buttonDown;
     }
 
+    /**
+     * Returns the button to edit a card
+     *
+     * @return the button to edit a card
+     */
     public Button getEditButton() {
         return editButton;
     }

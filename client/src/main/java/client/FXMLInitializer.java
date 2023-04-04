@@ -32,13 +32,32 @@ public class FXMLInitializer {
 
     private final Injector injector;
 
+    /**
+     * Constructs the FXMLInitializor.
+     *
+     * @param injector the injector to use when loading controllers and views.
+     */
     public FXMLInitializer(Injector injector) {
         this.injector = injector;
     }
 
+    /**
+     * This method loads a view and its respective controller.
+     *
+     * @param ignoredC the class of the controller
+     * @param parts    the location where the fxml file is stored
+     * @param <T>      controller
+     * @return the pair of controller and the root of the view
+     */
     public <T> Pair<T, Parent> load(Class<T> ignoredC, String... parts) {
         try {
-            var loader = new FXMLLoader(getLocation(parts), null, null, new MyFactory(), StandardCharsets.UTF_8);
+            var loader = new FXMLLoader(
+                getLocation(parts),
+                null,
+                null,
+                new MyFactory(),
+                StandardCharsets.UTF_8);
+
             Parent parent = loader.load();
             T ctrl = loader.getController();
             return new Pair<>(ctrl, parent);

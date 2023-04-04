@@ -10,32 +10,36 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="root" maxHeight="1.7976931348623157E308" stylesheets="@../styles/CardPopup.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardPopupCtrl">
+<BorderPane fx:id="root" maxHeight="1.7976931348623157E308" stylesheets="@../styles/CardPopup.css"
+            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="client.scenes.CardPopupCtrl">
     <bottom>
         <ButtonBar fx:id="buttonBar" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <buttons>
                 <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" text="Close" />
                 <Button fx:id="editButton" mnemonicParsing="false" onAction="#edit" text="Edit" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#showDeleteConfirmation" text="Delete" />
                 <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#close" text="Cancel" />
-                <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" text="Save" />
+                <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveCardChanges" text="Save" />
             </buttons>
             <BorderPane.margin>
-                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
             </BorderPane.margin>
         </ButtonBar>
     </bottom>
     <center>
-        <ScrollPane fitToHeight="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
+        <ScrollPane fitToHeight="true" hbarPolicy="NEVER" hmax="0.0" maxHeight="1.7976931348623157E308"
+                    BorderPane.alignment="CENTER">
             <VBox maxHeight="1.7976931348623157E308">
                 <padding>
-                    <Insets bottom="8.0" left="8.0" right="20.0" top="8.0" />
+                    <Insets bottom="8.0" left="8.0" right="20.0" top="8.0"/>
                 </padding>
                 <TextField fx:id="cardTitle">
                     <VBox.margin>
-                        <Insets />
+                        <Insets/>
                     </VBox.margin>
                 </TextField>
-            <ChoiceBox fx:id="list" prefWidth="150.0" />
+                <ChoiceBox fx:id="list" prefWidth="150.0"/>
                 <TextArea fx:id="cardDescription" prefHeight="100.0" prefWidth="200.0">
 
                 </TextArea>
