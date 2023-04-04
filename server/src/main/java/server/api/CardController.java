@@ -4,8 +4,10 @@ import commons.Card;
 import commons.messages.MoveCardMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -23,15 +25,18 @@ import java.util.function.Consumer;
 public class CardController {
 
     private final CardRepositroy cardRepository;
+    private final SimpMessagingTemplate msgs;
     private Logger logger = LoggerFactory.getLogger(CardController.class);
 
     /**
      * Constructor
      *
      * @param cardRepository the repository (used for querying the DB)
+     * @param msgs not used TODO
      */
-    public CardController(CardRepositroy cardRepository) {
+    public CardController(CardRepositroy cardRepository, SimpMessagingTemplate msgs) {
         this.cardRepository = cardRepository;
+        this.msgs = msgs;
     }
 
     /**
@@ -40,13 +45,35 @@ public class CardController {
      * @param card the card to create
      * @return the created card
      */
+    @MessageMapping("/cards/new") // app/cards/new
+    public Card addMessage(Card card){
+        long listSize = cardRepository.countByListId(card.getListId());
+        System.out.println("addmessage called");
+        card.setIdx(listSize);
+        Card storedCard = cardRepository.save(card);
+        long boardId = storedCard.getBoardId();
+        this.msgs.convertAndSend("/topic/cards/new/" + boardId, storedCard);
+        return storedCard;
+    }
+
+    /**
+     * Create a new card
+     *
+     * @param card the card to create
+     * @return the created card
+     */
+    @Deprecated
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public Card createCard(@RequestBody Card card) {
         logger.info("createCard() called with: card = [" + card + "]");
         long listSize = cardRepository.countByListId(card.getListId());
         card.setIdx(listSize);
-        return cardRepository.save(card);
+        Card newCard = cardRepository.save(card);
+        //msgs.convertAndSend("/topic/cards/new", newCard);
+        return newCard;
+
     }
+
 
     /**
      * Get all cards
@@ -120,10 +147,94 @@ public class CardController {
      * @param id the id of the card
      * @return true if card doesn't exist in the database after deletion, false otherwise
      */
+    @MessageMapping("/cards/delete") //app/cards/{id}
+    @Transactional
+    public Long deleteMessage(long id){
+        var optCard = cardRepository.findById(id);
+        if (optCard.isPresent()) {
+            Card card = optCard.get();
+            cardRepository.deleteById(id);
+            cardRepository.moveAllCardsHigherThanIndexDown(card.getListId(), card.getIdx());
+            logger.info("card has been deleted from db");
+            long boardId = card.getBoardId();
+            this.msgs.convertAndSend("/topic/cards/delete/" + boardId, id);
+            return id;
+        }
+        return -1L;
+    }
+
+    /**
+     * Delete a card
+     *
+     * @param id the id of the card
+     * @return true if card doesn't exist in the database after deletion, false otherwise
+     */
+    // TODO Clean up
     @DeleteMapping("{id}")
     public boolean deleteCard(@PathVariable("id") long id) {
         cardRepository.deleteById(id);
         return !cardRepository.existsById(id);
+    }
+
+    /**
+     * Move a card
+     * <p>
+     * Transactional annotation is used to ensure that the database is updated in a consistent way
+     *
+     * @param message the message containing the card id, the list id, the board id and the index
+     * @return true if the card was moved successfully, false otherwise
+     */
+    @MessageMapping("/cards/move")
+    @Transactional
+    public MoveCardMessage moveCardMessage(@RequestBody MoveCardMessage message) {
+
+        long cardId = message.getCardId(), newListId = message.getNewListId(), newIndex =
+            message.getNewIndex();
+
+        // log the call
+        logger.info("moveCard() called with: cardId = [" + cardId + "], listId = [" + newListId +
+            "], newIndex = [" + newIndex + "]");
+
+        // check if cardId is valid
+        var optCard = cardRepository.findById(cardId);
+        if (optCard.isEmpty()) {
+            message.setMoved(false);
+            return message;
+        }
+        // get the card
+        Card card = optCard.get();
+        //check if the card is being moved in the same list
+        if (newListId == card.getListId()) {
+            // check if the card is being moved to the same index
+            if (newIndex == card.getIdx()) {
+                message.setMoved(true);
+            }
+
+            // check if the card is being moved to a higher index
+            if (newIndex > card.getIdx()) {
+                // update all cards with index between old and new index
+                cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
+            } else {
+                // update all cards with index between new and old index
+                cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
+            }
+        } else {
+            // move all cards in the old list down
+            cardRepository.moveAllCardsHigherThanIndexDown(card.getListId(), card.getIdx());
+            //move all cards in the new list up, to make room for the new card
+            cardRepository.moveAllCardsHigherEqualThanIndexUp(newListId, newIndex);
+
+            // update the list id of the card
+            card.setListId(newListId);
+        }
+        // update the index of the card
+        card.setIdx(newIndex);
+        cardRepository.save(card);
+        message.setMoved(true);
+
+        long boardId = card.getBoardId();
+        this.msgs.convertAndSend("/topic/cards/move/" + boardId, message);
+        return message;
     }
 
     /**
@@ -161,13 +272,9 @@ public class CardController {
                 if (newIndex > card.getIdx()) {
                     // update all cards with index between old and new index
                     cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
-
-
                 } else {
                     // update all cards with index between new and old index
                     cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
-
-
                 }
             } else {
                 // move all cards in the old list down
@@ -181,6 +288,7 @@ public class CardController {
             // update the index of the card
             card.setIdx(newIndex);
             cardRepository.save(card);
+
             return true;
         }
         return false;

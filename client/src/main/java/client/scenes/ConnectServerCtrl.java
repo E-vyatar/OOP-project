@@ -32,15 +32,15 @@ public class ConnectServerCtrl implements Initializable {
      * This class relies on injection so the constructor should not be called manually.
      *
      * @param server the ServerUtils of the app
+     * @param polling  the PollingUtils of the app
      * @param sockets utils class for sockets so we can start connection
      * @param mainCtrl the MainCtrl of the app
-     * @param polling  the PollingUtils of the app
      */
     @Inject
-    public ConnectServerCtrl(MainCtrl mainCtrl,
-                             ServerUtils server,
+    public ConnectServerCtrl(ServerUtils server,
                              PollingUtils polling,
-                             SocketsUtils sockets) {
+                             SocketsUtils sockets,
+                             MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.polling = polling;

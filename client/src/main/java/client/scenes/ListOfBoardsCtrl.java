@@ -52,11 +52,33 @@ public class ListOfBoardsCtrl {
         this.config = clientConfig;
     }
 
+
+    /**
+     * This method initializes the ListView.
+     */
+    public void initialize() {
+        this.boards.setCellFactory(param -> {
+            return new BoardCell();
+        });
+
+        // When you select (i.e.) click a board, open that board.
+        this.boards.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        long boardId = newValue.getId();
+                        mainCtrl.showOverview(boardId);
+                    }
+                });
+    }
     /**
      * Refresh the controller.
      * This loads data from the backend and sets the listView.
      */
     public void refresh() {
+        // Make sure it's unselected, so when you return to this view
+        // it looks the same as before.
+        this.boards.getSelectionModel().clearSelection();
+
         List<Board> boards;
         if (server.hasPassword()) {
             boards = server.getAllBoards();
@@ -66,24 +88,6 @@ public class ListOfBoardsCtrl {
 
         ObservableList<Board> data = FXCollections.observableList(boards);
         this.boards.setItems(data);
-        this.boards.setCellFactory(param -> {
-            /*BoardCellCtrl boardCellCtrl = new BoardCellCtrl();
-            return boardCellCtrl.getCell();*/
-            return new BoardCell();
-        });
-        // Make sure it's unselected, so when you return to this view
-        // it looks the same as before.
-        this.boards.getSelectionModel().clearSelection();
-        
-        // When you select (i.e.) click a board, open that board.
-        this.boards.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    if (newValue != null) {
-                        long boardId = newValue.getId();
-                        mainCtrl.showOverview(boardId);
-                        sockets.listenForBoard(boardId);
-                    }
-                });
     }
 
     /**

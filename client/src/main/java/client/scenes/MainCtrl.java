@@ -99,13 +99,6 @@ public class MainCtrl {
         overviewCtrl.refresh(boardId);
     }
 
-//TODO solve the connection later
-//    public void checkConnection() throws UnknownHostException {
-//        if(connectServerCtrl.connect()){
-//            showOverview();
-//        }
-//    }
-
     /**
      * Show the list with all known boards.
      */
