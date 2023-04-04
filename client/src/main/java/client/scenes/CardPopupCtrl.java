@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 public class CardPopupCtrl {
 
