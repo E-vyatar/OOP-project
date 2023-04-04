@@ -157,6 +157,10 @@ public class BoardController {
      */
     @PostMapping("find")
     public Iterable<Board> findBoards(@RequestBody List<Long> ids) {
-        return boardRepository.findAllById(ids);
+        List<Board> boards = boardRepository.findAllById(ids);
+        if (boards == null){
+            return List.of();
+        }
+        return boards;
     }
 }
