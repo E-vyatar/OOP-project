@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.function.ServerResponse;
+import server.AdminService;
 import server.database.BoardRepository;
 import server.database.ListRepository;
 
@@ -23,6 +24,7 @@ import java.util.function.Consumer;
 public class BoardController {
     private final BoardRepository boardRepository;
     private final ListRepository listRepository;
+    private final AdminService adminService;
     private Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     /**
@@ -30,21 +32,29 @@ public class BoardController {
      *
      * @param boardRepository the repository (used for all board-related queries)
      * @param listRepository the list repository (used to initialize a new board with empty lists)
+     * @param adminService the admin service (used to test admin authentication)
      */
-    public BoardController(BoardRepository boardRepository, ListRepository listRepository) {
+    public BoardController(BoardRepository boardRepository, ListRepository listRepository,
+                           AdminService adminService) {
         this.boardRepository = boardRepository;
         this.listRepository = listRepository;
+        this.adminService = adminService;
     }
 
     /**
      * Get all boards
      *
+     * @param password the admin password
      * @return all boards
      */
 
     @GetMapping("all")
-    public Iterable<Board> getAllBoards() {
-        return boardRepository.findAll();
+    public ResponseEntity<Iterable<Board>> getAllBoards(@RequestHeader String password) {
+        if (!adminService.isValidPassword(password)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        List<Board> boards = boardRepository.findAll();
+        return new ResponseEntity<>(boards, HttpStatus.OK);
     }
 
     /**

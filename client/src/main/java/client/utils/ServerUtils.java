@@ -225,11 +225,11 @@ public class ServerUtils {
      */
     public List<Board> getAllBoards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-            .target(server).path("boards/all")
-            .request(APPLICATION_JSON)
-            .accept(APPLICATION_JSON)
-            .get(new GenericType<>() {
-            });
+                .target(server).path("boards/all")
+            .   request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .header("password", password)
+                .get(new GenericType<>() {});
     }
     /**
      * Get all the board with the given ids
