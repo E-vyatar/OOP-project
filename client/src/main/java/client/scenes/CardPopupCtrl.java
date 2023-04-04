@@ -13,7 +13,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
-import java.util.Optional;
 
 public class CardPopupCtrl {
 
@@ -148,7 +147,10 @@ public class CardPopupCtrl {
                 long idx = card.getIdx();
                 String title = cardTitle.getText();
                 Card updatedCard = new Card(cardId, listId, boardId, title, idx);
-                server.editCard(updatedCard);
+                Card cardFromDatabase =  server.editCard(updatedCard);
+                long newIndex = list.getValue().getCards().size();
+                boardOverviewCtrl.moveCard(cardFromDatabase, list.getValue(), newIndex);
+
                 close();
             } catch (WebApplicationException e) {
 
