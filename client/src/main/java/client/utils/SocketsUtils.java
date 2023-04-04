@@ -30,10 +30,10 @@ public class SocketsUtils {
         session = connect("ws://" + hostname + ":8080/websocket");
     }
     /**
-     * @return returns the session, used it in disconnect method in board overview
+     * Disconnect from the server.
      */
-    public StompSession getSession() {
-        return session;
+    public void disconnect() {
+        this.session.disconnect();
     }
 
 

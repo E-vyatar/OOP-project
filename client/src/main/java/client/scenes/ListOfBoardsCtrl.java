@@ -98,7 +98,7 @@ public class ListOfBoardsCtrl {
      * @param mouseEvent the mouse event - unused
      */
     public void disconnect(MouseEvent mouseEvent) {
-        sockets.getSession().disconnect();
+        sockets.disconnect();
         System.out.println("The client has been disconnected");
 
         mainCtrl.showConnect();
@@ -120,45 +120,55 @@ public class ListOfBoardsCtrl {
         }
     }
     /**
-     * Remove a board
+     * delete a board
      *
      */
-    public void deleteBoard() {
+    @FXML
+    private void deleteBoard() {
         Board board = this.boards.getSelectionModel().getSelectedItem();
         if (board == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please select a board to delete from your list");
             alert.show();
         } else {
-            server.deleteBoard(board.getId());
+            deleteBoard(board);
             this.boards.getSelectionModel().clearSelection();
             this.boards.getItems().remove(board);
         }
     }
 
     /**
+     * Delete a board.
+     * This will delete the board and remove it from your config.
+     * @param board
+     */
+    public void deleteBoard(Board board) {
+        long boardId = board.getId();
+        server.deleteBoard(boardId);
+        config.removeBoard(server.getHostname(), boardId);
+    }
+    /**
      * Add a new board
      *
-     * @param mouseEvent the mouse event
      */
-    public void addBoard(MouseEvent mouseEvent) {
+    @FXML
+    public void addBoard() {
         mainCtrl.showAddBoard();
     }
 
     /**
      * Go to the interface to create a new board
-     *
-     * @param mouseEvent the mouse event
      */
-    public void newBoard(MouseEvent mouseEvent) {
+    @FXML
+    public void newBoard() {
         mainCtrl.showCreateBoard();
     }
 
     /**
      * Open a board
-     * @param mouseEvent unused
      */
-    public void openBoard(MouseEvent mouseEvent) {
+    @FXML
+    public void openBoard() {
         Board board = this.boards.getSelectionModel().getSelectedItem();
         if (board == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
