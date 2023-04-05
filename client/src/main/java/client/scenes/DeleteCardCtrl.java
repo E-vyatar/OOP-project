@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import client.utils.SocketsUtils;
 import commons.Card;
 import jakarta.ws.rs.WebApplicationException;
@@ -12,7 +11,6 @@ import javax.inject.Inject;
 
 public class DeleteCardCtrl {
 
-    private final ServerUtils serverUtils;
     private final BoardOverviewCtrl boardOverviewCtrl;
     private final SocketsUtils socketUtils;
 
@@ -22,15 +20,12 @@ public class DeleteCardCtrl {
     /**
      * Constructor
      *
-     * @param serverUtils       Reference to ServerUtils
      * @param socketsUtils      Reference to ServerSockets
      * @param boardOverviewCtrl Reference to BoardOverviewCtrl
      */
     @Inject
-    public DeleteCardCtrl(ServerUtils serverUtils,
-                          SocketsUtils socketsUtils,
+    public DeleteCardCtrl(SocketsUtils socketsUtils,
                           BoardOverviewCtrl boardOverviewCtrl) {
-        this.serverUtils = serverUtils;
         this.socketUtils = socketsUtils;
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
@@ -49,18 +44,6 @@ public class DeleteCardCtrl {
      */
     public void deleteCard() {
         try {
-//            boolean wasDeleted = serverUtils.deleteCard(card);
-//
-//            if (wasDeleted) {
-//                boardOverviewCtrl.removeDeletedCard(card);
-//                closeConfirmation();
-//                boardOverviewCtrl.closeCardPopUp();
-//            } else {
-//                var alert = new Alert(Alert.AlertType.ERROR);
-//                alert.initModality(Modality.APPLICATION_MODAL);
-//                alert.setContentText("Card wasn't deleted, please try again");
-//                alert.showAndWait();
-//            }
             socketUtils.send("/app/cards/delete", card.getId());
             System.out.println("message been sent to delete with" + card.toString());
             closeConfirmation();
