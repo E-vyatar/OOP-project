@@ -143,7 +143,7 @@ public class ListController {
 
         long boardId = cardList.getBoardId();
         listRepository.deleteById(id);
-        listRepository.moveAllCardsHigherThanIndexDown(boardId, cardList.getIdx());
+        listRepository.moveAllCardListsHigherThanIndexDown(boardId, cardList.getIdx());
         logger.info("cardlist has been deleted from db");
 
         this.msgs.convertAndSend("/topic/lists/delete/" + boardId, id);

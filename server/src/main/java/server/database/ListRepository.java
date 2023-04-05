@@ -40,5 +40,5 @@ public interface ListRepository extends CrudRepository<CardList, Long> {
      */
     @Modifying
     @Query(value = "UPDATE CardList c SET c.idx = c.idx - 1 WHERE c.boardId = ?1 AND c.idx > ?2")
-    void moveAllCardsHigherThanIndexDown(long boardId, long idx);
+    void moveAllCardListsHigherThanIndexDown(long boardId, long idx);
 }

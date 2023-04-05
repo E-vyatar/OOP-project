@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 public class CardPopupCtrl {
 
@@ -20,7 +21,7 @@ public class CardPopupCtrl {
     private final CardsUtils cardsUtils;
     private final ServerUtils server;
     private Stage cardPopup;
-    private BoardOverviewCtrl boardOverviewCtrl;
+    private final BoardOverviewCtrl boardOverviewCtrl;
     @FXML
     private Parent root;
     @FXML
@@ -106,10 +107,16 @@ public class CardPopupCtrl {
         }
     }
 
+    /**
+     * Insert card's values in the fields of the pop-up
+     */
     private void createView() {
         cardTitle.setText(card.getTitle());
         cardsUtils.initializeListsDropDown(list);
-        list.getSelectionModel().select((int) card.getListId());
+        Optional<CardList> chosenList = boardOverviewCtrl.getAllLists().stream()
+                .filter(currentList -> currentList.getId() == card.getListId())
+                .findFirst();
+        chosenList.ifPresent(cardList -> list.getSelectionModel().select(cardList));
         cardDescription.setText("Here there will be a description.");
     }
 
