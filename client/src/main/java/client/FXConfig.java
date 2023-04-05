@@ -41,5 +41,6 @@ public class FXConfig implements Module {
         binder.bind(ServerUtils.class).in(Scopes.SINGLETON);
         binder.bind(DeleteCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(PollingUtils.class).in(Scopes.SINGLETON);
+        binder.bind(DeleteListPopupCtrl.class).in(Scopes.SINGLETON);
     }
 }

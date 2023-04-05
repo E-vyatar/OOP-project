@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
 import client.utils.SocketsUtils;
 import commons.CardList;
 import javafx.fxml.FXML;
@@ -14,7 +13,6 @@ import javax.inject.Inject;
 
 public class RenameListPopupCtrl {
 
-    private final ServerUtils server;
     private final BoardOverviewCtrl boardOverviewCtrl;
     private final SocketsUtils socket;
     private Stage renameListPopup;
@@ -27,15 +25,12 @@ public class RenameListPopupCtrl {
     /**
      * This constructs the controller for the pop-up to rename a list.
      *
-     * @param server            the SeverUtils
      * @param socketsUtils      the SocketUtils
      * @param boardOverviewCtrl the BoardOverview
      */
     @Inject
-    public RenameListPopupCtrl(ServerUtils server,
-                               SocketsUtils socketsUtils,
+    public RenameListPopupCtrl(SocketsUtils socketsUtils,
                                BoardOverviewCtrl boardOverviewCtrl) {
-        this.server = server;
         this.socket = socketsUtils;
         this.boardOverviewCtrl = boardOverviewCtrl;
     }
@@ -83,8 +78,6 @@ public class RenameListPopupCtrl {
         } else {
             CardList temp = controller.getCardList();
             temp.setTitle(title);
-//            temp = server.editCardList(temp);
-//            controller.setCardList(temp);
             socket.send("/app/lists/edit", temp);
             close();
         }
@@ -96,8 +89,10 @@ public class RenameListPopupCtrl {
      * TODO
      */
     public void delete() {
-        socket.send("/app/lists/delete", controller.getCardList().getId());
-        close();
+        CardList temp = controller.getCardList();
+        this.boardOverviewCtrl.showDeleteList(
+            temp.getTitle(),
+            temp.getId());
     }
 
     /**
