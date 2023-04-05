@@ -36,9 +36,7 @@ public class CardListView extends TitledPane {
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.controller = controller;
         // Only keep the cards that have the same id as this list.
-        this.cards = cards.filtered(
-            card -> card.getListId() == controller.getCardList().getId()
-        );
+        this.cards = cards;
 
         setDragEvents();
         createView();

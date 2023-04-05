@@ -96,8 +96,6 @@ public class RenameListPopupCtrl {
      * TODO
      */
     public void delete() {
-//        server.deleteCardList(controller.getCardList());
-//        boardOverviewCtrl.deleteList(controller);
         socket.send("/app/lists/delete", controller.getCardList().getId());
         close();
     }

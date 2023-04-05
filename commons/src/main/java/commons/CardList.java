@@ -15,7 +15,7 @@ public class CardList {
     private String title;
     private long idx;
 
-    @OneToMany(mappedBy = "listId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "listId", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderColumn(name = "idx")
     private List<Card> cards = new ArrayList<>();
 
