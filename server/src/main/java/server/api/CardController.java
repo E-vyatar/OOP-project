@@ -166,7 +166,7 @@ public class CardController {
      * @param id the id of the card
      * @return true if card doesn't exist in the database after deletion, false otherwise
      */
-    @MessageMapping("/cards/delete") //app/cards/{id}
+    @MessageMapping("/cards/delete") //app/cards/delete
     @SendTo("/topic/cards/delete")
     public Long deleteMessage(long id){
         cardRepository.deleteById(id);

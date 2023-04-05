@@ -240,7 +240,7 @@ class CardControllerTest {
         card.setListId(1);
         card.setBoardId(1);
 
-        MoveCardMessage moveCardMessage = new MoveCardMessage(1,1,1);
+        MoveCardMessage moveCardMessage = new MoveCardMessage(1,1,1, 1);
         String json = "{\"id\": 1, \"title\": \"Card1\", \"boardId\": 1, \"listId\": 1}";
         mockMvc.perform(post("/cards/" + "move")
                 .contentType(MediaType.APPLICATION_JSON)
