@@ -49,6 +49,7 @@ public class AddBoardCtrl {
     public void add() {
         long id = Long.parseLong(boardId.getText());;
         clientConfig.addBoard(server.getHostname(), id);
+        mainCtrl.saveConfig("The joined board might not show up next time.");
         mainCtrl.showListOfBoards();
     }
 }

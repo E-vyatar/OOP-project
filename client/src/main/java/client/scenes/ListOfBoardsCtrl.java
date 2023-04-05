@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -107,6 +108,7 @@ public class ListOfBoardsCtrl {
      * Remove a board
      *
      */
+    @FXML
     public void removeBoard() {
         Board board = this.boards.getSelectionModel().getSelectedItem();
         if (board == null){
@@ -115,6 +117,7 @@ public class ListOfBoardsCtrl {
             alert.show();
         } else {
             config.removeBoard(server.getHostname(), board.getId());
+            mainCtrl.saveConfig("Removed board might show up again next time you run talio.");
             this.boards.getSelectionModel().clearSelection();
             this.boards.getItems().remove(board);
         }
@@ -138,14 +141,13 @@ public class ListOfBoardsCtrl {
     }
 
     /**
-     * Delete a board.
-     * This will delete the board and remove it from your config.
+     * Delete a board. It's only called for the admin
+     *
      * @param board
      */
     public void deleteBoard(Board board) {
         long boardId = board.getId();
         server.deleteBoard(boardId);
-        config.removeBoard(server.getHostname(), boardId);
     }
     /**
      * Add a new board

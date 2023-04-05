@@ -20,8 +20,11 @@ import client.utils.PollingUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
+import java.io.File;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -85,6 +88,19 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+
+        ClientConfig clientConfig = INJECTOR.getInstance(ClientConfig.class);
+
+        try {
+            File configFile = clientConfig.getFile();
+            clientConfig.readConfig(configFile);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Couldn't read configuration file." +
+                    " You might have to re-join boards.");
+            alert.show();
+            e.printStackTrace();
+        }
 
         var overview = initializeOverview();
 

@@ -54,6 +54,7 @@ public class CreateBoardCtrl {
             board = server.addBoard(board);
             // Remember board
             config.addBoard(server.getHostname(), board.getId());
+            mainCtrl.saveConfig("The created board might not show up next time you run the talio.");
             mainCtrl.showListOfBoards();
         }
     }

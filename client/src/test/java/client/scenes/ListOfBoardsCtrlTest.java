@@ -14,7 +14,6 @@ import org.mockito.MockitoSession;
 import org.mockito.quality.Strictness;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class ListOfBoardsCtrlTest {
 
@@ -48,11 +47,9 @@ public class ListOfBoardsCtrlTest {
     }
     @Test
     public void deleteBoard() {
-        when(serverUtils.getHostname()).thenReturn("http://example.com:8181");
         Board board = new Board(91L, "Board title");
         listOfBoardsCtrl.deleteBoard(board);
         verify(serverUtils).deleteBoard(91L);
-        verify(clientConfig).removeBoard("http://example.com:8181", 91L);
     }
 
     @Test

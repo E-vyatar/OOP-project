@@ -15,10 +15,16 @@
  */
 package client.scenes;
 
+import client.ClientConfig;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
+import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
 
 public class MainCtrl {
 
@@ -36,7 +42,18 @@ public class MainCtrl {
     private AddBoardCtrl addBoardCtrl;
     private Scene addBoard;
 
+    private ClientConfig config;
+
     //=========================================================
+    /**
+     * The constructor
+     *
+     * @param config the client configuration.
+     */
+    @Inject
+    public MainCtrl(ClientConfig config) {
+        this.config = config;
+    }
 
     /**
      * This method initializes MainCtrl. The roots of the views are used to create scenes.
@@ -126,5 +143,25 @@ public class MainCtrl {
         addBoardCtrl.clear();
         primaryStage.setTitle("Add board");
         primaryStage.setScene(addBoard);
+    }
+
+    /**
+     * This method save the client config.
+     * If it fails, it will show an alert to the user.
+     *
+     * @param message an additional message to display.
+     *                This allows you to customize the message depending
+     *                on the effect of unsaved changes.
+     */
+    public void saveConfig(String message) {
+        try {
+            File configFile = config.getFile();
+            config.saveConfig(configFile);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Couldn't save changes");
+            alert.setContentText("Couldn't save changes. " + message);
+            alert.show();
+        }
     }
 }
