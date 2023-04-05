@@ -54,7 +54,7 @@ public class ListOfBoardsCtrlTest {
 
     @Test
     public void addBoard() {
-        listOfBoardsCtrl.addBoard();
+        listOfBoardsCtrl.joinBoard();
         verify(mainCtrl).showAddBoard();
     }
     @Test

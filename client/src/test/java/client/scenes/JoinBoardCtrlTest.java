@@ -13,7 +13,7 @@ import org.mockito.quality.Strictness;
 
 import static org.mockito.Mockito.verify;
 
-public class AddBoardCtrlTest {
+public class JoinBoardCtrlTest {
 
     @Mock
     private MainCtrl mainCtrl;
@@ -23,7 +23,7 @@ public class AddBoardCtrlTest {
     private ClientConfig clientConfig;
 
     @InjectMocks
-    private AddBoardCtrl addBoardCtrl;
+    private JoinBoardCtrl joinBoardCtrl;
 
     private MockitoSession mockito;
 
@@ -37,7 +37,7 @@ public class AddBoardCtrlTest {
 
     @Test
     public void testCancel(){
-        addBoardCtrl.cancel();
+        joinBoardCtrl.cancel();
         verify(mainCtrl).showListOfBoards();
     }
 

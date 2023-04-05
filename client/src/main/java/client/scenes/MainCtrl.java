@@ -39,7 +39,7 @@ public class MainCtrl {
     private CreateBoardCtrl createBoardCtrl;
     private Scene createBoard;
 
-    private AddBoardCtrl addBoardCtrl;
+    private JoinBoardCtrl joinBoardCtrl;
     private Scene addBoard;
 
     private ClientConfig config;
@@ -71,7 +71,7 @@ public class MainCtrl {
                            Pair<ConnectServerCtrl, Parent> connectServerCtrl,
                            Pair<ListOfBoardsCtrl, Parent> listOfBoards,
                            Pair<CreateBoardCtrl, Parent> createBoard,
-                           Pair<AddBoardCtrl, Parent> addBoard) {
+                           Pair<JoinBoardCtrl, Parent> addBoard) {
 
         this.primaryStage = primaryStage;
 
@@ -88,7 +88,7 @@ public class MainCtrl {
         this.createBoardCtrl = createBoard.getKey();
 
         this.addBoard = new Scene(addBoard.getValue());
-        this.addBoardCtrl = addBoard.getKey();
+        this.joinBoardCtrl = addBoard.getKey();
 
         showConnect();
         this.primaryStage.show();
@@ -140,7 +140,7 @@ public class MainCtrl {
      * Shows the UI to add a board, so it's visible in your list.
      */
     public void showAddBoard() {
-        addBoardCtrl.clear();
+        joinBoardCtrl.clear();
         primaryStage.setTitle("Add board");
         primaryStage.setScene(addBoard);
     }

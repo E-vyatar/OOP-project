@@ -6,7 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="client.scenes.AddBoardCtrl"
+      fx:controller="client.scenes.JoinBoardCtrl"
       prefHeight="400.0" prefWidth="600.0"
       stylesheets="@../styles/GeneralStyle.css">
 
@@ -26,7 +26,7 @@
     <bottom>
         <HBox styleClass="buttons">
             <Button onMouseClicked="#cancel">cancel</Button>
-            <Button onMouseClicked="#add">add board</Button>
+            <Button onMouseClicked="#join">join board</Button>
         </HBox>
     </bottom>
 </BorderPane>

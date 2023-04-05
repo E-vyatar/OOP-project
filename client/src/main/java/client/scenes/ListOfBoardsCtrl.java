@@ -12,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
-import java.io.*;
 import java.util.List;
 
 /**
@@ -150,11 +149,11 @@ public class ListOfBoardsCtrl {
         server.deleteBoard(boardId);
     }
     /**
-     * Add a new board
+     * Go to the interface to join a board
      *
      */
     @FXML
-    public void addBoard() {
+    public void joinBoard() {
         mainCtrl.showAddBoard();
     }
 

@@ -26,7 +26,7 @@
             <HBox styleClass="buttons" fx:id="userButtons">
                 <Button onMouseClicked="#disconnect">disconnect</Button>
                 <Button onMouseClicked="#removeBoard">remove board</Button>
-                <Button onMouseClicked="#addBoard">add board</Button>
+                <Button onMouseClicked="#joinBoard">join board</Button>
                 <Button onMouseClicked="#newBoard">create board</Button>
                 <Button onMouseClicked="#openBoard">open board</Button>
             </HBox>

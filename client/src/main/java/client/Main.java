@@ -117,8 +117,8 @@ public class Main extends Application {
                 CreateBoardCtrl.class,
                 "client", "scenes", "CreateBoard.fxml");
         var addBoard = FXML.load(
-                AddBoardCtrl.class,
-                "client", "scenes", "AddBoard.fxml"
+                JoinBoardCtrl.class,
+                "client", "scenes", "JoinBoard.fxml"
         );
 
         mainCtrl.initialize(primaryStage,

@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 
 import javax.inject.Inject;
 
-public class AddBoardCtrl {
+public class JoinBoardCtrl {
 
     private final MainCtrl mainCtrl;
     private final ClientConfig clientConfig;
@@ -23,7 +23,7 @@ public class AddBoardCtrl {
      * @param server - the server utils
      */
     @Inject
-    public AddBoardCtrl(MainCtrl mainCtrl, ClientConfig clientConfig, ServerUtils server) {
+    public JoinBoardCtrl(MainCtrl mainCtrl, ClientConfig clientConfig, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.clientConfig = clientConfig;
         this.server = server;
@@ -46,7 +46,7 @@ public class AddBoardCtrl {
     /**
      * Add the board.
      */
-    public void add() {
+    public void join() {
         long id = Long.parseLong(boardId.getText());;
         clientConfig.addBoard(server.getHostname(), id);
         mainCtrl.saveConfig("The joined board might not show up next time.");
