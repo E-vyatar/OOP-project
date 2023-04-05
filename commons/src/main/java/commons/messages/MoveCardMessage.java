@@ -10,6 +10,10 @@ public class MoveCardMessage implements Serializable {
     private long newIndex;
     private boolean moved = false;
 
+    /**
+     * Empty constructor
+     */
+    public MoveCardMessage() {}
 
     /**
      * Constructor
