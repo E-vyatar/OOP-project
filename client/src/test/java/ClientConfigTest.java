@@ -59,6 +59,9 @@ public class ClientConfigTest {
 
     @Test
     public void testEqualsTrue() {
+        assertEquals(clientConfig, clientConfig,
+                "clientconfigs should always be equal to themselves");
+
         ClientConfig clientConfig1 = new ClientConfig();
         ClientConfig clientConfig2 = new ClientConfig();
 
