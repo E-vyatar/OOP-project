@@ -191,14 +191,14 @@ public class CardController {
      * Move a card
      * <p>
      * Transactional annotation is used to ensure that the database is updated in a consistent way
-     *
+     * </p>
      * @param message the message containing the card id, the list id, the board id and the index
      * @return true if the card was moved successfully, false otherwise
      */
     @MessageMapping("/cards/move")
     @SendTo("/topic/cards/move")
     @Transactional
-    public MoveCardMessage moveCardMessage(@RequestBody MoveCardMessage message) {
+    public MoveCardMessage moveCardMessage(MoveCardMessage message) {
 
         long cardId = message.getCardId(), newListId = message.getNewListId(), newIndex =
             message.getNewIndex();
@@ -207,36 +207,33 @@ public class CardController {
         logger.info("moveCard() called with: cardId = [" + cardId + "], listId = [" + newListId +
             "], newIndex = [" + newIndex + "]");
 
-        // check if cardId is valid
-        if (cardRepository.findById(cardId).isPresent()) {
-            // get the card
-            Card card = cardRepository.findById(cardId).get();
+        Optional<Card> cardOptional = cardRepository.findById(cardId);
 
+        // check if cardId is valid
+        if (cardOptional.isPresent()) {
+            // get the card
+            Card card = cardOptional.get();
             //check if the card is being moved in the same list
             if (newListId == card.getListId()) {
                 // check if the card is being moved to the same index
                 if (newIndex == card.getIdx()) {
                     message.setMoved(true);
+                    logger.info("returned");
+                    return message;
                 }
-
                 // check if the card is being moved to a higher index
                 if (newIndex > card.getIdx()) {
                     // update all cards with index between old and new index
                     cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
-
-
                 } else {
                     // update all cards with index between new and old index
                     cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
-
-
                 }
             } else {
                 // move all cards in the old list down
                 cardRepository.moveAllCardsHigherThanIndexDown(card.getListId(), card.getIdx());
                 //move all cards in the new list up, to make room for the new card
                 cardRepository.moveAllCardsHigherEqualThanIndexUp(newListId, newIndex);
-
                 // update the list id of the card
                 card.setListId(newListId);
             }
@@ -244,6 +241,7 @@ public class CardController {
             card.setIdx(newIndex);
             cardRepository.save(card);
             message.setMoved(true);
+            return message;
         }
         message.setMoved(false);
         return message;
