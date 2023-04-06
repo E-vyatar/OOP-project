@@ -76,7 +76,8 @@ public class Main extends Application {
                 "client", "scenes", "EditBoard.fxml"
         );
 
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl, deleteListCtrl, editBoard);
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl,
+            deleteListCtrl, editBoard);
 
         return overview;
     }
