@@ -1,18 +1,19 @@
 package client.scenes;
 
+import client.ClientConfig;
 import client.utils.ServerUtils;
 import client.utils.SocketsUtils;
 import commons.Board;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import org.apache.commons.lang3.NotImplementedException;
+import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The controller for the list of boards.
@@ -26,8 +27,16 @@ public class ListOfBoardsCtrl {
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
     private final SocketsUtils sockets;
+    private final ClientConfig config;
     @FXML
     private ListView<Board> boards;
+
+    @FXML
+    private Label adminText;
+    @FXML
+    private HBox userButtons;
+    @FXML
+    private HBox adminButtons;
 
     /**
      * This constructs an instance of ListOfBoards.
@@ -35,12 +44,17 @@ public class ListOfBoardsCtrl {
      * @param mainCtrl    the main controller
      * @param server the server utils - used to load list of boards
      * @param sockets the socket utils - used to disconnect connection
+     * @param clientConfig the client configuration - used to get list of boards to retrieve
      */
     @Inject
-    public ListOfBoardsCtrl(MainCtrl mainCtrl, ServerUtils server, SocketsUtils sockets) {
+    public ListOfBoardsCtrl(MainCtrl mainCtrl,
+                            ServerUtils server,
+                            SocketsUtils sockets,
+                            ClientConfig clientConfig) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.sockets = sockets;
+        this.config = clientConfig;
     }
 
 
@@ -49,31 +63,40 @@ public class ListOfBoardsCtrl {
      */
     public void initialize() {
         this.boards.setCellFactory(param -> {
-            /*BoardCellCtrl boardCellCtrl = new BoardCellCtrl();
-            return boardCellCtrl.getCell();*/
             return new BoardCell();
         });
-
-        // When you select (i.e.) click a board, open that board.
-        this.boards.getSelectionModel().selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    if (newValue != null) {
-                        long boardId = newValue.getId();
-                        mainCtrl.showOverview(boardId);
-                    }
-                });
     }
     /**
      * Refresh the controller.
      * This loads data from the backend and sets the listView.
      */
     public void refresh() {
-        // Make sure it's unselected, so when you return to this view
-        // it looks the same as before.
-        this.boards.getSelectionModel().clearSelection();
+        List<Board> boards;
+        if (isAdmin()) {
+            boards = server.getAllBoards();
+        } else {
+            boards = server.getAllBoards(config.getIds(server.getHostname()));
+            removeDeletedBoards(boards);
+        }
 
-        ObservableList<Board> data = FXCollections.observableList(server.getBoards());
+        ObservableList<Board> data = FXCollections.observableList(boards);
         this.boards.setItems(data);
+
+        if (isAdmin()) {
+            adminText.setVisible(true);
+            adminText.setManaged(true);
+            adminButtons.setManaged(true);
+            adminButtons.setVisible(true);
+            userButtons.setManaged(false);
+            userButtons.setVisible(false);
+        } else {
+            adminText.setVisible(false);
+            adminText.setManaged(false);
+            adminButtons.setManaged(false);
+            adminButtons.setVisible(false);
+            userButtons.setManaged(true);
+            userButtons.setVisible(true);
+        }
     }
 
     /**
@@ -83,28 +106,113 @@ public class ListOfBoardsCtrl {
      * @param mouseEvent the mouse event - unused
      */
     public void disconnect(MouseEvent mouseEvent) {
-        sockets.getSession().disconnect();
+        sockets.disconnect();
         System.out.println("The client has been disconnected");
 
         mainCtrl.showConnect();
     }
+    /**
+     * Remove a board
+     *
+     */
+    @FXML
+    public void removeBoard() {
+        Board board = this.boards.getSelectionModel().getSelectedItem();
+        if (board == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please select a board to remove from your list");
+            alert.show();
+        } else {
+            config.removeBoard(server.getHostname(), board.getId());
+            mainCtrl.saveConfig("Removed board might show up again next time you run talio.");
+            this.boards.getSelectionModel().clearSelection();
+            this.boards.getItems().remove(board);
+        }
+    }
+    /**
+     * delete a board
+     *
+     */
+    @FXML
+    private void deleteBoard() {
+        Board board = this.boards.getSelectionModel().getSelectedItem();
+        if (board == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please select a board to delete from your list");
+            alert.show();
+        } else {
+            deleteBoard(board);
+            this.boards.getSelectionModel().clearSelection();
+            this.boards.getItems().remove(board);
+        }
+    }
 
     /**
-     * Add a new board
+     * Delete a board. It's only called for the admin
      *
-     * @param mouseEvent the mouse event
+     * @param board
      */
-    public void addBoard(MouseEvent mouseEvent) {
-        throw new NotImplementedException();
+    public void deleteBoard(Board board) {
+        long boardId = board.getId();
+        server.deleteBoard(boardId);
+    }
+
+    /**
+     * Remove boards that have been deleted from the clientconfig.
+     * It also informs the user that these boards have been deleted.
+     *
+     * @param boards boards received from the server (i.e. the boards that still exist)
+     */
+    public void removeDeletedBoards(List<Board> boards) {
+        List<Long> ids = config.getIds(server.getHostname());
+        List<Long> deleted = new ArrayList<>();
+        for (Long id : ids) {
+            if (!boards.stream().anyMatch(board -> board.getId() == id)) {
+                deleted.add(id);
+            }
+        }
+        int numDeleted = deleted.size();
+        if (numDeleted > 0) {
+            ids.removeAll(deleted);
+            mainCtrl.showAlert(Alert.AlertType.INFORMATION,
+                    numDeleted + " of your board(s) have been deleted",
+                    numDeleted + " of the board(s) you have joined have been deleted " +
+                            "since the last time you viewed this screen. " +
+                            "You will not be able to see these boards again.");
+        }
+    }
+
+    /**
+     * Go to the interface to join a board
+     *
+     */
+    @FXML
+    public void joinBoard() {
+        mainCtrl.showJoinBoard();
     }
 
     /**
      * Go to the interface to create a new board
-     *
-     * @param mouseEvent the mouse event
      */
-    public void newBoard(MouseEvent mouseEvent) {
+    @FXML
+    public void newBoard() {
         mainCtrl.showCreateBoard();
+    }
+
+    /**
+     * Open a board
+     */
+    @FXML
+    public void openBoard() {
+        Board board = this.boards.getSelectionModel().getSelectedItem();
+        if (board == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Please select a board to open");
+            alert.show();
+        } else {
+            long boardId = board.getId();
+            mainCtrl.showOverview(boardId);
+        }
     }
 
     static class BoardCell extends ListCell<Board> {
@@ -120,5 +228,12 @@ public class ListOfBoardsCtrl {
                 this.getStyleClass().add("board");
             }
         }
+    }
+
+    /**
+     * Check if the user is admin
+     */
+    private boolean isAdmin() {
+        return server.hasPassword();
     }
 }

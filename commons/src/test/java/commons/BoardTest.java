@@ -61,7 +61,7 @@ class BoardTest {
 
     @Test
     void testToString() {
-        assertEquals("Board{id=0, cardLists=[]}", board1.toString());
+        assertEquals("Board{id=0, title=Title 1, cardLists=[]}", board1.toString());
     }
     @Test
     void getTitle() {

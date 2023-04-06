@@ -15,10 +15,16 @@
  */
 package client.scenes;
 
+import client.ClientConfig;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
+import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
 
 public class MainCtrl {
 
@@ -33,7 +39,21 @@ public class MainCtrl {
     private CreateBoardCtrl createBoardCtrl;
     private Scene createBoard;
 
+    private JoinBoardCtrl joinBoardCtrl;
+    private Scene joinBoard;
+
+    private ClientConfig config;
+
     //=========================================================
+    /**
+     * The constructor
+     *
+     * @param config the client configuration.
+     */
+    @Inject
+    public MainCtrl(ClientConfig config) {
+        this.config = config;
+    }
 
     /**
      * This method initializes MainCtrl. The roots of the views are used to create scenes.
@@ -44,12 +64,14 @@ public class MainCtrl {
      * @param connectServerCtrl a pair of the connectServerCtrl and the root of the to-be scene.
      * @param listOfBoards a pair of the ListOfBoardsCtrl and the root of the to-be scene.
      * @param createBoard a pair of the CreateBoardCtrl and the root of the to-be scene.
+     * @param joinBoard a pair of the AddBoardCtrl and the root of the to-be scene.
      */
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<ConnectServerCtrl, Parent> connectServerCtrl,
                            Pair<ListOfBoardsCtrl, Parent> listOfBoards,
-                           Pair<CreateBoardCtrl, Parent> createBoard) {
+                           Pair<CreateBoardCtrl, Parent> createBoard,
+                           Pair<JoinBoardCtrl, Parent> joinBoard) {
 
         this.primaryStage = primaryStage;
 
@@ -64,6 +86,9 @@ public class MainCtrl {
 
         this.createBoard = new Scene(createBoard.getValue());
         this.createBoardCtrl = createBoard.getKey();
+
+        this.joinBoard = new Scene(joinBoard.getValue());
+        this.joinBoardCtrl = joinBoard.getKey();
 
         showConnect();
         this.primaryStage.show();
@@ -108,5 +133,49 @@ public class MainCtrl {
         createBoardCtrl.clear();
         primaryStage.setTitle("Create board");
         primaryStage.setScene(createBoard);
+    }
+
+    /**
+
+     * Shows the UI to add a board, so it's visible in your list.
+     */
+    public void showJoinBoard() {
+        joinBoardCtrl.clear();
+        primaryStage.setTitle("Join board");
+        primaryStage.setScene(joinBoard);
+    }
+
+    /**
+     * This method save the client config.
+     * If it fails, it will show an alert to the user.
+     *
+     * @param message an additional message to display.
+     *                This allows you to customize the message depending
+     *                on the effect of unsaved changes.
+     */
+    public void saveConfig(String message) {
+        try {
+            File configFile = config.getFile();
+            config.saveConfig(configFile);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Couldn't save changes");
+            alert.setContentText("Couldn't save changes. " + message);
+            alert.show();
+        }
+    }
+
+    /**
+     * This shows an alert.
+     * his method exists, so code can be decoupled and the controller can be better tested.
+     * @param alertType the type of the alert
+     * @param headerText the header text
+     * @param contentText the body text
+     */
+    public void showAlert(Alert.AlertType alertType, String headerText, String contentText) {
+        Alert alert = new Alert(alertType);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.show();
     }
 }

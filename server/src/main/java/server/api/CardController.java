@@ -307,8 +307,6 @@ public class CardController {
     @GetMapping(value = "updates/{id}", produces = "application/json")
     public DeferredResult<Card> longPollForUpdates(@PathVariable("id") long boardId) {
 
-        logger.info("Received polling request");
-
         var timeout = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
 

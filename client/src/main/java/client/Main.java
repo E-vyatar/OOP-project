@@ -19,7 +19,12 @@ import client.scenes.*;
 import client.utils.PollingUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+
+import java.io.File;
 
 import static com.google.inject.Guice.createInjector;
 
@@ -38,6 +43,45 @@ public class Main extends Application {
     }
 
     /**
+     * This method initializes everything related to the board overview.
+     * @return a pair of the board overview ctrl and the root node of the scene.
+     */
+    private Pair<BoardOverviewCtrl, Parent> initializeOverview() {
+        var overview = FXML.load(
+                BoardOverviewCtrl.class,
+                "client", "scenes", "boardOverview.fxml");
+
+        var cardPopup = FXML.load(
+                CardPopupCtrl.class,
+                "client", "scenes", "CardPopup.fxml");
+
+        var deleteListCtrl = FXML.load(
+                DeleteListPopupCtrl.class,
+                "client", "scenes", "DeleteListPopup.fxml");
+
+        var renameListPopup = FXML.load(
+                RenameListPopupCtrl.class,
+                "client", "scenes", "RenameListPopup.fxml");
+
+        var addCard = FXML.load(
+                AddCardCtrl.class,
+                "client", "scenes", "AddCard.fxml");
+
+        var deleteCtrl = FXML.load(
+                DeleteCardCtrl.class,
+                "client", "scenes", "DeleteCard.fxml");
+
+        var editBoard = FXML.load(
+                EditBoardCtrl.class,
+                "client", "scenes", "EditBoard.fxml"
+        );
+
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl, deleteListCtrl, editBoard);
+
+        return overview;
+    }
+
+    /**
      * This method is called by JavaFX and starts the program.
      *
      * @param primaryStage the primary stage for this application, onto which
@@ -48,33 +92,20 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        var overview = FXML.load(
-            BoardOverviewCtrl.class,
-            "client", "scenes", "boardOverview.fxml");
+        ClientConfig clientConfig = INJECTOR.getInstance(ClientConfig.class);
 
-        var cardPopup = FXML.load(
-                CardPopupCtrl.class,
-                "client", "scenes", "CardPopup.fxml");
+        try {
+            File configFile = clientConfig.getFile();
+            clientConfig.readConfig(configFile);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Couldn't read configuration file." +
+                    " You might have to re-join boards.");
+            alert.show();
+            e.printStackTrace();
+        }
 
-        var deleteListCtrl = FXML.load(
-            DeleteListPopupCtrl.class,
-            "client", "scenes", "DeleteListPopup.fxml");
-
-        var renameListPopup = FXML.load(
-            RenameListPopupCtrl.class,
-            "client", "scenes", "RenameListPopup.fxml");
-
-        var addCard = FXML.load(
-            AddCardCtrl.class,
-            "client", "scenes", "AddCard.fxml");
-
-        var deleteCtrl = FXML.load(
-                DeleteCardCtrl.class,
-                "client", "scenes", "DeleteCard.fxml");
-
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup,
-            deleteCtrl, deleteListCtrl);
-
+        var overview = initializeOverview();
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
@@ -88,12 +119,17 @@ public class Main extends Application {
         var createBoard = FXML.load(
                 CreateBoardCtrl.class,
                 "client", "scenes", "CreateBoard.fxml");
+        var addBoard = FXML.load(
+                JoinBoardCtrl.class,
+                "client", "scenes", "JoinBoard.fxml"
+        );
 
         mainCtrl.initialize(primaryStage,
                 overview,
                 connectServerCtrl,
                 listOfBoardsCtrl,
-                createBoard);
+                createBoard,
+                addBoard);
     }
 
     /**
@@ -103,7 +139,7 @@ public class Main extends Application {
     @Override
     public void stop() {
         PollingUtils pollingUtils = INJECTOR.getInstance(PollingUtils.class);
-        pollingUtils.disconnect();
+        pollingUtils.shutdown();
     }
 
 }
