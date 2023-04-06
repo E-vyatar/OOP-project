@@ -86,9 +86,10 @@ public class JoinBoardCtrl {
     public void joinBoard(long boardId) {
         if (clientConfig.hasBoard(server.getHostname(), boardId)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("You already have joined this board.");
+            alert.setHeaderText("You have already joined this board.");
             alert.setContentText("You can't join an already joined board. " +
-                    "Please join a different board");
+                    "If you meant to join a new board, " +
+                    "please check you entered the correct");
             alert.show();
         } else {
             boolean exists = server.boardExists(boardId);
@@ -100,7 +101,7 @@ public class JoinBoardCtrl {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setHeaderText("Board not found");
                 alert.setContentText("Can't find the board for id " + boardId +
-                        ". Verify you have entered the board id.");
+                        ". Verify you have entered the correct board id.");
                 alert.show();
             }
         }
