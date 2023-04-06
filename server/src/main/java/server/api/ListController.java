@@ -42,7 +42,7 @@ public class ListController {
     }
 
     /**
-     * Creates new lists
+     * Websocket endpoint for creating.
      *
      * @param cardList list to be created
      * @return the created list
@@ -57,6 +57,12 @@ public class ListController {
         return temp;
     }
 
+    /**
+     * Creates new lists
+     *
+     * @param cardList list to be created
+     * @return the created list
+     */
     @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
     public CardList createList(@RequestBody CardList cardList) {
         logger.info("createList() called with: cardList = [" + cardList + "]");
