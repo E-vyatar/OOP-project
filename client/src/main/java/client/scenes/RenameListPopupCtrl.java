@@ -4,6 +4,7 @@ import client.scenes.service.RenameListService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -12,6 +13,8 @@ import javax.inject.Inject;
 
 public class RenameListPopupCtrl {
 
+    private static final String redBorder = "-fx-border-color: red";
+    private static final String normalBorder = "-fx-border-color: inherit";
     private final BoardOverviewCtrl boardOverviewCtrl;
 
     /**
@@ -24,6 +27,8 @@ public class RenameListPopupCtrl {
     private Parent root;
     @FXML
     private TextField listTitle;
+    @FXML
+    private Label errorMessage;
 
     /**
      * This constructs the controller for the pop-up to rename a list.
@@ -58,6 +63,8 @@ public class RenameListPopupCtrl {
     public void show() {
         service.setCardList(controller.getCardList());
         listTitle.setText(service.getTitle());
+        errorMessage.setText("");
+        listTitle.setStyle(normalBorder);
         this.renameListPopup.show();
     }
 
@@ -76,9 +83,14 @@ public class RenameListPopupCtrl {
      */
     public void save() {
         String title = listTitle.getText();
-        listTitle.setStyle("-fx-border-color: inherit");
-        if (title.isEmpty()) {
-            listTitle.setStyle("-fx-border-color: red");
+        listTitle.setStyle(normalBorder);
+        if (title.isEmpty() || title.length() > 255) {
+            listTitle.setStyle(redBorder);
+            if (title.length() > 255){
+                errorMessage.setText("Title is too long!");
+            } else {
+                errorMessage.setText("Title is empty!");
+            }
         } else {
             service.save(title);
             close();
