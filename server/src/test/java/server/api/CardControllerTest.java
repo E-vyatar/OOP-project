@@ -233,8 +233,27 @@ class CardControllerTest {
     }
 
     @Test
-    void moveCardSameIndex() {
+    void moveCardSameIndex() throws Exception {
+        Card card = new Card();
+        card.setId(1);
+        card.setIdx(0);
+        card.setTitle("Card1");
+        card.setListId(1);
+        card.setBoardId(1);
 
+        MoveCardMessage moveCardMessage = new MoveCardMessage(1,1,1, 1);
+        String json = "{\"id\": 1, \"title\": \"Card1\", \"boardId\": 1, \"listId\": 1}";
+        mockMvc.perform(post("/cards/" + "move")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(card.getId()))
+                .andExpect(jsonPath("$.title").value(card.getTitle()))
+                .andExpect(jsonPath("$.boardId").value(card.getBoardId()))
+                .andExpect(jsonPath("$.listId").value(card.getListId()))
+                .andExpect(jsonPath("$.idx").value(card.getIdx()));
+
+        when(cardRepository.findById(card.getId())).thenReturn(Optional.of(card));
+        //when(cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), card.getIdx())).thenReturn();
     }
 
     @Test

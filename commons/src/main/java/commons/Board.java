@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "board_id_seq")
-    @SequenceGenerator(name = "board_id_seq", initialValue = 10, allocationSize = 1)
+    @SequenceGenerator(name = "board_id_seq", initialValue = 2, allocationSize = 1)
     private long id;
     private String title;
 

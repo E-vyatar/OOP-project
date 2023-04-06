@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import server.database.ListRepository;
@@ -26,7 +27,8 @@ public class ListControllerTest {
 
     @Mock
     private ListRepository listRepository;
-
+    @Mock
+    private SimpMessagingTemplate msg;
     @InjectMocks
     private ListController listController;
 
