@@ -89,7 +89,7 @@ public class JoinBoardCtrl {
                     "You have already joined this board.",
                     "You can't join an already joined board. " +
                     "If you meant to join a new board, " +
-                    "please check you entered the correct");
+                    "please check you entered the correct ID");
         } else {
             boolean exists = server.boardExists(boardId);
             if (exists) {
