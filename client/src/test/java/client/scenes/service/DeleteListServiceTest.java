@@ -48,6 +48,11 @@ class DeleteListServiceTest {
         assertEquals("Are you sure you want to delete 'List Name' list? " +
             "It will delete all cards within it.",
             DeleteListService.generateLabelText("List Name"));
+        assertEquals("Are you sure you want to delete 'pngGz74DP4cs2RWUsgKQoPh4k0i7sv12h" +
+                "hqWPBlltjxkKBgMct2hhqWPBllt...' list? " +
+            "It will delete all cards within it.",
+            DeleteListService.generateLabelText("pngGz74DP4cs2RWUsgKQoPh4k0i7sv12hhq" +
+                "WPBlltjxkKBgMct2hhqWPBlltjxkKBgMctpngGz74DP4cs2RWUsgKQoPh4k0"));
     }
 
     /**
