@@ -8,6 +8,7 @@ import com.google.inject.Inject;
  * Used to separate testable methods from JavaFX.
  */
 public class DeleteListService {
+    private static final int maxTitleLength = 60;
     private long listId;
     private final SocketsUtils socket;
 
@@ -28,6 +29,9 @@ public class DeleteListService {
      * @return a sting that will be shown on label
      */
     public static String generateLabelText(String listTitle) {
+        if (listTitle.length() > maxTitleLength) {
+            listTitle = listTitle.substring(0, maxTitleLength) + "...";
+        }
         return "Are you sure you want to delete '" + listTitle + "' list? " +
             "It will delete all cards within it.";
     }
