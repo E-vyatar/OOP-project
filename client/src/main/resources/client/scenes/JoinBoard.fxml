@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.*?>
+
+<?import javafx.scene.text.Text?>
+<BorderPane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="client.scenes.JoinBoardCtrl"
+      prefHeight="400.0" prefWidth="600.0"
+      stylesheets="@../styles/GeneralStyle.css">
+
+    <top>
+        <HBox alignment="CENTER">
+            <Label styleClass="instruction">Join a board</Label>
+        </HBox>
+    </top>
+    <center>
+        <VBox maxWidth="400">
+            <Region VBox.vgrow="ALWAYS"/>
+            <Label wrapText="true">Join a board of a friend by entering their board's ID below.
+                You can find this ID next to a board's title, or you can copy it from the menu where you edit the board title.</Label>
+            <Region prefHeight="16.0" />
+            <Label style="-fx-font-size: 1.5em;">Board ID:</Label>
+            <TextField fx:id="boardId"/>
+            <Region VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="buttons">
+            <Button onMouseClicked="#cancel">cancel</Button>
+            <Button onMouseClicked="#join">join board</Button>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="root" maxHeight="1.7976931348623157E308" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditBoardCtrl"
+            stylesheets="@../styles/GeneralStyle.css">
+    <bottom>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <buttons>
+                <Button styleClass="deleteButton" mnemonicParsing="false" onAction="#delete" text="Delete" />
+                <Button styleClass="cancelButton" mnemonicParsing="false" onAction="#close" text="Cancel" />
+                <Button styleClass="saveButton" mnemonicParsing="false" onAction="#save" text="Save" />
+            </buttons>
+            <BorderPane.margin>
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+            </BorderPane.margin>
+        </ButtonBar>
+    </bottom>
+    <center>
+        <Pane maxHeight="1.7976931348623157E308" BorderPane.alignment="CENTER">
+            <VBox maxHeight="1.7976931348623157E308">
+                <padding>
+                    <Insets bottom="8.0" left="8.0" right="20.0" top="8.0" />
+                </padding>
+                <Label prefHeight="26.0" text="Board name: "/>
+                <TextField fx:id="boardTitle" prefHeight="26.0" prefWidth="222.0">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </TextField>
+                <Label prefHeight="26.0" text="Board ID (share this with others so they can join your board):" />
+                <TextField editable="false" fx:id="boardId" />
+            </VBox>
+        </Pane>
+    </center>
+</BorderPane>

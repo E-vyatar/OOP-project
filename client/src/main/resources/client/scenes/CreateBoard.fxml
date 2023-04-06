@@ -7,15 +7,19 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="client.scenes.CreateBoardCtrl"
             prefHeight="400.0" prefWidth="600.0"
-            stylesheets="@../styles/ListOfBoards.css">
+            stylesheets="@../styles/GeneralStyle.css">
     <top>
         <HBox alignment="CENTER">
             <Label styleClass="instruction">Create new board</Label>
         </HBox>
     </top>
     <center>
-        <Label>Title:</Label>
-        <TextField fx:id="boardTitle"></TextField>
+        <VBox maxWidth="400">
+            <Region VBox.vgrow="ALWAYS" />
+            <Label>Title:</Label>
+            <TextField fx:id="boardTitle"/>
+            <Region VBox.vgrow="ALWAYS" />
+        </VBox>
     </center>
     <bottom>
         <HBox styleClass="buttons">

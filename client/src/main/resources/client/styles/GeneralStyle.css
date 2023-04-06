@@ -1,0 +1,47 @@
+.editButton {
+    -fx-background-color: none;
+    -fx-border-color: #dadada;
+    -fx-border-radius: 3;
+}
+.editButton:pressed {
+    -fx-background-color: #435f9c;
+}
+
+.deleteButton {
+    -fx-background-color: #ce5858;
+}
+.deleteButton:pressed {
+    -fx-background-color: #9b4747;
+}
+
+.saveButton {
+    -fx-background-color:#419841;
+}
+
+.saveButton:pressed {
+    -fx-background-color: #317031;
+}
+
+.cancelButton {
+    -fx-background-color: grey;
+}
+
+.cancelButton:pressed {
+    -fx-background-color: #646363;
+}
+
+.instruction {
+    -fx-font-size: 4em;
+}
+
+.buttons {
+    -fx-padding: 1em 1em 1em 1em;
+    -fx-spacing: 2em;
+    -fx-alignment: center;
+}
+#adminText {
+    -fx-text-fill: red;
+}
+.invalid {
+    -fx-border-color: red;
+}

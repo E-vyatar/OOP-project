@@ -29,6 +29,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -54,9 +55,19 @@ public class BoardOverviewCtrl {
     private DeleteCardCtrl deleteCardCtrl;
     private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
+    private EditBoardCtrl editBoardCtrl;
+    private Scene editBoard;
+
+    private Stage popup;
+
     private Board board;
+
     @FXML
     private HBox listOfLists;
+    @FXML
+    private Label boardTitle;
+    @FXML
+    private Label boardId;
 
     /**
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
@@ -84,12 +95,14 @@ public class BoardOverviewCtrl {
      * @param cardPopup       a pair of the CardPopupCtrl and the root of the to-be scene
      * @param addCard         a pair of the AddCardCtrl and the root of the to-be scene
      * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
-     * @param deleteCard a pair of the DeleteCardCtrl and the root of the to-be scene
+     * @param deleteCard      a pair of the DeleteCardCtrl and the root of the to-be scene
+     * @param editBoard       a pair of the EditboardCtrl and the root of the to-be scene
      */
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup,
-                           Pair<DeleteCardCtrl, Parent> deleteCard) {
+                           Pair<DeleteCardCtrl, Parent> deleteCard,
+                           Pair<EditBoardCtrl, Parent> editBoard) {
         this.cardPopupCtrl = cardPopup.getKey();
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
@@ -97,6 +110,13 @@ public class BoardOverviewCtrl {
         this.deleteCardCtrl = deleteCard.getKey();
         this.deleteCard = new Scene(deleteCard.getValue());
 
+        this.editBoardCtrl = editBoard.getKey();
+        this.editBoard = new Scene(editBoard.getValue());
+
+        this.popup = new Stage();
+        this.popup.initModality(Modality.APPLICATION_MODAL);
+        this.popup.setMinWidth(240.0);
+        this.popup.setMinHeight(200.0);
     }
 
     /**
@@ -117,6 +137,20 @@ public class BoardOverviewCtrl {
                 }
             }
         }
+    }
+
+    /**
+     * Update board details (i.e. the board title)
+     * @param updatedBoard the board with the new details - only the title is checked
+     */
+    public void updateBoard(Board updatedBoard) {
+        // Stopping long polling might have a delay,
+        // so let's check the board id just to be sure.
+        if (board.getId() != updatedBoard.getId()) {
+            return;
+        }
+        this.boardTitle.setText(updatedBoard.getTitle());
+        this.board.setTitle(updatedBoard.getTitle());
     }
 
     /**
@@ -170,14 +204,15 @@ public class BoardOverviewCtrl {
         // Get board with ID = 0
         board = server.getBoard(boardId);
 
-        this.polling.pollForCardUpdates(this);
+        this.polling.pollForUpdates("cards/updates/" + boardId, this::updateCard, Card.class);
+        this.polling.pollForUpdates("boards/updates/" + boardId, this::updateBoard, Board.class);
+
         socketsUtils.registerMessages("/topic/cards/new/" + boardId, Card.class, newCard -> {
             System.out.println("added new card " + newCard);
             for (CardListViewCtrl cardListViewCtrl : this.cardListViewCtrlList) {
                 if (cardListViewCtrl.getCardList().getId() == newCard.getListId()) {
                     // Append new card to the end.
                     cardListViewCtrl.getObservableCards().add(newCard);
-
                 }
             }
         });
@@ -244,6 +279,9 @@ public class BoardOverviewCtrl {
                 cardListViewCtrl.getCardListNode()
             );
         }
+
+        boardTitle.setText(board.getTitle());
+        boardId.setText("#" + board.getId());
     }
 
     /**
@@ -469,7 +507,26 @@ public class BoardOverviewCtrl {
     }
 
     /**
-     * Update the details (i.e. the title0 of a list
+     * Show the popup that allows you to edit board details (and view the board id)
+     */
+    @FXML
+    public void editBoard() {
+        editBoardCtrl.setBoard(board);
+        editBoardCtrl.refresh();
+
+        popup.setTitle("Editing board details");
+        popup.setScene(editBoard);
+
+        popup.show();
+    }
+
+    /**
+     * Hide the popup if it's currently visible
+     */
+    public void hidePopup() {
+        this.popup.hide();
+    }
+    /** Update the details (i.e. the title0 of a list
      * @param updatedCardList the updated list
      */
     public void updateList(CardList updatedCardList) {

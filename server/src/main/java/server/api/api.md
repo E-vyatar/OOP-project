@@ -46,11 +46,11 @@ Base Route: `/boards`
 
 > ⚠ Routes marked with `*` will be implemented in the future
 
-| Method Type | Route         | Controller      | Request Body | Description                              |
-|-------------|---------------|-----------------|--------------|------------------------------------------|
-| GET         | /boards/all   | BoardController | -            | gets all (&ge; 1) boards from the server |
-| PUT         | /boards/new*  | BoardController | Board        | creates a new board                      |
-| GET         | /boards/{id}  | BoardController | -            | gets a board from the server             |
-| POST        | /boards/{id}  | BoardController | Board        | updates the specified board              |
-| DELETE      | /boards/{id}* | BoardController | -            | deletes a board                          |
+| Method Type | Route         | Controller      | Request Body | Description                                                       |
+|-------------|---------------|-----------------|--------------|-------------------------------------------------------------------|
+| GET         | /boards/all   | BoardController | -            | gets all (&ge; 1) boards from the server                          |
+| PUT         | /boards/new*  | BoardController | Board        | creates a new board                                               |
+| GET         | /boards/{id}  | BoardController | -            | gets a board from the server                                      |
+| POST        | /boards/{id}  | BoardController | Board        | updates the specified board, body shouldn't include the cardlists |
+| DELETE      | /boards/{id}* | BoardController | -            | deletes a board                                                   |
 
