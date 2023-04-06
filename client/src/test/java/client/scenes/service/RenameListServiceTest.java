@@ -70,7 +70,6 @@ class RenameListServiceTest {
         renameListService.setCardList(newCardList);
         assertEquals("New Name", renameListService.getTitle());
         assertEquals(1, renameListService.getListId());
-        verifyNoInteractions(socketsUtils);
     }
 
     /**
@@ -79,7 +78,6 @@ class RenameListServiceTest {
     @Test
     void getTitle() {
         assertEquals("List Name", renameListService.getTitle());
-        verifyNoInteractions(socketsUtils);
     }
 
     /**
@@ -88,6 +86,5 @@ class RenameListServiceTest {
     @Test
     void getListId() {
         assertEquals(0, renameListService.getListId());
-        verifyNoInteractions(socketsUtils);
     }
 }

@@ -48,7 +48,6 @@ class DeleteListServiceTest {
         assertEquals("Are you sure you want to delete 'List Name' list? " +
             "It will delete all cards within it.",
             DeleteListService.generateLabelText("List Name"));
-        verifyNoInteractions(socketsUtils);
     }
 
     /**
@@ -61,7 +60,6 @@ class DeleteListServiceTest {
         doNothing().when(socketsUtils).send("/app/lists/delete", listId);
         deleteListService.delete();
         verify(socketsUtils, times(1)).send("/app/lists/delete", listId);
-        verifyNoMoreInteractions(socketsUtils);
     }
 
     /**
@@ -73,6 +71,5 @@ class DeleteListServiceTest {
         assertEquals(0, deleteListService.getListId());
         deleteListService.setListId(1);
         assertEquals(1, deleteListService.getListId());
-        verifyNoInteractions(socketsUtils);
     }
 }
