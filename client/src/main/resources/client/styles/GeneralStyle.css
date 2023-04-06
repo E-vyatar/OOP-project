@@ -39,3 +39,6 @@
     -fx-spacing: 2em;
     -fx-alignment: center;
 }
+#adminText {
+    -fx-text-fill: red;
+}

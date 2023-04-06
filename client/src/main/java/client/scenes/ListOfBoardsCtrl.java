@@ -31,6 +31,8 @@ public class ListOfBoardsCtrl {
     private ListView<Board> boards;
 
     @FXML
+    private Label adminText;
+    @FXML
     private HBox userButtons;
     @FXML
     private HBox adminButtons;
@@ -79,11 +81,15 @@ public class ListOfBoardsCtrl {
         this.boards.setItems(data);
 
         if (isAdmin()) {
+            adminText.setVisible(true);
+            adminText.setManaged(true);
             adminButtons.setManaged(true);
             adminButtons.setVisible(true);
             userButtons.setManaged(false);
             userButtons.setVisible(false);
         } else {
+            adminText.setVisible(false);
+            adminText.setManaged(false);
             adminButtons.setManaged(false);
             adminButtons.setVisible(false);
             userButtons.setManaged(true);

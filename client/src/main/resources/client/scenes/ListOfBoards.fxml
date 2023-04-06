@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -15,14 +12,17 @@
             fx:id="root">
     <top>
         <HBox alignment="CENTER">
-            <Label styleClass="instruction">Pick a board</Label>
+            <VBox>
+                <Label styleClass="instruction">Pick a board</Label>
+                <Label fx:id="adminText">You're in admin mode. You're now seeing all boards of the server.</Label>
+            </VBox>
         </HBox>
     </top>
     <center>
         <ListView fx:id="boards" maxWidth="400"/>
     </center>
     <bottom>
-        <Pane maxWidth="1.7976931348623157E308"> <!-- This is pane is necessary cause bottom can have only one child -->
+        <Pane maxWidth="1.7976931348623157E308"> <!-- This pane is necessary cause bottom can have only one child -->
             <HBox styleClass="buttons" fx:id="userButtons">
                 <Button onMouseClicked="#disconnect">disconnect</Button>
                 <Button onMouseClicked="#removeBoard">remove board</Button>
