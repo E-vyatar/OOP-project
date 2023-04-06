@@ -28,7 +28,7 @@ public class DeleteListService {
      * @return a sting that will be shown on label
      */
     public static String generateLabelText(String listTitle) {
-        return "Are you sure you want to delete '" + listTitle + "' list. " +
+        return "Are you sure you want to delete '" + listTitle + "' list? " +
             "It will delete all cards within it.";
     }
 
