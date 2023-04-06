@@ -1,7 +1,6 @@
 package client.scenes;
 
-import client.utils.SocketsUtils;
-import commons.CardList;
+import client.scenes.service.RenameListService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,7 +13,7 @@ import javax.inject.Inject;
 public class RenameListPopupCtrl {
 
     private final BoardOverviewCtrl boardOverviewCtrl;
-    private final SocketsUtils socket;
+    private final RenameListService service;
     private Stage renameListPopup;
     private CardListViewCtrl controller;
     @FXML
@@ -25,14 +24,14 @@ public class RenameListPopupCtrl {
     /**
      * This constructs the controller for the pop-up to rename a list.
      *
-     * @param socketsUtils      the SocketUtils
      * @param boardOverviewCtrl the BoardOverview
+     * @param service the RenameListService
      */
     @Inject
-    public RenameListPopupCtrl(SocketsUtils socketsUtils,
-                               BoardOverviewCtrl boardOverviewCtrl) {
-        this.socket = socketsUtils;
+    public RenameListPopupCtrl(BoardOverviewCtrl boardOverviewCtrl,
+                               RenameListService service) {
         this.boardOverviewCtrl = boardOverviewCtrl;
+        this.service = service;
     }
 
     /**
@@ -53,7 +52,8 @@ public class RenameListPopupCtrl {
      * Before calling it, setCardList() should be called.
      */
     public void show() {
-        listTitle.setText(controller.getCardList().getTitle());
+        service.setCardList(controller.getCardList());
+        listTitle.setText(service.getTitle());
         this.renameListPopup.show();
     }
 
@@ -76,23 +76,20 @@ public class RenameListPopupCtrl {
         if (title.isEmpty()) {
             listTitle.setStyle("-fx-border-color: red");
         } else {
-            CardList temp = controller.getCardList();
-            temp.setTitle(title);
-            socket.send("/app/lists/edit", temp);
+            service.save(title);
             close();
         }
 
     }
 
     /**
-     * Deletes card
-     * TODO
+     * Deletes card.
      */
     public void delete() {
-        CardList temp = controller.getCardList();
         this.boardOverviewCtrl.showDeleteList(
-            temp.getTitle(),
-            temp.getId());
+            service.getTitle(),
+            service.getListId()
+        );
     }
 
     /**
