@@ -45,7 +45,7 @@ class DeleteListServiceTest {
      */
     @Test
     void generateLabelText() {
-        assertEquals("Are you sure you want to delete 'List Name' list. " +
+        assertEquals("Are you sure you want to delete 'List Name' list? " +
             "It will delete all cards within it.",
             DeleteListService.generateLabelText("List Name"));
         verifyNoInteractions(socketsUtils);
