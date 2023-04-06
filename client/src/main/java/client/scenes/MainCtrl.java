@@ -40,7 +40,7 @@ public class MainCtrl {
     private Scene createBoard;
 
     private JoinBoardCtrl joinBoardCtrl;
-    private Scene addBoard;
+    private Scene joinBoard;
 
     private ClientConfig config;
 
@@ -64,14 +64,14 @@ public class MainCtrl {
      * @param connectServerCtrl a pair of the connectServerCtrl and the root of the to-be scene.
      * @param listOfBoards a pair of the ListOfBoardsCtrl and the root of the to-be scene.
      * @param createBoard a pair of the CreateBoardCtrl and the root of the to-be scene.
-     * @param addBoard a pair of the AddBoardCtrl and the root of the to-be scene.
+     * @param joinBoard a pair of the AddBoardCtrl and the root of the to-be scene.
      */
     public void initialize(Stage primaryStage,
                            Pair<BoardOverviewCtrl, Parent> overview,
                            Pair<ConnectServerCtrl, Parent> connectServerCtrl,
                            Pair<ListOfBoardsCtrl, Parent> listOfBoards,
                            Pair<CreateBoardCtrl, Parent> createBoard,
-                           Pair<JoinBoardCtrl, Parent> addBoard) {
+                           Pair<JoinBoardCtrl, Parent> joinBoard) {
 
         this.primaryStage = primaryStage;
 
@@ -87,8 +87,8 @@ public class MainCtrl {
         this.createBoard = new Scene(createBoard.getValue());
         this.createBoardCtrl = createBoard.getKey();
 
-        this.addBoard = new Scene(addBoard.getValue());
-        this.joinBoardCtrl = addBoard.getKey();
+        this.joinBoard = new Scene(joinBoard.getValue());
+        this.joinBoardCtrl = joinBoard.getKey();
 
         showConnect();
         this.primaryStage.show();
@@ -139,10 +139,10 @@ public class MainCtrl {
 
      * Shows the UI to add a board, so it's visible in your list.
      */
-    public void showAddBoard() {
+    public void showJoinBoard() {
         joinBoardCtrl.clear();
-        primaryStage.setTitle("Add board");
-        primaryStage.setScene(addBoard);
+        primaryStage.setTitle("Join board");
+        primaryStage.setScene(joinBoard);
     }
 
     /**

@@ -15,7 +15,6 @@ import server.database.ListRepository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -64,8 +63,13 @@ public class BoardController {
      * @return the board
      */
     @GetMapping("{id}")
-    public Optional<Board> getBoardById(@PathVariable("id") long id) {
-        return boardRepository.findById(id);
+    public ResponseEntity<Board> getBoardById(@PathVariable("id") long id) {
+        var opt = boardRepository.findById(id);
+        if (opt.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Board board = opt.get();
+        return new ResponseEntity<>(board, HttpStatus.OK);
     }
 
     /**

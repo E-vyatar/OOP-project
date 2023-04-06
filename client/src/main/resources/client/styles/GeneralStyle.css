@@ -42,3 +42,6 @@
 #adminText {
     -fx-text-fill: red;
 }
+.invalid {
+    -fx-border-color: red;
+}

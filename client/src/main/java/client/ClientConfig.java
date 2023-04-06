@@ -36,6 +36,16 @@ public class ClientConfig {
     }
 
     /**
+     * Check if the config already has this board.
+     * @param hostname the hostname of the server
+     * @param boardId the id of the board
+     * @return whether it already exists
+     */
+    public boolean hasBoard(String hostname, long boardId) {
+        return getIds(hostname).contains(boardId);
+    }
+
+    /**
      * Get all boards for a specific server.
      * If there are no saved boards,
      * we return a list with the board id zero by default.

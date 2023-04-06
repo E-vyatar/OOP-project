@@ -12,6 +12,7 @@ public class ClientConfigTest {
 
     private ClientConfig clientConfig;
     private static final String LOCALHOST = "http:://localhost:8080";
+    private static final String EXAMPLE_SERVER = "http://example.com:9191";
 
     @BeforeEach
     public void setup(){
@@ -46,14 +47,22 @@ public class ClientConfigTest {
         assertEquals(List.of(), clientConfig.getIds(LOCALHOST), "board with id 21 should have been removed.");
     }
     @Test
+    public void testContains() {
+        clientConfig.addBoard(LOCALHOST, 13L);
+        assertTrue(clientConfig.hasBoard(LOCALHOST, 13L),
+                "config should say it contains board id 13");
+
+        assertFalse(clientConfig.hasBoard(EXAMPLE_SERVER, 13L),
+                "config shouldn't say  it contains the board id 13 if it's part of a different server");
+    }
+    @Test
     public void testTwoServers(){
-        String otherServer = "http://example.com:9191";
-        clientConfig.addBoard(otherServer, 9L);
+        clientConfig.addBoard(EXAMPLE_SERVER, 9L);
         clientConfig.addBoard(LOCALHOST, 14L);
-        assertEquals(List.of(9L), clientConfig.getIds(otherServer), "only board with id 9 should have been added");
+        assertEquals(List.of(9L), clientConfig.getIds(EXAMPLE_SERVER), "only board with id 9 should have been added");
         assertEquals(List.of(14L), clientConfig.getIds(LOCALHOST), "board with id 14 should have been added.");
 
-        clientConfig.removeBoard(otherServer, 14L);
+        clientConfig.removeBoard(EXAMPLE_SERVER, 14L);
         assertEquals(List.of(14L), clientConfig.getIds(LOCALHOST), "Board with id 14 should not have been removed from localhost");
     }
 
@@ -81,7 +90,6 @@ public class ClientConfigTest {
 
     @Test
     public void testEqualsFalse() {
-        String otherServer = "http://example.com:9191";
         ClientConfig clientConfig1 = new ClientConfig();
         ClientConfig clientConfig2 = new ClientConfig();
 
@@ -89,7 +97,7 @@ public class ClientConfigTest {
         assertNotEquals(clientConfig1, clientConfig2,
                 "A difference in boards should result in inequality");
 
-        clientConfig2.addBoard(otherServer, 4L);
+        clientConfig2.addBoard(EXAMPLE_SERVER, 4L);
 
         assertNotEquals(clientConfig1, clientConfig2,
                 "Clientconfigs with the same board but in different servers should be unequal");

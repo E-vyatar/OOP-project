@@ -11,9 +11,13 @@ import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.quality.Strictness;
 
+import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class JoinBoardCtrlTest {
+
+    private static final String LOCALHOST = "http://localhost:8080";
 
     @Mock
     private MainCtrl mainCtrl;
@@ -38,6 +42,19 @@ public class JoinBoardCtrlTest {
     @Test
     public void testCancel(){
         joinBoardCtrl.cancel();
+        verify(mainCtrl).showListOfBoards();
+    }
+
+    @Test
+    public void testJoinBoard() {
+        when(serverUtils.getHostname()).thenReturn(LOCALHOST);
+        when(clientConfig.hasBoard(LOCALHOST, 19L)).thenReturn(false);
+        when(serverUtils.boardExists(19L)).thenReturn(true);
+
+        joinBoardCtrl.joinBoard(19L);
+
+        verify(clientConfig).addBoard(LOCALHOST, 19L);
+        verify(mainCtrl).saveConfig(isNotNull());
         verify(mainCtrl).showListOfBoards();
     }
 

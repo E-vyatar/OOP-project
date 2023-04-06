@@ -160,7 +160,7 @@ public class ListOfBoardsCtrl {
      */
     @FXML
     public void joinBoard() {
-        mainCtrl.showAddBoard();
+        mainCtrl.showJoinBoard();
     }
 
     /**

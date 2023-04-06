@@ -76,6 +76,25 @@ public class ServerUtils {
     }
 
     /**
+     * Check if a board exists on the server side
+     * @param boardId the board to check for
+     * @return whether it exists
+     */
+    public boolean boardExists(long boardId) {
+        var res = ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("boards/{id}")
+                .resolveTemplate("id", boardId) //
+                .request()
+                .head();
+
+        if (res.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Sends HTTP request to server to add a new card
      *
      * @param card the card to add to the database
