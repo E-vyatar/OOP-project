@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,6 +76,7 @@ public class ListOfBoardsCtrl {
             boards = server.getAllBoards();
         } else {
             boards = server.getAllBoards(config.getIds(server.getHostname()));
+            removeDeletedBoards(boards);
         }
 
         ObservableList<Board> data = FXCollections.observableList(boards);
@@ -154,6 +156,32 @@ public class ListOfBoardsCtrl {
         long boardId = board.getId();
         server.deleteBoard(boardId);
     }
+
+    /**
+     * Remove boards that have been deleted from the clientconfig.
+     * It also informs the user that these boards have been deleted.
+     *
+     * @param boards boards received from the server (i.e. the boards that still exist)
+     */
+    public void removeDeletedBoards(List<Board> boards) {
+        List<Long> ids = config.getIds(server.getHostname());
+        List<Long> deleted = new ArrayList<>();
+        for (Long id : ids) {
+            if (!boards.stream().anyMatch(board -> board.getId() == id)) {
+                deleted.add(id);
+            }
+        }
+        int numDeleted = deleted.size();
+        if (numDeleted > 0) {
+            ids.removeAll(deleted);
+            mainCtrl.showAlert(Alert.AlertType.INFORMATION,
+                    numDeleted + " of your board(s) have been deleted",
+                    numDeleted + " of the board(s) you have joined have been deleted " +
+                            "since the last time you viewed this screen. " +
+                            "You will not be able to see these boards again.");
+        }
+    }
+
     /**
      * Go to the interface to join a board
      *

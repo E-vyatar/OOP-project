@@ -164,4 +164,18 @@ public class MainCtrl {
             alert.show();
         }
     }
+
+    /**
+     * This shows an alert.
+     * his method exists, so code can be decoupled and the controller can be better tested.
+     * @param alertType the type of the alert
+     * @param headerText the header text
+     * @param contentText the body text
+     */
+    public void showAlert(Alert.AlertType alertType, String headerText, String contentText) {
+        Alert alert = new Alert(alertType);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.show();
+    }
 }
