@@ -13,6 +13,10 @@ import javax.inject.Inject;
 public class RenameListPopupCtrl {
 
     private final BoardOverviewCtrl boardOverviewCtrl;
+
+    /**
+     * The service which contains testable methods of this controller.
+     */
     private final RenameListService service;
     private Stage renameListPopup;
     private CardListViewCtrl controller;
