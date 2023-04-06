@@ -29,9 +29,6 @@ public class CardPopupCtrl {
     @FXML
     private ChoiceBox<CardList> list;
     @FXML
-    private TextArea cardDescription;
-
-    @FXML
     private ButtonBar buttonBar;
     @FXML
     private Button closeButton;
@@ -97,7 +94,6 @@ public class CardPopupCtrl {
      */
     public void setEditable(boolean editable) {
         this.cardTitle.setEditable(editable);
-        this.cardDescription.setEditable(editable);
 
         this.buttonBar.getButtons().clear();
         if (editable) {
@@ -117,7 +113,6 @@ public class CardPopupCtrl {
                 .filter(currentList -> currentList.getId() == card.getListId())
                 .findFirst();
         chosenList.ifPresent(cardList -> list.getSelectionModel().select(cardList));
-        cardDescription.setText("Here there will be a description.");
     }
 
     /**
