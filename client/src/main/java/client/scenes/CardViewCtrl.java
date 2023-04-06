@@ -86,7 +86,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
     }
 
     void addCardAt(Card card, long idx) {
-        boardOverviewCtrl.moveCard(card, cardListViewCtrl.getCardList(), idx);
+        boardOverviewCtrl.requestMoveCard(card, cardListViewCtrl.getCardList(), idx);
     }
 
     /**

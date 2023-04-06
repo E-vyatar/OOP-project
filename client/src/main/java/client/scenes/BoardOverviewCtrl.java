@@ -329,7 +329,7 @@ public class BoardOverviewCtrl {
         if (originalCardListController != editedCardListController) {
             // move card to edited list
             long indexForEditedCard = editedCardListController.getCardList().getCards().size();
-            moveCard(editedCard, editedCardListController.getCardList(),indexForEditedCard);
+            requestMoveCard(editedCard, editedCardListController.getCardList(),indexForEditedCard);
         }
     }
 
@@ -445,7 +445,7 @@ public class BoardOverviewCtrl {
      * @param cardList the CardList the card is moved to
      * @param index    the new position index of the card in the CardList
      */
-    public void moveCard(Card card, CardList cardList, long index) {
+    public void requestMoveCard(Card card, CardList cardList, long index) {
 
         MoveCardMessage message = new MoveCardMessage(
             card.getId(),
