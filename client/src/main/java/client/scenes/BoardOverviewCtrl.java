@@ -66,6 +66,8 @@ public class BoardOverviewCtrl {
     private HBox listOfLists;
     @FXML
     private Label boardTitle;
+    @FXML
+    private Label boardId;
 
     /**
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
@@ -279,6 +281,7 @@ public class BoardOverviewCtrl {
         }
 
         boardTitle.setText(board.getTitle());
+        boardId.setText("#" + board.getId());
     }
 
     /**

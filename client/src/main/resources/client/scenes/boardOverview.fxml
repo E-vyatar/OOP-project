@@ -58,6 +58,12 @@
                                 <Font name="System Bold" size="16.0"/>
                             </font>
                         </Label>
+                        <Region prefWidth="8.0" minWidth="0.0" />
+                        <Label fx:id="boardId" prefHeight="25.0" style="-fx-text-fill: grey;">
+                            <font>
+                                <Font name="System Medium" size="16.0" />
+                            </font>
+                        </Label>
                         <!-- Everything before this is on the left, everything after on the right -->
                         <Region HBox.hgrow="ALWAYS" />
                         <Button styleClass="editButton" layoutX="24.0" layoutY="13.0" mnemonicParsing="false"

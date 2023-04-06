@@ -31,7 +31,7 @@
                         <Insets />
                     </VBox.margin>
                 </TextField>
-                <Label prefHeight="26.0" text="Board ID:" />
+                <Label prefHeight="26.0" text="Board ID (share this with others so they can join your board):" />
                 <TextField editable="false" fx:id="boardId" />
             </VBox>
         </Pane>
