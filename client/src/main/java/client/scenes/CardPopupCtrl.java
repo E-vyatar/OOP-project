@@ -148,7 +148,14 @@ public class CardPopupCtrl {
                 long idx = card.getIdx();
                 String title = cardTitle.getText();
                 Card updatedCard = new Card(cardId, listId, boardId, title, idx);
-                server.editCard(updatedCard);
+                if (listId == card.getListId()) {
+                    server.editCard(updatedCard);
+                }
+                else {
+                    Card cardFromDatabase =  server.editCard(updatedCard);
+                    long newIndex = list.getValue().getCards().size();
+                    boardOverviewCtrl.requestMoveCard(cardFromDatabase, list.getValue(), newIndex);
+                }
                 close();
             } catch (WebApplicationException e) {
 

@@ -239,7 +239,7 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     @SuppressWarnings("MissingJavadocMethod")
     public void moveCard(long cardId) {
         Card card = boardOverviewCtrl.getCard(cardId);
-        boardOverviewCtrl.moveCard(card, getCardList(), getCards().length);
+        boardOverviewCtrl.requestMoveCard(card, getCardList(), getCards().length);
     }
 
     @SuppressWarnings("MissingJavadocMethod")
