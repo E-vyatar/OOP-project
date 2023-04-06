@@ -4,6 +4,8 @@ import commons.Board;
 import commons.CardList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
 import server.database.ListRepository;
@@ -16,7 +18,7 @@ import java.util.Optional;
 public class BoardController {
     private final BoardRepository boardRepository;
     private final ListRepository listRepository;
-    private Logger logger = LoggerFactory.getLogger(CardController.class);
+    private final Logger logger = LoggerFactory.getLogger(CardController.class);
 
     /**
      * Constructor
@@ -67,6 +69,24 @@ public class BoardController {
         return null;
     }
 
+    /** sends message back to user that board has been saved
+     * @param board board
+     * @return board after saved to db, containing 3 lists
+     */
+    @MessageMapping("/boards/new")
+    @SendTo("/topic/boards/new")
+    public Board addMessage(Board board){
+        logger.info("addMessage() called with : board = [" + board.toString() + "]");
+        Board sent = boardRepository.save(board);
+        List<CardList> cardLists = List.of(
+                new CardList("To Do", board.getId(), 0),
+                new CardList("Doing", board.getId(), 1),
+                new CardList("Done", board.getId(), 2)
+        );
+        sent.getCardLists().addAll(cardLists);
+        listRepository.saveAll(cardLists);
+        return sent;
+    }
     /**
      * Create a new board
      *
@@ -96,5 +116,13 @@ public class BoardController {
     @DeleteMapping("{id}")
     public void deleteBoard(@PathVariable("id") long id) {
         boardRepository.deleteById(id);
+    }
+
+    @MessageMapping("/boards/delete") // app/boards/delete
+    @SendTo("/topic/boards/delete")
+    public Long deleteMessage(Long id){
+        boardRepository.deleteById(id);
+        logger.info("board has been deleted from db");
+        return id;
     }
 }
