@@ -10,6 +10,10 @@ import org.mockito.quality.Strictness;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Tests the {@link client.scenes.service.DeleteListService}
+ * which is used in {@link client.scenes.DeleteListPopupCtrl}.
+ */
 class DeleteListServiceTest {
     private MockitoSession mockito;
     @Mock
@@ -17,6 +21,9 @@ class DeleteListServiceTest {
     @InjectMocks
     private DeleteListService deleteListService;
 
+    /**
+     * Starts the mocks.
+     */
     @BeforeEach
     void setUp() {
         mockito = Mockito.mockitoSession()
@@ -25,11 +32,17 @@ class DeleteListServiceTest {
             .startMocking();
     }
 
+    /**
+     * Closes the mocks.
+     */
     @AfterEach
     void tearDown() {
         mockito.finishMocking();
     }
 
+    /**
+     * Tests the static generateLabelText() method.
+     */
     @Test
     void generateLabelText() {
         assertEquals("Are you sure you want to delete 'List Name' list. " +
@@ -37,6 +50,9 @@ class DeleteListServiceTest {
             DeleteListService.generateLabelText("List Name"));
     }
 
+    /**
+     * Tests the delete() method.
+     */
     @Test
     void delete() {
         long listId = 0;
@@ -47,6 +63,9 @@ class DeleteListServiceTest {
         verifyNoMoreInteractions(socketsUtils);
     }
 
+    /**
+     * Tests the getListId() & setListId() methods.
+     */
     @Test
     void getAndSetListId() {
         deleteListService.setListId(0);
