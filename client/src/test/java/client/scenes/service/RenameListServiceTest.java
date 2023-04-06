@@ -53,8 +53,8 @@ class RenameListServiceTest {
     @Test
     void save() {
         doNothing().when(socketsUtils).send("/app/lists/edit", cardList);
-        renameListService.save("POOP");
-        assertEquals("POOP", renameListService.getTitle());
+        renameListService.save("... LOL");
+        assertEquals("... LOL", renameListService.getTitle());
         verify(socketsUtils, times(1)).send("/app/lists/edit", cardList);
         verifyNoMoreInteractions(socketsUtils);
     }
