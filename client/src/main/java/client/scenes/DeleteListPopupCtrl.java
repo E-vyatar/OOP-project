@@ -22,7 +22,7 @@ public class DeleteListPopupCtrl {
     private final DeleteListService service;
     private Stage stage;
     @FXML
-    private Label label;
+    private Label listTitleLabel;
     @FXML
     private Parent root;
 
@@ -59,7 +59,7 @@ public class DeleteListPopupCtrl {
      * @param listId the id of the list to be deleted
      */
     public void show(String listTitle, long listId) {
-        label.setText(DeleteListService.generateLabelText(listTitle));
+        listTitleLabel.setText(DeleteListService.generateLabelText(listTitle));
         service.setListId(listId);
         this.stage.show();
     }
