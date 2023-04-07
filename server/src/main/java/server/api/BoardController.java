@@ -69,6 +69,12 @@ public class BoardController {
         return null;
     }
 
+    /**
+     * Websocket endpoint for updating a board
+     *
+     * @param board the board to be updated with updates
+     * @return the updated board
+     */
     @MessageMapping("/boards/edit")
     @SendTo("/topic/boards/edit")
     public Board editMessage(Board board){
@@ -131,6 +137,12 @@ public class BoardController {
         boardRepository.deleteById(id);
     }
 
+    /**
+     * Websocket endpoint for deleting a board
+     *
+     * @param id the id of the board to be deleted
+     * @return the id of the deleted board
+     */
     @MessageMapping("/boards/delete") // app/boards/delete
     @SendTo("/topic/boards/delete")
     public Long deleteMessage(Long id){

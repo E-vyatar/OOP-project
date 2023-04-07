@@ -38,7 +38,8 @@ public class MoveCardMessage implements Serializable {
      * @param newIndex the new index of the card
      * @param moved true if the card was moved, false if it was copied
      */
-    public MoveCardMessage(long cardId, long newListId, long oldListId, long newIndex, boolean moved) {
+    public MoveCardMessage(long cardId, long newListId,
+                           long oldListId, long newIndex, boolean moved) {
         this.cardId = cardId;
         this.newListId = newListId;
         this.oldListId = oldListId;
