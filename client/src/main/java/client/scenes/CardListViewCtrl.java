@@ -12,7 +12,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import static com.google.inject.Guice.createInjector;
@@ -31,7 +35,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
     private AnchorPane cardListNode;
     @FXML
     private Text cardListTitle;
-    private CardListView view;
 
     /**
      * This constructs an instance of CardListViewCtrl.
@@ -68,12 +71,10 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
                             CardList cardList) {
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.cardList = cardList;
-        // Only keep the cards that have the same id as this list.
         this.cards = FXCollections.observableList(cardList.getCards());
 
-        this.view = new CardListView(boardOverviewCtrl, this, cards);
-
         createView();
+        setDragEvents();
 
         addCardButton.setOnAction(event -> showAddCard());
     }
@@ -108,15 +109,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      */
     public void refresh() {
         cardListTitle.setText(cardList.getTitle());
-    }
-
-    /**
-     * Returns the view for which the controller handles the logic
-     *
-     * @return the attached CardListView
-     */
-    public CardListView getView() {
-        return this.view;
     }
 
     /**
@@ -242,12 +234,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
         boardOverviewCtrl.requestMoveCard(card, getCardList(), getCards().length);
     }
 
-    @SuppressWarnings("MissingJavadocMethod")
-    public void highlightCard(Card card) {
-        view.highlightCard(card);
-    }
-
-
     /**
      * Set the CardList of the AddCard window and open the window
      */
@@ -291,5 +277,75 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      */
     public void setCardList(CardList cardList) {
         this.cardList = cardList;
+    }
+
+    @SuppressWarnings({"MethodLength", "CyclomaticComplexity"})
+    private void setDragEvents() {
+        cardListView.setOnDragDetected(event -> {
+
+            /* allow any transfer mode */
+            Dragboard db = cardListNode.startDragAndDrop(TransferMode.ANY);
+
+            /* put a string on dragboard */
+            ClipboardContent content = new ClipboardContent();
+            content.putString(String.valueOf(cardList.getId()));
+            db.setContent(content);
+
+            event.consume();
+        });
+        cardListView.setOnDragOver(event -> {
+            /* data is dragged over the target */
+            /* accept it only if it is not dragged from the same node
+             * and if it has a string data */
+            if (event.getGestureSource() == this) {
+                return;
+            } else if (event.getDragboard().hasContent(CardView.CARD_DATA_FORMAT)) {
+                // Only accept cards this way if the list doesn't have cards
+                // This is necessary cause otherwise, there's no way to receive a card
+                if (cards.size() == 0) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                } else {
+                    event.acceptTransferModes(TransferMode.NONE);
+                }
+            } else if ( event.getDragboard().hasString()) {
+                /* allow for both copying and moving, whatever user chooses */
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+
+            event.consume();
+        });
+        cardListView.setOnDragEntered(event -> {
+            if (event.getDragboard().hasContent(CardView.CARD_DATA_FORMAT)) {
+                if (cards.size() == 0) {
+                    cardListView.setBorder(new Border(new BorderStroke(
+                            Color.RED, BorderStrokeStyle.SOLID,
+                            CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+                }
+            } else {
+                cardListView.setBorder(new Border(new BorderStroke(
+                        Color.RED, BorderStrokeStyle.SOLID,
+                        CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+            }
+            event.consume();
+        });
+        cardListView.setOnDragExited(event -> {
+            cardListView.setBorder(null);
+            event.consume();
+        });
+        cardListView.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasContent(CardView.CARD_DATA_FORMAT)) {
+                long cardId = (Long) db.getContent(CardView.CARD_DATA_FORMAT);
+                moveCard(cardId);
+                success = true;
+            } else if (db.hasString()) {
+                long listId = Long.parseLong(db.getString());
+                moveList(listId);
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
     }
 }
