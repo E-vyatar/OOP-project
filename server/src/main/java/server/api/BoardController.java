@@ -69,6 +69,19 @@ public class BoardController {
         return null;
     }
 
+    @MessageMapping("/boards/edit")
+    @SendTo("/topic/boards/edit")
+    public Board editMessage(Board board){
+        logger.info("updateMessage called");
+        Optional<Board> boardOptional = boardRepository.findById(board.getId());
+        if(boardOptional.isPresent()){
+            Board boardTemp = boardOptional.get();
+            boardTemp.setTitle(boardTemp.getTitle());
+            return boardRepository.save(boardTemp);
+        }
+        return null;
+    }
+
     /** sends message back to user that board has been saved
      * @param board board
      * @return board after saved to db, containing 3 lists

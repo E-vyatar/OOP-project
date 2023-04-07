@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import server.database.CardRepositroy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -234,26 +235,56 @@ class CardControllerTest {
 
     @Test
     void moveCardSameIndex() throws Exception {
-        Card card = new Card();
-        card.setId(1);
-        card.setIdx(0);
-        card.setTitle("Card1");
-        card.setListId(1);
-        card.setBoardId(1);
+        Card card1 = new Card();
+        card1.setId(1L);
+        card1.setIdx(0);
+        card1.setTitle("Card1");
+        card1.setListId(1L);
+        card1.setBoardId(1L);
 
-        //MoveCardMessage moveCardMessage = new MoveCardMessage(1,1,1, 1);
-        String json = "{\"id\": 1, \"title\": \"Card1\", \"boardId\": 1, \"listId\": 1}";
-        mockMvc.perform(post("/cards/" + "move")
+        Card card2 = new Card();
+        card2.setId(2L);
+        card2.setIdx(1);
+        card2.setTitle("Card2");
+        card2.setListId(1L);
+        card2.setBoardId(1L);
+
+        Card card3 = new Card();
+        card3.setId(3L);
+        card3.setIdx(2);
+        card3.setTitle("Card3");
+        card3.setListId(1L);
+        card3.setBoardId(1L);
+
+        List<Card> cards = new ArrayList<>();
+        cards.add(card1);
+        cards.add(card2);
+        cards.add(card3);
+
+        CardList cardList = new CardList();
+        cardList.setIdx(0);
+        cardList.setId(1L);
+        cardList.setTitle("List");
+        cardList.setBoardId(1L);
+        cardList.setCards(cards);
+
+        when(cardRepository.findById(card1.getId())).thenReturn(Optional.of(card1));
+
+        MoveCardMessage moveCardMessage = new MoveCardMessage(card1.getId(),card1.getListId(),card1.getListId(), card1.getIdx());
+        String json = "{\"cardId\": " + moveCardMessage.getCardId() +
+                ", \"newListId\": " + moveCardMessage.getNewListId() +
+                ", \"oldListId\": " + moveCardMessage.getOldListId() +
+                ", \"newIndex\": " + moveCardMessage.getNewIndex() + "}";
+
+        mockMvc.perform(post("/cards/move")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(json)).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(card.getId()))
-                .andExpect(jsonPath("$.title").value(card.getTitle()))
-                .andExpect(jsonPath("$.boardId").value(card.getBoardId()))
-                .andExpect(jsonPath("$.listId").value(card.getListId()))
-                .andExpect(jsonPath("$.idx").value(card.getIdx()));
+                .content(json))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", is(true)));
 
-        when(cardRepository.findById(card.getId())).thenReturn(Optional.of(card));
-        //when(cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), card.getIdx())).thenReturn();
+        verify(cardRepository, times(2)).findById(card1.getId());
+        verifyNoMoreInteractions(cardRepository);
     }
 
     @Test
@@ -297,9 +328,8 @@ class CardControllerTest {
 
         // when updatebetweendIdxDown is called, change cardList and indexes of cards
         doAnswer(invocation -> {
-            Long listId = invocation.getArgument(0);
-            Integer fromIdx = invocation.getArgument(1);
-            Integer toIdx = invocation.getArgument(2);
+            int fromIdx = invocation.getArgument(1);
+            int toIdx = invocation.getArgument(2);
             for(Card card : list.getCards()) {
                 if(card.getIdx() > fromIdx && card.getIdx() <= toIdx) {
                     card.setIdx(card.getIdx() - 1);
@@ -385,7 +415,6 @@ class CardControllerTest {
 
         // when updatebetweendIdxDown is called, change cardList and indexes of cards
         doAnswer(invocation -> {
-            long listId = invocation.getArgument(0);
             long fromIdx = invocation.getArgument(1);
             long toIdx = invocation.getArgument(2);
             for(Card card : list.getCards()) {
@@ -413,7 +442,10 @@ class CardControllerTest {
         MoveCardMessage message = new MoveCardMessage(card3.getId(), card3.getListId(), list.getId(), 0);
 
         // convert message to json in format { "cardId": 1, "newListId": 1, "oldListId": 1, "newIdx": 2 }
-        String messageJSON = "{\"cardId\": " + message.getCardId() + ", \"newListId\": " + message.getNewListId() + ", \"oldListId\": " + message.getOldListId() + ", \"newIndex\": " + message.getNewIndex() + "}";
+        String messageJSON = "{\"cardId\": " + message.getCardId() +
+                ", \"newListId\": " + message.getNewListId() +
+                ", \"oldListId\": " + message.getOldListId() +
+                ", \"newIndex\": " + message.getNewIndex() + "}";
 
         mockMvc.perform(post("/cards/move")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -432,12 +464,148 @@ class CardControllerTest {
     }
 
     @Test
-    void moveCardOtherList() {
+    void moveCardOtherList() throws Exception {
+        Card card1 = new Card();
+        card1.setId(1L);
+        card1.setIdx(0);
+        card1.setTitle("Card1");
+        card1.setListId(1L);
+        card1.setBoardId(1L);
 
+        Card card2 = new Card();
+        card2.setId(2L);
+        card2.setIdx(1);
+        card2.setTitle("Card2");
+        card2.setListId(1L);
+        card2.setBoardId(1L);
+
+        List<Card> cards = new ArrayList<>();
+        cards.add(card1);
+        cards.add(card2);
+
+        CardList cardList1 = new CardList();
+        cardList1.setIdx(0);
+        cardList1.setId(1L);
+        cardList1.setTitle("List");
+        cardList1.setBoardId(1L);
+        cardList1.setCards(cards);
+
+        Card card3 = new Card();
+        card3.setIdx(0);
+        card3.setId(3L);
+        card3.setBoardId(1L);
+        card3.setTitle("Card3");
+        card3.setListId(2L);
+
+        List<Card> list = List.of(card3);
+        CardList cardList2 = new CardList();
+        cardList2.setBoardId(1L);
+        cardList2.setIdx(1);
+        cardList2.setId(2L);
+        cardList2.setCards(list);
+        cardList2.setTitle("New List");
+
+        when(cardRepository.findById(card2.getId())).thenReturn(Optional.of(card2));
+        doAnswer(invocation -> {
+            long oldIdx = invocation.getArgument(1);
+            for(Card card : cardList1.getCards()){
+                if(card.getIdx() > oldIdx){
+                    card.setIdx(card.getIdx()-1);
+                }
+            }
+            return null;
+        }).when(cardRepository).moveAllCardsHigherThanIndexDown(cardList1.getId(), card2.getIdx());
+        doAnswer(invocation -> {
+            long newIdx = invocation.getArgument(1);
+            for(Card card : cardList2.getCards()){
+                if(card.getIdx() >= newIdx){
+                    card.setIdx(card.getIdx()+1);
+                }
+            }
+            return null;
+        }).when(cardRepository).moveAllCardsHigherEqualThanIndexUp(cardList2.getId(), card3.getIdx());
+        when(cardRepository.save(any(Card.class))).thenAnswer(invocation -> {
+            Card card = invocation.getArgument(0);
+            if(card.getId() == card3.getId()){
+                card.setIdx(card3.getIdx());
+                card.setListId(card3.getListId());
+            }
+            return card;
+        });
+        MoveCardMessage moveCardMessage = new MoveCardMessage(card2.getId(),card3.getListId(),card1.getListId(), card3.getIdx()+1);
+
+        String json = "{\"cardId\": " + moveCardMessage.getCardId() +
+                ", \"newListId\": " + moveCardMessage.getNewListId() +
+                ", \"oldListId\": " + moveCardMessage.getOldListId() +
+                ", \"newIndex\": " + moveCardMessage.getNewIndex() + "}";
+
+        mockMvc.perform(post("/cards/move")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", is(true)));
+
+        verify(cardRepository, times(2)).findById(card2.getId());
+        verify(cardRepository, times(1)).moveAllCardsHigherThanIndexDown(cardList1.getId(), card2.getIdx());
+        verify(cardRepository, times(1)).moveAllCardsHigherEqualThanIndexUp(cardList2.getId(), 1);
+        verify(cardRepository, times(1)).save(card2);
+        verifyNoMoreInteractions(cardRepository);
     }
 
+
     @Test
-    void moveNonExistentCard() {
+    void moveNonExistentCard() throws Exception {
+        Card card1 = new Card();
+        card1.setId(1L);
+        card1.setIdx(0);
+        card1.setTitle("Card1");
+        card1.setListId(1L);
+        card1.setBoardId(1L);
+
+        Card card2 = new Card();
+        card2.setId(2L);
+        card2.setIdx(1);
+        card2.setTitle("Card2");
+        card2.setListId(1L);
+        card2.setBoardId(1L);
+
+        Card card3 = new Card();
+        card3.setId(3L);
+        card3.setIdx(2);
+        card3.setTitle("Card3");
+        card3.setListId(1L);
+        card3.setBoardId(1L);
+
+        List<Card> cards = new ArrayList<>();
+        cards.add(card1);
+        cards.add(card2);
+        cards.add(card3);
+
+        CardList cardList = new CardList();
+        cardList.setIdx(0);
+        cardList.setId(1L);
+        cardList.setTitle("List");
+        cardList.setBoardId(1L);
+        cardList.setCards(cards);
+
+        when(cardRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        MoveCardMessage moveCardMessage = new MoveCardMessage(0,1L,1L,0);
+
+        String json = "{\"cardId\": " + moveCardMessage.getCardId() +
+                ", \"newListId\": " + moveCardMessage.getNewListId() +
+                ", \"oldListId\": " + moveCardMessage.getOldListId() +
+                ", \"newIndex\": " + moveCardMessage.getNewIndex() + "}";
+
+        mockMvc.perform(post("/cards/move")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", is(false)));
+        verify(cardRepository, times(1)).findById(moveCardMessage.getCardId());
+        verifyNoMoreInteractions(cardRepository);
 
     }
 

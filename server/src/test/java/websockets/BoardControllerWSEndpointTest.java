@@ -22,6 +22,7 @@ import server.database.BoardRepository;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.*;
 
 import static org.awaitility.Awaitility.await;
@@ -121,6 +122,63 @@ public class BoardControllerWSEndpointTest {
                 });
 
         verify(boardRepository, times(1)).deleteById(0L);
+        verifyNoMoreInteractions(boardRepository);
+    }
+
+    @Test
+    public void editMessage() throws ExecutionException, InterruptedException, TimeoutException {
+        Board board1 = new Board();
+        board1.setId(1L);
+        board1.setTitle("Board 1");
+
+        CardList todo = new CardList(0L, "TODO", 0, 1L);
+        CardList doing = new CardList(1L, "Doing", 1, 1L);
+        CardList done = new CardList(2L, "Done", 2, 1L);
+
+        List<CardList> cardLists = List.of(todo, doing, done);
+        board1.getCardLists().addAll(cardLists);
+
+        Board board2 = new Board();
+        board2.setId(1L);
+        board2.setTitle("New Board");
+        board2.getCardLists().addAll(cardLists);
+
+        when(boardRepository.findById(board2.getId())).thenReturn(Optional.of(board1));
+        when(boardRepository.save(any(Board.class))).thenAnswer(invocation -> {
+            Board boardtemp = invocation.getArgument(0);
+            if(board1.getId() == boardtemp.getId()){
+                board1.setTitle(boardtemp.getTitle());
+            }
+            return board1;
+        });
+
+        BlockingQueue<Board> blockingQueue = new ArrayBlockingQueue<>(1);
+
+        webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
+
+        StompSession session = webSocketStompClient
+                .connect(String.format("ws://localhost:%d/websocket", port), new StompSessionHandlerAdapter() {
+                }).get(1, TimeUnit.SECONDS);
+        session.subscribe("/topic/boards/edit", new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Board.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                blockingQueue.add((Board) payload);
+            }
+        });
+
+        session.send("/app/boards/edit", board2);
+
+        await()
+                .atMost(1, TimeUnit.SECONDS)
+                .untilAsserted(() -> Assertions.assertEquals(board2, blockingQueue.poll()));
+
+        verify(boardRepository, times(1)).findById(board2.getId());
+        verify(boardRepository, times(1)).save(any(Board.class));
         verifyNoMoreInteractions(boardRepository);
     }
 }
