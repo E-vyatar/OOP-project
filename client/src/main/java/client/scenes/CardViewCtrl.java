@@ -47,14 +47,7 @@ public class CardViewCtrl implements EventHandler<MouseEvent> {
     public void handle(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             Object source = event.getSource();
-
-            if (source == view.getButtonUp()) {
-                // move card up
-                cardListViewCtrl.moveCardUp(this.card);
-            } else if (source == view.getButtonDown()) {
-                // move card down
-                cardListViewCtrl.moveCardDown(this.card);
-            } else boardOverviewCtrl.showCard(card, source == view.getEditButton());
+            boardOverviewCtrl.showCard(card, source == view.getEditButton());
         }
     }
 

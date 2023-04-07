@@ -13,11 +13,7 @@ import javafx.scene.paint.Color;
 public class CardView extends ListCell<Card> {
 
     private final CardViewCtrl controller;
-    private HBox hbox;
-    private Button buttonUp;
-    private Button buttonDown;
     private Button editButton;
-    private Label cardTitle;
 
     /**
      * This constructs a CardView
@@ -117,19 +113,6 @@ public class CardView extends ListCell<Card> {
             // This contains the list of buttons and the rest of the card
             HBox hbox = new HBox();
 
-            // Move card up and down list buttons
-            VBox vbox = new VBox();
-
-            this.buttonUp = new Button();
-            this.buttonUp.setText("↑");
-            this.buttonUp.setOnMouseClicked(this.controller);
-
-            this.buttonDown = new Button();
-            this.buttonDown.setText("↓");
-            this.buttonDown.setOnMouseClicked(this.controller);
-
-            vbox.getChildren().addAll(this.buttonUp, this.buttonDown);
-
             hbox.setPrefHeight(150.0);
             hbox.setPrefWidth(200.0);
 
@@ -137,21 +120,20 @@ public class CardView extends ListCell<Card> {
             editButton.setId("editButton");
             editButton.setText("edit");
             editButton.setOnMouseClicked(this.controller);
-
-            AnchorPane pane = new AnchorPane();
+            // Set button width to match the width of its text
+            editButton.setMinWidth(USE_PREF_SIZE);
 
             Label label = new Label();
             label.setText(card.getTitle());
+            // Used to allow the label to change its width
+            label.setMaxWidth(Double.MAX_VALUE);
+            label.setWrapText(true);
 
-            AnchorPane.setTopAnchor(editButton, 8.0);
-            AnchorPane.setRightAnchor(editButton, 8.0);
-
-            pane.getChildren().addAll(label, editButton);
-
-            hbox.getChildren().addAll(vbox, pane);
+            hbox.getChildren().addAll(label, editButton);
             hbox.setSpacing(8.0); // Put 8 pixels of space between buttons and the rest
 
-            HBox.setHgrow(pane, Priority.ALWAYS);
+            // Stretch the label to occupy all space not occupied other nodes in the HBox
+            HBox.setHgrow(label, Priority.ALWAYS);
 
             this.setGraphic(hbox);
             this.setMinHeight(150.0);
@@ -160,24 +142,6 @@ public class CardView extends ListCell<Card> {
             hbox.setOnMouseClicked(this.controller);
 
         }
-    }
-
-    /**
-     * Returns the button to move a card up
-     *
-     * @return the button to move a card up
-     */
-    public Button getButtonUp() {
-        return buttonUp;
-    }
-
-    /**
-     * Returns the button to move a card down
-     *
-     * @return the button to move a card down
-     */
-    public Button getButtonDown() {
-        return buttonDown;
     }
 
     /**
