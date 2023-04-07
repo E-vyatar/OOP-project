@@ -90,6 +90,9 @@ public class MainCtrl {
         this.joinBoard = new Scene(joinBoard.getValue());
         this.joinBoardCtrl = joinBoard.getKey();
 
+        // stop the application when closing it
+        this.primaryStage.setOnCloseRequest(event -> primaryStage.close());
+
         showConnect();
         this.primaryStage.show();
     }

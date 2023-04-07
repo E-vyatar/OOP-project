@@ -74,6 +74,8 @@ public class CardPopupCtrl {
         this.cardPopup.setMinWidth(240.0);
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(root));
+
+        cardsUtils.limitCharacters(cardTitle, 255);
     }
 
 
@@ -94,6 +96,11 @@ public class CardPopupCtrl {
      */
     public void setEditable(boolean editable) {
         this.cardTitle.setEditable(editable);
+        // Make the dropdown list non-intractable if editable is false
+        // Prevent the dropdown list from being focused using the keyboard
+        this.list.setFocusTraversable(editable);
+        // Make the dropdown list transparent to mouse
+        this.list.setMouseTransparent(!editable);
 
         this.buttonBar.getButtons().clear();
         if (editable) {
@@ -101,6 +108,7 @@ public class CardPopupCtrl {
         } else {
             this.buttonBar.getButtons().addAll(closeButton, editButton);
         }
+        cardPopup.sizeToScene();
     }
 
     /**

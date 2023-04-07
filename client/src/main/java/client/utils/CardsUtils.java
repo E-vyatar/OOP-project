@@ -7,6 +7,8 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextInputControl;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
@@ -91,5 +93,23 @@ public class CardsUtils {
             }
         }));
         timeline.play();
+    }
+
+    /**
+     * Limit the number of character a text input can have to prevent database errors
+     *
+     * @param textInputControl Text input to limit (TextField or TextArea)
+     * @param limit Maximum number of character the text input can have
+     */
+    public void limitCharacters(TextInputControl textInputControl, int limit) {
+        textInputControl.setTextFormatter(new TextFormatter<>(change -> {
+            // check if change form client input causes the text to be too long
+            if (change.getControlNewText().length() > limit) {
+                // text is too long, return null to make the TextField reject the input
+                return null;
+            }
+            // text is not too long, return the change to update the TextField
+            return change;
+        }));
     }
 }
