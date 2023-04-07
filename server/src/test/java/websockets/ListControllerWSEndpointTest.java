@@ -52,6 +52,7 @@ public class ListControllerWSEndpointTest {
 
     @Test
     void addListMessage() throws Exception {
+
         List<Card> cardList = new ArrayList<>();
 
         CardList list = new CardList();
