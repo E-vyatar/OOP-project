@@ -175,7 +175,7 @@ public class ListOfBoardsCtrl {
         if (numDeleted > 0) {
             ids.removeAll(deleted);
             mainCtrl.showAlert(Alert.AlertType.INFORMATION,
-                    numDeleted + " of your board(s) have been deleted",
+                    numDeleted + " of your board(s) have been deleted.",
                     numDeleted + " of the board(s) you have joined have been deleted " +
                             "since the last time you viewed this screen. " +
                             "You will not be able to see this/these board(s) again.");

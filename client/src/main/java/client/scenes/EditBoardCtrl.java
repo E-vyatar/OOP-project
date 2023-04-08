@@ -69,7 +69,7 @@ public class EditBoardCtrl {
         serverUtils.deleteBoard(boardId);
         config.removeBoard(serverUtils.getHostname(), boardId);
         mainCtrl.saveConfig("Next time you open talio, "
-                + "you might get an error about others having deleted your board");
+                + "you might get an error about others having deleted your board.");
         boardOverviewCtrl.hidePopup();
         boardOverviewCtrl.returnToBoardList();
     }
