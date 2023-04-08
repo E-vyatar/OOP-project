@@ -178,7 +178,9 @@ public class ListOfBoardsCtrl {
                     numDeleted + " of your board(s) have been deleted",
                     numDeleted + " of the board(s) you have joined have been deleted " +
                             "since the last time you viewed this screen. " +
-                            "You will not be able to see these boards again.");
+                            "You will not be able to see this/these board(s) again.");
+            mainCtrl.saveConfig("Couldn't remove the deleted boards from your configuration " +
+                    "so you might get a warning about them being deleted next time too");
         }
     }
 
