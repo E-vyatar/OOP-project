@@ -149,7 +149,7 @@ public class MainCtrl {
      * This method save the client config.
      * If it fails, it will show an alert to the user.
      *
-     * @param message an additional message to display.
+     * @param message The error message to display on failure.
      *                This allows you to customize the message depending
      *                on the effect of unsaved changes.
      */
