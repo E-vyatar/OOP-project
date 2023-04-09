@@ -65,6 +65,13 @@ public class AddCardCtrl {
     }
 
     /**
+     * Initialize the controller
+     */
+    public void initialize() {
+        cardsUtils.limitCharacters(title, 255);
+    }
+
+    /**
      * Clear title field and close the "Add new task" window
      */
     public void closeWindow() {
@@ -80,12 +87,8 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-
                 Card returnedCard = getCard();
-                //server.addCard(returnedCard);
                 socketsUtils.send("/app/cards/new", returnedCard);
-                //boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
-
                 closeWindow();
             } catch (WebApplicationException e) {
 

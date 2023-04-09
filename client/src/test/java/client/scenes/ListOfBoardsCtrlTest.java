@@ -83,6 +83,7 @@ public class ListOfBoardsCtrlTest {
 
         // two boards were removed, so this should be in the message
         verify(mainCtrl).showAlert(eq(Alert.AlertType.INFORMATION), contains("2"), contains("2"));
+        verify(mainCtrl).saveConfig(notNull());
     }
     @Test
     public void testRemoveDeletedBoardsNothingDeleted() {

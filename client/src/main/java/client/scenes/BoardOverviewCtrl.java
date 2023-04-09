@@ -55,6 +55,7 @@ public class BoardOverviewCtrl {
     private DeleteCardCtrl deleteCardCtrl;
     private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
+    private DeleteListPopupCtrl deleteListCtrl;
     private EditBoardCtrl editBoardCtrl;
     private Scene editBoard;
 
@@ -95,13 +96,15 @@ public class BoardOverviewCtrl {
      * @param cardPopup       a pair of the CardPopupCtrl and the root of the to-be scene
      * @param addCard         a pair of the AddCardCtrl and the root of the to-be scene
      * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
-     * @param deleteCard      a pair of the DeleteCardCtrl and the root of the to-be scene
+     * @param deleteCard a pair of the DeleteCardCtrl and the root of the to-be scene
+     * @param deleteList a pair of the DeleteListPopupCtrl and the root of the to-be scene
      * @param editBoard       a pair of the EditboardCtrl and the root of the to-be scene
      */
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup,
                            Pair<DeleteCardCtrl, Parent> deleteCard,
+                           Pair<DeleteListPopupCtrl, Parent> deleteList,
                            Pair<EditBoardCtrl, Parent> editBoard) {
         this.cardPopupCtrl = cardPopup.getKey();
         this.addCardCtrl = addCard.getKey();
@@ -109,6 +112,7 @@ public class BoardOverviewCtrl {
         this.renameListPopupCtrl = renameListPopup.getKey();
         this.deleteCardCtrl = deleteCard.getKey();
         this.deleteCard = new Scene(deleteCard.getValue());
+        this.deleteListCtrl = deleteList.getKey();
 
         this.editBoardCtrl = editBoard.getKey();
         this.editBoard = new Scene(editBoard.getValue());
@@ -393,6 +397,16 @@ public class BoardOverviewCtrl {
     public void showRenameList(CardListViewCtrl controller) {
         renameListPopupCtrl.setCardListViewCtrl(controller);
         renameListPopupCtrl.show();
+    }
+
+    /**
+     * Displays the DeleteListPopup
+     *
+     * @param listTitle the title of the list to be deleted
+     * @param listId the list id of the list to be deleted
+     */
+    public void showDeleteList(String listTitle, long listId) {
+        deleteListCtrl.show(listTitle, listId);
     }
 
     /**

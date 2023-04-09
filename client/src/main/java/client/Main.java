@@ -32,7 +32,6 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new FXConfig());
     private static final FXMLInitializer FXML = new FXMLInitializer(INJECTOR);
-    private MainCtrl mainCtrl;
 
     /**
      * The main method. This starts the client.
@@ -56,6 +55,10 @@ public class Main extends Application {
                 CardPopupCtrl.class,
                 "client", "scenes", "CardPopup.fxml");
 
+        var deleteListCtrl = FXML.load(
+                DeleteListPopupCtrl.class,
+                "client", "scenes", "DeleteListPopup.fxml");
+
         var renameListPopup = FXML.load(
                 RenameListPopupCtrl.class,
                 "client", "scenes", "RenameListPopup.fxml");
@@ -73,7 +76,8 @@ public class Main extends Application {
                 "client", "scenes", "EditBoard.fxml"
         );
 
-        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl, editBoard);
+        overview.getKey().initialize(cardPopup, addCard, renameListPopup, deleteCtrl,
+            deleteListCtrl, editBoard);
 
         return overview;
     }

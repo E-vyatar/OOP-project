@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.ClipboardContent;
@@ -109,44 +108,6 @@ public class CardListViewCtrl implements ListChangeListener<Card> {
      */
     public void refresh() {
         cardListTitle.setText(cardList.getTitle());
-    }
-
-    /**
-     * This method moves a card one item up the list.
-     * If it's the highest card, an error is shown.
-     *
-     * @param card the card to move upwards
-     */
-    public void moveCardUp(Card card) {
-        int indexOf = cards.indexOf(card);
-        if (indexOf == 0) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Can't move upper card higher");
-            alert.show();
-        } else {
-            // TODO: communicate with server
-            cards.remove(indexOf);
-            cards.add(indexOf - 1, card);
-        }
-    }
-
-    /**
-     * This method moves the card one item down the list.
-     * If it's the bottom card, an error is shown.
-     *
-     * @param card the card to move downwards.
-     */
-    public void moveCardDown(Card card) {
-        int indexOf = cards.indexOf(card);
-        if (indexOf + 1 == cards.size()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Can't move bottom card lower");
-            alert.show();
-        } else {
-            // TODO: communicate with server
-            cards.remove(indexOf);
-            cards.add(indexOf + 1, card);
-        }
     }
 
     /**

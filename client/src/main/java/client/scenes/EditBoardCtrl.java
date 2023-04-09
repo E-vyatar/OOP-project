@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.ClientConfig;
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ public class EditBoardCtrl {
     private final MainCtrl mainCtrl;
     private final BoardOverviewCtrl boardOverviewCtrl;
     private final ServerUtils serverUtils;
+    private final ClientConfig config;
 
     private Board board;
 
@@ -29,14 +31,17 @@ public class EditBoardCtrl {
      * @param mainCtrl the main controller
      * @param boardOverviewCtrl the board overview controller
      * @param serverUtils the server utils - used to send changes to server
+     * @param config the client config - stores the boards you joined
      */
     @Inject
     public EditBoardCtrl(MainCtrl mainCtrl,
                          BoardOverviewCtrl boardOverviewCtrl,
-                         ServerUtils serverUtils) {
+                         ServerUtils serverUtils,
+                         ClientConfig config) {
         this.mainCtrl = mainCtrl;
         this.boardOverviewCtrl = boardOverviewCtrl;
         this.serverUtils = serverUtils;
+        this.config = config;
     }
 
     /**
@@ -60,7 +65,11 @@ public class EditBoardCtrl {
      */
     @FXML
     public void delete() {
-        serverUtils.deleteBoard(board.getId());
+        long boardId = board.getId();
+        serverUtils.deleteBoard(boardId);
+        config.removeBoard(serverUtils.getHostname(), boardId);
+        mainCtrl.saveConfig("Next time you open talio, "
+                + "you might get an error about others having deleted your board.");
         boardOverviewCtrl.hidePopup();
         boardOverviewCtrl.returnToBoardList();
     }
