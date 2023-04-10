@@ -261,6 +261,10 @@ public class ListOfBoardsCtrl {
                     "Board " + board.getTitle() + " was deleted!",
                     "Someone deleted the board with title " + board.getTitle() +
                     " . You will not be able to see this board again.");
+
+            config.removeBoard(server.getHostname(), boardId);
+            mainCtrl.saveConfig("You might get another warning in the future saying someone " +
+                    "deleted a board, even though no new boards were deleted.");
         }
     }
 }
