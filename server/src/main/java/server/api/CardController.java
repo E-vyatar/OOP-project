@@ -72,7 +72,6 @@ public class CardController {
         long listSize = cardRepository.countByListId(card.getListId());
         card.setIdx(listSize);
         Card newCard = cardRepository.save(card);
-        //msgs.convertAndSend("/topic/cards/new", newCard);
         return newCard;
 
     }
@@ -218,43 +217,6 @@ public class CardController {
         logger.info("moveCard() called with: cardId = [" + cardId + "], listId = [" + newListId +
             "], newIndex = [" + newIndex + "]");
 
-//        Optional<Card> cardOptional = cardRepository.findById(cardId);
-//
-//        // check if cardId is valid
-//        if (cardOptional.isPresent()) {
-//            // get the card
-//            Card card = cardOptional.get();
-//            //check if the card is being moved in the same list
-//            if (newListId == card.getListId()) {
-//                // check if the card is being moved to the same index
-//                if (newIndex == card.getIdx()) {
-//                    message.setMoved(true);
-//                    logger.info("returned");
-//                    return message;
-//                }
-//                // check if the card is being moved to a higher index
-//                if (newIndex > card.getIdx()) {
-//                    // update all cards with index between old and new index
-//                    cardRepository.updateIdxBetweenDown(card.getListId(), card.getIdx(), newIndex);
-//                } else {
-//                    // update all cards with index between new and old index
-//                    cardRepository.updateIdxBetweenUp(card.getListId(), newIndex, card.getIdx());
-//                }
-//            } else {
-//                // move all cards in the old list down
-//                cardRepository.moveAllCardsHigherThanIndexDown(card.getListId(), card.getIdx());
-//                //move all cards in the new list up, to make room for the new card
-//                cardRepository.moveAllCardsHigherEqualThanIndexUp(newListId, newIndex);
-//                // update the list id of the card
-//                card.setListId(newListId);
-//            }
-//            // update the index of the card
-//            card.setIdx(newIndex);
-//            cardRepository.save(card);
-//            message.setMoved(true);
-//            return message;
-//        }
-//        message.setMoved(false);
         var optCard = cardRepository.findById(cardId);
         if (optCard.isEmpty()) {
             message.setMoved(false);
