@@ -104,6 +104,7 @@ public class AnotherBoardControllerTest {
         doAnswer(invocation ->{
             exists[0] = false;
             return null;
+
         }).when(boardRepository).deleteById(boardId);
 
         mockMvc.perform(delete("/boards/" + board.getId()))
