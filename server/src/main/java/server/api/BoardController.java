@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -13,6 +14,7 @@ import server.AdminService;
 import server.database.BoardRepository;
 import server.database.ListRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,6 +26,7 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final ListRepository listRepository;
     private final AdminService adminService;
+    private final SimpMessagingTemplate msgs;
     private Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     /**
@@ -32,12 +35,15 @@ public class BoardController {
      * @param boardRepository the repository (used for all board-related queries)
      * @param listRepository the list repository (used to initialize a new board with empty lists)
      * @param adminService the admin service (used to test admin authentication)
+     * @param msgs template used to send websocket messages
      */
     public BoardController(BoardRepository boardRepository, ListRepository listRepository,
-                           AdminService adminService) {
+                           AdminService adminService,
+                           SimpMessagingTemplate msgs) {
         this.boardRepository = boardRepository;
         this.listRepository = listRepository;
         this.adminService = adminService;
+        this.msgs = msgs;
     }
 
     /**
@@ -53,7 +59,11 @@ public class BoardController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<Board> boards = boardRepository.findAll();
-        return new ResponseEntity<>(boards, HttpStatus.OK);
+        // Send the boards without the CardLists
+        List<Board> results = new ArrayList<>();
+        boards.forEach((board) -> results.add(new Board(board.getId(), board.getTitle())));
+
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     /**
@@ -157,10 +167,21 @@ public class BoardController {
      * deletes board by id
      *
      * @param id the id of the board
+     * @return the response (200 if successfull, 404 if the board doesn't exist)
      */
     @DeleteMapping("{id}")
-    public void deleteBoard(@PathVariable("id") long id) {
-        boardRepository.deleteById(id);
+    public ServerResponse deleteBoard(@PathVariable("id") long id) {
+        var optBoard = boardRepository.findById(id);
+        if (optBoard.isPresent()) {
+            Board board = optBoard.get();
+
+            boardRepository.delete(board);
+
+            msgs.convertAndSend("/topic/boards/delete", id);
+            return ServerResponse.ok().build();
+        } else {
+            return ServerResponse.notFound().build();
+        }
     }
 
     /**
@@ -175,6 +196,9 @@ public class BoardController {
         if (boards == null){
             return List.of();
         }
-        return boards;
+        // Don't send the card lists over the network
+        List<Board> res = new ArrayList<>();
+        boards.forEach((b) -> res.add(new Board(b.getId(), b.getTitle())));
+        return res;
     }
 }

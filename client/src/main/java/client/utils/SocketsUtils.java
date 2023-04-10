@@ -33,6 +33,7 @@ public class SocketsUtils {
      * Disconnect from the server.
      */
     public void disconnect() {
+        stopListening();
         this.session.disconnect();
     }
 

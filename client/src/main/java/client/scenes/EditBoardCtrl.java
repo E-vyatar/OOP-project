@@ -66,6 +66,7 @@ public class EditBoardCtrl {
     @FXML
     public void delete() {
         long boardId = board.getId();
+        boardOverviewCtrl.setUserDeletedBoard(true);
         serverUtils.deleteBoard(boardId);
         config.removeBoard(serverUtils.getHostname(), boardId);
         mainCtrl.saveConfig("Next time you open talio, "

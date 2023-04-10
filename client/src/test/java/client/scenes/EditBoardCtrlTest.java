@@ -46,6 +46,7 @@ public class EditBoardCtrlTest {
         Board board = new Board(54L, "Board title");
         editBoardCtrl.setBoard(board);
         editBoardCtrl.delete();
+        verify(boardOverviewCtrl).setUserDeletedBoard(true);
         verify(serverUtils).deleteBoard(54L);
         verify(clientConfig).removeBoard("http://example.com:4343", 54L);
         verify(mainCtrl).saveConfig(notNull());
