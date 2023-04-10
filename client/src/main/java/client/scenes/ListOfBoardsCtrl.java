@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The controller for the list of boards.
@@ -97,6 +98,8 @@ public class ListOfBoardsCtrl {
             userButtons.setManaged(true);
             userButtons.setVisible(true);
         }
+
+        sockets.registerMessages("/topic/boards/delete", Long.class, this::boardDeleted);
     }
 
     /**
@@ -190,6 +193,7 @@ public class ListOfBoardsCtrl {
      */
     @FXML
     public void joinBoard() {
+        sockets.stopListening();
         mainCtrl.showJoinBoard();
     }
 
@@ -198,6 +202,7 @@ public class ListOfBoardsCtrl {
      */
     @FXML
     public void newBoard() {
+        sockets.stopListening();
         mainCtrl.showCreateBoard();
     }
 
@@ -212,6 +217,7 @@ public class ListOfBoardsCtrl {
             alert.setContentText("Please select a board to open");
             alert.show();
         } else {
+            sockets.stopListening();
             long boardId = board.getId();
             mainCtrl.showOverview(boardId);
         }
@@ -237,5 +243,24 @@ public class ListOfBoardsCtrl {
      */
     private boolean isAdmin() {
         return server.hasPassword();
+    }
+
+    /**
+     * Handles a board being deleted
+     * @param boardId
+     */
+    public void boardDeleted(long boardId) {
+        Optional<Board> optBoard = this.boards.getItems().stream()
+                .filter(b -> b.getId() == boardId)
+                .findFirst();
+
+        if (optBoard.isPresent()) {
+            Board board = optBoard.get();
+            this.boards.getItems().remove(board);
+            mainCtrl.showAlert(Alert.AlertType.INFORMATION,
+                    "Board " + board.getTitle() + " was deleted!",
+                    "Someone deleted the board with title " + board.getTitle() +
+                    " . You will not be able to see this board again.");
+        }
     }
 }

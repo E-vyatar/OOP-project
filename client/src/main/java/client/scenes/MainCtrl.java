@@ -19,6 +19,7 @@ import client.ClientConfig;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -176,6 +177,7 @@ public class MainCtrl {
         Alert alert = new Alert(alertType);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
+        alert.initModality(Modality.APPLICATION_MODAL);
         alert.show();
     }
 }
