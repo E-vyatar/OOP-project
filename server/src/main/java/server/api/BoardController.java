@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -15,6 +17,7 @@ import server.database.ListRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -24,7 +27,7 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final ListRepository listRepository;
     private final AdminService adminService;
-    private Logger logger = LoggerFactory.getLogger(BoardController.class);
+    private final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     /**
      * Constructor
@@ -100,7 +103,7 @@ public class BoardController {
     }
 
     // We use a Concurrent HashMap to prevent race conditions.
-    private Map<Object, Consumer<Board>> listeners = new ConcurrentHashMap<>();
+    private final Map<Object, Consumer<Board>> listeners = new ConcurrentHashMap<>();
 
     /**
      * Long poll for updates to a card.
@@ -132,6 +135,43 @@ public class BoardController {
         return defResult;
     }
 
+    /**
+     * Websocket endpoint for updating a board
+     *
+     * @param board the board to be updated with updates
+     * @return the updated board
+     */
+    @MessageMapping("/boards/edit")
+    @SendTo("/topic/boards/edit")
+    public Board editMessage(Board board){
+        logger.info("updateMessage called");
+        Optional<Board> boardOptional = boardRepository.findById(board.getId());
+        if(boardOptional.isPresent()){
+            Board boardTemp = boardOptional.get();
+            boardTemp.setTitle(boardTemp.getTitle());
+            return boardRepository.save(boardTemp);
+        }
+        return null;
+    }
+
+    /** sends message back to user that board has been saved
+     * @param board board
+     * @return board after saved to db, containing 3 lists
+     */
+    @MessageMapping("/boards/new")
+    @SendTo("/topic/boards/new")
+    public Board addMessage(Board board){
+        logger.info("addMessage() called with : board = [" + board.toString() + "]");
+        Board sent = boardRepository.save(board);
+        List<CardList> cardLists = List.of(
+                new CardList("To Do", board.getId(), 0),
+                new CardList("Doing", board.getId(), 1),
+                new CardList("Done", board.getId(), 2)
+        );
+        sent.getCardLists().addAll(cardLists);
+        listRepository.saveAll(cardLists);
+        return sent;
+    }
     /**
      * Create a new board
      *
@@ -176,5 +216,19 @@ public class BoardController {
             return List.of();
         }
         return boards;
+    }
+
+    /**
+     * Websocket endpoint for deleting a board
+     *
+     * @param id the id of the board to be deleted
+     * @return the id of the deleted board
+     */
+    @MessageMapping("/boards/delete") // app/boards/delete
+    @SendTo("/topic/boards/delete")
+    public Long deleteMessage(Long id){
+        boardRepository.deleteById(id);
+        logger.info("board has been deleted from db");
+        return id;
     }
 }

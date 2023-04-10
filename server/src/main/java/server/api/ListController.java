@@ -42,7 +42,7 @@ public class ListController {
     }
 
     /**
-     * Creates new lists
+     * Websocket endpoint for creating.
      *
      * @param cardList list to be created
      * @return the created list
@@ -58,12 +58,18 @@ public class ListController {
         return newCardList;
     }
 
-//    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
-//    public CardList createList(@RequestBody CardList cardList) {
-//        logger.info("createList() called with: cardList = [" + cardList + "]");
-//        msgs.convertAndSend("/topic/lists/new", cardList);
-//        return listRepository.save(cardList);
-//    }
+    /**
+     * Creates new lists
+     *
+     * @param cardList list to be created
+     * @return the created list
+     */
+    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
+    public CardList createList(@RequestBody CardList cardList) {
+        logger.info("createList() called with: cardList = [" + cardList + "]");
+        msgs.convertAndSend("/topic/lists/new", cardList);
+        return listRepository.save(cardList);
+    }
 
     /**
      * Gets a list by id
@@ -94,12 +100,12 @@ public class ListController {
      * @return the updated list
      */
     @MessageMapping("/lists/edit") // app/lists/edit
+    @Transactional
     public CardList editListMessage(CardList cardList){
         long id = cardList.getId();
         if(listRepository.existsById(id)){
             listRepository.save(cardList);
-            long boardId = cardList.getBoardId();
-            msgs.convertAndSend("/topic/lists/edit/" + boardId, cardList);
+            msgs.convertAndSend("/topic/lists/edit/", cardList);
             return cardList;
         }
         return null;

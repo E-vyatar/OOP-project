@@ -12,13 +12,12 @@ import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
 import server.AdminService;
 import server.database.BoardRepository;
-
-import java.util.List;
 import java.util.Optional;
+import static org.mockito.Mockito.*;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.mockito.Mockito.*;
 
 public class BoardControllerTest {
 
@@ -31,13 +30,14 @@ public class BoardControllerTest {
 
     private MockitoSession mockito;
 
+
     @BeforeEach
     public void setup() {
         mockito = Mockito.mockitoSession()
                 .initMocks(this)
                 .strictness(Strictness.STRICT_STUBS)
                 .startMocking();
-    }
+   }
 
     @Test
     public void testGetAllBoardsUnauthorized() {
@@ -45,6 +45,7 @@ public class BoardControllerTest {
         var response = boardController.getAllBoards("password");
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode(),
                 "You shouldn't be allowed to get all boards without proper authentication");
+        mockito.finishMocking();
     }
     @Test
     public void testgetAllBoards() {
@@ -60,6 +61,7 @@ public class BoardControllerTest {
 
         assertEquals(boards, response.getBody(),
                 "The same list as the board repository should be returned");
+        mockito.finishMocking();
     }
     @Test
     public void testGetBoardByIdEmpty() {
@@ -68,6 +70,7 @@ public class BoardControllerTest {
         var response = boardController.getBoardById(5L);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode(),
                 "If the board is not found, the API should return Error 404");
+        mockito.finishMocking();
     }
     @Test
     public void testGetBoardByIdFound() {
@@ -80,11 +83,21 @@ public class BoardControllerTest {
 
         assertEquals(board, response.getBody(),
                 "If the board is found, it should return that board");
-    }
-
-
-    @AfterEach
-    public void tearDown() {
         mockito.finishMocking();
     }
+
+    @Test
+    public void testGetBoardByIdNotFound () {
+
+        when(boardRepository.findById(5L)).thenReturn(Optional.empty());
+        var response = boardController.getBoardById(5L);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode(),
+                "This should not work because there is no board with the 5L id");
+        mockito.finishMocking();
+    }
+
+    @AfterEach
+        public void tearDown() {
+            mockito.finishMocking();
+        }
 }
