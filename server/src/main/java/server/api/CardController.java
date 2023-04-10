@@ -34,7 +34,7 @@ public class CardController {
      * Constructor
      *
      * @param cardRepository the repository (used for querying the DB)
-     * @param msgs not used TODO
+     * @param msgs template used to send websocket messages
      */
     public CardController(CardRepositroy cardRepository, SimpMessagingTemplate msgs) {
         this.cardRepository = cardRepository;

@@ -24,7 +24,7 @@ public class ListController {
      * Constructor
      *
      * @param listRepository the repository (used for querying the DB)
-     * @param msgs not used TODO
+     * @param msgs template used to send websocket messages
      */
     public ListController(ListRepository listRepository, SimpMessagingTemplate msgs) {
         this.listRepository = listRepository;
