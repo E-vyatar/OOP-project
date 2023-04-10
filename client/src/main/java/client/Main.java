@@ -17,6 +17,7 @@ package client;
 
 import client.scenes.*;
 import client.utils.PollingUtils;
+import client.utils.SocketsUtils;
 import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -141,6 +142,8 @@ public class Main extends Application {
     public void stop() {
         PollingUtils pollingUtils = INJECTOR.getInstance(PollingUtils.class);
         pollingUtils.shutdown();
+        SocketsUtils socketsUtils = INJECTOR.getInstance(SocketsUtils.class);
+        socketsUtils.disconnect();
     }
 
 }
