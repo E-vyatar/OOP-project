@@ -13,6 +13,7 @@ import server.AdminService;
 import server.database.BoardRepository;
 import server.database.ListRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,7 +54,11 @@ public class BoardController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         List<Board> boards = boardRepository.findAll();
-        return new ResponseEntity<>(boards, HttpStatus.OK);
+        // Send the boards without the CardLists
+        List<Board> results = new ArrayList<>();
+        boards.forEach((board) -> results.add(new Board(board.getId(), board.getTitle())));
+
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
     /**
@@ -175,6 +180,9 @@ public class BoardController {
         if (boards == null){
             return List.of();
         }
-        return boards;
+        // Don't send the card lists over the network
+        List<Board> res = new ArrayList<>();
+        boards.forEach((b) -> res.add(new Board(b.getId(), b.getTitle())));
+        return res;
     }
 }
