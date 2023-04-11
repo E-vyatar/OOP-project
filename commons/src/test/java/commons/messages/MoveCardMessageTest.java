@@ -116,5 +116,11 @@ public class MoveCardMessageTest {
         assertFalse(moveCardMessage1.isMoved());
     }
 
+    @Test
+    void testHashCode() {
+        assertEquals(moveCardMessage1.hashCode(),
+            new MoveCardMessage(1, 2, 8, 4).hashCode());
+        assertNotEquals(new MoveCardMessage(1,4,7,4,true).hashCode(), moveCardMessage1.hashCode());
+    }
 
 }

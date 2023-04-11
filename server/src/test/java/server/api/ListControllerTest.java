@@ -120,7 +120,17 @@ public class ListControllerTest {
         cardList.setBoardId(1L);
         cardList.setCards(Collections.emptyList());
 
+        CardList cardList2 = new CardList();
+        cardList2.setId(100L);
+        cardList2.setTitle("List 100");
+        cardList2.setBoardId(1L);
+        cardList2.setCards(Collections.emptyList());
+
+
         when(listRepository.findById(cardList.getId())).thenReturn(Optional.of(cardList));
+
+        // when findById is called with 100L, then return nothing
+        when(listRepository.findById(100L)).thenReturn(Optional.empty());
 
         when(listRepository.save(any(CardList.class))).thenAnswer(invocation -> {
                 CardList c1 = invocation.getArgument(0);
@@ -142,8 +152,19 @@ public class ListControllerTest {
                 .andExpect(jsonPath("$.id").value(cardList.getId()))
                 .andExpect(jsonPath("$.title").value("Updated List 1"));
 
+        cardListJson = "{\"id\": 100, \"title\": \"Updated List 100\", \"boardId\": 1, \"cards\": []}";
+
+        // verify that updating list 2 will return a json with null
+        mockMvc.perform(post("/lists/" + cardList2.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(cardListJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+
+
         verify(listRepository, times(1)).save(any(CardList.class));
         verify(listRepository, times(1)).findById(cardList.getId());
+        verify(listRepository, times(1)).findById(cardList2.getId());
         verifyNoMoreInteractions(listRepository);
     }
 
