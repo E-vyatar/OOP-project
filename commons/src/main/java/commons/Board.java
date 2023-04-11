@@ -14,7 +14,8 @@ public class Board {
     private long id;
     private String title;
 
-    @OneToMany(mappedBy = "boardId")
+    @OneToMany(mappedBy = "boardId", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderColumn(name = "idx")
     private List<CardList> cardLists = new ArrayList<>();
 
@@ -125,6 +126,7 @@ public class Board {
     public String toString() {
         return "Board{" +
             "id=" + id +
+            ", title=" + title +
             ", cardLists=" + cardLists +
             '}';
     }

@@ -3,6 +3,16 @@ package server.database;
 import commons.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-@SuppressWarnings("unused")
+import java.util.List;
+
 public interface BoardRepository extends JpaRepository<Board, Long> {
+
+    /**
+     * Get a list of boards by their ids.
+     *
+     * @param ids must not be {@literal null} nor contain any {@literal null} values.
+     * @return the list of boards
+     */
+    @Override
+    List<Board> findAllById(Iterable<Long> ids);
 }

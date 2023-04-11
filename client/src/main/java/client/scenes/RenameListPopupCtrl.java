@@ -1,11 +1,10 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
-import client.utils.SocketsUtils;
-import commons.CardList;
+import client.scenes.service.RenameListService;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -14,30 +13,34 @@ import javax.inject.Inject;
 
 public class RenameListPopupCtrl {
 
-    private final ServerUtils server;
+    private static final String redBorder = "-fx-border-color: red";
+    private static final String normalBorder = "-fx-border-color: inherit";
     private final BoardOverviewCtrl boardOverviewCtrl;
-    private final SocketsUtils socket;
+
+    /**
+     * The service which contains testable methods of this controller.
+     */
+    private final RenameListService service;
     private Stage renameListPopup;
     private CardListViewCtrl controller;
     @FXML
     private Parent root;
     @FXML
     private TextField listTitle;
+    @FXML
+    private Label errorMessage;
 
     /**
      * This constructs the controller for the pop-up to rename a list.
      *
-     * @param server            the SeverUtils
-     * @param socketsUtils      the SocketUtils
      * @param boardOverviewCtrl the BoardOverview
+     * @param service the RenameListService
      */
     @Inject
-    public RenameListPopupCtrl(ServerUtils server,
-                               SocketsUtils socketsUtils,
-                               BoardOverviewCtrl boardOverviewCtrl) {
-        this.server = server;
-        this.socket = socketsUtils;
+    public RenameListPopupCtrl(BoardOverviewCtrl boardOverviewCtrl,
+                               RenameListService service) {
         this.boardOverviewCtrl = boardOverviewCtrl;
+        this.service = service;
     }
 
     /**
@@ -58,7 +61,10 @@ public class RenameListPopupCtrl {
      * Before calling it, setCardList() should be called.
      */
     public void show() {
-        listTitle.setText(controller.getCardList().getTitle());
+        service.setCardList(controller.getCardList());
+        listTitle.setText(service.getTitle());
+        errorMessage.setText("");
+        listTitle.setStyle(normalBorder);
         this.renameListPopup.show();
     }
 
@@ -77,29 +83,29 @@ public class RenameListPopupCtrl {
      */
     public void save() {
         String title = listTitle.getText();
-        listTitle.setStyle("-fx-border-color: inherit");
-        if (title.isEmpty()) {
-            listTitle.setStyle("-fx-border-color: red");
+        listTitle.setStyle(normalBorder);
+        if (title.isEmpty() || title.length() > 255) {
+            listTitle.setStyle(redBorder);
+            if (title.length() > 255){
+                errorMessage.setText("Title is too long!");
+            } else {
+                errorMessage.setText("Title is empty!");
+            }
         } else {
-            CardList temp = controller.getCardList();
-            temp.setTitle(title);
-//            temp = server.editCardList(temp);
-//            controller.setCardList(temp);
-            socket.send("/app/lists/edit", temp);
+            service.save(title);
             close();
         }
 
     }
 
     /**
-     * Deletes card
-     * TODO
+     * Deletes card.
      */
     public void delete() {
-//        server.deleteCardList(controller.getCardList());
-//        boardOverviewCtrl.deleteList(controller);
-        socket.send("/app/lists/delete", controller.getCardList().getId());
-        close();
+        this.boardOverviewCtrl.showDeleteList(
+            service.getTitle(),
+            service.getListId()
+        );
     }
 
     /**

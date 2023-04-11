@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import client.ClientConfig;
 import client.utils.PollingUtils;
 import client.utils.ServerUtils;
 import commons.*;
@@ -29,6 +30,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,6 +47,7 @@ public class BoardOverviewCtrl {
     private final ServerUtils server;
     private final SocketsUtils socketsUtils;
     private final PollingUtils polling;
+    private final ClientConfig clientConfig;
 
     private final MainCtrl mainCtrl;
     private final List<CardListViewCtrl> cardListViewCtrlList = new ArrayList<>();
@@ -54,9 +57,22 @@ public class BoardOverviewCtrl {
     private DeleteCardCtrl deleteCardCtrl;
     private Scene deleteCard;
     private RenameListPopupCtrl renameListPopupCtrl;
+    private DeleteListPopupCtrl deleteListCtrl;
+    private EditBoardCtrl editBoardCtrl;
+    private Scene editBoard;
+
+    private Stage popup;
+
     private Board board;
+
     @FXML
     private HBox listOfLists;
+    @FXML
+    private Label boardTitle;
+    @FXML
+    private Label boardId;
+
+    private boolean userDeletedBoard = false;
 
     /**
      * This constructs BoardOverviewCtrl. BoardOverviewCtrl is the controller
@@ -66,16 +82,19 @@ public class BoardOverviewCtrl {
      * @param sockets socket utils - used to receive changes from the server
      * @param mainCtrl the MainCtrl of the app
      * @param polling  the PollingUtils of the app
+     * @param config the configuration of the client
     */
     @Inject
     public BoardOverviewCtrl(MainCtrl mainCtrl,
                              ServerUtils server,
                              PollingUtils polling,
-                             SocketsUtils sockets) {
+                             SocketsUtils sockets,
+                             ClientConfig config) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.polling = polling;
         this.socketsUtils = sockets;
+        this.clientConfig = config;
     }
 
     /**
@@ -85,18 +104,30 @@ public class BoardOverviewCtrl {
      * @param addCard         a pair of the AddCardCtrl and the root of the to-be scene
      * @param renameListPopup a pair of the renameListPopupCtrl and the root of the to-be scene
      * @param deleteCard a pair of the DeleteCardCtrl and the root of the to-be scene
+     * @param deleteList a pair of the DeleteListPopupCtrl and the root of the to-be scene
+     * @param editBoard       a pair of the EditboardCtrl and the root of the to-be scene
      */
     public void initialize(Pair<CardPopupCtrl, Parent> cardPopup,
                            Pair<AddCardCtrl, Parent> addCard,
                            Pair<RenameListPopupCtrl, Parent> renameListPopup,
-                           Pair<DeleteCardCtrl, Parent> deleteCard) {
+                           Pair<DeleteCardCtrl, Parent> deleteCard,
+                           Pair<DeleteListPopupCtrl, Parent> deleteList,
+                           Pair<EditBoardCtrl, Parent> editBoard) {
         this.cardPopupCtrl = cardPopup.getKey();
         this.addCardCtrl = addCard.getKey();
         this.addCard = new Scene(addCard.getValue());
         this.renameListPopupCtrl = renameListPopup.getKey();
         this.deleteCardCtrl = deleteCard.getKey();
         this.deleteCard = new Scene(deleteCard.getValue());
+        this.deleteListCtrl = deleteList.getKey();
 
+        this.editBoardCtrl = editBoard.getKey();
+        this.editBoard = new Scene(editBoard.getValue());
+
+        this.popup = new Stage();
+        this.popup.initModality(Modality.APPLICATION_MODAL);
+        this.popup.setMinWidth(240.0);
+        this.popup.setMinHeight(200.0);
     }
 
     /**
@@ -117,6 +148,20 @@ public class BoardOverviewCtrl {
                 }
             }
         }
+    }
+
+    /**
+     * Update board details (i.e. the board title)
+     * @param updatedBoard the board with the new details - only the title is checked
+     */
+    public void updateBoard(Board updatedBoard) {
+        // Stopping long polling might have a delay,
+        // so let's check the board id just to be sure.
+        if (board.getId() != updatedBoard.getId()) {
+            return;
+        }
+        this.boardTitle.setText(updatedBoard.getTitle());
+        this.board.setTitle(updatedBoard.getTitle());
     }
 
     /**
@@ -167,49 +212,46 @@ public class BoardOverviewCtrl {
      */
     public void refresh(long boardId) {
 
-        // Get board with ID = 0
         board = server.getBoard(boardId);
 
-        this.polling.pollForCardUpdates(this);
-        socketsUtils.registerMessages("/topic/cards/new", Card.class, newCard -> {
+        userDeletedBoard = false;
+
+        this.polling.pollForUpdates("cards/updates/" + boardId, this::updateCard, Card.class);
+        this.polling.pollForUpdates("boards/updates/" + boardId, this::updateBoard, Board.class);
+
+        socketsUtils.registerMessages("/topic/cards/new/" + boardId, Card.class, newCard -> {
             System.out.println("added new card " + newCard);
             for (CardListViewCtrl cardListViewCtrl : this.cardListViewCtrlList) {
                 if (cardListViewCtrl.getCardList().getId() == newCard.getListId()) {
                     // Append new card to the end.
                     cardListViewCtrl.getObservableCards().add(newCard);
-
                 }
             }
         });
-        socketsUtils.registerMessages("/topic/cards/delete", Long.class, id ->{
+        socketsUtils.registerMessages("/topic/cards/delete/" + boardId, Long.class, id ->{
             Card card = getCard(id);
             getCardListViewCtrl(card.getListId()).removeCard(card);
         });
-        socketsUtils.registerMessages( "/topic/cards/move", MoveCardMessage.class,
-            message -> {
-                var oldList = getCardListViewCtrl(message.getOldListId());
-                var newList = getCardListViewCtrl(message.getNewListId());
-                Card card = getCard(message.getCardId());
-                oldList.removeCard(card);
-                card.setIdx(message.getNewIndex());
-                card.setListId(message.getNewListId());
-                newList.addCard(card, message.getNewIndex());
-            }
+        socketsUtils.registerMessages(
+                "/topic/cards/move/" + boardId, MoveCardMessage.class, this::moveCard
         );
-        socketsUtils.registerMessages("/topic/lists/new", CardList.class, newCardList ->{
+        socketsUtils.registerMessages("/topic/lists/new/" + boardId, CardList.class, newCardList ->{
             CardListViewCtrl cardListViewCtrl = CardListViewCtrl
                 .createNewCardListViewCtrl(this, newCardList);
             cardListViewCtrlList.add(cardListViewCtrl);
             listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+            board.getCardLists().add(newCardList);
         });
-        socketsUtils.registerMessages("/topic/lists/delete", Long.class, id ->{
+        socketsUtils.registerMessages("/topic/lists/delete/" + boardId, Long.class, id ->{
             CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(id);
             deleteList(cardListViewCtrl);
-
         });
-        socketsUtils.registerMessages("/topic/lists/edit", CardList.class, updatedCardList -> {
-            getCardListViewCtrl(updatedCardList.getId()).setTitle(updatedCardList.getTitle());
-        });
+        socketsUtils.registerMessages(
+                "/topic/lists/edit/" + boardId, CardList.class, this::updateList
+        );
+        socketsUtils.registerMessages(
+                "/topic/boards/delete", Long.class, this::boardIsDeleted
+        );
         generateView();
     }
 
@@ -244,6 +286,9 @@ public class BoardOverviewCtrl {
                 cardListViewCtrl.getCardListNode()
             );
         }
+
+        boardTitle.setText(board.getTitle());
+        boardId.setText("#" + board.getId());
     }
 
     /**
@@ -291,7 +336,7 @@ public class BoardOverviewCtrl {
         if (originalCardListController != editedCardListController) {
             // move card to edited list
             long indexForEditedCard = editedCardListController.getCardList().getCards().size();
-            moveCard(editedCard, editedCardListController.getCardList(),indexForEditedCard);
+            requestMoveCard(editedCard, editedCardListController.getCardList(),indexForEditedCard);
         }
     }
 
@@ -358,6 +403,16 @@ public class BoardOverviewCtrl {
     }
 
     /**
+     * Displays the DeleteListPopup
+     *
+     * @param listTitle the title of the list to be deleted
+     * @param listId the list id of the list to be deleted
+     */
+    public void showDeleteList(String listTitle, long listId) {
+        deleteListCtrl.show(listTitle, listId);
+    }
+
+    /**
      * Get a list of current lists in the board
      *
      * @return a list of lists as CardList
@@ -407,12 +462,7 @@ public class BoardOverviewCtrl {
      * @param cardList the CardList the card is moved to
      * @param index    the new position index of the card in the CardList
      */
-    public void moveCard(Card card, CardList cardList, long index) {
-
-//        var oldList = getCardListViewCtrl(card.getListId());
-//        var newList = getCardListViewCtrl(cardList.getId());
-//
-//        // TODO: wait for server to confirm move
+    public void requestMoveCard(Card card, CardList cardList, long index) {
 
         MoveCardMessage message = new MoveCardMessage(
             card.getId(),
@@ -422,13 +472,6 @@ public class BoardOverviewCtrl {
         );
 
         socketsUtils.send("/app/cards/move", message);
-
-//
-//        oldList.removeCard(card);
-//        newList.addCard(card, index);
-//
-//        // highlight the card
-//        newList.highlightCard(card);
 
     }
 
@@ -452,6 +495,20 @@ public class BoardOverviewCtrl {
 
     }
 
+    /**
+     * This method moves a card.
+     * It is called after receiving an update from the server
+     * @param message the message describing what needs to happen.
+     */
+    public void moveCard(MoveCardMessage message) {
+        var oldList = getCardListViewCtrl(message.getOldListId());
+        var newList = getCardListViewCtrl(message.getNewListId());
+        Card card = getCard(message.getCardId());
+        oldList.removeCard(card);
+        card.setIdx(message.getNewIndex());
+        card.setListId(message.getNewListId());
+        newList.addCard(card, message.getNewIndex());
+    }
     /**
      * Getter for ServerUtils of this app
      *
@@ -478,5 +535,65 @@ public class BoardOverviewCtrl {
         cardListViewCtrlList.remove(cardListViewCtrl);
         listOfLists.getChildren().remove(cardListViewCtrl.getCardListNode());
         board.getCardLists().remove(cardListViewCtrl.getCardList());
+    }
+
+    /**
+     * Show the popup that allows you to edit board details (and view the board id)
+     */
+    @FXML
+    public void editBoard() {
+        editBoardCtrl.setBoard(board);
+        editBoardCtrl.refresh();
+
+        popup.setTitle("Editing board details");
+        popup.setScene(editBoard);
+
+        popup.show();
+    }
+
+    /**
+     * Hide the popup if it's currently visible
+     */
+    public void hidePopup() {
+        this.popup.hide();
+    }
+    /** Update the details (i.e. the title0 of a list
+     * @param updatedCardList the updated list
+     */
+    public void updateList(CardList updatedCardList) {
+        CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(updatedCardList.getId());
+        CardList cardList = cardListViewCtrl.getCardList();
+        cardList.setTitle(updatedCardList.getTitle());
+        cardListViewCtrl.refresh();
+    }
+
+    /**
+     * This is called when the board is deleted.
+     */
+    protected void boardIsDeleted(long boardId) {
+        // Check if it was this board that was deleted
+        if (board.getId() != boardId) {
+            return;
+        }
+        // Don't do anything if we performed the deletion
+        if (userDeletedBoard) {
+            return;
+        }
+        mainCtrl.showAlert(Alert.AlertType.INFORMATION, "This board was deleted!",
+                "The board you were viewing was deleted. " +
+                        "You're being returned to the list of boards.");
+        clientConfig.removeBoard(server.getHostname(), boardId);
+        mainCtrl.saveConfig("You might get warnings in the future about a board " +
+                "being deleted in your absence.");
+        returnToBoardList();
+    }
+
+    /**
+     * Set whether the user deleted the board.
+     * Should remain false if a different user deleted the board
+     * @param userDeletedBoard user deleted the board
+     */
+    public void setUserDeletedBoard(boolean userDeletedBoard) {
+        this.userDeletedBoard = userDeletedBoard;
     }
 }

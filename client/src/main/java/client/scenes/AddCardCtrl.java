@@ -16,11 +16,9 @@
 
 package client.scenes;
 
+import client.scenes.service.AddCardService;
 import client.utils.CardsUtils;
-import client.utils.ServerUtils;
-import client.utils.SocketsUtils;
 import com.google.inject.Inject;
-import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
@@ -31,11 +29,8 @@ import javafx.stage.Stage;
 
 public class AddCardCtrl {
 
-    private final ServerUtils server;
-    private final SocketsUtils socketsUtils;
+    private final AddCardService service;
     private final CardsUtils cardsUtils;
-    private final MainCtrl mainCtrl;
-    private final BoardOverviewCtrl boardOverviewCtrl;
 
     @FXML
     private TextField title;
@@ -43,25 +38,23 @@ public class AddCardCtrl {
     @FXML
     private Button cancel;
 
-    private CardList cardList;
-
     /**
      * constructor
      *
-     * @param server     the ServerUtils reference
-     * @param socketUtils the SocketUtils reference
+     * @param service the reference to AddCardService
      * @param cardsUtils card utilities reference
-     * @param mainCtrl   main controller reference
-     * @param boardOverviewCtrl board overview reference
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, SocketsUtils socketUtils, CardsUtils cardsUtils,
-                       MainCtrl mainCtrl, BoardOverviewCtrl boardOverviewCtrl) {
-        this.mainCtrl = mainCtrl;
-        this.server = server;
+    public AddCardCtrl(AddCardService service, CardsUtils cardsUtils) {
+        this.service = service;
         this.cardsUtils = cardsUtils;
-        this.socketsUtils = socketUtils;
-        this.boardOverviewCtrl = boardOverviewCtrl;
+    }
+
+    /**
+     * Initialize the controller
+     */
+    public void initialize() {
+        cardsUtils.limitCharacters(title, 255);
     }
 
     /**
@@ -80,12 +73,7 @@ public class AddCardCtrl {
     public void ok() {
         if (cardsUtils.fieldsNotEmpty(title, null)) {
             try {
-
-                Card returnedCard = getCard();
-                //server.addCard(returnedCard);
-                socketsUtils.send("/app/cards/new", returnedCard);
-                //boardOverviewCtrl.addCardToBoardOverview(cardList, returnedCard);
-
+                service.createAndSend(title.getText());
                 closeWindow();
             } catch (WebApplicationException e) {
 
@@ -100,17 +88,6 @@ public class AddCardCtrl {
         } else {
             cardsUtils.markFields(title, null);
         }
-    }
-
-    /**
-     * Create new card object
-     * List index is -1 because the actual index is
-     * generated when sending the request to the database
-     *
-     * @return new Card, temporarily with dummy data
-     */
-    private Card getCard() {
-        return new Card(cardList.getId(), cardList.getBoardId(), title.getText(), -1);
     }
 
     /**
@@ -147,7 +124,7 @@ public class AddCardCtrl {
      * @return the CardList
      */
     public CardList getCardList() {
-        return cardList;
+        return service.getCardList();
     }
 
     /**
@@ -156,6 +133,6 @@ public class AddCardCtrl {
      * @param cardList the cardlist
      */
     public void setCardList(CardList cardList) {
-        this.cardList = cardList;
+        service.setCardList(cardList);
     }
 }

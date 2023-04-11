@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -11,21 +8,34 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="client.scenes.ListOfBoardsCtrl"
             prefHeight="400.0" prefWidth="600.0"
-            stylesheets="@../styles/ListOfBoards.css"
+            stylesheets="@../styles/GeneralStyle.css"
             fx:id="root">
     <top>
         <HBox alignment="CENTER">
-            <Label styleClass="instruction">Pick a board</Label>
+            <VBox>
+                <Label styleClass="instruction">Pick a board</Label>
+                <Label fx:id="adminText">You're in admin mode. You're now seeing all boards of the server.</Label>
+            </VBox>
         </HBox>
     </top>
     <center>
         <ListView fx:id="boards" maxWidth="400"/>
     </center>
     <bottom>
-        <HBox styleClass="buttons">
-            <Button onMouseClicked="#disconnect">disconnect</Button>
-            <Button onMouseClicked="#addBoard">add board</Button>
-            <Button onMouseClicked="#newBoard">create board</Button>
-        </HBox>
+        <Pane maxWidth="1.7976931348623157E308"> <!-- This pane is necessary cause bottom can have only one child -->
+            <HBox styleClass="buttons" fx:id="userButtons">
+                <Button onMouseClicked="#disconnect">disconnect</Button>
+                <Button onMouseClicked="#removeBoard">remove board</Button>
+                <Button onMouseClicked="#joinBoard">join board</Button>
+                <Button onMouseClicked="#newBoard">create board</Button>
+                <Button onMouseClicked="#openBoard">open board</Button>
+            </HBox>
+            <HBox styleClass="buttons" fx:id="adminButtons">
+                <Button onMouseClicked="#disconnect">disconnect</Button>
+                <Button onMouseClicked="#deleteBoard">delete board</Button>
+                <Button onMouseClicked="#newBoard">create board</Button>
+                <Button onMouseClicked="#openBoard">open board</Button>
+            </HBox>
+        </Pane>
     </bottom>
 </BorderPane>

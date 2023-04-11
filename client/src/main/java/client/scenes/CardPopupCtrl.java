@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 public class CardPopupCtrl {
 
@@ -20,16 +21,13 @@ public class CardPopupCtrl {
     private final CardsUtils cardsUtils;
     private final ServerUtils server;
     private Stage cardPopup;
-    private BoardOverviewCtrl boardOverviewCtrl;
+    private final BoardOverviewCtrl boardOverviewCtrl;
     @FXML
     private Parent root;
     @FXML
     private TextField cardTitle;
     @FXML
     private ChoiceBox<CardList> list;
-    @FXML
-    private TextArea cardDescription;
-
     @FXML
     private ButtonBar buttonBar;
     @FXML
@@ -76,6 +74,8 @@ public class CardPopupCtrl {
         this.cardPopup.setMinWidth(240.0);
         this.cardPopup.setMinHeight(200.0);
         this.cardPopup.setScene(new Scene(root));
+
+        cardsUtils.limitCharacters(cardTitle, 255);
     }
 
 
@@ -96,7 +96,11 @@ public class CardPopupCtrl {
      */
     public void setEditable(boolean editable) {
         this.cardTitle.setEditable(editable);
-        this.cardDescription.setEditable(editable);
+        // Make the dropdown list non-intractable if editable is false
+        // Prevent the dropdown list from being focused using the keyboard
+        this.list.setFocusTraversable(editable);
+        // Make the dropdown list transparent to mouse
+        this.list.setMouseTransparent(!editable);
 
         this.buttonBar.getButtons().clear();
         if (editable) {
@@ -104,13 +108,19 @@ public class CardPopupCtrl {
         } else {
             this.buttonBar.getButtons().addAll(closeButton, editButton);
         }
+        cardPopup.sizeToScene();
     }
 
+    /**
+     * Insert card's values in the fields of the pop-up
+     */
     private void createView() {
         cardTitle.setText(card.getTitle());
         cardsUtils.initializeListsDropDown(list);
-        list.getSelectionModel().select((int) card.getListId());
-        cardDescription.setText("Here there will be a description.");
+        Optional<CardList> chosenList = boardOverviewCtrl.getAllLists().stream()
+                .filter(currentList -> currentList.getId() == card.getListId())
+                .findFirst();
+        chosenList.ifPresent(cardList -> list.getSelectionModel().select(cardList));
     }
 
     /**
@@ -141,7 +151,14 @@ public class CardPopupCtrl {
                 long idx = card.getIdx();
                 String title = cardTitle.getText();
                 Card updatedCard = new Card(cardId, listId, boardId, title, idx);
-                server.editCard(updatedCard);
+                if (listId == card.getListId()) {
+                    server.editCard(updatedCard);
+                }
+                else {
+                    Card cardFromDatabase =  server.editCard(updatedCard);
+                    long newIndex = list.getValue().getCards().size();
+                    boardOverviewCtrl.requestMoveCard(cardFromDatabase, list.getValue(), newIndex);
+                }
                 close();
             } catch (WebApplicationException e) {
 

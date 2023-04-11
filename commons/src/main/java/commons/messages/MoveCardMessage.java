@@ -8,7 +8,12 @@ public class MoveCardMessage implements Serializable {
     private long newListId;
     private long oldListId;
     private long newIndex;
-    private boolean moved = false;
+    private boolean moved;
+
+    /**
+     * Empty constructor
+     */
+    public MoveCardMessage() {}
 
 
     /**
@@ -23,6 +28,24 @@ public class MoveCardMessage implements Serializable {
         this.newListId = newListId;
         this.oldListId = oldListId;
         this.newIndex = newIndex;
+        this.moved=false;
+    }
+
+    /**
+     * Constructor
+     * @param cardId the id of the card
+     * @param newListId the id of the new list
+     * @param oldListId the id of the old list
+     * @param newIndex the new index of the card
+     * @param moved true if the card was moved, false if it was copied
+     */
+    public MoveCardMessage(long cardId, long newListId,
+                           long oldListId, long newIndex, boolean moved) {
+        this.cardId = cardId;
+        this.newListId = newListId;
+        this.oldListId = oldListId;
+        this.newIndex = newIndex;
+        this.moved=moved;
     }
 
     /**

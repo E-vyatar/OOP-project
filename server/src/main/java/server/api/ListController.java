@@ -4,8 +4,8 @@ import commons.CardList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import server.database.ListRepository;
 
@@ -24,7 +24,7 @@ public class ListController {
      * Constructor
      *
      * @param listRepository the repository (used for querying the DB)
-     * @param msgs not used TODO
+     * @param msgs template used to send websocket messages
      */
     public ListController(ListRepository listRepository, SimpMessagingTemplate msgs) {
         this.listRepository = listRepository;
@@ -42,27 +42,34 @@ public class ListController {
     }
 
     /**
-     * Creates new lists
+     * Websocket endpoint for creating.
      *
      * @param cardList list to be created
      * @return the created list
      */
     @MessageMapping("/lists/new") //app/lists/new
-    @SendTo("/topic/lists/new")
     public CardList addListMessage(CardList cardList){
-        logger.info("addlistmessage called ");
+        logger.info("addMessage called back with cardList = [" + cardList + "]");
         cardList.setIdx(listRepository.countByBoardId(cardList.getBoardId()));
-        CardList temp = listRepository.save(cardList);
-        logger.info("addMessage called back with cardList = [" + temp + "]");
-        return temp;
+        CardList newCardList = listRepository.save(cardList);
+
+        long boardId = newCardList.getBoardId();
+        this.msgs.convertAndSend("/topic/lists/new/" + boardId, newCardList);
+        return newCardList;
     }
 
-//    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
-//    public CardList createList(@RequestBody CardList cardList) {
-//        logger.info("createList() called with: cardList = [" + cardList + "]");
-//        msgs.convertAndSend("/topic/lists/new", cardList);
-//        return listRepository.save(cardList);
-//    }
+    /**
+     * Creates new lists
+     *
+     * @param cardList list to be created
+     * @return the created list
+     */
+    @PutMapping(value = "new", consumes = "application/json", produces = "application/json")
+    public CardList createList(@RequestBody CardList cardList) {
+        logger.info("createList() called with: cardList = [" + cardList + "]");
+        msgs.convertAndSend("/topic/lists/new", cardList);
+        return listRepository.save(cardList);
+    }
 
     /**
      * Gets a list by id
@@ -89,15 +96,16 @@ public class ListController {
     /**
      * Updates an existing list
      *
-     * @param cardList the list to update
+     * @param cardList the list to edit
      * @return the updated list
      */
     @MessageMapping("/lists/edit") // app/lists/edit
-    @SendTo("/topic/lists/edit")
+    @Transactional
     public CardList editListMessage(CardList cardList){
         long id = cardList.getId();
-        if(listRepository.findById(id).isPresent()){
+        if(listRepository.existsById(id)){
             listRepository.save(cardList);
+            msgs.convertAndSend("/topic/lists/edit/" + cardList.getBoardId(), cardList);
             return cardList;
         }
         return null;
@@ -131,10 +139,21 @@ public class ListController {
      * @return Long for the id of the list that was deleted
      */
     @MessageMapping("/lists/delete") // app/lists/delete
-    @SendTo("/topic/lists/delete")
+    @Transactional
     public Long deleteListMessage(long id){
+        var optCardList = listRepository.findById(id);
+        if (optCardList.isEmpty()) {
+            return -1L;
+        }
+        CardList cardList = optCardList.get();
+
+        long boardId = cardList.getBoardId();
         listRepository.deleteById(id);
+        listRepository.moveAllCardListsHigherThanIndexDown(boardId, cardList.getIdx());
         logger.info("cardlist has been deleted from db");
+
+        this.msgs.convertAndSend("/topic/lists/delete/" + boardId, id);
+
         return id;
     }
 

@@ -46,8 +46,8 @@ public interface CardRepositroy extends CrudRepository<Card, Long> {
      * Update the index of all cards in a list
      *
      * @param listId   the id of the list
-     * @param idx      the index of the card
-     * @param newIndex the new index of the card
+     * @param idx      the index of the lowest card to move down
+     * @param newIndex the index of the highest card to move down
      */
     @Modifying
     @Query(value =

@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.ClientConfig;
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ public class CreateBoardCtrl {
 
     private final MainCtrl mainCtrl;
     private final ServerUtils server;
+    private final ClientConfig config;
 
     @FXML
     private TextField boardTitle;
@@ -21,11 +23,13 @@ public class CreateBoardCtrl {
      * to create a new board.
      * @param mainCtrl the main controller. Used to switch to other scenes.
      * @param server the server utils. Used to tell to server to create a new board.
+     * @param config the client configuration. Used to add the created board to.
      */
     @Inject
-    public CreateBoardCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public CreateBoardCtrl(MainCtrl mainCtrl, ServerUtils server, ClientConfig config) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.config = config;
     }
 
     /**
@@ -47,7 +51,10 @@ public class CreateBoardCtrl {
             String title = this.boardTitle.getText();
             Board board = new Board();
             board.setTitle(title);
-            server.addBoard(board);
+            board = server.addBoard(board);
+            // Remember board
+            config.addBoard(server.getHostname(), board.getId());
+            mainCtrl.saveConfig("The created board might not show up next time you run the talio.");
             mainCtrl.showListOfBoards();
         }
     }
