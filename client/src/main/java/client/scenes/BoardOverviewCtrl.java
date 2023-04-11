@@ -240,6 +240,7 @@ public class BoardOverviewCtrl {
                 .createNewCardListViewCtrl(this, newCardList);
             cardListViewCtrlList.add(cardListViewCtrl);
             listOfLists.getChildren().add(cardListViewCtrl.getCardListNode());
+            board.getCardLists().add(newCardList);
         });
         socketsUtils.registerMessages("/topic/lists/delete/" + boardId, Long.class, id ->{
             CardListViewCtrl cardListViewCtrl = getCardListViewCtrl(id);
