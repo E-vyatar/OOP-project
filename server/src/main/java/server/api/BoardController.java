@@ -82,7 +82,7 @@ public class BoardController {
      * @return the updated board - the list of CardList is not included (unless included in request)
      */
     @PostMapping(value = "update", consumes = "application/json", produces = "application/json")
-    public ServerResponse updateBoard(@RequestBody Board updatedBoard) {
+    public Board updateBoard(@RequestBody Board updatedBoard) {
         logger.info("updateBoard() called with board: " + updatedBoard);
 
         var optBoard = boardRepository.findById(updatedBoard.getId());
@@ -96,9 +96,9 @@ public class BoardController {
             for (Consumer<Board> listener : listeners.values()) {
                 listener.accept(updatedBoard);
             }
-            return ServerResponse.ok().build();
+            return updatedBoard;
         } else {
-            return ServerResponse.notFound().build();
+            return null;
         }
     }
 

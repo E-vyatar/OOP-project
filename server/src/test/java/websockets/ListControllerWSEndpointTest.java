@@ -112,6 +112,15 @@ public class ListControllerWSEndpointTest {
         cardList2.setIdx(0);
         cardList2.setBoardId(1L);
 
+        CardList cardList3 = new CardList();
+        cardList3.setCards(def);
+        cardList3.setId(100L);
+        cardList3.setTitle("List Title");
+        cardList3.setIdx(45343);
+        cardList3.setBoardId(1L);
+
+        when(listRepository.existsById(cardList3.getId())).thenReturn(false);
+
         when(listRepository.existsById(cardList2.getId())).thenReturn(true);
         when(listRepository.findById(cardList2.getId())).thenReturn(Optional.of(cardList1));
         when(listRepository.save(any(CardList.class))).thenAnswer(invocation -> {
@@ -141,6 +150,7 @@ public class ListControllerWSEndpointTest {
             }
         });
 
+        // test not null
         session.send("/app/lists/edit", cardList2);
 
         await()
@@ -148,7 +158,15 @@ public class ListControllerWSEndpointTest {
                 .untilAsserted(() -> Assertions.assertEquals(cardList2, blockingQueue.poll()));
 
 
+        //test null
+        session.send("/app/lists/edit", cardList3);
+
+        await()
+                .atMost(1, SECONDS)
+                .untilAsserted(() -> Assertions.assertEquals(null, blockingQueue.poll()));
+
         verify(listRepository, times(1)).existsById(cardList2.getId());
+        verify(listRepository, times(1)).existsById(cardList3.getId());
         verify(listRepository, times(1)).save(any(CardList.class));
         verifyNoMoreInteractions(listRepository);
     }
