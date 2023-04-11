@@ -16,6 +16,9 @@
 package client;
 
 import client.scenes.*;
+import client.scenes.service.AddCardService;
+import client.scenes.service.DeleteListService;
+import client.scenes.service.RenameListService;
 import client.utils.*;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -43,5 +46,8 @@ public class FXConfig implements Module {
         binder.bind(DeleteCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(PollingUtils.class).in(Scopes.SINGLETON);
         binder.bind(DeleteListPopupCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(DeleteListService.class).in(Scopes.SINGLETON);
+        binder.bind(RenameListService.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardService.class).in(Scopes.SINGLETON);
     }
 }
