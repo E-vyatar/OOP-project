@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.quality.Strictness;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import server.AdminService;
 import server.database.BoardRepository;
 import java.util.Optional;
@@ -25,6 +26,8 @@ public class BoardControllerTest {
     private AdminService adminService;
     @Mock
     private BoardRepository boardRepository;
+    @Mock
+    private SimpMessagingTemplate msgs;
     @InjectMocks
     private BoardController boardController;
 

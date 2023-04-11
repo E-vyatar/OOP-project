@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -27,6 +28,7 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final ListRepository listRepository;
     private final AdminService adminService;
+    private final SimpMessagingTemplate msgs;
     private final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     /**
@@ -35,12 +37,14 @@ public class BoardController {
      * @param boardRepository the repository (used for all board-related queries)
      * @param listRepository the list repository (used to initialize a new board with empty lists)
      * @param adminService the admin service (used to test admin authentication)
+     * @param msgs template used to send websocket messages
      */
     public BoardController(BoardRepository boardRepository, ListRepository listRepository,
-                           AdminService adminService) {
+                           AdminService adminService, SimpMessagingTemplate msgs) {
         this.boardRepository = boardRepository;
         this.listRepository = listRepository;
         this.adminService = adminService;
+        this.msgs = msgs;
     }
 
     /**
@@ -201,6 +205,7 @@ public class BoardController {
     @DeleteMapping("{id}")
     public void deleteBoard(@PathVariable("id") long id) {
         boardRepository.deleteById(id);
+        msgs.convertAndSend("/topic/boards/delete", id);
     }
 
     /**

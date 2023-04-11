@@ -105,7 +105,7 @@ public class ListController {
         long id = cardList.getId();
         if(listRepository.existsById(id)){
             listRepository.save(cardList);
-            msgs.convertAndSend("/topic/lists/edit/", cardList);
+            msgs.convertAndSend("/topic/lists/edit/" + cardList.getBoardId(), cardList);
             return cardList;
         }
         return null;

@@ -129,7 +129,7 @@ public class ListControllerWSEndpointTest {
         StompSession session = webSocketStompClient
                 .connect(String.format("ws://localhost:%d/websocket", port), new StompSessionHandlerAdapter() {
                 }).get(1, SECONDS);
-        session.subscribe("/topic/lists/edit/", new StompFrameHandler() {
+        session.subscribe("/topic/lists/edit/" + cardList2.getBoardId(), new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 return CardList.class;
